@@ -41,8 +41,12 @@ key asserts (`spec/horrors.json`). The format is [`SPEC.md`](SPEC.md). gitgalaxy
    not text to paste.
 8. **Generator: standard library only, deterministic.** All randomness goes through a
    seeded `random.Random`. Same seed and size, same bytes.
-9. **Check before you push:** `make check` (or `make check-fast` without a compiler).
-10. **Cross-repo PRs carry a "Cross-repo" note** (companion PR links, merge order, what
+9. **Bytes are the estate.** A member's code page and record format are part of its spec
+   (`encoding` on the app or the member). Never re-save a member through an editor or let
+   git convert it; add a new non-UTF-8 member's path to `.gitattributes` as `binary`. New
+   DBCS characters need `python3 tools/gen_codepages.py` (glibc iconv) before generating.
+10. **Check before you push:** `make check` (or `make check-fast` without a compiler).
+11. **Cross-repo PRs carry a "Cross-repo" note** (companion PR links, merge order, what
     re-runs after), per gitgalaxy's `docs/ecosystem.md`.
 
 ## Adding a horror

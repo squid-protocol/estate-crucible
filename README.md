@@ -59,7 +59,7 @@ tools/check.py                   regenerate + diff, key consistency, compile
 tools/compile.py                 GnuCOBOL compile check; tools/stubs/ hold SQLCA / DFHAID / DFHEIBLK stand-ins
 ```
 
-## The estate (phase 1)
+## The estate (phase 2)
 
 | app | what it is | style |
 |---|---|---|
@@ -72,16 +72,20 @@ tools/compile.py                 GnuCOBOL compile check; tools/stubs/ hold SQLCA
 | `GLED` | general ledger: the oldest code | numbered, cols 73-80 identification, every paragraph-header form |
 | `MODN` | a rate service rehosted off z/OS | free-format source (not Enterprise COBOL) |
 | `CLMS` | claims: a PL/I main program with internal procedures, calling a COBOL routine | PL/I |
+| `NORD` | a Danish interest run: COBOL as raw EBCDIC cp277 80-byte records, copybooks with NEL line ends, PL/I and JCL in UTF-8 | Æ Ø Å in member, PROGRAM-ID (literal), PL/I and JCL names; EBCDIC collation; stray NUL bytes |
+| `DEUT` | a German interest calculation in EBCDIC cp273 (NEL program, FB80 copybook) | `DECIMAL-POINT IS COMMA`, VALUE 1,50 in a copybook |
+| `KYUY` | Japanese payroll in four encodings: cp930 FB80, cp939 NEL, Shift-JIS, UTF-8 (+ a UTF-8 copybook with a BOM) | DBCS words and literals with SO/SI, unbalanced / nested shift codes in comments, full-width names and spaces |
+| `GULF` | an Arabic account inquiry: BMS in EBCDIC cp420 with visual-order text, program in cp037 | BiDi |
 | `shared` | `DATEWS` copybook (library `SHRCPY`), `AUDLOG` proc | |
 
-48 members. The key holds 669 facts and 32 phantoms over 19 channels
+63 members. The key holds 903 facts and 37 phantoms over 20 channels
 (`key/manifest.json`, `fact_totals`). Copy libraries are named the way `COPY ... IN
 library` names them: `<APP>CPY`, `<APP>DCL`, `SHRCPY`; a program's SYSLIB is its app's two
 libraries, then `SHRCPY`.
 
 ## Horrors
 
-34 horrors, each in `horrors/H-NNNN.json`; `horrors/README.md` is the index.
+49 horrors, each in `horrors/H-NNNN.json`; `horrors/README.md` is the index.
 
 | ids | from | what |
 |---|---|---|
@@ -90,6 +94,7 @@ libraries, then `SHRCPY`.
 | H-0013..H-0032 | gitgalaxy's field-testing ledger (`tests/cobol_mainframe/field_testing.json`, D001-D044), each citing its issue | every plantable defect: cols 73-80, change markers, DCLGEN, COPY forms, one-line INCLUDE, data-only copybooks, PROGRAM-ID forms, paragraph-header forms, commented code, ENVIRONMENT paragraphs, CSD / job name clashes, SIGN SEPARATE, END-/mixed-case names, free format, implicit FILLER, multi-program members, ASSIGN continuation |
 | H-0033 | Enterprise COBOL 6.4 | `PERFORM UNTIL EXIT` |
 | H-0034 | [#4265](https://github.com/squid-protocol/gitgalaxy/issues/4265) | the same copybook name in two libraries |
+| H-0035..H-0049 | gitgalaxy [#3988](https://github.com/squid-protocol/gitgalaxy/issues/3988) and the ledger's national-language defects | raw EBCDIC (FB80 and NEL), stray NULs (D016), the full-width space (D030), Nordic names (D015), Japanese and full-width names (D029, D031), DBCS literals and shift codes, decimal comma (#3942), EBCDIC collation, BiDi BMS (cp420), Shift-JIS, and the data-move defects D013, D023, D039 |
 
 The ledger defects that cannot be planted yet are listed, with the reason, at the end of
 `horrors/README.md` (reachability, data moves, multicultural forms, PL/I CICS and layouts,
@@ -122,6 +127,14 @@ A unit records its extent, not only its name:
 {"name": "RETURN-TO-MENU", "kind": "paragraph", "section": null, "start_line": 48, "end_line": 53, "horror": "H-0002"}
 ```
 
+## Code pages
+
+Members are committed as the bytes an export holds: raw EBCDIC (cp037, cp273, cp277, cp420,
+cp930, cp939) as 80-byte records or with NEL line ends, Shift-JIS, UTF-8 with and without a
+byte-order mark. `key/manifest.json` gives each member's `encoding` and `storage`, and
+`code_pages` is what a scanner must be told. `python3 tools/view.py <member>` prints any of
+them. The decision and the details are in [SPEC.md](SPEC.md#13-code-pages-and-storage).
+
 ## Running the checks
 
 ```bash
@@ -132,10 +145,12 @@ make scale-smoke    # the medium preset (12 seeded filler apps), twice, byte-ide
 GNUCOBOL_IMAGE=gitgalaxy-gnucobol:3 python3 tools/compile.py
 ```
 
-Compile results at phase 1: 16 programs compile with `cobc -c -std=ibm` (9 as written, 5
-with EXEC blocks stubbed, 2 IBM-only members through their check variant). Two are not
-compiled: `LNIDMS01` needs the CA IDMS DML precompiler, and `CLMPROC` is PL/I (the check
-has no PL/I compiler).
+Compile results at phase 2: 22 programs compile with `cobc -c -std=ibm`. Members with
+multi-byte characters are decoded to UTF-8 and compiled as free format. Some compile through
+a check variant: two have the PROGRAM-ID period restored, KYUYO01 has PIC G turned into
+PIC N (GnuCOBOL has no DBCS category), and KYUYJP has its full-width spaces turned into
+spaces (opensourcecobol4j dialect). Four members are not compiled: `LNIDMS01` (IDMS) and the
+PL/I members `CLMPROC`, `RENTEØ` and `NULREST`.
 
 ## Scale
 
@@ -152,19 +167,22 @@ epic grows this dial to 20k-100k members. The committed tree is `--size small --
 | H-0020 | A paragraph-name's separator period may stand alone on the next line. | No IBM sentence says so outright; it follows from the separator and continuation rules (an end of line is a space; a space may precede a separator period). GnuCOBOL `-std=ibm` accepts it. |
 | H-0028 | Free-format source. | Not Enterprise COBOL for z/OS (72-column reference format only); cited from GnuCOBOL. It stands for code rehosted off the mainframe. |
 | H-0033 | `PERFORM UNTIL EXIT`. | New in Enterprise COBOL 6.4: an estate compiled with 6.3 or earlier cannot hold it. |
+| H-0037 | A compiler takes stray NULs inside a comment. | The ledger's evidence (DSF's PL/I programs compile with them); IBM says where a comment may stand, not which bytes it may hold. |
+| H-0038, H-0040, H-0041 | The full-width space as a separator; mixed SBCS/DBCS names (X項目); a Japanese PROGRAM-ID; U+2212 as a hyphen. | Not Enterprise COBOL (DBCS words must be all double-byte, and words are separated by single-byte spaces): the opensourcecobol4j dialect, evidenced by its test suite (#3956, #3991). |
+| H-0042 | Unbalanced and nested shift codes. | Planted only in comment lines: IBM forbids them in literals and words. |
+| H-0045 | CCSID 420 host text is held in visual order. | IBM's emulator documentation (Lam-Alef stored as one character in visual CCSID 420), not the CICS BMS reference. |
 | H-0013, H-0032 | Cols 73-80 are ignored. | The 6.4 Language Reference defines a 72-character line and does not describe cols 73-80 for source. |
 
-## Known gaps (phase 2 and later)
+## Known gaps (phase 3 and later)
 
-* Channels not keyed yet: reachability (dead units), data moves and MOVE truncation,
-  COMMAREA contracts, DL/I and MQ calls, PL/I structure mapping (layouts) and PL/I CICS
-  operations.
+* Channels not keyed yet: reachability (dead units), MOVE truncation (D038), COMMAREA
+  contracts, DL/I and MQ calls, PL/I structure mapping and PL/I CICS operations.
 * The key states but no gitgalaxy column holds: PERFORM THRU's end, an EXEC SQL CALL's
   procedure name, SYSOUT DDs, REDEFINES overlays in a layout. The scorer reports these as
   `unscored`.
-* Not planted yet: national / DBCS / full-width text and other code pages (phase 2,
-  gitgalaxy#3988); Assembler and REXX members; JCL symbolic parameters and INCLUDE
-  groups; forked and drifting program versions; missing members (phase 3).
+* Not planted yet (phase 3, estate realism): forked and drifting program and copybook
+  versions, missing members, JCL symbolic parameters and INCLUDE groups, Assembler and REXX
+  members, mixed fixed and free format within an app.
 
 ## Licence
 

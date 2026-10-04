@@ -36,6 +36,39 @@ at. Line numbers are 1-based physical lines of the member.
 `numbered` (cols 1-6 carry sequence numbers), `lines`, `compile`, optional
 `generated_from`, then one list per channel that has facts, then `phantoms` and `horrors`.
 
+### 1.3 Code pages and storage
+
+**Decision: members are committed as the exact bytes an export holds, never as a transcoded
+view.** A PDS member transferred in binary is raw EBCDIC with no line ends; one kept in z/OS
+UNIX is EBCDIC with NEL (X'15') line ends; one transferred as text, or written on a PC, is in
+the PC's code page with LF. A scanner meets those bytes in a real estate, so the crucible
+gives it the same. The key states, per member (`key/manifest.json` `members`):
+
+| field | values |
+|---|---|
+| `encoding` | `utf-8`, `utf-8-sig` (with a byte-order mark), `shift_jis`, `cp037`, `cp273`, `cp277`, `cp420`, `cp930`, `cp939` |
+| `storage` | `lf` (lines ending in LF), `nel` (raw EBCDIC, each line ending in X'15'), `fb80` (raw EBCDIC 80-byte records, blank-padded, no line ends) |
+| `bytes`, `sha256` | of the committed file |
+
+and `code_pages` maps every non-UTF-8 member's path to its code page: **what a scanner must
+be told**. Nothing in a raw EBCDIC member's bytes names its page (cp037 and cp277 differ only
+in a dozen national positions), so an estate's code pages are declared, and the scorer
+passes this map to the scan (`--source-encoding PATH=CODEC,...`). Line numbers are records:
+line n of an `fb80` member is its n-th 80-byte record.
+
+* `.gitattributes` keeps git from converting any of it (`estate/** -text`) and marks every
+  non-UTF-8 member `binary`; `tools/check.py` fails on a member it does not cover.
+* `tools/view.py <member>` prints any member as text.
+* The EBCDIC tables (`generator/codepages/*.json`) are built from GNU libc iconv by
+  `tools/gen_codepages.py`, not from the JDK GitGalaxy's own tables come from, so the two
+  implementations meet only in the scorer. cp930 / cp939 write every DBCS run between
+  Shift-Out (X'0E') and Shift-In (X'0F'), balanced on each record. A horror that needs an
+  unbalanced or nested shift writes it on purpose (in a comment line, where IBM allows any
+  character).
+* A fixed-format COBOL line never straddles column 72 in its own encoding's bytes, whichever
+  way a reader counts columns.
+* cp273 X'BC': glibc maps it to U+00AF, Python to U+203E. No member uses it.
+
 ## 2. Tags on facts
 
 | key | meaning |
@@ -66,6 +99,7 @@ at. Line numbers are 1-based physical lines of the member.
 | `jcl_datasets` | DD naming a dataset | `dsn` (the base), `generation` (`0`, `+1`, `-1`), `step`, `dd`, `line` | the dataset a job or proc references; a reader may record a GDG reference as its base or with its generation, never anything else |
 | `file_control` | FILE-CONTROL SELECT | `select`, `assign`, `organization`, `access_mode`, `record_key`, `file_status`, `fd_copies` (COPY members of its FD record), `line` | |
 | `entry_points` | PROCEDURE DIVISION header (COBOL), external PROC (PL/I) | `kind` (`PROCEDURE`), `program`, `params` (USING / parameter list), `line` | |
+| `data_moves` | source -> target pair of a data-moving statement (MOVE, ADD, SUBTRACT, COMPUTE, INITIALIZE, WRITE / REWRITE FROM, READ INTO; PL/I assignment) | `verb`, `source` (as written; null for INITIALIZE), `source_kind` (`item` / `literal` / `figurative` / `function` / `file`), `target` (with qualifiers, subscripts dropped), `corresponding`, `source_refmod` / `target_refmod` and their texts, `line` | the statement's line. The generator reads its own statement text with a small grammar (`generator/moves.py`); a moving verb in a form it does not know is an error, not a silent gap |
 | `file_edges` | resolved invocation between two members | `kind` (`call` for CALL / LINK / XCTL, `exec` for EXEC PGM), `target` (member path) | one per (target, kind); a call inside the same member draws none |
 
 ## 4. Phantoms
@@ -83,7 +117,12 @@ next line's sequence number as a split operand, IDMS-CONTROL as a unit.
 | `compiled` | `cobc -c -std=ibm` accepts the member as written |
 | `compiled-stubbed` | accepted after EXEC SQL / EXEC CICS blocks become CONTINUE and EXEC SQL INCLUDE becomes COPY (the precompilers' job) |
 | `ibm-only` | not compiled as written; `reason` says why. With `check_variant`, a variant with that one construct normalised is compiled, so the rest of the member is still checked |
+| `other-dialect` | written for another compiler's dialect (opensourcecobol4j); `reason` says what GnuCOBOL refuses, and `check_variant` normalises that one construct |
 | `copybook`, `not-cobol` | not compiled on its own |
+
+A member with multi-byte characters is decoded to UTF-8 for the check and compiled as free
+format (`cobc -free`, cols 1-6 and 73-80 dropped): in UTF-8 its lines are longer than in its
+own code page.
 
 ## 6. Storage sizes
 
@@ -91,6 +130,7 @@ From Enterprise COBOL for z/OS, Language Reference, "USAGE clause", and Programm
 Guide, "Examples: numeric data and internal representation":
 
 * DISPLAY: one byte per character position; `S` and `V` take none, except that SIGN ... SEPARATE gives the sign a byte of its own.
+* PIC N (USAGE NATIONAL, implied under NSYMBOL(NATIONAL)) and PIC G (USAGE DISPLAY-1): 2 bytes per character position. `data_items.usage` records these implied usages; an implied DISPLAY is recorded as no usage.
 * BINARY / COMP / COMP-4 / COMP-5: 2, 4 or 8 bytes for 1-4, 5-9 or 10-18 digits.
 * PACKED-DECIMAL / COMP-3: digits / 2 + 1 bytes (integer division).
 * COMP-1: 4 bytes. COMP-2: 8 bytes.
