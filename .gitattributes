@@ -1,0 +1,10 @@
+# Members are committed as the exact bytes an export would hold (SPEC.md, "Code pages and
+# storage"): never convert line ends, and treat every raw EBCDIC / Shift-JIS member as binary.
+estate/** -text
+estate/apps/NORD/cobol/** binary
+estate/apps/NORD/copybook/** binary
+estate/apps/DEUT/** binary
+estate/apps/GULF/** binary
+estate/apps/KYUY/cobol/KYUYO01.cbl binary
+estate/apps/KYUY/cobol/KYUYO02.cbl binary
+estate/apps/KYUY/copybook/SHAINREC.cpy binary

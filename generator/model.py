@@ -42,6 +42,8 @@ CHANNELS = (
     "file_control",
     "entry_points",
     "file_edges",
+    # phase 2 (#4317)
+    "data_moves",
 )
 
 
@@ -59,6 +61,8 @@ class Member:
         numbered: bool = False,
         seq_step: int = 100,
         free: bool = False,
+        encoding: str = "utf-8",
+        storage: str = "lf",
     ) -> None:
         self.path = path
         self.language = language
@@ -68,6 +72,9 @@ class Member:
         self.seq_step = seq_step
         # free-format source (>>SOURCE FORMAT FREE): no sequence or indicator area, no column 72
         self.free = free
+        # the code page and record format the member is committed in (generator/codepages.py)
+        self.encoding = encoding
+        self.storage = storage
         self.lines: list[str] = []
         self.facts: dict[str, list[dict[str, Any]]] = {}
         self.phantoms: list[dict[str, Any]] = []
@@ -137,6 +144,13 @@ class Member:
     def text(self) -> str:
         return "\n".join(self.lines) + "\n"
 
+    def data(self) -> bytes:
+        """The member's bytes, in its code page and record format."""
+        from .codepages import encode
+
+        fixed = self.language == "cobol" and not self.free
+        return encode(self.lines, self.encoding, self.storage, check_cols=72 if fixed else 0)
+
     # ---------------------------------------------------------------- facts
     @contextmanager
     def horror(self, horror_id: Optional[str]) -> Iterator[None]:
@@ -176,6 +190,8 @@ class Member:
             "lines": len(self.lines),
             "compile": self.compile,
         }
+        if (self.encoding, self.storage) != ("utf-8", "lf"):
+            entry["encoding"], entry["storage"] = self.encoding, self.storage
         if self.generated_from:
             entry["generated_from"] = self.generated_from
         for ch in CHANNELS:

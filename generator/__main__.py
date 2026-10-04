@@ -25,7 +25,7 @@ SIZES = {"small": 0, "medium": 12, "large": 120}
 DEFAULT_SEED = 1
 
 
-def build(size: str = "small", seed: int = DEFAULT_SEED, filler: int | None = None) -> dict[str, str]:
+def build(size: str = "small", seed: int = DEFAULT_SEED, filler: int | None = None) -> dict[str, bytes]:
     spec = json.loads(SPEC.read_text(encoding="utf-8"))
     horrors = spec["horrors"]
     count = SIZES[size] if filler is None else filler

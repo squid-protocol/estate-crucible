@@ -29,6 +29,8 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+from generator.codepages import decode  # noqa: E402
 ESTATE = ROOT / "estate"
 STUBS = ROOT / "tools" / "stubs"
 COMMENT = "      *"
@@ -91,15 +93,46 @@ def stub(text: str, *, cics: bool) -> str:
     return "\n".join(out)
 
 
+def to_free(text: str) -> str:
+    """Fixed format -> free format for cobc -free: a member with multi-byte characters is
+    longer in UTF-8 than in its own code page, so its columns would not survive the decode.
+    Cols 1-6 go, a col-7 comment becomes *>, cols 73-80 go."""
+    out = []
+    for line in text.split("\n"):
+        if line.lstrip().startswith(">>"):
+            out.append(line.strip())
+        elif len(line) > 6 and line[6] in "*/":
+            out.append("*>" + line[7:])
+        else:
+            out.append(line[7:72] if line.isascii() else line[7:])
+    return "\n".join(out)
+
+
 def variant(text: str, kind: str) -> str:
+    if kind == "pic-g-to-n":
+        return re.sub(r"\bG'", "N'", re.sub(r"(PIC\s+)G\(", r"\1N(", text))
+    if kind == "u3000-to-space":
+        return text.replace("\u3000", " ")
     if kind == "program-id-period":
         return re.sub(r"^(.{7})PROGRAM-ID\.?\s+([A-Z0-9-]+)\.?[ \t]*$", r"\1PROGRAM-ID. \2.", text, count=1,
                       flags=re.M)
     raise ValueError(kind)
 
 
+MANIFEST: dict = {}
+
+
+def text_of(p: Path) -> str:
+    """A member as text: decoded from its code page and record format (key/manifest.json)."""
+    if ESTATE not in p.parents:  # tools/stubs: plain text
+        return p.read_text(encoding="utf-8")
+    meta = MANIFEST["members"][str(p.relative_to(ESTATE)).replace("\\", "/")]
+    return "".join(line + "\n" for line in decode(p.read_bytes(), meta["encoding"], meta["storage"]))
+
+
 def main(argv: list[str]) -> int:
     manifest = json.loads((ROOT / "key" / "manifest.json").read_text(encoding="utf-8"))
+    MANIFEST.update(manifest)
     image = os.environ.get("GNUCOBOL_IMAGE", "gitgalaxy-gnucobol:3")
     use_docker = shutil.which("cobc") is None
     if use_docker and shutil.which("docker") is None:
@@ -119,7 +152,7 @@ def main(argv: list[str]) -> int:
                 continue
             status = meta["compile"]["status"]
             check = meta["compile"].get("check_variant")
-            if status == "ibm-only" and not check:
+            if status in ("ibm-only", "other-dialect") and not check:
                 print(f"{path}: not compiled (ibm-only: {meta['compile']['reason']})")
                 continue
             name = Path(path).stem
@@ -128,31 +161,44 @@ def main(argv: list[str]) -> int:
             app = meta["app"]
             libs = [ESTATE / "apps" / app / "copybook", ESTATE / "apps" / app / "dclgen", ESTATE / "shared" / "copylib",
                     STUBS]
-            cics = "EXEC CICS" in (ESTATE / path).read_text(encoding="utf-8").upper()
+            cics = "EXEC CICS" in text_of(ESTATE / path).upper()
             lib_names = [f"{app}CPY", f"{app}DCL", "SHRCPY", None]
             for lib, lib_name in reversed(list(zip(libs, lib_names))):  # noqa: B905 -- earlier libraries win
                 for cb in sorted(lib.glob("*.*")) if lib.is_dir() else []:
                     if cb.suffix in (".cpy", ".dcl"):
-                        text = stub(cb.read_text(encoding="utf-8"), cics=False)
+                        text = stub(text_of(cb), cics=False)
                         (d / f"{cb.stem}.cpy").write_text(text, encoding="utf-8")
                         if lib_name:  # `COPY member IN library` reads <library>/<member>
                             (d / lib_name).mkdir(exist_ok=True)
                             (d / lib_name / f"{cb.stem}.cpy").write_text(text, encoding="utf-8")
-            src = (ESTATE / path).read_text(encoding="utf-8")
+            src = text_of(ESTATE / path)
             if status == "compiled-stubbed":
                 src = stub(src, cics=cics)
-            if status == "ibm-only":
+            if status in ("ibm-only", "other-dialect"):
                 src = variant(src, check)
+                for cpy in [*d.glob("*.cpy"), *d.glob("*/*.cpy")]:
+                    cpy.write_text(variant(cpy.read_text(encoding="utf-8"), check), encoding="utf-8")
+            free = "\n       >>SOURCE FORMAT FREE" in "\n" + src or not src.isascii()
+            if free and not src.lstrip().startswith(">>SOURCE"):
+                src = to_free(src)
+                for cpy in d.glob("*.cpy"):
+                    t = cpy.read_text(encoding="utf-8")
+                    cpy.write_text(to_free(t), encoding="utf-8")
+                for cpy in d.glob("*/*.cpy"):
+                    cpy.write_text(to_free(cpy.read_text(encoding="utf-8")), encoding="utf-8")
             (d / f"{name}.cbl").write_text(src, encoding="utf-8")
-            jobs.append((path, status, name))
+            jobs.append((path, status, name, free and not src.lstrip().startswith(">>SOURCE")))
         failed = 0
-        for path, status, name in jobs:
-            cmd = ["cobc", "-c", "-std=ibm", "-I", ".", "-o", f"{name}.o", f"{name}.cbl"]
+        for path, status, name, free in jobs:
+            cmd = ["cobc", "-c", "-std=ibm", *(["-free"] if free else []), "-I", ".", "-o", f"{name}.o", f"{name}.cbl"]
             if use_docker:
                 cmd = ["docker", "run", "--rm", "-v", f"{work / name}:/work", "-w", "/work", image] + cmd
             r = subprocess.run(cmd, cwd=work / name, capture_output=True, text=True, check=False)
             how = {"compiled": "as written", "compiled-stubbed": "EXEC blocks stubbed",
-                   "ibm-only": "variant: " + str(manifest["members"][path]["compile"].get("check_variant"))}[status]
+                   "ibm-only": "variant: " + str(manifest["members"][path]["compile"].get("check_variant")),
+                   "other-dialect": "variant: " + str(manifest["members"][path]["compile"].get("check_variant"))}[status]
+            if free:
+                how += ", decoded to UTF-8 and compiled as free format"
             if r.returncode != 0:
                 failed += 1
                 print(f"{path}: FAILED ({how})\n{r.stdout}{r.stderr}")

@@ -13,6 +13,7 @@
 
 from __future__ import annotations
 
+import fnmatch
 import hashlib
 import json
 import subprocess
@@ -24,6 +25,7 @@ sys.path.insert(0, str(ROOT))
 
 from generator import FORMAT  # noqa: E402
 from generator.__main__ import GENERATED_DIRS, build  # noqa: E402
+from generator.codepages import decode  # noqa: E402
 from generator.model import CHANNELS  # noqa: E402
 
 REQUIRED = {
@@ -46,6 +48,7 @@ REQUIRED = {
     "file_control": ("select", "assign", "organization", "file_status", "line"),
     "entry_points": ("kind", "program", "params", "line"),
     "file_edges": ("kind", "target"),
+    "data_moves": ("verb", "target", "line"),
 }
 
 
@@ -64,7 +67,7 @@ def regenerated_diff() -> list[str]:
         p = ROOT / rel
         if not p.is_file():
             problems.append(f"{rel}: generated but not committed")
-        elif p.read_bytes() != text.encode("utf-8"):
+        elif p.read_bytes() != text:
             problems.append(f"{rel}: differs from a regeneration (hand-edited, or the generator changed without "
                             f"`python3 -m generator`)")
     for rel in sorted(committed - set(files)):
@@ -86,11 +89,16 @@ def key_consistency() -> list[str]:
         for c in h.get("citations", []):
             if not (c.get("url", "").startswith("https://") and c.get("section") and c.get("quote")):
                 problems.append(f"spec/horrors.json {hid}: a citation needs url, section and quote")
+    binary_globs = [ln.split()[0] for ln in (ROOT / ".gitattributes").read_text(encoding="utf-8").splitlines()
+                    if ln.strip() and not ln.startswith("#") and "binary" in ln.split()[1:]]
     for path, meta in manifest["members"].items():
+        raw = meta["encoding"] not in ("utf-8", "utf-8-sig")
+        if raw != any(fnmatch.fnmatch(f"estate/{path}", g.replace("**", "*")) for g in binary_globs):
+            problems.append(f"{path}: {meta['encoding']} member {'not ' if raw else ''}marked binary in .gitattributes")
         src = ROOT / "estate" / path
         if hashlib.sha256(src.read_bytes()).hexdigest() != meta["sha256"]:
             problems.append(f"{path}: sha256 differs from key/manifest.json")
-        nlines = src.read_text(encoding="utf-8").count("\n")
+        nlines = len(decode(src.read_bytes(), meta["encoding"], meta["storage"]))
         entry = json.loads((ROOT / meta["key"]).read_text(encoding="utf-8"))["members"][path]
         if entry["lines"] != nlines:
             problems.append(f"{path}: key says {entry['lines']} lines, the member has {nlines}")
