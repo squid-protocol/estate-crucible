@@ -1,0 +1,206 @@
+{
+ "about": "Hand-written horror definitions. The generator merges each with the members it is planted in and the facts it keys there, and writes horrors/H-*.json. Edit this file to change a horror's description or citations; edit generator/apps/ to change where and how it is planted. Never edit horrors/ or key/ by hand.",
+ "horrors": [
+  {
+   "id": "H-0001",
+   "title": "A cols 1-6 sequence number read as the operand of a verb whose operand is on the next line",
+   "category": "reference-format",
+   "issue": 4300,
+   "shapes": [
+    "PERFORM / <procedure-name> on the next line",
+    "GO TO / <procedure-name> on the next line (inside IF ... END-IF)",
+    "CALL / '<literal>' on the next line",
+    "CALL / <identifier> on the next line",
+    "COPY / <member>. on the next line"
+   ],
+   "asserts": "The operand is the word on the next line, never that line's sequence number: the edges, the CALL sites and the COPY edge name the real procedure, program and member, and no edge, call site or import names a sequence number.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+     "section": "Reference format > Sequence number area",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=format-sequence-number-area",
+     "quote": "The content of this area can consist of any character in the character set of the computer."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+     "section": "CALL statement",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-call-statement",
+     "quote": "literal-1 or the contents of identifier-1 must specify the program-name of the called subprogram."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+     "section": "COPY statement",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-copy-statement",
+     "quote": "A COPY statement can appear in the source text anywhere a character string or a separator can appear."
+    }
+   ],
+   "notes": "The sequence number area is outside the program text, so a statement may continue onto the next line at any separator. The phantoms name the exact sequence number the engine would read (the next line's cols 1-6)."
+  },
+  {
+   "id": "H-0002",
+   "title": "A paragraph cut at a conditional or non-terminating GOBACK / RETURN / EXIT",
+   "category": "unit-extent",
+   "issue": 4301,
+   "shapes": [
+    "EXEC CICS / RETURN TRANSID(...) / END-EXEC inside IF ... END-IF, more statements after it (CUSTINQ 0000-MAIN)",
+    "a paragraph whose name starts with RETURN (CUSTINQ RETURN-TO-MENU)",
+    "EXIT PERFORM inside an inline PERFORM, more statements after the loop: unnumbered (CUSTINQ 4000-FIND-BLANK) and numbered (ACCTRPT 2500-SCAN-HISTORY)"
+   ],
+   "asserts": "A paragraph runs from its header to just before the next paragraph or section header; the key's end_line is the last code line before that header. Every PERFORM after the conditional terminator belongs to the paragraph.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+     "section": "Procedure division structure > Procedures",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-procedures",
+     "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
+    },
+    {
+     "doc": "CICS Transaction Server for z/OS 6.x",
+     "section": "EXEC CICS RETURN",
+     "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=summary-return",
+     "quote": "RETURN returns control from an application program either to an application program at the next higher logical level, or to CICS."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+     "section": "EXIT statement (EXIT PERFORM)",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-exit-statement",
+     "quote": "The EXIT statement ... provides a way to exit from a section, a paragraph, or an inline PERFORM statement."
+    }
+   ],
+   "notes": "In a numbered member the engine's line-leading terminator test does not see EXIT behind the sequence number, so the numbered plant can pass for the wrong reason while #4300 is open; the unnumbered plant is the one that exercises the cut. Shape 1's PL/I form (ELSE RETURN;) waits for PL/I members (phase 1)."
+  },
+  {
+   "id": "H-0003",
+   "title": "Main-line statements between PROCEDURE DIVISION and the first paragraph belong to no unit",
+   "category": "unit-extent",
+   "issue": 4302,
+   "shapes": [
+    "OPEN / PERFORM ... THRU / PERFORM ... UNTIL / GOBACK right after PROCEDURE DIVISION, before the first paragraph name (ACCTPOST)"
+   ],
+   "asserts": "The main line is a unit (kind mainline, no name) from the first statement after the PROCEDURE DIVISION header to the line before the first paragraph; its PERFORM targets are edges from it. The scorer accepts a function_data unit or a synthetic_unit_data row there.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+     "section": "Procedure division structure > Procedures",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-procedures",
+     "quote": "If there are no declaratives (format 2), a paragraph-name is not required in the PROCEDURE DIVISION."
+    }
+   ]
+  },
+  {
+   "id": "H-0004",
+   "title": "A COPY that does not start its line draws no import",
+   "category": "copy",
+   "issue": 4303,
+   "shapes": [
+    "01  WS-RPT-HEAD.  COPY RPTHDR.",
+    "01  WS-RPT-TOTALS.  COPY RPTTOT. COPY RPTCNT. (two COPYs on one line)"
+   ],
+   "asserts": "Each COPY is an import of its member, resolved to the copybook in the app's library, at the line of its 01.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+     "section": "COPY statement",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-copy-statement",
+     "quote": "A COPY statement can appear in the source text anywhere a character string or a separator can appear. ... Each COPY statement must be preceded by a space and ended with a separator period."
+    }
+   ]
+  },
+  {
+   "id": "H-0005",
+   "title": "EXEC SQL CALL of a stored procedure recorded as a COBOL dynamic CALL",
+   "category": "embedded-sql",
+   "issue": 4304,
+   "shapes": [
+    "EXEC SQL / CALL PRODPROC.CUSTBAL / (:CUST-ID, :CUST-BAL) / END-EXEC (schema-qualified, multi-line)",
+    "EXEC SQL CALL CUSTAUDT END-EXEC (unqualified, one line)"
+   ],
+   "asserts": "Both are SQL statements with verb CALL and the procedure name; neither is a COBOL CALL site or a call edge.",
+   "citations": [
+    {
+     "doc": "Db2 13 for z/OS SQL Reference",
+     "section": "CALL statement",
+     "url": "https://www.ibm.com/docs/en/db2-for-zos/13?topic=statements-call",
+     "quote": "The CALL statement invokes a stored procedure. ... This statement can be embedded in an application program."
+    }
+   ]
+  },
+  {
+   "id": "H-0006",
+   "title": "Inline PERFORM headers and EXIT PERFORM read as PERFORM targets",
+   "category": "edges",
+   "issue": 4305,
+   "shapes": [
+    "PERFORM TEST AFTER VARYING ... (WITH omitted)",
+    "PERFORM TEST BEFORE UNTIL ...",
+    "PERFORM WS-N TIMES ... END-PERFORM (inline, identifier count)",
+    "PERFORM 3 TIMES ... END-PERFORM (inline, literal count)",
+    "IF ... EXIT PERFORM END-IF",
+    "PERFORM 3100-FORMAT-TOTAL 2 TIMES (out-of-line: a real edge, the control case)"
+   ],
+   "asserts": "An inline PERFORM names no procedure, so it draws no edge; EXIT PERFORM is not a PERFORM. Out-of-line PERFORM procedure-name n TIMES is an edge to the procedure.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+     "section": "PERFORM statement",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-perform-statement",
+     "quote": "The PERFORM statement is an out-of-line PERFORM statement, when procedure-name-1 is specified. ... The PERFORM statement is an inline PERFORM statement, when procedure-name-1 is omitted."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+     "section": "EXIT statement (EXIT PERFORM)",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-exit-statement",
+     "quote": "The EXIT statement ... provides a way to exit from a section, a paragraph, or an inline PERFORM statement."
+    }
+   ],
+   "notes": "PERFORM FOREVER (#4305's GnuCOBOL / Micro Focus form) is not planted: it is not Enterprise COBOL, and this estate is IBM dialect. Its IBM counterpart, PERFORM UNTIL EXIT, is a phase-1 candidate."
+  },
+  {
+   "id": "H-0007",
+   "title": "IDMS IDMS-CONTROL SECTION / PROTOCOL (ENVIRONMENT DIVISION) recorded as procedure units",
+   "category": "dialect",
+   "issue": 4306,
+   "shapes": [
+    "ENVIRONMENT DIVISION. IDMS-CONTROL SECTION. PROTOCOL. MODE IS IDMS-DC DEBUG IDMS-RECORDS MANUAL. (LNIDMS01, numbered)",
+    "DATA DIVISION. SCHEMA SECTION. DB LOANSS01 WITHIN LOANSCHM. (LNIDMS01): not in #4306, found by this crucible"
+   ],
+   "asserts": "Units come from the PROCEDURE DIVISION only: IDMS-CONTROL, PROTOCOL and SCHEMA are not units; the program's three paragraphs are.",
+   "citations": [
+    {
+     "doc": "Broadcom CA IDMS 19.0 DML Reference for COBOL",
+     "section": "Precompiler-Directive Statements (ENVIRONMENT DIVISION)",
+     "url": "https://techdocs.broadcom.com/us/en/ca-mainframe-software/database-management/ca-idms-reference/19-0/dml-reference-for-cobol/precompiler-directive-statements.html",
+     "quote": "An IDMS-CONTROL SECTION is required in the ENVIRONMENT DIVISION to establish the following: Operating mode, Debug sequencing, Variable storage allocation"
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+     "section": "Procedure division structure > Procedures",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-procedures",
+     "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
+    }
+   ],
+   "notes": "IDMS is a Broadcom product, so its rule is cited from Broadcom's documentation. The member is IBM-only (not compiled): GnuCOBOL has no IDMS precompiler."
+  },
+  {
+   "id": "H-0008",
+   "title": "PROGRAM-ID not recorded when its separator period is missing",
+   "category": "identification",
+   "issue": 4307,
+   "shapes": [
+    "PROGRAM-ID.    LNRATE + blanks to col 72, no period after the name (LNRATE)",
+    "PROGRAM-ID LNCALC. (no period after the keyword) (LNCALC)"
+   ],
+   "asserts": "The program-name is LNRATE / LNCALC: PROGRAM-ID names the program whatever the punctuation around it.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+     "section": "PROGRAM-ID paragraph",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=division-program-id-paragraph",
+     "quote": "program-name ... identifies your program"
+    }
+   ],
+   "lower_confidence": "IBM's syntax diagram shows both periods as required. That Enterprise COBOL compiles the period-less forms with a diagnostic rests on #4307's evidence (cobol-programming-course CBLDB22 compiles in its own JCL), not on an IBM sentence. The fact the key asserts, the program-name, does not depend on it. Both members are IBM-only here; the check compiles a variant with the periods restored.",
+   "notes": "LNRATE has no AUTHOR paragraph, as #4307's CBLDB22 has none: when a period-terminated AUTHOR. line follows the period-less PROGRAM-ID, the engine records the name, which would hide shape 1."
+  }
+ ]
+}
