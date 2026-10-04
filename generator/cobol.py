@@ -2,13 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable, Optional
+from typing import Any, Optional
 
-from .data import DataWriter, Item, layout
+from .data import DataWriter, Item, Resolver, layout
 from .model import Member
 from .stmt import Stmt
-
-Resolver = Callable[[str], tuple[Optional[str], Optional[list[Item]]]]
 
 # How the compile check treats a member (SPEC.md, "Validity"). The status is part of the key.
 COMPILED = "compiled"  # cobc -std=ibm, as written
@@ -17,23 +15,29 @@ IBM_ONLY = "ibm-only"  # not compiled; `reason` says why
 
 
 class ProgramWriter:
-    def __init__(self, m: Member, spec: dict[str, Any], resolve: Resolver,
-                 program_paths: dict[str, str]) -> None:
+    """Writes one program (and the programs nested in it) into a member."""
+
+    def __init__(self, m: Member, spec: dict[str, Any], resolve: Resolver, program_paths: dict[str, str],
+                 multi: bool) -> None:
         self.m = m
         self.spec = spec
         self.resolve = resolve
         self.program_paths = program_paths
+        self.multi = multi  # the member holds more than one program: units carry `program`
         self.unit: Optional[str] = None
         self.tag: Optional[str] = None
         self.exit_performs: list[tuple[int, Optional[str], Optional[str]]] = []
         self.idents: dict[str, str] = {}
 
     # ------------------------------------------------------------ helpers
-    def line(self, text: str, indent: int = 0, area: str = "B") -> int:
-        return self.m.cobol(text, area=area, indent=indent, tag=self.tag)
+    def line(self, text: str, indent: int = 0, area: str = "B", seq: Optional[str] = None) -> int:
+        return self.m.cobol(text, area=area, indent=indent, tag=self.tag, seq=seq)
+
+    def prog(self) -> dict[str, Any]:
+        return {"program": self.spec["program_id"]} if self.multi else {}
 
     def edge(self, kind: str, target: str, line: int, **extra: Any) -> None:
-        self.m.fact("edges", kind=kind, **{"from": self.unit}, target=target, line=line, **extra)
+        self.m.fact("edges", kind=kind, **{"from": self.unit}, target=target, line=line, **extra, **self.prog())
 
     # ------------------------------------------------------------ divisions
     def write(self) -> None:
@@ -54,6 +58,11 @@ class ProgramWriter:
         self.data()
         self.procedure()
         self.resolve_exit_performs()
+        for nested in s.get("nested", []):
+            ProgramWriter(m, nested, self.resolve, self.program_paths, True).write()
+        if self.multi:
+            pid = s["program_id"]
+            m.cobol(f"END PROGRAM {repr_name(pid, s)}.", area="A")
 
     def program_id(self) -> None:
         s = self.spec
@@ -68,6 +77,16 @@ class ProgramWriter:
             elif style == "keyword-no-period":
                 # no period after the PROGRAM-ID keyword (#4307 shape 2)
                 line = self.m.cobol(f"PROGRAM-ID {name}.", area="A")
+            elif style == "quoted":
+                # the program-name as an alphanumeric literal (#4242)
+                line = self.m.cobol(f"PROGRAM-ID. '{name}'.", indent=-3)
+            elif style == "next-line":
+                # PROGRAM-ID. alone, the name on the next line (#3418)
+                line = self.m.cobol("PROGRAM-ID.", area="A")
+                self.m.cobol(f"{name}.")
+                if self.m.numbered:
+                    self.m.phantom("programs", program_id=self.m.seq_of(line + 1),
+                                   why="the next line's sequence number, not the program-name")
             else:
                 raise ValueError(style)
             self.m.fact("programs", program_id=name, line=line)
@@ -75,13 +94,20 @@ class ProgramWriter:
     def environment(self) -> None:
         s = self.spec
         m = self.m
-        if not (s.get("selects") or s.get("idms") or s.get("configuration")):
+        if not (s.get("selects") or s.get("idms") or s.get("configuration") or s.get("special_names")):
             return
         m.cobol("ENVIRONMENT DIVISION.", area="A")
-        if s.get("configuration"):
+        if s.get("configuration") or s.get("special_names"):
             m.cobol("CONFIGURATION SECTION.", area="A")
             m.cobol("SOURCE-COMPUTER.    IBM-ZOS.", area="A")
             m.cobol("OBJECT-COMPUTER.    IBM-ZOS.", area="A")
+        if s.get("special_names"):
+            with m.horror(s.get("special_names_horror")):
+                m.cobol("SPECIAL-NAMES.", area="A")
+                for text in s["special_names"]:
+                    m.cobol(text)
+                m.append_to_last(".")
+                m.phantom("units", name="SPECIAL-NAMES", why="an ENVIRONMENT DIVISION paragraph, not a procedure")
         if s.get("idms"):
             idms = s["idms"]
             with m.horror(idms.get("horror")):
@@ -96,13 +122,44 @@ class ProgramWriter:
             m.cobol("INPUT-OUTPUT SECTION.", area="A")
             m.cobol("FILE-CONTROL.", area="A")
             for sel in s["selects"]:
-                m.cobol(f"SELECT {sel['name']} ASSIGN TO {sel['assign']}")
-                m.cobol(f"ORGANIZATION IS {sel.get('org', 'SEQUENTIAL')}", indent=4)
-                m.cobol(f"FILE STATUS IS {sel['status']}.", indent=4)
+                self.select(sel)
+            if s.get("i_o_control"):
+                with m.horror(s.get("special_names_horror")):
+                    m.cobol("I-O-CONTROL.", area="A")
+                    for text in s["i_o_control"]:
+                        m.cobol(text)
+                    m.append_to_last(".")
+                    m.phantom("units", name="I-O-CONTROL", why="an ENVIRONMENT DIVISION paragraph, not a procedure")
+
+    def select(self, sel: dict[str, Any]) -> None:
+        m = self.m
+        with m.horror(sel.get("horror")):
+            if sel.get("assign_split"):
+                # ASSIGN TO at the end of its line, the assignment-name on the next, both lines
+                # carrying an identification tag in cols 73-80 (#4264)
+                line = m.cobol(f"SELECT {sel['name']} ASSIGN TO", tag=sel["assign_split"])
+                m.cobol(f"    {sel['assign']}", tag=sel["assign_split"])
+            else:
+                line = m.cobol(f"SELECT {sel['name']} ASSIGN TO {sel['assign']}")
+            org = sel.get("org", "SEQUENTIAL")
+            m.cobol(f"ORGANIZATION IS {org}", indent=4)
+            if sel.get("access"):
+                m.cobol(f"ACCESS MODE IS {sel['access']}", indent=4)
+            if sel.get("record_key"):
+                m.cobol(f"RECORD KEY IS {sel['record_key']}", indent=4)
+            m.cobol(f"FILE STATUS IS {sel['status']}.", indent=4)
+            fd = next((f for f in self.spec.get("fds", []) if f["fd"] == sel["name"]), None)
+            rec = fd["record"] if fd else {}
+            fd_copies = [rec["copy_only"]["member"]] if "copy_only" in rec else [c["member"] for c in rec.get("copy", [])]
+            m.fact("file_control", select=sel["name"], assign=sel["assign"], organization=org,
+                   access_mode=sel.get("access"), record_key=sel.get("record_key"), file_status=sel["status"],
+                   fd_copies=fd_copies, line=line, **self.prog())
 
     def data(self) -> None:
         s = self.spec
         m = self.m
+        if not (s.get("idms") or s.get("fds") or s.get("ws") or s.get("linkage")):
+            return
         m.cobol("DATA DIVISION.", area="A")
         dw = DataWriter(m, self.resolve)
         if s.get("idms"):
@@ -117,29 +174,52 @@ class ProgramWriter:
                 m.cobol(f"FD  {fd['fd']}", area="A")
                 m.cobol("RECORDING MODE IS F.")
                 self.records([fd["record"]], "FILE", dw)
+        first_fact = len(m.facts.get("data_items", []))
         for sec, key in (("WORKING-STORAGE", "ws"), ("LINKAGE", "linkage")):
             if s.get(key):
                 m.cobol(f"{sec} SECTION.", area="A")
                 self.records(s[key], sec, dw)
+        self.expose_last_entry(first_fact)
+
+    def expose_last_entry(self, first_fact: int) -> None:
+        """#4329: the engine reads the last DATA DIVISION entry's USAGE past its period, into
+        the PROCEDURE DIVISION. The last entry (and its record's layout) can only pass once
+        that is fixed, unless the entry codes a USAGE of its own: mark it `depends_on`."""
+        items = self.m.facts.get("data_items", [])[first_fact:]
+        if not items:
+            return
+        last = items[-1]
+        if last.get("usage") or last.get("horror") == "H-0009":
+            return
+        last.setdefault("depends_on", ["H-0009"])
+        layouts = self.m.facts.get("layouts", [])
+        if layouts and layouts[-1].get("horror") != "H-0009":
+            layouts[-1].setdefault("depends_on", ["H-0009"])
 
     def records(self, items: list[Item], section: str, dw: DataWriter) -> None:
         for it in items:
-            if it.get("value") and it.get("pic", "").startswith("X") and it["value"].startswith("'"):
-                self.idents[it["name"]] = it["value"].strip("'")
-            for kid in it.get("kids", []):
-                if kid.get("value") and (kid.get("pic") or "").startswith("X") and kid["value"].startswith("'"):
-                    self.idents[kid["name"]] = kid["value"].strip("'")
+            if "lvl" not in it:  # a bare COPY or EXEC SQL INCLUDE
+                dw.items([it], section)
+                continue
+            for x in [it, *it.get("kids", [])]:
+                if x.get("value") and (x.get("pic") or "").startswith("X") and x["value"].startswith("'"):
+                    self.idents[x["name"]] = x["value"].strip("'")
             start = self.m.line_no
             dw.items([it], section)
             if it.get("lvl") == 1:
                 with self.m.horror(it.get("horror")):
-                    self.m.fact("layouts", **layout(it, self.m.path, self.resolve, start))
+                    extra = {"depends_on": it["depends_on"]} if it.get("depends_on") else {}
+                    self.m.fact("layouts", **layout(it, self.m.path, self.resolve, start), **extra)
 
     # ------------------------------------------------------------ procedure
     def procedure(self) -> None:
         s = self.spec
         using = s.get("using")
-        self.m.cobol("PROCEDURE DIVISION" + (f" USING {' '.join(using)}" if using else "") + ".", area="A")
+        header = s.get("procedure_header", "PROCEDURE DIVISION")
+        with self.m.horror(s.get("procedure_header_horror")):
+            pline = self.m.cobol(header + (f" USING {' '.join(using)}" if using else "") + ".", area="A")
+        self.m.fact("entry_points", kind="PROCEDURE", program=s["program_id"],
+                    params=list(using) if using else [], line=pline)
         if s.get("mainline"):
             with self.m.horror(s.get("mainline_horror")):
                 start = self.m.line_no
@@ -147,27 +227,48 @@ class ProgramWriter:
                 self.stmts(s["mainline"], 0)
                 self.m.append_to_last(".")
                 self.m.fact("units", name=None, kind="mainline", section=None, start_line=start,
-                            end_line=len(self.m.lines))
+                            end_line=len(self.m.lines), **self.prog())
         current_section: Optional[dict[str, Any]] = None
         for u in s["units"]:
             with self.m.horror(u.get("horror")):
                 self.tag = u.get("tag")
                 self.unit = u["name"]
-                header = f"{u['name']} SECTION." if u["kind"] == "section" else f"{u['name']}."
-                start = self.line(header, area="A")
+                if u["kind"] == "section":
+                    start = self.line(f"{u['name']} SECTION.", area="A", seq=u.get("seq"))
+                    stmts = u["stmts"]
+                elif u.get("header") == "period-next-line":
+                    start = self.line(u["name"], area="A", seq=u.get("seq"))
+                    self.line(".")
+                    stmts = u["stmts"]
+                elif u.get("header") == "inline":
+                    first, *rest = u["stmts"]
+                    if first["op"] != "raw" or len(first["lines"]) != 1:
+                        raise ValueError(f"{self.m.path}: an inline header takes one raw statement")
+                    start = self.line(f"{u['name']}. {first['lines'][0]}", area="A", seq=u.get("seq"))
+                    stmts = rest
+                else:
+                    start = self.line(f"{u['name']}.", area="A", seq=u.get("seq"))
+                    stmts = u["stmts"]
+                if self.m.free and len(u["name"]) > 7 and u["name"][6] == "-":
+                    # free format: a hyphen where a fixed-format line has its indicator area
+                    self.m.phantom("units", name=u["name"][7:],
+                                   why=f"{u['name']} is one paragraph-name; free format has no column 7")
+                if stmts:
+                    self.stmts(stmts, 0)
                 if u["stmts"]:
-                    self.stmts(u["stmts"], 0)
                     self.m.append_to_last(".")
                 fact = self.m.fact("units", name=u["name"], kind=u["kind"],
                                    section=current_section["name"] if current_section and u["kind"] != "section" else None,
-                                   start_line=start, end_line=len(self.m.lines))
+                                   start_line=start, end_line=len(self.m.lines), **self.prog())
                 if u["kind"] == "section":
                     if current_section is not None:
                         current_section["span_end"] = start - 1
                     current_section = fact
                 self.tag = None
+                if u.get("blank_after"):
+                    self.m.blank()
         if current_section is not None:
-            current_section["span_end"] = len(self.m.lines)
+            current_section["span_end"] = last_code_line(self.m)
 
     def stmts(self, stmts: list[Stmt], indent: int) -> None:
         for st in stmts:
@@ -177,6 +278,15 @@ class ProgramWriter:
     def op_raw(self, st: Stmt, indent: int) -> None:
         for text in st["lines"]:
             self.line(text, indent)
+
+    def op_comment(self, st: Stmt, indent: int) -> None:
+        for text in st["lines"]:
+            self.m.cobol(" " * (indent + 4) + text, area="A", indicator="*")
+        if st["call"]:
+            self.m.phantom("call_sites", verb="CALL", operand=st["call"],
+                           why="a CALL in a comment line (indicator *) is not a statement")
+            self.m.phantom("edges", kind="call", **{"from": self.unit}, target=st["call"],
+                           why="a CALL in a comment line (indicator *) is not a statement")
 
     def op_perform(self, st: Stmt, indent: int) -> None:
         tail = ""
@@ -290,6 +400,10 @@ class ProgramWriter:
         if st["verb"]:
             self.m.fact("call_sites", verb=st["verb"], form="literal", operand=st["operand"], target=st["operand"],
                         line=line, resolves_to=self.program_paths.get(st["operand"]) if st["verb"] in ("LINK", "XCTL") else None)
+        if st.get("resource"):
+            r = st["resource"]
+            self.m.fact("cics_resources", verb=r["verb"], kind=r["kind"], name=r["name"],
+                        qualifier=r.get("qualifier"), record=r.get("record"), access=r["access"], line=line)
 
     def resolve_exit_performs(self) -> None:
         """EXIT PERFORM is not a PERFORM: whatever token follows it must not become a callee."""
@@ -311,8 +425,36 @@ class ProgramWriter:
                                    why=f"EXIT PERFORM (line {line}) is not a PERFORM; {nxt.rstrip('.')} follows it")
 
 
+def repr_name(pid: str, spec: dict[str, Any]) -> str:
+    return f"'{pid}'" if spec.get("program_id_style") == "quoted" else pid
+
+
+def last_code_line(m: Member) -> int:
+    for i in range(len(m.lines), 0, -1):
+        ln = m.lines[i - 1]
+        if len(ln) > 7 and ln[6] not in "*/" and ln[7:72].strip():
+            return i
+    return len(m.lines)
+
+
+def all_programs(spec: dict[str, Any]) -> list[dict[str, Any]]:
+    """Every program a member's spec holds: itself, its nested programs, its siblings."""
+    out = [spec]
+    for n in spec.get("nested", []):
+        out += all_programs(n)
+    for sib in spec.get("siblings", []):
+        out += all_programs(sib)
+    return out
+
+
 def write_program(m: Member, spec: dict[str, Any], resolve: Resolver, program_paths: dict[str, str]) -> None:
-    ProgramWriter(m, spec, resolve, program_paths).write()
+    multi = bool(spec.get("nested") or spec.get("siblings"))
+    if spec.get("free"):
+        m.raw("       >>SOURCE FORMAT FREE")
+    with m.horror(spec.get("member_horror")):
+        ProgramWriter(m, spec, resolve, program_paths, multi).write()
+        for sib in spec.get("siblings", []):
+            ProgramWriter(m, sib, resolve, program_paths, True).write()
     m.compile = {"status": spec.get("compile", COMPILED)}
     if spec.get("compile_reason"):
         m.compile["reason"] = spec["compile_reason"]
@@ -323,5 +465,6 @@ def write_program(m: Member, spec: dict[str, Any], resolve: Resolver, program_pa
 def write_copybook(m: Member, spec: dict[str, Any], resolve: Resolver) -> None:
     for c in spec.get("header", []):
         m.comment(c)
-    DataWriter(m, resolve).items(spec["items"], None)
+    with m.horror(spec.get("horror")):
+        DataWriter(m, resolve).items(spec["items"], None)
     m.compile = {"status": "copybook"}

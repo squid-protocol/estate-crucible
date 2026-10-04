@@ -13,16 +13,24 @@ from pathlib import Path
 from typing import Any, Optional
 
 from . import FORMAT, VERSION
-from .cobol import write_copybook, write_program
+from .cobol import all_programs, write_copybook, write_program
 from .data import Item
 from .model import CHANNELS, Member
 from .other import symbolic_map, write_bms, write_csd, write_dclgen, write_jcl
+from .pli import write_pli
 
 # library -> file extension, as GitGalaxy (and most exporters) recognise members
 EXT = {"cobol": ".cbl", "copybook": ".cpy", "jcl": ".jcl", "proclib": ".prc", "bms": ".bms", "csd": ".csd",
-       "dclgen": ".dcl", "copylib": ".cpy"}
+       "dclgen": ".dcl", "copylib": ".cpy", "pli": ".pli"}
 LANG = {"cobol": "cobol", "copybook": "cobol", "copylib": "cobol", "dclgen": "cobol", "jcl": "jcl",
-        "proclib": "jcl", "bms": "bms", "csd": "csd"}
+        "proclib": "jcl", "bms": "bms", "csd": "csd", "pli": "pli"}
+SHARED_COPYLIB = "SHRCPY"
+
+
+def syslib(app: Optional[str]) -> list[str]:
+    """The copy libraries a program of `app` is compiled with, in SYSLIB order. A library's
+    name is what `COPY member IN library` names: <APP>CPY, <APP>DCL, SHRCPY."""
+    return ([f"{app}CPY", f"{app}DCL"] if app else []) + [SHARED_COPYLIB]
 
 
 def member_path(app: Optional[str], library: str, member: str) -> str:
@@ -38,47 +46,52 @@ class Estate:
         self.apps = apps
         self.shared = shared
         self.horror_defs = {h["id"]: h for h in horrors}
+        self.not_planted: list[dict[str, Any]] = []
         self.seed = seed
         self.size = size
         self.members: dict[str, Member] = {}
         self.program_paths: dict[str, str] = {}
-        # copybook member -> [(path, items)] per search scope
-        self.copybooks: dict[tuple[Optional[str], str], tuple[str, list[Item]]] = {}
+        # (library, member) -> (path, items)
+        self.copybooks: dict[tuple[str, str], tuple[str, list[Item]]] = {}
 
     # ------------------------------------------------------------ registry
     def _register(self) -> None:
         for app in self.apps:
             a = app["id"]
             for p in app.get("programs", []):
-                if p["program_id"] in self.program_paths:
-                    raise ValueError(f"PROGRAM-ID {p['program_id']} defined twice")
-                self.program_paths[p["program_id"]] = member_path(a, "cobol", p["member"])
+                for prog in all_programs(p):
+                    if prog["program_id"] in self.program_paths:
+                        raise ValueError(f"PROGRAM-ID {prog['program_id']} defined twice")
+                    self.program_paths[prog["program_id"]] = member_path(a, "cobol", p["member"])
             for cb in app.get("copybooks", []):
-                self.copybooks[(a, cb["member"])] = (member_path(a, "copybook", cb["member"]), cb["items"])
+                self.copybooks[(f"{a}CPY", cb["member"])] = (member_path(a, "copybook", cb["member"]), cb["items"])
             for bms in app.get("bms", []):
-                self.copybooks[(a, bms["mapset"])] = (member_path(a, "copybook", bms["mapset"]), symbolic_map(bms))
+                self.copybooks[(f"{a}CPY", bms["mapset"])] = (member_path(a, "copybook", bms["mapset"]),
+                                                             symbolic_map(bms))
             for d in app.get("dclgen", []):
-                self.copybooks[(a, d["member"])] = (member_path(a, "dclgen", d["member"]), [])
+                self.copybooks[(f"{a}DCL", d["member"])] = (member_path(a, "dclgen", d["member"]), [])
         for cb in self.shared.get("copylib", []):
-            self.copybooks[(None, cb["member"])] = (member_path(None, "copylib", cb["member"]), cb["items"])
+            self.copybooks[(SHARED_COPYLIB, cb["member"])] = (member_path(None, "copylib", cb["member"]), cb["items"])
 
     def resolver(self, app: Optional[str]):
-        """SYSLIB order: the app's copybook / DCLGEN libraries, then shared/copylib."""
+        """COPY resolution: `IN library` searches that library only; otherwise SYSLIB order
+        (the app's copybook and DCLGEN libraries, then shared/copylib), first hit wins."""
 
-        def resolve(member: str) -> tuple[Optional[str], Optional[list[Item]]]:
-            for scope in (app, None):
-                hit = self.copybooks.get((scope, member))
+        def resolve(member: str, lib: Optional[str] = None) -> tuple[Optional[str], Optional[list[Item]]]:
+            for library in [lib] if lib else syslib(app):
+                hit = self.copybooks.get((library, member))
                 if hit:
                     return hit
             return None, None
 
         return resolve
 
-    def _new(self, app: Optional[str], library: str, member: str, numbered: bool = False) -> Member:
+    def _new(self, app: Optional[str], library: str, member: str, numbered: bool = False,
+             free: bool = False) -> Member:
         path = member_path(app, library, member)
         if path in self.members:
             raise ValueError(f"{path} written twice")
-        m = Member(path, LANG[library], app=app, library=library, numbered=numbered)
+        m = Member(path, LANG[library], app=app, library=library, numbered=numbered, free=free)
         self.members[path] = m
         return m
 
@@ -100,8 +113,10 @@ class Estate:
             for d in app.get("dclgen", []):
                 write_dclgen(self._new(a, "dclgen", d["member"]), d)
             for p in app.get("programs", []):
-                write_program(self._new(a, "cobol", p["member"], p.get("numbered", False)), p, resolve,
-                              self.program_paths)
+                write_program(self._new(a, "cobol", p["member"], p.get("numbered", False), p.get("free", False)),
+                              p, resolve, self.program_paths)
+            for pl in app.get("pli", []):
+                write_pli(self._new(a, "pli", pl["member"]), pl, self.program_paths)
             for j in app.get("jcl", []):
                 write_jcl(self._new(a, "jcl", j["name"]), j, self.program_paths, proc=False)
             for pr in app.get("procs", []):
@@ -115,7 +130,49 @@ class Estate:
             write_jcl(self._new(None, "proclib", pr["name"]), pr, self.program_paths, proc=True)
         self._link_generated()
         self._link_dependents()
+        self._file_edges()
+        self._link_collisions()
         self._check_horrors()
+
+    def _link_collisions(self) -> None:
+        """#4265 (H-0034): a COPY of a member that exists in more than one library resolves
+        right only when the reader follows the program's own SYSLIB order. Every such COPY,
+        and the layout that expands it, is marked `depends_on` H-0034 (unless planted there)."""
+        libs_of: dict[str, set] = {}
+        for (lib, member) in self.copybooks:
+            libs_of.setdefault(member, set()).add(lib)
+        shared = {mem for mem, libs in libs_of.items() if len(libs) > 1}
+        for m in self.members.values():
+            hit = False
+            for f in m.facts.get("copies", []):
+                if f["member"] in shared and f.get("horror") != "H-0034":
+                    f.setdefault("depends_on", ["H-0034"])
+                    hit = True
+            if not hit:
+                continue
+            for lay in m.facts.get("layouts", []):
+                files = {x["file"] for x in lay["fields"]}
+                if any(p.endswith(f"/{mem}.cpy") for p in files for mem in shared) and lay.get("horror") != "H-0034":
+                    lay.setdefault("depends_on", ["H-0034"])
+
+    def _file_edges(self) -> None:
+        """file_edges: the resolved invocation edges between members (edge_data kinds `call`
+        for CALL / LINK / XCTL, `exec` for JCL EXEC PGM), one per (target, kind)."""
+        for m in self.members.values():
+            seen: dict[tuple[str, str], dict[str, Any]] = {}
+            for f in m.facts.get("call_sites", []):
+                if not f.get("resolves_to") or f["resolves_to"] == m.path:
+                    continue
+                kind = "exec" if f["verb"] == "EXEC PGM" else "call" if f["verb"] in ("CALL", "LINK", "XCTL") else None
+                if kind is None or (f["resolves_to"], kind) in seen:
+                    continue
+                row = {"kind": kind, "target": f["resolves_to"]}
+                for tag in ("horror", "depends_on"):
+                    if f.get(tag):
+                        row[tag] = f[tag]
+                seen[(f["resolves_to"], kind)] = row
+            for row in seen.values():
+                m.facts.setdefault("file_edges", []).append(row)
 
     def _link_dependents(self) -> None:
         """A call site whose target program's identity is itself a planted horror (H-0008)
@@ -206,11 +263,18 @@ class Estate:
                 "Generated by `python3 -m generator`; do not edit. Each `H-*.json` holds the horror's",
                 "definition (from `spec/horrors.json`), the members it is planted in, and the expected",
                 "facts and phantoms the answer key carries for it.", "",
-                "| id | issue | category | title | planted in |", "|---|---|---|---|---|"]
+                "| id | issue (defect) | category | title | planted in |", "|---|---|---|---|---|"]
         for hid, d in sorted(self.horror_defs.items()):
             where = ", ".join(f"`{p}`" for p, m in sorted(self.members.items()) if hid in m.horrors)
             issue = f"[#{d['issue']}](https://github.com/squid-protocol/gitgalaxy/issues/{d['issue']})" if d.get("issue") else ""
-            rows.append(f"| {hid} | {issue} | {d['category']} | {d['title']} | {where} |")
+            src = f"{issue} ({d['defect']})" if d.get("defect") else issue
+            rows.append(f"| {hid} | {src} | {d['category']} | {d['title']} | {where} |")
+        if self.not_planted:
+            rows += ["", "## Field-testing defects not planted", "",
+                     "From gitgalaxy `tests/cobol_mainframe/field_testing.json`; each waits for what the reason names.", "",
+                     "| defects | why not |", "|---|---|"]
+            for np in self.not_planted:
+                rows.append(f"| {', '.join(np['defects'])} | {np['why']} |")
         return "\n".join(rows) + "\n"
 
 

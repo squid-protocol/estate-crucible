@@ -41,6 +41,11 @@ REQUIRED = {
     "screen_fields": ("kind", "mapset", "line"),
     "csd_resources": ("type", "name", "group", "line"),
     "transactions": ("transid", "program", "line"),
+    "cics_resources": ("verb", "kind", "name", "access", "line"),
+    "jcl_datasets": ("dsn", "step", "dd", "line"),
+    "file_control": ("select", "assign", "organization", "file_status", "line"),
+    "entry_points": ("kind", "program", "params", "line"),
+    "file_edges": ("kind", "target"),
 }
 
 

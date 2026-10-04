@@ -36,6 +36,12 @@ CHANNELS = (
     "screen_fields",
     "csd_resources",
     "transactions",
+    # phase 1 (#4317)
+    "cics_resources",
+    "jcl_datasets",
+    "file_control",
+    "entry_points",
+    "file_edges",
 )
 
 
@@ -52,6 +58,7 @@ class Member:
         library: str,
         numbered: bool = False,
         seq_step: int = 100,
+        free: bool = False,
     ) -> None:
         self.path = path
         self.language = language
@@ -59,6 +66,8 @@ class Member:
         self.library = library
         self.numbered = numbered
         self.seq_step = seq_step
+        # free-format source (>>SOURCE FORMAT FREE): no sequence or indicator area, no column 72
+        self.free = free
         self.lines: list[str] = []
         self.facts: dict[str, list[dict[str, Any]]] = {}
         self.phantoms: list[dict[str, Any]] = []
@@ -83,12 +92,18 @@ class Member:
         return len(self.lines)
 
     def cobol(self, text: str, *, area: str = "B", indent: int = 0, indicator: str = " ",
-              tag: Optional[str] = None, pad: bool = False) -> int:
+              tag: Optional[str] = None, pad: bool = False, seq: Optional[str] = None) -> int:
         """Emit one fixed-format COBOL line. `area` A starts at col 8, B at col 12 (+indent).
         `tag` fills cols 73-80; `pad` keeps the line blank-padded to col 72 (a member saved
         from ISPF with trailing blanks)."""
-        seq = self.seq_of(self.line_no).ljust(SEQ_WIDTH)
         lead = "" if area == "A" else " " * (AREA_B_COL - AREA_A_COL + indent)
+        if self.free:
+            if indicator == "*":
+                self.lines.append((lead + "*> " + text).rstrip())
+            else:
+                self.lines.append((lead + text).rstrip())
+            return len(self.lines)
+        seq = (seq if seq is not None else self.seq_of(self.line_no)).ljust(SEQ_WIDTH)
         line = seq + indicator + lead + text
         if len(line) > CODE_END_COL:
             raise ValueError(f"{self.path}:{self.line_no}: past column 72: {line!r}")
@@ -102,6 +117,10 @@ class Member:
             line = line.rstrip()
         self.lines.append(line)
         return len(self.lines)
+
+    def blank(self) -> int:
+        """An empty line. A numbered member keeps the sequence number on it, as ISPF does."""
+        return self.raw(self.seq_of(self.line_no))
 
     def comment(self, text: str = "") -> int:
         return self.cobol(text, area="A", indicator="*")

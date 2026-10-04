@@ -110,7 +110,12 @@ def main(argv: list[str]) -> int:
     with tempfile.TemporaryDirectory(prefix="estate-cobc-") as tmp:
         work = Path(tmp)
         for path, meta in sorted(manifest["members"].items()):
-            if meta["library"] != "cobol" or (only and path not in only):
+            if only and path not in only:
+                continue
+            if meta["library"] == "pli":
+                print(f"{path}: not compiled (ibm-only: {meta['compile']['reason']})")
+                continue
+            if meta["library"] != "cobol":
                 continue
             status = meta["compile"]["status"]
             check = meta["compile"].get("check_variant")
@@ -124,11 +129,15 @@ def main(argv: list[str]) -> int:
             libs = [ESTATE / "apps" / app / "copybook", ESTATE / "apps" / app / "dclgen", ESTATE / "shared" / "copylib",
                     STUBS]
             cics = "EXEC CICS" in (ESTATE / path).read_text(encoding="utf-8").upper()
-            for lib in reversed(libs):  # earlier libraries win
+            lib_names = [f"{app}CPY", f"{app}DCL", "SHRCPY", None]
+            for lib, lib_name in reversed(list(zip(libs, lib_names))):  # noqa: B905 -- earlier libraries win
                 for cb in sorted(lib.glob("*.*")) if lib.is_dir() else []:
                     if cb.suffix in (".cpy", ".dcl"):
-                        (d / f"{cb.stem}.cpy").write_text(stub(cb.read_text(encoding="utf-8"), cics=False),
-                                                          encoding="utf-8")
+                        text = stub(cb.read_text(encoding="utf-8"), cics=False)
+                        (d / f"{cb.stem}.cpy").write_text(text, encoding="utf-8")
+                        if lib_name:  # `COPY member IN library` reads <library>/<member>
+                            (d / lib_name).mkdir(exist_ok=True)
+                            (d / lib_name / f"{cb.stem}.cpy").write_text(text, encoding="utf-8")
             src = (ESTATE / path).read_text(encoding="utf-8")
             if status == "compiled-stubbed":
                 src = stub(src, cics=cics)

@@ -26,9 +26,11 @@ DEFAULT_SEED = 1
 
 
 def build(size: str = "small", seed: int = DEFAULT_SEED, filler: int | None = None) -> dict[str, str]:
-    horrors = json.loads(SPEC.read_text(encoding="utf-8"))["horrors"]
+    spec = json.loads(SPEC.read_text(encoding="utf-8"))
+    horrors = spec["horrors"]
     count = SIZES[size] if filler is None else filler
     estate = Estate(HAND_APPS + filler_apps(seed, count), SHARED, horrors, seed, size)
+    estate.not_planted = spec.get("not_planted", [])
     estate.build()
     return estate.files()
 

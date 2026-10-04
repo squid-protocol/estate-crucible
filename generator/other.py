@@ -60,7 +60,14 @@ def write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], *,
             else:
                 dsn = dd["dsn"] + (f"({dd['gen']})" if dd.get("gen") else "")
                 ops = [f"DSN={dsn}", f"DISP={_disp(dd['disp'])}"] + dd.get("extra", [])
-            dline = _jcl_stmt(m, dd["name"], "DD", ops)
+            with m.horror(dd.get("horror")):
+                dline = _jcl_stmt(m, dd["name"], "DD", ops)
+            if dd.get("dsn"):
+                with m.horror(dd.get("horror")):
+                    row = m.fact("jcl_datasets", dsn=dd["dsn"], generation=dd.get("gen"), step=step["name"],
+                                 dd=dd["name"], line=dline)
+                    if (dd.get("gen") or "")[:1] in "+-" and dd.get("gen") and not row.get("horror"):
+                        row["depends_on"] = ["H-0011"]  # #4331: a signed relative generation
             disp: tuple[str, ...] = dd.get("disp") or ()
             m.fact("jcl_dds", job=None if proc else owner, proc=owner if proc else None, step=step["name"],
                    dd=dd["name"], dsn=dd.get("dsn"), generation=dd.get("gen"),
@@ -157,6 +164,12 @@ def write_csd(m: Member, spec: dict[str, Any], program_paths: dict[str, str]) ->
 
 def write_dclgen(m: Member, spec: dict[str, Any]) -> None:
     """A DCLGEN member: the DECLARE TABLE and the COBOL host structure."""
+    with m.horror(spec.get("horror")):
+        _dclgen(m, spec)
+    m.compile = {"status": "copybook"}
+
+
+def _dclgen(m: Member, spec: dict[str, Any]) -> None:
     table = spec["table"]
     m.comment("*" * 63)
     m.comment(f" DCLGEN TABLE({table})".ljust(62) + "*")
@@ -185,16 +198,16 @@ def write_dclgen(m: Member, spec: dict[str, Any]) -> None:
             kids.append(I(10, cname, kids=[I(49, cname + "-LEN", "S9(4)", "USAGE COMP"),
                                            I(49, cname + "-TEXT", f"X({length})")]))
         elif typ == "DECIMAL":
-            kids.append(I(10, cname, f"S9({length - scale})V9({scale})", "USAGE COMP-3"))
+            pic = f"S9({length - scale})V9({scale})" if scale else f"S9({length})"
+            kids.append(I(10, cname, pic, "USAGE COMP-3"))
         elif typ == "INTEGER":
             kids.append(I(10, cname, "S9(9)", "USAGE COMP"))
         elif typ == "DATE":
             kids.append(I(10, cname, "X(10)"))
         else:
             raise ValueError(typ)
-    DataWriter(m, lambda _n: (None, None)).items([I(1, spec["structure"], kids=kids)], None)
+    DataWriter(m, lambda *_a: (None, None)).items([I(1, spec["structure"], kids=kids)], None)
     m.comment("*" * 63)
     m.comment(f" THE NUMBER OF COLUMNS DESCRIBED BY THIS DECLARATION IS {len(cols)}".ljust(62) + "*")
     m.comment("*" * 63)
-    m.compile = {"status": "copybook"}
 
