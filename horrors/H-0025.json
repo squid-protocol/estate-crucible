@@ -1,0 +1,102 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0025",
+ "title": "SIGN LEADING / TRAILING SEPARATE takes a byte of its own",
+ "category": "layouts",
+ "issue": 3694,
+ "defect": "D024",
+ "shapes": [
+  "05 WS-ADJUST PIC S9(7)V99 SIGN LEADING SEPARATE (10 bytes)",
+  "05 WS-CREDIT PIC S9(5) SIGN TRAILING SEPARATE (6 bytes)"
+ ],
+ "asserts": "With SEPARATE CHARACTER the sign takes its own byte: the layout counts it.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "SIGN clause (p.231)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The character S in the PICTURE character string is counted in determining the size of the data item (in terms of standard data format characters)."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/BILL/cobol/BILLCALC.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-SIGNED",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 31,
+      "horror": "H-0025"
+     },
+     {
+      "level": 5,
+      "name": "WS-ADJUST",
+      "pic": "S9(7)V99",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 32,
+      "sign_separate": true,
+      "sign_leading": true,
+      "horror": "H-0025"
+     },
+     {
+      "level": 5,
+      "name": "WS-CREDIT",
+      "pic": "S9(5)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 33,
+      "sign_separate": true,
+      "sign_leading": false,
+      "horror": "H-0025"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-SIGNED",
+      "line": 31,
+      "bytes": 16,
+      "fields": [
+       {
+        "name": "WS-ADJUST",
+        "level": 5,
+        "pic": "S9(7)V99",
+        "usage": null,
+        "offset": 0,
+        "bytes": 10,
+        "file": "apps/BILL/cobol/BILLCALC.cbl"
+       },
+       {
+        "name": "WS-CREDIT",
+        "level": 5,
+        "pic": "S9(5)",
+        "usage": null,
+        "offset": 10,
+        "bytes": 6,
+        "file": "apps/BILL/cobol/BILLCALC.cbl"
+       }
+      ],
+      "horror": "H-0025"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

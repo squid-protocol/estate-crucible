@@ -1,0 +1,46 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0021",
+ "title": "Commented-out CALL / PERFORM (indicator *) are not statements",
+ "category": "edges",
+ "issue": 3420,
+ "defect": "D010",
+ "shapes": [
+  "*    CALL 'OLDINVAD' USING WS-INV-AREA and *    PERFORM 2500-OLD-REORDER as comment lines (INVUPD)"
+ ],
+ "asserts": "A comment line holds no statement: no call site, no edge.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Comment lines (p.60)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A comment line is any line with an asterisk (*) or slash (/) in the indicator area (column 7) of the line, or with a floating comment indicator (*>) as the first character-string in the program text area (Area A plus Area B)."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/INVN/cobol/INVUPD.cbl",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "expected": {},
+   "phantoms": [
+    {
+     "channel": "call_sites",
+     "verb": "CALL",
+     "operand": "OLDINVAD",
+     "why": "a CALL in a comment line (indicator *) is not a statement",
+     "horror": "H-0021"
+    },
+    {
+     "channel": "edges",
+     "kind": "call",
+     "from": "2000-ADJUST",
+     "target": "OLDINVAD",
+     "why": "a CALL in a comment line (indicator *) is not a statement",
+     "horror": "H-0021"
+    }
+   ]
+  }
+ ]
+}

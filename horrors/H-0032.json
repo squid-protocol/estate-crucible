@@ -1,0 +1,50 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0032",
+ "title": "ASSIGN TO at the end of a line with cols 73-80 identification; the assignment-name on the next line",
+ "category": "file-control",
+ "issue": 4264,
+ "defect": "D044",
+ "shapes": [
+  "SELECT JRNL-FILE ASSIGN TO + GL001000 in cols 73-80; the assignment-name JRNLIN on the next line, also tagged"
+ ],
+ "asserts": "The assignment-name is JRNLIN: cols 73-80 are outside the line and the clause continues in Area B of the next.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Reference format",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-reference-format",
+   "quote": "Reference format consists of the following areas in a 72-character line."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Area B / Continuation lines (p.57-58)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "Any sentence, entry, clause, or phrase that requires more than one line can be continued in Area B of the next line that is neither a comment line nor a blank line."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/GLED/cobol/GLPOST.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "file_control": [
+     {
+      "select": "JRNL-FILE",
+      "assign": "JRNLIN",
+      "organization": "SEQUENTIAL",
+      "access_mode": null,
+      "record_key": null,
+      "file_status": "WS-JRNL-STATUS",
+      "fd_copies": [],
+      "line": 12,
+      "horror": "H-0032"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

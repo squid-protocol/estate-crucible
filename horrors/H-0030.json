@@ -1,0 +1,141 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0030",
+ "title": "An unnamed data description entry is an implicit FILLER",
+ "category": "data-items",
+ "issue": 4246,
+ "defect": "D042",
+ "shapes": [
+  "05 PIC X(6) VALUE 'BILL: ' and 05 PIC X(2) VALUE SPACES inside WS-PRINT-LINE (BILLCALC)"
+ ],
+ "asserts": "An entry with no data-name is FILLER: it is a data item named FILLER with its picture, and it occupies storage.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Data-name or FILLER clause (p.195)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "If data-name-1 or the FILLER clause is omitted, the data item being described is treated as though FILLER had been specified."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/BILL/cobol/BILLCALC.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-PRINT-LINE",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 26,
+      "horror": "H-0030"
+     },
+     {
+      "level": 5,
+      "name": "FILLER",
+      "pic": "X(6)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'BILL: '",
+      "section": "WORKING-STORAGE",
+      "line": 27,
+      "implicit_filler": true,
+      "horror": "H-0030"
+     },
+     {
+      "level": 5,
+      "name": "WS-PRT-ACCT",
+      "pic": "X(10)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 28,
+      "horror": "H-0030"
+     },
+     {
+      "level": 5,
+      "name": "FILLER",
+      "pic": "X(2)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "SPACES",
+      "section": "WORKING-STORAGE",
+      "line": 29,
+      "implicit_filler": true,
+      "horror": "H-0030"
+     },
+     {
+      "level": 5,
+      "name": "WS-PRT-AMOUNT",
+      "pic": "-Z(8)9.99",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 30,
+      "horror": "H-0030"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-PRINT-LINE",
+      "line": 26,
+      "bytes": 31,
+      "fields": [
+       {
+        "name": "FILLER",
+        "level": 5,
+        "pic": "X(6)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 6,
+        "file": "apps/BILL/cobol/BILLCALC.cbl"
+       },
+       {
+        "name": "WS-PRT-ACCT",
+        "level": 5,
+        "pic": "X(10)",
+        "usage": null,
+        "offset": 6,
+        "bytes": 10,
+        "file": "apps/BILL/cobol/BILLCALC.cbl"
+       },
+       {
+        "name": "FILLER",
+        "level": 5,
+        "pic": "X(2)",
+        "usage": null,
+        "offset": 16,
+        "bytes": 2,
+        "file": "apps/BILL/cobol/BILLCALC.cbl"
+       },
+       {
+        "name": "WS-PRT-AMOUNT",
+        "level": 5,
+        "pic": "-Z(8)9.99",
+        "usage": null,
+        "offset": 18,
+        "bytes": 13,
+        "file": "apps/BILL/cobol/BILLCALC.cbl"
+       }
+      ],
+      "horror": "H-0030"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

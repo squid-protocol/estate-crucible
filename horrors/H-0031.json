@@ -1,0 +1,225 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0031",
+ "title": "Several programs in one member: nested and batch-compiled siblings, each with MAINLINE SECTION",
+ "category": "units",
+ "issue": 4243,
+ "defect": "D043",
+ "shapes": [
+  "PAYMAIN holds PAYCALC (nested, END PROGRAM PAYCALC) and is followed by the batch-compiled sibling 'PAYRPT'; each program opens with MAINLINE SECTION",
+  "each program's own WORKING-STORAGE; CALL 'PAYCALC' / CALL 'PAYRPT' resolve inside the member"
+ ],
+ "asserts": "Each program has its own units, data items and entry point; a CALL of a nested or sibling program resolves to this member.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "COBOL program structure; End program markers (p.57, p.84-85)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A COBOL program can contain other COBOL programs, which in turn can contain still other COBOL programs. These contained programs are called nested programs."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "End program, end class, and end method markers (p.57)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "An end program marker separates each program in the sequence of programs."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/PAYR/cobol/PAYMAIN.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "MAINLINE",
+      "kind": "section",
+      "section": null,
+      "start_line": 37,
+      "end_line": 37,
+      "program": "PAYMAIN",
+      "horror": "H-0031",
+      "span_end": 48
+     },
+     {
+      "name": "MAINLINE",
+      "kind": "section",
+      "section": null,
+      "start_line": 56,
+      "end_line": 56,
+      "program": "PAYCALC",
+      "horror": "H-0031",
+      "span_end": 68
+     },
+     {
+      "name": "2000-ROUND",
+      "kind": "paragraph",
+      "section": "MAINLINE",
+      "start_line": 67,
+      "end_line": 68,
+      "program": "PAYCALC",
+      "horror": "H-0031"
+     },
+     {
+      "name": "MAINLINE",
+      "kind": "section",
+      "section": null,
+      "start_line": 77,
+      "end_line": 77,
+      "program": "PAYRPT",
+      "horror": "H-0031",
+      "span_end": 81
+     },
+     {
+      "name": "0100",
+      "kind": "paragraph",
+      "section": "MAINLINE",
+      "start_line": 78,
+      "end_line": 81,
+      "program": "PAYRPT",
+      "horror": "H-0031"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "call",
+      "from": "0100",
+      "target": "PAYCALC",
+      "line": 42,
+      "form": "literal",
+      "program": "PAYMAIN",
+      "horror": "H-0031"
+     },
+     {
+      "kind": "call",
+      "from": "0100",
+      "target": "PAYRPT",
+      "line": 43,
+      "form": "literal",
+      "program": "PAYMAIN",
+      "horror": "H-0031"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "PAYCALC",
+      "target": "PAYCALC",
+      "line": 42,
+      "resolves_to": "apps/PAYR/cobol/PAYMAIN.cbl",
+      "horror": "H-0031",
+      "depends_on": [
+       "H-0029"
+      ]
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "PAYRPT",
+      "target": "PAYRPT",
+      "line": 43,
+      "resolves_to": "apps/PAYR/cobol/PAYMAIN.cbl",
+      "horror": "H-0031",
+      "depends_on": [
+       "H-0029"
+      ]
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-I",
+      "pic": "9(4)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": "0",
+      "section": "WORKING-STORAGE",
+      "line": 53,
+      "horror": "H-0031"
+     },
+     {
+      "level": 1,
+      "name": "WS-GROSS",
+      "pic": "S9(7)V99",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": "0",
+      "section": "WORKING-STORAGE",
+      "line": 54,
+      "horror": "H-0031"
+     },
+     {
+      "level": 1,
+      "name": "WS-LINES",
+      "pic": "9(4)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": "0",
+      "section": "WORKING-STORAGE",
+      "line": 75,
+      "horror": "H-0031"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-I",
+      "line": 53,
+      "bytes": 2,
+      "fields": [
+       {
+        "name": "WS-I",
+        "level": 1,
+        "pic": "9(4)",
+        "usage": "COMP",
+        "offset": 0,
+        "bytes": 2,
+        "file": "apps/PAYR/cobol/PAYMAIN.cbl"
+       }
+      ],
+      "horror": "H-0031"
+     },
+     {
+      "record": "WS-GROSS",
+      "line": 54,
+      "bytes": 5,
+      "fields": [
+       {
+        "name": "WS-GROSS",
+        "level": 1,
+        "pic": "S9(7)V99",
+        "usage": "COMP-3",
+        "offset": 0,
+        "bytes": 5,
+        "file": "apps/PAYR/cobol/PAYMAIN.cbl"
+       }
+      ],
+      "horror": "H-0031"
+     },
+     {
+      "record": "WS-LINES",
+      "line": 75,
+      "bytes": 2,
+      "fields": [
+       {
+        "name": "WS-LINES",
+        "level": 1,
+        "pic": "9(4)",
+        "usage": "COMP",
+        "offset": 0,
+        "bytes": 2,
+        "file": "apps/PAYR/cobol/PAYMAIN.cbl"
+       }
+      ],
+      "horror": "H-0031"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

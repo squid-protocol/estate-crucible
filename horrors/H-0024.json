@@ -1,0 +1,83 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0024",
+ "title": "A called program also named in a CSD group and as a JCL job resolves to the COBOL source",
+ "category": "call-resolution",
+ "issue": 3616,
+ "defect": "D022",
+ "shapes": [
+  "EXEC CICS LINK PROGRAM('CUSTDBIO'), CUSTDBIO also DEFINEd in CSD group CUSTGRP",
+  "EXEC CICS LINK PROGRAM('INVDB'), INVDB also a CSD PROGRAM and the name of a JCL job"
+ ],
+ "asserts": "The LINK target is the COBOL program whose PROGRAM-ID is that name, not the CSD deck or the job.",
+ "citations": [
+  {
+   "doc": "CICS Transaction Server for z/OS 6.x",
+   "section": "PROGRAM resource definitions",
+   "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=attributes-program-resource-definitions",
+   "quote": "PROGRAM resources control information for a program that is stored in the program library and used to process a transaction, or part of a transaction."
+  },
+  {
+   "doc": "CICS Transaction Server for z/OS 6.x",
+   "section": "EXEC CICS LINK",
+   "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=summary-link",
+   "quote": "LINK passes control from an application program at one logical level to an application program at the next lower logical level."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/CUST/cobol/CUSTINQ.cbl",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "LINK",
+      "form": "literal",
+      "operand": "CUSTDBIO",
+      "target": "CUSTDBIO",
+      "line": 55,
+      "resolves_to": "apps/CUST/cobol/CUSTDBIO.cbl",
+      "horror": "H-0024"
+     }
+    ],
+    "file_edges": [
+     {
+      "kind": "call",
+      "target": "apps/CUST/cobol/CUSTDBIO.cbl",
+      "horror": "H-0024"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/INVN/cobol/INVUPD.cbl",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "LINK",
+      "form": "literal",
+      "operand": "INVDB",
+      "target": "INVDB",
+      "line": 40,
+      "resolves_to": "apps/INVN/cobol/INVDB.cbl",
+      "horror": "H-0024"
+     }
+    ],
+    "file_edges": [
+     {
+      "kind": "call",
+      "target": "apps/INVN/cobol/INVDB.cbl",
+      "horror": "H-0024"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

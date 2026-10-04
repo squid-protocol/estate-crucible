@@ -1,0 +1,102 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0011",
+ "title": "A GDG relative generation (+1) / (-1) is captured as a truncated DSN",
+ "category": "jcl",
+ "issue": 4331,
+ "shapes": [
+  "DSN=PROD.ACCT.MASTER(+1) (ACCTPRC)",
+  "DSN=PROD.BILL.MASTER(0) / (-1) / (+1) in one step (BILLMTH)",
+  "DSN=PROD.PAYR.REGISTER(+1) (PAYWKLY)"
+ ],
+ "asserts": "A DD names the GDG base and a relative generation; the dataset reference is the base, with or without its generation, never a name cut at the sign.",
+ "citations": [
+  {
+   "doc": "z/OS V2R2 MVS JCL Reference (SA23-1385-03)",
+   "section": "DD statement: DSNAME parameter, cataloged data set name (p.178-179)",
+   "url": "https://publibz.boulder.ibm.com/epubs/pdf/iea3b611.pdf",
+   "quote": "dsname(generation) Specifies the name of a generation data group (GDG) and the generation number (zero or a signed integer) of a generation data set within the GDG."
+  },
+  {
+   "doc": "z/OS V2R2 DFSMS Using Data Sets (SC23-6855-03)",
+   "section": "Processing generation data groups",
+   "url": "https://publibz.boulder.ibm.com/epubs/pdf/dgt3d410.pdf",
+   "quote": "The relative name is a signed integer used to refer to the latest (0), the next to the latest (-1), and so forth, generation."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/ACCT/proclib/ACCTPRC.prc",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_datasets": [
+     {
+      "dsn": "PROD.ACCT.MASTER",
+      "generation": "+1",
+      "step": "POST",
+      "dd": "ACCTOUT",
+      "line": 6,
+      "horror": "H-0011"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/BILL/jcl/BILLMTH.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_datasets": [
+     {
+      "dsn": "PROD.BILL.MASTER",
+      "generation": "0",
+      "step": "CALC",
+      "dd": "BILLIN",
+      "line": 6,
+      "horror": "H-0011"
+     },
+     {
+      "dsn": "PROD.BILL.MASTER",
+      "generation": "-1",
+      "step": "CALC",
+      "dd": "BILLPRV",
+      "line": 7,
+      "horror": "H-0011"
+     },
+     {
+      "dsn": "PROD.BILL.MASTER",
+      "generation": "+1",
+      "step": "CALC",
+      "dd": "BILLOUT",
+      "line": 8,
+      "horror": "H-0011"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/PAYR/jcl/PAYWKLY.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_datasets": [
+     {
+      "dsn": "PROD.PAYR.REGISTER",
+      "generation": "+1",
+      "step": "PAY",
+      "dd": "PAYOUT",
+      "line": 6,
+      "horror": "H-0011"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

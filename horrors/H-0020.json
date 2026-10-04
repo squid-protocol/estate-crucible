@@ -1,0 +1,48 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0020",
+ "title": "A paragraph header whose separator period is on the next line",
+ "category": "unit-extent",
+ "issue": 3419,
+ "defect": "D008",
+ "shapes": [
+  "1100-OPEN-MSG alone on its line, the separator period alone on the next (GLPOST)"
+ ],
+ "asserts": "1100-OPEN-MSG is a paragraph from its name to its last code line.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Separators (p.49-50)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A space can immediately precede or follow any separator except: The opening pseudo-text delimiter ... Within quotation marks."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Continuation lines (p.58)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "If there is no hyphen (-) in the indicator area (column 7) of a line, the last character of the preceding line is assumed to be followed by a space."
+  }
+ ],
+ "lower_confidence": "No IBM sentence states outright that a paragraph-name's separator period may be on the next line; it follows from the separator and continuation rules (an end of line is a space; a space may precede a separator period). GnuCOBOL -std=ibm accepts it.",
+ "planted": [
+  {
+   "member": "apps/GLED/cobol/GLPOST.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "1100-OPEN-MSG",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 38,
+      "end_line": 40,
+      "horror": "H-0020"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0027",
+ "title": "A mixed-case paragraph name (End-Program) is a paragraph",
+ "category": "units",
+ "issue": 4031,
+ "defect": "D037",
+ "shapes": [
+  "paragraph End-Program. (mixed case), PERFORM End-Program (GLPOST)"
+ ],
+ "asserts": "End-Program is a paragraph; COBOL words are not case-sensitive.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "COBOL words with single-byte characters (p.12)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "Latin uppercase letters A through Z, Latin lowercase letters a through z, digits 0 through 9, - (hyphen), _ (underscore)"
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/GLED/cobol/GLPOST.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "End-Program",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 50,
+      "end_line": 51,
+      "horror": "H-0027"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

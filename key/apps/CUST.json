@@ -189,13 +189,15 @@
      "member": "SQLCA",
      "kind": "sql-include",
      "line": 10,
-     "resolves_to": null
+     "resolves_to": null,
+     "horror": "H-0017"
     },
     {
      "member": "DCLCUST",
      "kind": "sql-include",
      "line": 11,
-     "resolves_to": "apps/CUST/dclgen/DCLCUST.dcl"
+     "resolves_to": "apps/CUST/dclgen/DCLCUST.dcl",
+     "horror": "H-0017"
     },
     {
      "member": "CUSTCOMM",
@@ -239,6 +241,9 @@
      "line": 15,
      "copy_members": [
       "CUSTCOMM"
+     ],
+     "depends_on": [
+      "H-0009"
      ]
     }
    ],
@@ -307,6 +312,9 @@
        "bytes": 40,
        "file": "apps/CUST/copybook/CUSTCOMM.cpy"
       }
+     ],
+     "depends_on": [
+      "H-0009"
      ]
     }
    ],
@@ -338,6 +346,14 @@
      "table": "PROD.CUSTOMER",
      "access": "update",
      "line": 43
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "CUSTDBIO",
+     "params": [],
+     "line": 17
     }
    ],
    "phantoms": [
@@ -375,7 +391,8 @@
     }
    ],
    "horrors": [
-    "H-0005"
+    "H-0005",
+    "H-0017"
    ]
   },
   "apps/CUST/cobol/CUSTINQ.cbl": {
@@ -532,7 +549,8 @@
      "operand": "CUSTDBIO",
      "target": "CUSTDBIO",
      "line": 55,
-     "resolves_to": "apps/CUST/cobol/CUSTDBIO.cbl"
+     "resolves_to": "apps/CUST/cobol/CUSTDBIO.cbl",
+     "horror": "H-0024"
     }
    ],
    "copies": [
@@ -540,13 +558,15 @@
      "member": "CUSTCOMM",
      "kind": "copy",
      "line": 12,
-     "resolves_to": "apps/CUST/copybook/CUSTCOMM.cpy"
+     "resolves_to": "apps/CUST/copybook/CUSTCOMM.cpy",
+     "horror": "H-0010"
     },
     {
      "member": "CUSTMS",
      "kind": "copy",
      "line": 13,
      "resolves_to": "apps/CUST/copybook/CUSTMS.cpy",
+     "horror": "H-0010",
      "alternatives": [
       "apps/CUST/bms/CUSTMS.bms"
      ]
@@ -555,13 +575,17 @@
      "member": "DFHAID",
      "kind": "copy",
      "line": 14,
-     "resolves_to": null
+     "resolves_to": null,
+     "horror": "H-0010"
     },
     {
      "member": "DATEWS",
      "kind": "copy",
      "line": 17,
-     "resolves_to": "shared/copylib/DATEWS.cpy"
+     "resolves_to": "shared/copylib/DATEWS.cpy",
+     "depends_on": [
+      "H-0034"
+     ]
     }
    ],
    "data_items": [
@@ -577,7 +601,8 @@
      "line": 11,
      "copy_members": [
       "CUSTCOMM"
-     ]
+     ],
+     "horror": "H-0010"
     },
     {
      "level": 1,
@@ -624,7 +649,10 @@
      "redefines": null,
      "value": null,
      "section": "LINKAGE",
-     "line": 20
+     "line": 20,
+     "depends_on": [
+      "H-0009"
+     ]
     }
    ],
    "layouts": [
@@ -660,7 +688,8 @@
        "bytes": 40,
        "file": "apps/CUST/copybook/CUSTCOMM.cpy"
       }
-     ]
+     ],
+     "horror": "H-0010"
     },
     {
      "record": "WS-RESP",
@@ -731,6 +760,9 @@
        "bytes": 8,
        "file": "shared/copylib/DATEWS.cpy"
       }
+     ],
+     "depends_on": [
+      "H-0034"
      ]
     },
     {
@@ -763,7 +795,60 @@
        "bytes": 50,
        "file": "apps/CUST/cobol/CUSTINQ.cbl"
       }
+     ],
+     "depends_on": [
+      "H-0009"
      ]
+    }
+   ],
+   "cics_resources": [
+    {
+     "verb": "SEND",
+     "kind": "MAP",
+     "name": "CUSTMAP",
+     "qualifier": "CUSTMS",
+     "record": null,
+     "access": "write",
+     "line": 25,
+     "horror": "H-0002"
+    },
+    {
+     "verb": "RECEIVE",
+     "kind": "MAP",
+     "name": "CUSTMAP",
+     "qualifier": "CUSTMS",
+     "record": "CUSTMAPI",
+     "access": "read",
+     "line": 44
+    },
+    {
+     "verb": "SEND",
+     "kind": "MAP",
+     "name": "CUSTMAP",
+     "qualifier": "CUSTMS",
+     "record": null,
+     "access": "write",
+     "line": 63
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "CUSTINQ",
+     "params": [],
+     "line": 21
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "call",
+     "target": "apps/CUST/cobol/CUSTMNU.cbl",
+     "horror": "H-0002"
+    },
+    {
+     "kind": "call",
+     "target": "apps/CUST/cobol/CUSTDBIO.cbl",
+     "horror": "H-0024"
     }
    ],
    "phantoms": [
@@ -786,7 +871,9 @@
    ],
    "horrors": [
     "H-0002",
-    "H-0006"
+    "H-0006",
+    "H-0010",
+    "H-0024"
    ]
   },
   "apps/CUST/cobol/CUSTMNU.cbl": {
@@ -833,7 +920,10 @@
      "redefines": null,
      "value": "'CUSTOMER SYSTEMS: CINQ = INQUIRY'",
      "section": "WORKING-STORAGE",
-     "line": 9
+     "line": 9,
+     "depends_on": [
+      "H-0009"
+     ]
     }
    ],
    "layouts": [
@@ -851,7 +941,18 @@
        "bytes": 40,
        "file": "apps/CUST/cobol/CUSTMNU.cbl"
       }
+     ],
+     "depends_on": [
+      "H-0009"
      ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "CUSTMNU",
+     "params": [],
+     "line": 11
     }
    ]
   },
@@ -1350,7 +1451,8 @@
      "redefines": null,
      "value": null,
      "section": null,
-     "line": 15
+     "line": 15,
+     "horror": "H-0015"
     },
     {
      "level": 10,
@@ -1361,7 +1463,8 @@
      "redefines": null,
      "value": null,
      "section": null,
-     "line": 16
+     "line": 16,
+     "horror": "H-0015"
     },
     {
      "level": 10,
@@ -1372,7 +1475,8 @@
      "redefines": null,
      "value": null,
      "section": null,
-     "line": 17
+     "line": 17,
+     "horror": "H-0015"
     },
     {
      "level": 49,
@@ -1383,7 +1487,8 @@
      "redefines": null,
      "value": null,
      "section": null,
-     "line": 18
+     "line": 18,
+     "horror": "H-0015"
     },
     {
      "level": 49,
@@ -1394,7 +1499,8 @@
      "redefines": null,
      "value": null,
      "section": null,
-     "line": 19
+     "line": 19,
+     "horror": "H-0015"
     },
     {
      "level": 10,
@@ -1405,7 +1511,8 @@
      "redefines": null,
      "value": null,
      "section": null,
-     "line": 20
+     "line": 20,
+     "horror": "H-0015"
     },
     {
      "level": 10,
@@ -1416,7 +1523,8 @@
      "redefines": null,
      "value": null,
      "section": null,
-     "line": 21
+     "line": 21,
+     "horror": "H-0015"
     }
    ],
    "sql_tables": [
@@ -1456,8 +1564,12 @@
        "nullable": true,
        "line": 10
       }
-     ]
+     ],
+     "horror": "H-0015"
     }
+   ],
+   "horrors": [
+    "H-0015"
    ]
   }
  }

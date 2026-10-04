@@ -1,0 +1,57 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0023",
+ "title": "A spaced-out PROCEDURE        DIVISION header and an inline paragraph header",
+ "category": "units",
+ "issue": 3533,
+ "defect": "D020",
+ "shapes": [
+  "PROCEDURE        DIVISION. (multiple spaces, GLPOST)",
+  "1000-INIT. MOVE ZERO TO WS-TOTAL (the first statement on the header line)"
+ ],
+ "asserts": "The procedure division starts at the spaced header; 1000-INIT is a paragraph whose first statement shares its header line.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Separators (p.49)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "Anywhere a space is used as a separator or as part of a separator, more than one space can be used."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Procedure division structure > Procedures",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-procedures",
+   "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/GLED/cobol/GLPOST.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "1000-INIT",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 36,
+      "end_line": 37,
+      "horror": "H-0023"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "1000-INIT",
+      "target": "1100-OPEN-MSG",
+      "line": 37,
+      "horror": "H-0023"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

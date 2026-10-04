@@ -1,0 +1,1221 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0018",
+ "title": "A data-only copybook (no procedure code, 60+ lines) is still an import target",
+ "category": "copy",
+ "issue": 3417,
+ "defect": "D006",
+ "shapes": [
+  "INVITEM: 60+ lines of data entries and nothing else, COPYed by INVUPD"
+ ],
+ "asserts": "A copybook with no procedure code is still a member the program imports; its entries are data items.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "COPY statement",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-copy-statement",
+   "quote": "A COPY statement can appear in the source text anywhere a character string or a separator can appear."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/INVN/cobol/INVUPD.cbl",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "INVITEM",
+      "kind": "copy",
+      "line": 13,
+      "resolves_to": "apps/INVN/copybook/INVITEM.cpy",
+      "horror": "H-0018"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-ITEM-REC",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 12,
+      "copy_members": [
+       "INVITEM"
+      ],
+      "horror": "H-0018"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-ITEM-REC",
+      "line": 12,
+      "bytes": 267,
+      "fields": [
+       {
+        "name": "INV-ITEM-ID",
+        "level": 10,
+        "pic": "X(12)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 12,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-DESC",
+        "level": 10,
+        "pic": "X(40)",
+        "usage": null,
+        "offset": 12,
+        "bytes": 40,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-UOM",
+        "level": 10,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 52,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH1-ID",
+        "level": 15,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 56,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH1-ONHAND",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 60,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH1-ALLOC",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 64,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH1-REORDER",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 68,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH1-BIN",
+        "level": 15,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 72,
+        "bytes": 8,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH1-LAST-CNT",
+        "level": 15,
+        "pic": "9(8)",
+        "usage": null,
+        "offset": 80,
+        "bytes": 8,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH1-FLAG",
+        "level": 15,
+        "pic": "X",
+        "usage": null,
+        "offset": 88,
+        "bytes": 1,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH2-ID",
+        "level": 15,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 89,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH2-ONHAND",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 93,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH2-ALLOC",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 97,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH2-REORDER",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 101,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH2-BIN",
+        "level": 15,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 105,
+        "bytes": 8,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH2-LAST-CNT",
+        "level": 15,
+        "pic": "9(8)",
+        "usage": null,
+        "offset": 113,
+        "bytes": 8,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH2-FLAG",
+        "level": 15,
+        "pic": "X",
+        "usage": null,
+        "offset": 121,
+        "bytes": 1,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH3-ID",
+        "level": 15,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 122,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH3-ONHAND",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 126,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH3-ALLOC",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 130,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH3-REORDER",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 134,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH3-BIN",
+        "level": 15,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 138,
+        "bytes": 8,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH3-LAST-CNT",
+        "level": 15,
+        "pic": "9(8)",
+        "usage": null,
+        "offset": 146,
+        "bytes": 8,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH3-FLAG",
+        "level": 15,
+        "pic": "X",
+        "usage": null,
+        "offset": 154,
+        "bytes": 1,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH4-ID",
+        "level": 15,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 155,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH4-ONHAND",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 159,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH4-ALLOC",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 163,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH4-REORDER",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 167,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH4-BIN",
+        "level": 15,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 171,
+        "bytes": 8,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH4-LAST-CNT",
+        "level": 15,
+        "pic": "9(8)",
+        "usage": null,
+        "offset": 179,
+        "bytes": 8,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH4-FLAG",
+        "level": 15,
+        "pic": "X",
+        "usage": null,
+        "offset": 187,
+        "bytes": 1,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH5-ID",
+        "level": 15,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 188,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH5-ONHAND",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 192,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH5-ALLOC",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 196,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH5-REORDER",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 200,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH5-BIN",
+        "level": 15,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 204,
+        "bytes": 8,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH5-LAST-CNT",
+        "level": 15,
+        "pic": "9(8)",
+        "usage": null,
+        "offset": 212,
+        "bytes": 8,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH5-FLAG",
+        "level": 15,
+        "pic": "X",
+        "usage": null,
+        "offset": 220,
+        "bytes": 1,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH6-ID",
+        "level": 15,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 221,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH6-ONHAND",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 225,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH6-ALLOC",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 229,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH6-REORDER",
+        "level": 15,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 233,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH6-BIN",
+        "level": 15,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 237,
+        "bytes": 8,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH6-LAST-CNT",
+        "level": 15,
+        "pic": "9(8)",
+        "usage": null,
+        "offset": 245,
+        "bytes": 8,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-WH6-FLAG",
+        "level": 15,
+        "pic": "X",
+        "usage": null,
+        "offset": 253,
+        "bytes": 1,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-COST",
+        "level": 10,
+        "pic": "S9(9)V9(4)",
+        "usage": "COMP-3",
+        "offset": 254,
+        "bytes": 7,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       },
+       {
+        "name": "INV-PRICE",
+        "level": 10,
+        "pic": "S9(9)V99",
+        "usage": "COMP-3",
+        "offset": 261,
+        "bytes": 6,
+        "file": "apps/INVN/copybook/INVITEM.cpy"
+       }
+      ],
+      "horror": "H-0018"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/INVN/copybook/INVITEM.cpy",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 5,
+      "name": "INV-ITEM",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 2,
+      "horror": "H-0018"
+     },
+     {
+      "level": 10,
+      "name": "INV-ITEM-ID",
+      "pic": "X(12)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 3,
+      "horror": "H-0018"
+     },
+     {
+      "level": 10,
+      "name": "INV-DESC",
+      "pic": "X(40)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 4,
+      "horror": "H-0018"
+     },
+     {
+      "level": 10,
+      "name": "INV-UOM",
+      "pic": "X(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 5,
+      "horror": "H-0018"
+     },
+     {
+      "level": 10,
+      "name": "INV-WH1",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 6,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH1-ID",
+      "pic": "X(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 7,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH1-ONHAND",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 8,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH1-ALLOC",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 9,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH1-REORDER",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 10,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH1-BIN",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 11,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH1-LAST-CNT",
+      "pic": "9(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 12,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH1-FLAG",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 13,
+      "horror": "H-0018"
+     },
+     {
+      "level": 88,
+      "name": "INV-WH1-ACTIVE",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'A'",
+      "section": null,
+      "line": 14,
+      "horror": "H-0018"
+     },
+     {
+      "level": 10,
+      "name": "INV-WH2",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 15,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH2-ID",
+      "pic": "X(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 16,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH2-ONHAND",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 17,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH2-ALLOC",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 18,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH2-REORDER",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 19,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH2-BIN",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 20,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH2-LAST-CNT",
+      "pic": "9(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 21,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH2-FLAG",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 22,
+      "horror": "H-0018"
+     },
+     {
+      "level": 88,
+      "name": "INV-WH2-ACTIVE",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'A'",
+      "section": null,
+      "line": 23,
+      "horror": "H-0018"
+     },
+     {
+      "level": 10,
+      "name": "INV-WH3",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 24,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH3-ID",
+      "pic": "X(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 25,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH3-ONHAND",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 26,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH3-ALLOC",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 27,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH3-REORDER",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 28,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH3-BIN",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 29,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH3-LAST-CNT",
+      "pic": "9(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 30,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH3-FLAG",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 31,
+      "horror": "H-0018"
+     },
+     {
+      "level": 88,
+      "name": "INV-WH3-ACTIVE",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'A'",
+      "section": null,
+      "line": 32,
+      "horror": "H-0018"
+     },
+     {
+      "level": 10,
+      "name": "INV-WH4",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 33,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH4-ID",
+      "pic": "X(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 34,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH4-ONHAND",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 35,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH4-ALLOC",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 36,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH4-REORDER",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 37,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH4-BIN",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 38,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH4-LAST-CNT",
+      "pic": "9(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 39,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH4-FLAG",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 40,
+      "horror": "H-0018"
+     },
+     {
+      "level": 88,
+      "name": "INV-WH4-ACTIVE",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'A'",
+      "section": null,
+      "line": 41,
+      "horror": "H-0018"
+     },
+     {
+      "level": 10,
+      "name": "INV-WH5",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 42,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH5-ID",
+      "pic": "X(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 43,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH5-ONHAND",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 44,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH5-ALLOC",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 45,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH5-REORDER",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 46,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH5-BIN",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 47,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH5-LAST-CNT",
+      "pic": "9(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 48,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH5-FLAG",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 49,
+      "horror": "H-0018"
+     },
+     {
+      "level": 88,
+      "name": "INV-WH5-ACTIVE",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'A'",
+      "section": null,
+      "line": 50,
+      "horror": "H-0018"
+     },
+     {
+      "level": 10,
+      "name": "INV-WH6",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 51,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH6-ID",
+      "pic": "X(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 52,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH6-ONHAND",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 53,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH6-ALLOC",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 54,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH6-REORDER",
+      "pic": "S9(7)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 55,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH6-BIN",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 56,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH6-LAST-CNT",
+      "pic": "9(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 57,
+      "horror": "H-0018"
+     },
+     {
+      "level": 15,
+      "name": "INV-WH6-FLAG",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 58,
+      "horror": "H-0018"
+     },
+     {
+      "level": 88,
+      "name": "INV-WH6-ACTIVE",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'A'",
+      "section": null,
+      "line": 59,
+      "horror": "H-0018"
+     },
+     {
+      "level": 10,
+      "name": "INV-COST",
+      "pic": "S9(9)V9(4)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 60,
+      "horror": "H-0018"
+     },
+     {
+      "level": 10,
+      "name": "INV-PRICE",
+      "pic": "S9(9)V99",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 61,
+      "horror": "H-0018"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

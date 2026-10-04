@@ -1,0 +1,41 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0026",
+ "title": "A paragraph named END-xxx (END-IPROC1) is a paragraph",
+ "category": "units",
+ "issue": 4026,
+ "defect": "D036",
+ "shapes": [
+  "paragraph END-IPROC1. PERFORMed from 0000-MAIN (GLPOST)"
+ ],
+ "asserts": "END-IPROC1 is a user-defined word, so a legal paragraph-name; only the reserved END-xxx words are scope terminators.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "COBOL words with single-byte characters (p.12)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "Most user-defined words (all except section-names, paragraph-names, priority-numbers, and level-numbers) must contain at least one alphabetic character."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/GLED/cobol/GLPOST.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "END-IPROC1",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 48,
+      "end_line": 49,
+      "horror": "H-0026"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

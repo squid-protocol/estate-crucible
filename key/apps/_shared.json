@@ -148,6 +148,22 @@
      "sysout": null,
      "line": 6
     }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.SHARED.AUDIT.STAGE",
+     "generation": null,
+     "step": "LOG",
+     "dd": "SYSUT1",
+     "line": 5
+    },
+    {
+     "dsn": "PROD.SHARED.AUDIT.LOG",
+     "generation": null,
+     "step": "LOG",
+     "dd": "SYSUT2",
+     "line": 6
+    }
    ]
   }
  }

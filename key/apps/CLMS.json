@@ -1,0 +1,310 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "CLMS",
+ "members": {
+  "apps/CLMS/cobol/CLMEDIT.cbl": {
+   "app": "CLMS",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 18,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "CLMEDIT",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 14,
+     "end_line": 18
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "LK-CLAIM",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 9
+    },
+    {
+     "level": 5,
+     "name": "LK-CLM-ID",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 10
+    },
+    {
+     "level": 5,
+     "name": "LK-CLM-AMT",
+     "pic": "S9(7)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 11
+    },
+    {
+     "level": 5,
+     "name": "LK-CLM-STATUS",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 12,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "LK-CLAIM",
+     "line": 9,
+     "bytes": 16,
+     "fields": [
+      {
+       "name": "LK-CLM-ID",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/CLMS/cobol/CLMEDIT.cbl"
+      },
+      {
+       "name": "LK-CLM-AMT",
+       "level": 5,
+       "pic": "S9(7)V99",
+       "usage": "COMP-3",
+       "offset": 10,
+       "bytes": 5,
+       "file": "apps/CLMS/cobol/CLMEDIT.cbl"
+      },
+      {
+       "name": "LK-CLM-STATUS",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 15,
+       "bytes": 1,
+       "file": "apps/CLMS/cobol/CLMEDIT.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "CLMEDIT",
+     "params": [
+      "LK-CLAIM"
+     ],
+     "line": 13
+    }
+   ]
+  },
+  "apps/CLMS/pli/CLMPROC.pli": {
+   "app": "CLMS",
+   "library": "pli",
+   "language": "pli",
+   "numbered": false,
+   "lines": 34,
+   "compile": {
+    "status": "ibm-only",
+    "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"
+   },
+   "programs": [
+    {
+     "program_id": "CLMPROC",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "CLMPROC",
+     "kind": "procedure",
+     "section": null,
+     "start_line": 2,
+     "end_line": 12,
+     "span_end": 34
+    },
+    {
+     "name": "INIT_CLAIM",
+     "kind": "procedure",
+     "section": null,
+     "start_line": 14,
+     "end_line": 17
+    },
+    {
+     "name": "CHECK_CLAIM",
+     "kind": "procedure",
+     "section": null,
+     "start_line": 19,
+     "end_line": 25,
+     "horror": "H-0002"
+    },
+    {
+     "name": "LOG_CLAIM",
+     "kind": "procedure",
+     "section": null,
+     "start_line": 27,
+     "end_line": 29
+    },
+    {
+     "name": "WRITE_CLAIM",
+     "kind": "procedure",
+     "section": null,
+     "start_line": 31,
+     "end_line": 33
+    }
+   ],
+   "edges": [
+    {
+     "kind": "call",
+     "from": "CLMPROC",
+     "target": "INIT_CLAIM",
+     "line": 9,
+     "form": "literal"
+    },
+    {
+     "kind": "call",
+     "from": "CLMPROC",
+     "target": "CHECK_CLAIM",
+     "line": 10,
+     "form": "literal"
+    },
+    {
+     "kind": "call",
+     "from": "CLMPROC",
+     "target": "CLMEDIT",
+     "line": 11,
+     "form": "literal"
+    },
+    {
+     "kind": "call",
+     "from": "CHECK_CLAIM",
+     "target": "LOG_CLAIM",
+     "line": 23,
+     "form": "literal",
+     "horror": "H-0002"
+    },
+    {
+     "kind": "call",
+     "from": "CHECK_CLAIM",
+     "target": "WRITE_CLAIM",
+     "line": 24,
+     "form": "literal",
+     "horror": "H-0002"
+    }
+   ],
+   "call_sites": [
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "CLMEDIT",
+     "target": "CLMEDIT",
+     "line": 11,
+     "resolves_to": "apps/CLMS/cobol/CLMEDIT.cbl"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "PARM",
+     "pic": null,
+     "usage": "CHAR(100) VARYING",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 1,
+     "name": "CLAIM",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4
+    },
+    {
+     "level": 2,
+     "name": "CLM_ID",
+     "pic": null,
+     "usage": "CHAR(10)",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5
+    },
+    {
+     "level": 2,
+     "name": "CLM_AMT",
+     "pic": null,
+     "usage": "FIXED DEC(9,2)",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 6
+    },
+    {
+     "level": 2,
+     "name": "CLM_STATUS",
+     "pic": null,
+     "usage": "CHAR(1)",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 7
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "CLMPROC",
+     "params": [
+      "PARM"
+     ],
+     "line": 2
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "call",
+     "target": "apps/CLMS/cobol/CLMEDIT.cbl"
+    }
+   ],
+   "horrors": [
+    "H-0002"
+   ]
+  }
+ }
+}

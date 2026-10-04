@@ -1,0 +1,80 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0013",
+ "title": "Columns 73-80 identification text on paragraph lines",
+ "category": "reference-format",
+ "issue": 3244,
+ "defect": "D001",
+ "shapes": [
+  "identification text GL000100 / GL002000 in cols 73-80 of every line of two GLPOST paragraphs, including their headers"
+ ],
+ "asserts": "Cols 73-80 are outside the program text: the paragraphs, their PERFORM edges and extents are what cols 1-72 say.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Reference format",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-reference-format",
+   "quote": "Reference format consists of the following areas in a 72-character line."
+  }
+ ],
+ "notes": "IBM's 6.4 Language Reference defines a 72-character line and does not describe cols 73-80 for source; the compiler ignores them.",
+ "planted": [
+  {
+   "member": "apps/GLED/cobol/GLPOST.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "0000-MAIN",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 29,
+      "end_line": 35,
+      "horror": "H-0013"
+     },
+     {
+      "name": "2000-POST",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 41,
+      "end_line": 47,
+      "horror": "H-0013"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "0000-MAIN",
+      "target": "1000-INIT",
+      "line": 31,
+      "horror": "H-0013"
+     },
+     {
+      "kind": "perform",
+      "from": "0000-MAIN",
+      "target": "2000-POST",
+      "line": 32,
+      "horror": "H-0013"
+     },
+     {
+      "kind": "perform",
+      "from": "0000-MAIN",
+      "target": "END-IPROC1",
+      "line": 33,
+      "horror": "H-0013"
+     },
+     {
+      "kind": "perform",
+      "from": "0000-MAIN",
+      "target": "End-Program",
+      "line": 34,
+      "horror": "H-0013"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

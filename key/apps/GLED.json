@@ -1,0 +1,381 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "GLED",
+ "members": {
+  "apps/GLED/cobol/GLPOST.cbl": {
+   "app": "GLED",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 51,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "GLPOST",
+     "line": 2,
+     "horror": "H-0019"
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 29,
+     "end_line": 35,
+     "horror": "H-0013"
+    },
+    {
+     "name": "1000-INIT",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 36,
+     "end_line": 37,
+     "horror": "H-0023"
+    },
+    {
+     "name": "1100-OPEN-MSG",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 38,
+     "end_line": 40,
+     "horror": "H-0020"
+    },
+    {
+     "name": "2000-POST",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 41,
+     "end_line": 47,
+     "horror": "H-0013"
+    },
+    {
+     "name": "END-IPROC1",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 48,
+     "end_line": 49,
+     "horror": "H-0026"
+    },
+    {
+     "name": "End-Program",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 50,
+     "end_line": 51,
+     "horror": "H-0027"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-INIT",
+     "line": 31,
+     "horror": "H-0013"
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-POST",
+     "line": 32,
+     "horror": "H-0013"
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "END-IPROC1",
+     "line": 33,
+     "horror": "H-0013"
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "End-Program",
+     "line": 34,
+     "horror": "H-0013"
+    },
+    {
+     "kind": "perform",
+     "from": "1000-INIT",
+     "target": "1100-OPEN-MSG",
+     "line": 37,
+     "horror": "H-0023"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "JRNL-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 20
+    },
+    {
+     "level": 5,
+     "name": "JRNL-ACCT",
+     "pic": "X(12)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 21
+    },
+    {
+     "level": 5,
+     "name": "JRNL-AMT",
+     "pic": "S9(11)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 22
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(61)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 23
+    },
+    {
+     "level": 1,
+     "name": "WS-JRNL-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 25
+    },
+    {
+     "level": 88,
+     "name": "WS-JRNL-EOF",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'10'",
+     "section": "WORKING-STORAGE",
+     "line": 26
+    },
+    {
+     "level": 1,
+     "name": "WS-TOTAL",
+     "pic": "S9(13)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 27
+    }
+   ],
+   "layouts": [
+    {
+     "record": "JRNL-REC",
+     "line": 20,
+     "bytes": 80,
+     "fields": [
+      {
+       "name": "JRNL-ACCT",
+       "level": 5,
+       "pic": "X(12)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 12,
+       "file": "apps/GLED/cobol/GLPOST.cbl"
+      },
+      {
+       "name": "JRNL-AMT",
+       "level": 5,
+       "pic": "S9(11)V99",
+       "usage": "COMP-3",
+       "offset": 12,
+       "bytes": 7,
+       "file": "apps/GLED/cobol/GLPOST.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(61)",
+       "usage": null,
+       "offset": 19,
+       "bytes": 61,
+       "file": "apps/GLED/cobol/GLPOST.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-JRNL-STATUS",
+     "line": 25,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-JRNL-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/GLED/cobol/GLPOST.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-TOTAL",
+     "line": 27,
+     "bytes": 8,
+     "fields": [
+      {
+       "name": "WS-TOTAL",
+       "level": 1,
+       "pic": "S9(13)V99",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/GLED/cobol/GLPOST.cbl"
+      }
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "JRNL-FILE",
+     "assign": "JRNLIN",
+     "organization": "SEQUENTIAL",
+     "access_mode": null,
+     "record_key": null,
+     "file_status": "WS-JRNL-STATUS",
+     "fd_copies": [],
+     "line": 12,
+     "horror": "H-0032"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "GLPOST",
+     "params": [],
+     "line": 28
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "programs",
+     "program_id": "000300",
+     "why": "the next line's sequence number, not the program-name",
+     "horror": "H-0019"
+    }
+   ],
+   "horrors": [
+    "H-0013",
+    "H-0019",
+    "H-0020",
+    "H-0023",
+    "H-0026",
+    "H-0027",
+    "H-0032"
+   ]
+  },
+  "apps/GLED/jcl/GLNIGHT.jcl": {
+   "app": "GLED",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 6,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "GLPOST",
+     "target": "GLPOST",
+     "line": 4,
+     "resolves_to": "apps/GLED/cobol/GLPOST.cbl",
+     "depends_on": [
+      "H-0019"
+     ]
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "GLNIGHT",
+     "proc": null,
+     "step": "POST",
+     "ordinal": 1,
+     "program": "GLPOST",
+     "exec_proc": null,
+     "cond": null,
+     "line": 4
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "GLNIGHT",
+     "proc": null,
+     "step": "POST",
+     "dd": "STEPLIB",
+     "dsn": "PROD.GLED.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 5
+    },
+    {
+     "job": "GLNIGHT",
+     "proc": null,
+     "step": "POST",
+     "dd": "JRNLIN",
+     "dsn": "PROD.GLED.JOURNAL",
+     "generation": "0",
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 6
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.GLED.LOADLIB",
+     "generation": null,
+     "step": "POST",
+     "dd": "STEPLIB",
+     "line": 5
+    },
+    {
+     "dsn": "PROD.GLED.JOURNAL",
+     "generation": "0",
+     "step": "POST",
+     "dd": "JRNLIN",
+     "line": 6
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/GLED/cobol/GLPOST.cbl",
+     "depends_on": [
+      "H-0019"
+     ]
+    }
+   ]
+  }
+ }
+}

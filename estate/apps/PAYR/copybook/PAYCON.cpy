@@ -1,0 +1,3 @@
+      * PAYCON   - PAYROLL CONSTANTS (COPIED BY A QUOTED NAME)
+           05  PC-MAX-HOURS           PIC 9(3) VALUE 168.
+           05  PC-OT-FACTOR           PIC 9V99 VALUE 1.50.

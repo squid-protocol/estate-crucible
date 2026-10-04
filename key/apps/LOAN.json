@@ -62,6 +62,9 @@
      "line": 11,
      "copy_members": [
       "LNREC"
+     ],
+     "depends_on": [
+      "H-0009"
      ]
     }
    ],
@@ -132,7 +135,20 @@
        "bytes": 5,
        "file": "apps/LOAN/copybook/LNREC.cpy"
       }
+     ],
+     "depends_on": [
+      "H-0009"
      ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "LNCALC",
+     "params": [
+      "LK-LOAN"
+     ],
+     "line": 13
     }
    ],
    "horrors": [
@@ -253,6 +269,14 @@
        "file": "apps/LOAN/cobol/LNIDMS01.cbl"
       }
      ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "LNIDMS01",
+     "params": [],
+     "line": 17
     }
    ],
    "phantoms": [
@@ -385,7 +409,10 @@
      "redefines": null,
      "value": "'10'",
      "section": "WORKING-STORAGE",
-     "line": 20
+     "line": 20,
+     "depends_on": [
+      "H-0009"
+     ]
     }
    ],
    "layouts": [
@@ -455,6 +482,40 @@
        "bytes": 2,
        "file": "apps/LOAN/cobol/LNRATE.cbl"
       }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "LOAN-FILE",
+     "assign": "LOANIN",
+     "organization": "SEQUENTIAL",
+     "access_mode": null,
+     "record_key": null,
+     "file_status": "WS-LOAN-STATUS",
+     "fd_copies": [
+      "LNREC"
+     ],
+     "line": 9
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "LNRATE",
+     "params": [],
+     "line": 21
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "call",
+     "target": "apps/LOAN/cobol/LNCALC.cbl",
+     "depends_on": [
+      "H-0008"
      ]
     }
    ],
@@ -609,6 +670,31 @@
      "disp_normal": null,
      "sysout": "*",
      "line": 7
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.LOAN.LOADLIB",
+     "generation": null,
+     "step": "RESET",
+     "dd": "STEPLIB",
+     "line": 5
+    },
+    {
+     "dsn": "PROD.LOAN.MASTER",
+     "generation": null,
+     "step": "RESET",
+     "dd": "LOANIN",
+     "line": 6
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/LOAN/cobol/LNRATE.cbl",
+     "depends_on": [
+      "H-0008"
+     ]
     }
    ]
   }

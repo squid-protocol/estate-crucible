@@ -1,0 +1,72 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0017",
+ "title": "A one-line EXEC SQL INCLUDE member END-EXEC",
+ "category": "copy",
+ "issue": 3416,
+ "defect": "D005",
+ "shapes": [
+  "EXEC SQL INCLUDE SQLCA END-EXEC. and EXEC SQL INCLUDE DCLCUST END-EXEC. on one line each (CUSTDBIO, INVDB)"
+ ],
+ "asserts": "Each INCLUDE is an import of its member (SQLCA is Db2-supplied: no member in the estate).",
+ "citations": [
+  {
+   "doc": "Db2 13 for z/OS SQL Reference",
+   "section": "INCLUDE statement",
+   "url": "https://www.ibm.com/docs/en/db2-for-zos/13?topic=statements-include",
+   "quote": "The INCLUDE statement inserts application code, including declarations and statements, into a source program."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/CUST/cobol/CUSTDBIO.cbl",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "SQLCA",
+      "kind": "sql-include",
+      "line": 10,
+      "resolves_to": null,
+      "horror": "H-0017"
+     },
+     {
+      "member": "DCLCUST",
+      "kind": "sql-include",
+      "line": 11,
+      "resolves_to": "apps/CUST/dclgen/DCLCUST.dcl",
+      "horror": "H-0017"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/INVN/cobol/INVDB.cbl",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "SQLCA",
+      "kind": "sql-include",
+      "line": 9,
+      "resolves_to": null,
+      "horror": "H-0017"
+     },
+     {
+      "member": "DCLINVT",
+      "kind": "sql-include",
+      "line": 10,
+      "resolves_to": "apps/INVN/dclgen/DCLINVT.dcl",
+      "horror": "H-0017"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

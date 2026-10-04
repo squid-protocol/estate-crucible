@@ -1,0 +1,190 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0016",
+ "title": "COPY forms: REPLACING ==pseudo-text==, a quoted text-name, IN library",
+ "category": "copy",
+ "issue": 3414,
+ "defect": "D004",
+ "shapes": [
+  "COPY PAYTPL REPLACING ==:TAG:== BY ==EMP==. (the copybook's :TAG:- names are not data-names)",
+  "COPY 'PAYCON'. (a literal text-name)",
+  "COPY DATEWS IN SHRCPY. (a library-name)"
+ ],
+ "asserts": "REPLACING applies before the entries exist: WS-EMP holds EMP-ID / EMP-NAME / EMP-RATE (40 bytes); the copybook's own :TAG: entries are not data-names. A quoted text-name and IN library resolve like the plain forms.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "COPY statement (p.688-692)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The COPY statement with REPLACING phrase can be used to replace parts of words, either by using the LEADING|TRAILING partial-word-1 BY partial-word-2 phrase, or by using the pseudo-text :TAG: or (TAG) method."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "COBOL words with single-byte characters (p.12)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "Latin uppercase letters A through Z, Latin lowercase letters a through z, digits 0 through 9, - (hyphen), _ (underscore)"
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "COPY statement (p.688-692)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "literal-1, literal-2 Must be alphanumeric literals. literal-1 identifies the copy text. literal-2 identifies where the copy text exists."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/PAYR/cobol/PAYMAIN.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "PAYTPL",
+      "kind": "copy",
+      "line": 29,
+      "resolves_to": "apps/PAYR/copybook/PAYTPL.cpy",
+      "replacing": [
+       ":TAG:",
+       "EMP"
+      ],
+      "horror": "H-0016"
+     },
+     {
+      "member": "PAYCON",
+      "kind": "copy",
+      "line": 31,
+      "resolves_to": "apps/PAYR/copybook/PAYCON.cpy",
+      "horror": "H-0016"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-EMP",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 28,
+      "copy_members": [
+       "PAYTPL"
+      ],
+      "horror": "H-0016"
+     },
+     {
+      "level": 1,
+      "name": "WS-CONST",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 30,
+      "copy_members": [
+       "PAYCON"
+      ],
+      "horror": "H-0016"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-EMP",
+      "line": 28,
+      "bytes": 40,
+      "fields": [
+       {
+        "name": "EMP-ID",
+        "level": 5,
+        "pic": "X(6)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 6,
+        "file": "apps/PAYR/copybook/PAYTPL.cpy"
+       },
+       {
+        "name": "EMP-NAME",
+        "level": 5,
+        "pic": "X(30)",
+        "usage": null,
+        "offset": 6,
+        "bytes": 30,
+        "file": "apps/PAYR/copybook/PAYTPL.cpy"
+       },
+       {
+        "name": "EMP-RATE",
+        "level": 5,
+        "pic": "S9(5)V99",
+        "usage": "COMP-3",
+        "offset": 36,
+        "bytes": 4,
+        "file": "apps/PAYR/copybook/PAYTPL.cpy"
+       }
+      ],
+      "horror": "H-0016"
+     },
+     {
+      "record": "WS-CONST",
+      "line": 30,
+      "bytes": 6,
+      "fields": [
+       {
+        "name": "PC-MAX-HOURS",
+        "level": 5,
+        "pic": "9(3)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 3,
+        "file": "apps/PAYR/copybook/PAYCON.cpy"
+       },
+       {
+        "name": "PC-OT-FACTOR",
+        "level": 5,
+        "pic": "9V99",
+        "usage": null,
+        "offset": 3,
+        "bytes": 3,
+        "file": "apps/PAYR/copybook/PAYCON.cpy"
+       }
+      ],
+      "horror": "H-0016"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/PAYR/copybook/PAYTPL.cpy",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {},
+   "phantoms": [
+    {
+     "channel": "data_items",
+     "name": ":TAG:-ID",
+     "line": 2,
+     "why": ":TAG:-ID is pseudo-text awaiting COPY REPLACING, not a data-name",
+     "horror": "H-0016"
+    },
+    {
+     "channel": "data_items",
+     "name": ":TAG:-NAME",
+     "line": 3,
+     "why": ":TAG:-NAME is pseudo-text awaiting COPY REPLACING, not a data-name",
+     "horror": "H-0016"
+    },
+    {
+     "channel": "data_items",
+     "name": ":TAG:-RATE",
+     "line": 4,
+     "why": ":TAG:-RATE is pseudo-text awaiting COPY REPLACING, not a data-name",
+     "horror": "H-0016"
+    }
+   ]
+  }
+ ]
+}

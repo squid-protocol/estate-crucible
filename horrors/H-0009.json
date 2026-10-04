@@ -1,0 +1,106 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0009",
+ "title": "The last DATA DIVISION entry takes its USAGE from the PROCEDURE DIVISION",
+ "category": "data-items",
+ "issue": 4329,
+ "shapes": [
+  "01 WS-MSG PIC X(40). as the last WORKING-STORAGE entry, DISPLAY WS-MSG in the procedure (ACCTUPD)",
+  "01 WS-LEN PIC 9(4). as the last entry, MOVE 'BINARY' TO WS-MODE in the procedure (BILLCALC): the engine sizes WS-LEN 2 bytes, not 4"
+ ],
+ "asserts": "A data description entry ends at its separator period: an entry with no USAGE clause has no usage (DISPLAY by default, 4 bytes for PIC 9(4)). Every other program's last entry is marked depends_on H-0009.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Separators (p.49)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A separator period is composed of a period followed by a space."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/ACCT/cobol/ACCTUPD.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-MSG",
+      "pic": "X(40)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 16,
+      "horror": "H-0009"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-MSG",
+      "line": 16,
+      "bytes": 40,
+      "fields": [
+       {
+        "name": "WS-MSG",
+        "level": 1,
+        "pic": "X(40)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 40,
+        "file": "apps/ACCT/cobol/ACCTUPD.cbl"
+       }
+      ],
+      "horror": "H-0009"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/BILL/cobol/BILLCALC.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-LEN",
+      "pic": "9(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 36,
+      "horror": "H-0009"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-LEN",
+      "line": 36,
+      "bytes": 4,
+      "fields": [
+       {
+        "name": "WS-LEN",
+        "level": 1,
+        "pic": "9(4)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/BILL/cobol/BILLCALC.cbl"
+       }
+      ],
+      "horror": "H-0009"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

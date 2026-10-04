@@ -47,6 +47,9 @@
      "line": 9,
      "copy_members": [
       "UPDCTL"
+     ],
+     "depends_on": [
+      "H-0009"
      ]
     }
    ],
@@ -83,7 +86,20 @@
        "bytes": 10,
        "file": "apps/ACCT/copybook/UPDCTL.cpy"
       }
+     ],
+     "depends_on": [
+      "H-0009"
      ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "ACCTAUD",
+     "params": [
+      "LK-UPD-CONTROL"
+     ],
+     "line": 11
     }
    ]
   },
@@ -264,7 +280,10 @@
      "member": "DATEWS",
      "kind": "copy",
      "line": 45,
-     "resolves_to": "shared/copylib/DATEWS.cpy"
+     "resolves_to": "shared/copylib/DATEWS.cpy",
+     "depends_on": [
+      "H-0034"
+     ]
     },
     {
      "member": "ACCTREC",
@@ -438,7 +457,10 @@
      "redefines": null,
      "value": "'DATEUTIL'",
      "section": "WORKING-STORAGE",
-     "line": 48
+     "line": 48,
+     "depends_on": [
+      "H-0009"
+     ]
     }
    ],
    "layouts": [
@@ -733,6 +755,9 @@
        "bytes": 8,
        "file": "shared/copylib/DATEWS.cpy"
       }
+     ],
+     "depends_on": [
+      "H-0034"
      ]
     },
     {
@@ -858,7 +883,44 @@
        "bytes": 8,
        "file": "apps/ACCT/cobol/ACCTPOST.cbl"
       }
+     ],
+     "depends_on": [
+      "H-0009"
      ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "TRAN-FILE",
+     "assign": "TRANIN",
+     "organization": "SEQUENTIAL",
+     "access_mode": null,
+     "record_key": null,
+     "file_status": "WS-TRAN-STATUS",
+     "fd_copies": [
+      "TRANREC"
+     ],
+     "line": 18
+    },
+    {
+     "select": "ACCT-OUT",
+     "assign": "ACCTOUT",
+     "organization": "SEQUENTIAL",
+     "access_mode": null,
+     "record_key": null,
+     "file_status": "WS-ACCT-STATUS",
+     "fd_copies": [
+      "ACCTREC"
+     ],
+     "line": 21
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "ACCTPOST",
+     "params": [],
+     "line": 49
     }
    ],
    "horrors": [
@@ -1290,6 +1352,26 @@
      ]
     }
    ],
+   "file_control": [
+    {
+     "select": "RPT-FILE",
+     "assign": "RPTOUT",
+     "organization": "SEQUENTIAL",
+     "access_mode": null,
+     "record_key": null,
+     "file_status": "WS-RPT-STATUS",
+     "fd_copies": [],
+     "line": 12
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "ACCTRPT",
+     "params": [],
+     "line": 29
+    }
+   ],
    "phantoms": [
     {
      "channel": "edges",
@@ -1515,7 +1597,8 @@
      "redefines": null,
      "value": null,
      "section": "WORKING-STORAGE",
-     "line": 16
+     "line": 16,
+     "horror": "H-0009"
     }
    ],
    "layouts": [
@@ -1584,7 +1667,23 @@
        "bytes": 40,
        "file": "apps/ACCT/cobol/ACCTUPD.cbl"
       }
-     ]
+     ],
+     "horror": "H-0009"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "ACCTUPD",
+     "params": [],
+     "line": 17
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "call",
+     "target": "apps/ACCT/cobol/ACCTAUD.cbl",
+     "horror": "H-0001"
     }
    ],
    "phantoms": [
@@ -1628,7 +1727,8 @@
     }
    ],
    "horrors": [
-    "H-0001"
+    "H-0001",
+    "H-0009"
    ]
   },
   "apps/ACCT/copybook/ACCTREC.cpy": {
@@ -2236,6 +2336,39 @@
      "sysout": "A",
      "line": 17
     }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.ACCT.POSTWORK",
+     "generation": null,
+     "step": "STEP010",
+     "dd": "POSTWORK",
+     "line": 6
+    },
+    {
+     "dsn": "PROD.ACCT.LOADLIB",
+     "generation": null,
+     "step": "STEP030",
+     "dd": "STEPLIB",
+     "line": 12
+    },
+    {
+     "dsn": "PROD.ACCT.LOADLIB",
+     "generation": null,
+     "step": "STEP040",
+     "dd": "STEPLIB",
+     "line": 16
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/ACCT/cobol/ACCTUPD.cbl"
+    },
+    {
+     "kind": "exec",
+     "target": "apps/ACCT/cobol/ACCTRPT.cbl"
+    }
    ]
   },
   "apps/ACCT/proclib/ACCTPRC.prc": {
@@ -2318,6 +2451,39 @@
      "sysout": "*",
      "line": 8
     }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.ACCT.LOADLIB",
+     "generation": null,
+     "step": "POST",
+     "dd": "STEPLIB",
+     "line": 4
+    },
+    {
+     "dsn": "PROD.ACCT.TRANS",
+     "generation": "0",
+     "step": "POST",
+     "dd": "TRANIN",
+     "line": 5
+    },
+    {
+     "dsn": "PROD.ACCT.MASTER",
+     "generation": "+1",
+     "step": "POST",
+     "dd": "ACCTOUT",
+     "line": 6,
+     "horror": "H-0011"
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/ACCT/cobol/ACCTPOST.cbl"
+    }
+   ],
+   "horrors": [
+    "H-0011"
    ]
   }
  }

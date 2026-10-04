@@ -1,0 +1,830 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "PAYR",
+ "members": {
+  "apps/PAYR/cobol/PAYMAIN.cbl": {
+   "app": "PAYR",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 82,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "PAYMAIN",
+     "line": 2
+    },
+    {
+     "program_id": "PAYCALC",
+     "line": 50
+    },
+    {
+     "program_id": "PAYRPT",
+     "line": 72,
+     "horror": "H-0029"
+    }
+   ],
+   "units": [
+    {
+     "name": "MAINLINE",
+     "kind": "section",
+     "section": null,
+     "start_line": 37,
+     "end_line": 37,
+     "program": "PAYMAIN",
+     "horror": "H-0031",
+     "span_end": 48
+    },
+    {
+     "name": "0100",
+     "kind": "paragraph",
+     "section": "MAINLINE",
+     "start_line": 38,
+     "end_line": 45,
+     "program": "PAYMAIN",
+     "horror": "H-0022"
+    },
+    {
+     "name": "0200",
+     "kind": "paragraph",
+     "section": "MAINLINE",
+     "start_line": 46,
+     "end_line": 48,
+     "program": "PAYMAIN",
+     "horror": "H-0022"
+    },
+    {
+     "name": "MAINLINE",
+     "kind": "section",
+     "section": null,
+     "start_line": 56,
+     "end_line": 56,
+     "program": "PAYCALC",
+     "horror": "H-0031",
+     "span_end": 68
+    },
+    {
+     "name": "1000-CALC",
+     "kind": "paragraph",
+     "section": "MAINLINE",
+     "start_line": 57,
+     "end_line": 66,
+     "program": "PAYCALC",
+     "horror": "H-0033"
+    },
+    {
+     "name": "2000-ROUND",
+     "kind": "paragraph",
+     "section": "MAINLINE",
+     "start_line": 67,
+     "end_line": 68,
+     "program": "PAYCALC",
+     "horror": "H-0031"
+    },
+    {
+     "name": "MAINLINE",
+     "kind": "section",
+     "section": null,
+     "start_line": 77,
+     "end_line": 77,
+     "program": "PAYRPT",
+     "horror": "H-0031",
+     "span_end": 81
+    },
+    {
+     "name": "0100",
+     "kind": "paragraph",
+     "section": "MAINLINE",
+     "start_line": 78,
+     "end_line": 81,
+     "program": "PAYRPT",
+     "horror": "H-0031"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0100",
+     "target": "0200",
+     "line": 41,
+     "program": "PAYMAIN",
+     "horror": "H-0022"
+    },
+    {
+     "kind": "call",
+     "from": "0100",
+     "target": "PAYCALC",
+     "line": 42,
+     "form": "literal",
+     "program": "PAYMAIN",
+     "horror": "H-0031"
+    },
+    {
+     "kind": "call",
+     "from": "0100",
+     "target": "PAYRPT",
+     "line": 43,
+     "form": "literal",
+     "program": "PAYMAIN",
+     "horror": "H-0031"
+    },
+    {
+     "kind": "perform",
+     "from": "1000-CALC",
+     "target": "2000-ROUND",
+     "line": 65,
+     "program": "PAYCALC",
+     "horror": "H-0033"
+    }
+   ],
+   "call_sites": [
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "PAYCALC",
+     "target": "PAYCALC",
+     "line": 42,
+     "resolves_to": "apps/PAYR/cobol/PAYMAIN.cbl",
+     "horror": "H-0031",
+     "depends_on": [
+      "H-0029"
+     ]
+    },
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "PAYRPT",
+     "target": "PAYRPT",
+     "line": 43,
+     "resolves_to": "apps/PAYR/cobol/PAYMAIN.cbl",
+     "horror": "H-0031",
+     "depends_on": [
+      "H-0029"
+     ]
+    }
+   ],
+   "copies": [
+    {
+     "member": "PAYTPL",
+     "kind": "copy",
+     "line": 29,
+     "resolves_to": "apps/PAYR/copybook/PAYTPL.cpy",
+     "replacing": [
+      ":TAG:",
+      "EMP"
+     ],
+     "horror": "H-0016"
+    },
+    {
+     "member": "PAYCON",
+     "kind": "copy",
+     "line": 31,
+     "resolves_to": "apps/PAYR/copybook/PAYCON.cpy",
+     "horror": "H-0016"
+    },
+    {
+     "member": "DATEWS",
+     "kind": "copy",
+     "line": 33,
+     "resolves_to": "apps/PAYR/copybook/DATEWS.cpy",
+     "horror": "H-0034"
+    },
+    {
+     "member": "DATEWS",
+     "kind": "copy",
+     "line": 35,
+     "resolves_to": "shared/copylib/DATEWS.cpy",
+     "library": "SHRCPY",
+     "horror": "H-0034"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "PAY-REC",
+     "pic": "X(80)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 25
+    },
+    {
+     "level": 1,
+     "name": "WS-PAY-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 27
+    },
+    {
+     "level": 1,
+     "name": "WS-EMP",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 28,
+     "copy_members": [
+      "PAYTPL"
+     ],
+     "horror": "H-0016"
+    },
+    {
+     "level": 1,
+     "name": "WS-CONST",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 30,
+     "copy_members": [
+      "PAYCON"
+     ],
+     "horror": "H-0016"
+    },
+    {
+     "level": 1,
+     "name": "WS-LOCAL-DATE",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 32,
+     "copy_members": [
+      "DATEWS"
+     ],
+     "horror": "H-0034"
+    },
+    {
+     "level": 1,
+     "name": "WS-SHARED-DATE",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 34,
+     "copy_members": [
+      "DATEWS"
+     ],
+     "horror": "H-0034",
+     "depends_on": [
+      "H-0009"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-I",
+     "pic": "9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 53,
+     "horror": "H-0031"
+    },
+    {
+     "level": 1,
+     "name": "WS-GROSS",
+     "pic": "S9(7)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 54,
+     "horror": "H-0031"
+    },
+    {
+     "level": 1,
+     "name": "WS-LINES",
+     "pic": "9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 75,
+     "horror": "H-0031"
+    }
+   ],
+   "layouts": [
+    {
+     "record": "PAY-REC",
+     "line": 25,
+     "bytes": 80,
+     "fields": [
+      {
+       "name": "PAY-REC",
+       "level": 1,
+       "pic": "X(80)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 80,
+       "file": "apps/PAYR/cobol/PAYMAIN.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-PAY-STATUS",
+     "line": 27,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-PAY-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/PAYR/cobol/PAYMAIN.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-EMP",
+     "line": 28,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "EMP-ID",
+       "level": 5,
+       "pic": "X(6)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 6,
+       "file": "apps/PAYR/copybook/PAYTPL.cpy"
+      },
+      {
+       "name": "EMP-NAME",
+       "level": 5,
+       "pic": "X(30)",
+       "usage": null,
+       "offset": 6,
+       "bytes": 30,
+       "file": "apps/PAYR/copybook/PAYTPL.cpy"
+      },
+      {
+       "name": "EMP-RATE",
+       "level": 5,
+       "pic": "S9(5)V99",
+       "usage": "COMP-3",
+       "offset": 36,
+       "bytes": 4,
+       "file": "apps/PAYR/copybook/PAYTPL.cpy"
+      }
+     ],
+     "horror": "H-0016"
+    },
+    {
+     "record": "WS-CONST",
+     "line": 30,
+     "bytes": 6,
+     "fields": [
+      {
+       "name": "PC-MAX-HOURS",
+       "level": 5,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/PAYR/copybook/PAYCON.cpy"
+      },
+      {
+       "name": "PC-OT-FACTOR",
+       "level": 5,
+       "pic": "9V99",
+       "usage": null,
+       "offset": 3,
+       "bytes": 3,
+       "file": "apps/PAYR/copybook/PAYCON.cpy"
+      }
+     ],
+     "horror": "H-0016"
+    },
+    {
+     "record": "WS-LOCAL-DATE",
+     "line": 32,
+     "bytes": 18,
+     "fields": [
+      {
+       "name": "WS-CURR-DATE",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/PAYR/copybook/DATEWS.cpy"
+      },
+      {
+       "name": "WS-CURR-TIME",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 8,
+       "file": "apps/PAYR/copybook/DATEWS.cpy"
+      }
+     ],
+     "horror": "H-0034"
+    },
+    {
+     "record": "WS-SHARED-DATE",
+     "line": 34,
+     "bytes": 16,
+     "fields": [
+      {
+       "name": "WS-CURR-DATE",
+       "level": 5,
+       "pic": "9(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "shared/copylib/DATEWS.cpy"
+      },
+      {
+       "name": "WS-CURR-YYYY",
+       "level": 10,
+       "pic": "9(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4,
+       "file": "shared/copylib/DATEWS.cpy",
+       "overlay": true
+      },
+      {
+       "name": "WS-CURR-MM",
+       "level": 10,
+       "pic": "99",
+       "usage": null,
+       "offset": 4,
+       "bytes": 2,
+       "file": "shared/copylib/DATEWS.cpy",
+       "overlay": true
+      },
+      {
+       "name": "WS-CURR-DD",
+       "level": 10,
+       "pic": "99",
+       "usage": null,
+       "offset": 6,
+       "bytes": 2,
+       "file": "shared/copylib/DATEWS.cpy",
+       "overlay": true
+      },
+      {
+       "name": "WS-CURR-TIME",
+       "level": 5,
+       "pic": "9(8)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 8,
+       "file": "shared/copylib/DATEWS.cpy"
+      }
+     ],
+     "horror": "H-0034",
+     "depends_on": [
+      "H-0009"
+     ]
+    },
+    {
+     "record": "WS-I",
+     "line": 53,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-I",
+       "level": 1,
+       "pic": "9(4)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/PAYR/cobol/PAYMAIN.cbl"
+      }
+     ],
+     "horror": "H-0031"
+    },
+    {
+     "record": "WS-GROSS",
+     "line": 54,
+     "bytes": 5,
+     "fields": [
+      {
+       "name": "WS-GROSS",
+       "level": 1,
+       "pic": "S9(7)V99",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 5,
+       "file": "apps/PAYR/cobol/PAYMAIN.cbl"
+      }
+     ],
+     "horror": "H-0031"
+    },
+    {
+     "record": "WS-LINES",
+     "line": 75,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-LINES",
+       "level": 1,
+       "pic": "9(4)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/PAYR/cobol/PAYMAIN.cbl"
+      }
+     ],
+     "horror": "H-0031"
+    }
+   ],
+   "file_control": [
+    {
+     "select": "PAY-FILE",
+     "assign": "PAYOUT",
+     "organization": "SEQUENTIAL",
+     "access_mode": null,
+     "record_key": null,
+     "file_status": "WS-PAY-STATUS",
+     "fd_copies": [],
+     "line": 16,
+     "program": "PAYMAIN"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "PAYMAIN",
+     "params": [],
+     "line": 36
+    },
+    {
+     "kind": "PROCEDURE",
+     "program": "PAYCALC",
+     "params": [],
+     "line": 55
+    },
+    {
+     "kind": "PROCEDURE",
+     "program": "PAYRPT",
+     "params": [],
+     "line": 76
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "units",
+     "name": "SPECIAL-NAMES",
+     "why": "an ENVIRONMENT DIVISION paragraph, not a procedure",
+     "horror": "H-0022"
+    },
+    {
+     "channel": "units",
+     "name": "I-O-CONTROL",
+     "why": "an ENVIRONMENT DIVISION paragraph, not a procedure",
+     "horror": "H-0022"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "1000-CALC",
+     "target": "UNTIL",
+     "why": "an inline PERFORM (line 58) names no procedure; UNTIL is part of its header",
+     "horror": "H-0033"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "1000-CALC",
+     "target": "END-IF",
+     "why": "EXIT PERFORM (line 61) is not a PERFORM; END-IF follows it",
+     "horror": "H-0006"
+    }
+   ],
+   "horrors": [
+    "H-0006",
+    "H-0016",
+    "H-0022",
+    "H-0029",
+    "H-0031",
+    "H-0033",
+    "H-0034"
+   ]
+  },
+  "apps/PAYR/copybook/DATEWS.cpy": {
+   "app": "PAYR",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 3,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "WS-CURR-DATE",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2,
+     "horror": "H-0034"
+    },
+    {
+     "level": 5,
+     "name": "WS-CURR-TIME",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3,
+     "horror": "H-0034"
+    }
+   ],
+   "horrors": [
+    "H-0034"
+   ]
+  },
+  "apps/PAYR/copybook/PAYCON.cpy": {
+   "app": "PAYR",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 3,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "PC-MAX-HOURS",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "168",
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 5,
+     "name": "PC-OT-FACTOR",
+     "pic": "9V99",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "1.50",
+     "section": null,
+     "line": 3
+    }
+   ]
+  },
+  "apps/PAYR/copybook/PAYTPL.cpy": {
+   "app": "PAYR",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 4,
+   "compile": {
+    "status": "copybook"
+   },
+   "phantoms": [
+    {
+     "channel": "data_items",
+     "name": ":TAG:-ID",
+     "line": 2,
+     "why": ":TAG:-ID is pseudo-text awaiting COPY REPLACING, not a data-name",
+     "horror": "H-0016"
+    },
+    {
+     "channel": "data_items",
+     "name": ":TAG:-NAME",
+     "line": 3,
+     "why": ":TAG:-NAME is pseudo-text awaiting COPY REPLACING, not a data-name",
+     "horror": "H-0016"
+    },
+    {
+     "channel": "data_items",
+     "name": ":TAG:-RATE",
+     "line": 4,
+     "why": ":TAG:-RATE is pseudo-text awaiting COPY REPLACING, not a data-name",
+     "horror": "H-0016"
+    }
+   ],
+   "horrors": [
+    "H-0016"
+   ]
+  },
+  "apps/PAYR/jcl/PAYWKLY.jcl": {
+   "app": "PAYR",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 7,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "PAYMAIN",
+     "target": "PAYMAIN",
+     "line": 4,
+     "resolves_to": "apps/PAYR/cobol/PAYMAIN.cbl",
+     "depends_on": [
+      "H-0029"
+     ]
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "PAYWKLY",
+     "proc": null,
+     "step": "PAY",
+     "ordinal": 1,
+     "program": "PAYMAIN",
+     "exec_proc": null,
+     "cond": null,
+     "line": 4
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "PAYWKLY",
+     "proc": null,
+     "step": "PAY",
+     "dd": "STEPLIB",
+     "dsn": "PROD.PAYR.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 5
+    },
+    {
+     "job": "PAYWKLY",
+     "proc": null,
+     "step": "PAY",
+     "dd": "PAYOUT",
+     "dsn": "PROD.PAYR.REGISTER",
+     "generation": "+1",
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 6
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.PAYR.LOADLIB",
+     "generation": null,
+     "step": "PAY",
+     "dd": "STEPLIB",
+     "line": 5
+    },
+    {
+     "dsn": "PROD.PAYR.REGISTER",
+     "generation": "+1",
+     "step": "PAY",
+     "dd": "PAYOUT",
+     "line": 6,
+     "horror": "H-0011"
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/PAYR/cobol/PAYMAIN.cbl",
+     "depends_on": [
+      "H-0029"
+     ]
+    }
+   ],
+   "horrors": [
+    "H-0011"
+   ]
+  }
+ }
+}

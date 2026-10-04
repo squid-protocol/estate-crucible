@@ -1,0 +1,213 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0028",
+ "title": "Free-format source: indented level numbers are data entries, not paragraphs",
+ "category": "reference-format",
+ "issue": 4203,
+ "defect": "D040",
+ "shapes": [
+  ">>SOURCE FORMAT FREE, data entries indented under their parents (    01 VALUE-BYTES.) (MODRATE)",
+  "paragraph LOOKUP-RATE. starting in column 1, its hyphen in column 7: not in #4203, found by this crucible"
+ ],
+ "asserts": "In free format there are no columns: indented level numbers are data entries, and LOOKUP-RATE is one paragraph-name.",
+ "citations": [
+  {
+   "doc": "GnuCOBOL 3.x Programmer's Guide",
+   "section": "2.1.16 Format of Program Source Lines",
+   "url": "https://gnucobol.sourceforge.io/HTML/gnucobpg.html",
+   "quote": "in this mode of operation, COBOL statements may each be up to 255 characters long, with no specific requirements as to what should appear in which columns."
+  }
+ ],
+ "notes": "Not IBM dialect: Enterprise COBOL for z/OS 6.4 has only the 72-column reference format, and IBM COBOL for Linux needs a conversion utility for free-format source. The member stands for code rehosted off z/OS and is compiled by GnuCOBOL (-std=ibm accepts the directive).",
+ "planted": [
+  {
+   "member": "apps/MODN/cobol/MODRATE.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "LOOKUP-RATE",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 25,
+      "end_line": 27,
+      "horror": "H-0028"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "VALUE-BYTES",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 9,
+      "horror": "H-0028"
+     },
+     {
+      "level": 5,
+      "name": "VB-CODE",
+      "pic": "X(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 10,
+      "horror": "H-0028"
+     },
+     {
+      "level": 5,
+      "name": "VB-RATE",
+      "pic": "9V9(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 11,
+      "horror": "H-0028"
+     },
+     {
+      "level": 1,
+      "name": "WS-FOUND",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'N'",
+      "section": "WORKING-STORAGE",
+      "line": 12,
+      "horror": "H-0028"
+     },
+     {
+      "level": 1,
+      "name": "LK-REQUEST",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 14,
+      "horror": "H-0028"
+     },
+     {
+      "level": 5,
+      "name": "LK-CODE",
+      "pic": "X(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 15,
+      "horror": "H-0028"
+     },
+     {
+      "level": 5,
+      "name": "LK-RATE",
+      "pic": "9V9(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 16,
+      "horror": "H-0028",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "layouts": [
+     {
+      "record": "VALUE-BYTES",
+      "line": 9,
+      "bytes": 9,
+      "fields": [
+       {
+        "name": "VB-CODE",
+        "level": 5,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/MODN/cobol/MODRATE.cbl"
+       },
+       {
+        "name": "VB-RATE",
+        "level": 5,
+        "pic": "9V9(4)",
+        "usage": null,
+        "offset": 4,
+        "bytes": 5,
+        "file": "apps/MODN/cobol/MODRATE.cbl"
+       }
+      ],
+      "horror": "H-0028"
+     },
+     {
+      "record": "WS-FOUND",
+      "line": 12,
+      "bytes": 1,
+      "fields": [
+       {
+        "name": "WS-FOUND",
+        "level": 1,
+        "pic": "X",
+        "usage": null,
+        "offset": 0,
+        "bytes": 1,
+        "file": "apps/MODN/cobol/MODRATE.cbl"
+       }
+      ],
+      "horror": "H-0028"
+     },
+     {
+      "record": "LK-REQUEST",
+      "line": 14,
+      "bytes": 9,
+      "fields": [
+       {
+        "name": "LK-CODE",
+        "level": 5,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/MODN/cobol/MODRATE.cbl"
+       },
+       {
+        "name": "LK-RATE",
+        "level": 5,
+        "pic": "9V9(4)",
+        "usage": null,
+        "offset": 4,
+        "bytes": 5,
+        "file": "apps/MODN/cobol/MODRATE.cbl"
+       }
+      ],
+      "horror": "H-0028",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "units",
+     "name": "RATE",
+     "why": "LOOKUP-RATE is one paragraph-name; free format has no column 7",
+     "horror": "H-0028"
+    }
+   ]
+  }
+ ]
+}

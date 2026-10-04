@@ -1,0 +1,250 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0015",
+ "title": "A DCLGEN member (.dcl) is a COBOL / SQL member to scan",
+ "category": "embedded-sql",
+ "issue": 3365,
+ "defect": "D003",
+ "shapes": [
+  "DCLCUST.dcl and DCLINVT.dcl in the app's dclgen library: DECLARE TABLE plus the host structure"
+ ],
+ "asserts": "A DCLGEN member's DECLARE TABLE columns and its COBOL host structure are facts of that member.",
+ "citations": [
+  {
+   "doc": "Db2 13 for z/OS Commands",
+   "section": "DCLGEN (declarations generator) (DSN)",
+   "url": "https://www.ibm.com/docs/en/db2-for-zos/13?topic=commands-dclgen-declarations-generator-dsn",
+   "quote": "The declarations generator (DCLGEN) produces an SQL DECLARE TABLE statement and a COBOL, PL/I, or C data declaration for a table or a view named in the catalog."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/CUST/dclgen/DCLCUST.dcl",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 1,
+      "name": "DCLCUSTOMER",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 15,
+      "horror": "H-0015"
+     },
+     {
+      "level": 10,
+      "name": "CUST-ID",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 16,
+      "horror": "H-0015"
+     },
+     {
+      "level": 10,
+      "name": "CUST-NAME",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 17,
+      "horror": "H-0015"
+     },
+     {
+      "level": 49,
+      "name": "CUST-NAME-LEN",
+      "pic": "S9(4)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 18,
+      "horror": "H-0015"
+     },
+     {
+      "level": 49,
+      "name": "CUST-NAME-TEXT",
+      "pic": "X(30)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 19,
+      "horror": "H-0015"
+     },
+     {
+      "level": 10,
+      "name": "CUST-BAL",
+      "pic": "S9(9)V9(2)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 20,
+      "horror": "H-0015"
+     },
+     {
+      "level": 10,
+      "name": "CUST-UPD-DATE",
+      "pic": "X(10)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 21,
+      "horror": "H-0015"
+     }
+    ],
+    "sql_tables": [
+     {
+      "table": "PROD.CUSTOMER",
+      "line": 6,
+      "columns": [
+       {
+        "name": "CUST_ID",
+        "type": "CHAR",
+        "length": 8,
+        "scale": null,
+        "nullable": false,
+        "line": 7
+       },
+       {
+        "name": "CUST_NAME",
+        "type": "VARCHAR",
+        "length": 30,
+        "scale": null,
+        "nullable": false,
+        "line": 8
+       },
+       {
+        "name": "CUST_BAL",
+        "type": "DECIMAL",
+        "length": 11,
+        "scale": 2,
+        "nullable": true,
+        "line": 9
+       },
+       {
+        "name": "CUST_UPD_DATE",
+        "type": "DATE",
+        "length": null,
+        "scale": null,
+        "nullable": true,
+        "line": 10
+       }
+      ],
+      "horror": "H-0015"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/INVN/dclgen/DCLINVT.dcl",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 1,
+      "name": "DCLINVENTORY",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 14,
+      "horror": "H-0015"
+     },
+     {
+      "level": 10,
+      "name": "ITEM-ID",
+      "pic": "X(12)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 15,
+      "horror": "H-0015"
+     },
+     {
+      "level": 10,
+      "name": "ON-HAND",
+      "pic": "S9(9)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 16,
+      "horror": "H-0015"
+     },
+     {
+      "level": 10,
+      "name": "LAST-COUNT",
+      "pic": "X(10)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 17,
+      "horror": "H-0015"
+     }
+    ],
+    "sql_tables": [
+     {
+      "table": "PROD.INVENTORY",
+      "line": 6,
+      "columns": [
+       {
+        "name": "ITEM_ID",
+        "type": "CHAR",
+        "length": 12,
+        "scale": null,
+        "nullable": false,
+        "line": 7
+       },
+       {
+        "name": "ON_HAND",
+        "type": "DECIMAL",
+        "length": 9,
+        "scale": 0,
+        "nullable": false,
+        "line": 8
+       },
+       {
+        "name": "LAST_COUNT",
+        "type": "DATE",
+        "length": null,
+        "scale": null,
+        "nullable": true,
+        "line": 9
+       }
+      ],
+      "horror": "H-0015"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

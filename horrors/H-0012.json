@@ -1,0 +1,108 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0012",
+ "title": "A sequence-numbered blank line extends the previous unit's extent",
+ "category": "unit-extent",
+ "issue": 4332,
+ "shapes": [
+  "empty numbered lines (cols 1-6 only) between BILLCALC's paragraphs"
+ ],
+ "asserts": "A line with nothing in cols 7-72 holds no code: a paragraph's extent ends at its last code line, whatever cols 1-6 hold.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Reference format > Sequence number area",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=format-sequence-number-area",
+   "quote": "The content of this area can consist of any character in the character set of the computer."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Procedure division structure > Procedures",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-procedures",
+   "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/BILL/cobol/BILLCALC.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "0000-MAIN",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 38,
+      "end_line": 44,
+      "horror": "H-0012"
+     },
+     {
+      "name": "1000-NEXT-BILL",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 46,
+      "end_line": 52,
+      "horror": "H-0012"
+     },
+     {
+      "name": "2000-COMPUTE",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 54,
+      "end_line": 59,
+      "horror": "H-0012"
+     },
+     {
+      "name": "2100-ADJUST",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 61,
+      "end_line": 62,
+      "horror": "H-0012"
+     },
+     {
+      "name": "3000-PRINT",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 64,
+      "end_line": 67,
+      "horror": "H-0012"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "0000-MAIN",
+      "target": "1000-NEXT-BILL",
+      "line": 42,
+      "horror": "H-0012"
+     },
+     {
+      "kind": "perform",
+      "from": "1000-NEXT-BILL",
+      "target": "2000-COMPUTE",
+      "line": 51,
+      "horror": "H-0012"
+     },
+     {
+      "kind": "perform",
+      "from": "2000-COMPUTE",
+      "target": "2100-ADJUST",
+      "line": 57,
+      "horror": "H-0012"
+     },
+     {
+      "kind": "perform",
+      "from": "2000-COMPUTE",
+      "target": "3000-PRINT",
+      "line": 59,
+      "horror": "H-0012"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

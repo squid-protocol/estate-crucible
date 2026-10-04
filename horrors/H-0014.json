@@ -1,0 +1,219 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0014",
+ "title": "Record copybook: level-01 elementary items, REDEFINES, nested groups, change markers in cols 1-6",
+ "category": "data-items",
+ "issue": 3348,
+ "defect": "D002",
+ "shapes": [
+  "BILREC: two 01 records (one elementary), nested 05/10/15 groups, a REDEFINES group, change marker BL0412 in cols 1-6 of two entries"
+ ],
+ "asserts": "Every entry is a data item at its level, under its parent, whatever cols 1-6 hold; the elementary 01 is a record of its own.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Reference format > Sequence number area",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=format-sequence-number-area",
+   "quote": "The content of this area can consist of any character in the character set of the computer."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Levels of data in a record description entry (p.167)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A group item includes all group and elementary items that follow it until a level-number less than or equal to the level-number of that group is encountered."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/BILL/copybook/BILREC.cpy",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 1,
+      "name": "BIL-RECORD",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 2,
+      "horror": "H-0014"
+     },
+     {
+      "level": 5,
+      "name": "BIL-KEY",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 3,
+      "horror": "H-0014"
+     },
+     {
+      "level": 10,
+      "name": "BIL-ACCT",
+      "pic": "X(10)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 4,
+      "horror": "H-0014"
+     },
+     {
+      "level": 10,
+      "name": "BIL-CYCLE",
+      "pic": "9(6)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 5,
+      "horror": "H-0014"
+     },
+     {
+      "level": 5,
+      "name": "BIL-KEY-R",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": "BIL-KEY",
+      "value": null,
+      "section": null,
+      "line": 6,
+      "horror": "H-0014"
+     },
+     {
+      "level": 10,
+      "name": "BIL-KEY-ALL",
+      "pic": "X(16)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 7,
+      "horror": "H-0014"
+     },
+     {
+      "level": 5,
+      "name": "BIL-CUST",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 8,
+      "horror": "H-0014"
+     },
+     {
+      "level": 10,
+      "name": "BIL-NAME",
+      "pic": "X(30)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 9,
+      "horror": "H-0014"
+     },
+     {
+      "level": 10,
+      "name": "BIL-ADDR",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 10,
+      "horror": "H-0014"
+     },
+     {
+      "level": 15,
+      "name": "BIL-STREET",
+      "pic": "X(30)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 11,
+      "horror": "H-0014"
+     },
+     {
+      "level": 15,
+      "name": "BIL-ZIP",
+      "pic": "X(10)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 12,
+      "horror": "H-0014"
+     },
+     {
+      "level": 5,
+      "name": "BIL-AMOUNT",
+      "pic": "S9(9)V99",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 13,
+      "horror": "H-0014"
+     },
+     {
+      "level": 5,
+      "name": "BIL-TAX",
+      "pic": "S9(7)V99",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 14,
+      "horror": "H-0014"
+     },
+     {
+      "level": 5,
+      "name": "FILLER",
+      "pic": "X(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 15,
+      "horror": "H-0014"
+     },
+     {
+      "level": 1,
+      "name": "BIL-TRAILER-COUNT",
+      "pic": "9(7)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 16,
+      "horror": "H-0014"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

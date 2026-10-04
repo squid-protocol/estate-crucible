@@ -1,0 +1,38 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0029",
+ "title": "A PROGRAM-ID written as a literal ('PAYRPT')",
+ "category": "identification",
+ "issue": 4242,
+ "defect": "D041",
+ "shapes": [
+  "PROGRAM-ID. 'PAYRPT'. starting in column 9, and END PROGRAM 'PAYRPT'."
+ ],
+ "asserts": "The program-name is PAYRPT.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "PROGRAM-ID paragraph (p.101)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A user-defined word or alphanumeric literal, but not a figurative constant, that identifies your program."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/PAYR/cobol/PAYMAIN.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "PAYRPT",
+      "line": 72,
+      "horror": "H-0029"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

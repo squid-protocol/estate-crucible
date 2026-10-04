@@ -1,0 +1,81 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0022",
+ "title": "SPECIAL-NAMES / I-O-CONTROL are not units; all-digit paragraph names are",
+ "category": "units",
+ "issue": 3533,
+ "defect": "D019",
+ "shapes": [
+  "SPECIAL-NAMES. C01 IS TOP-OF-PAGE. and I-O-CONTROL. APPLY WRITE-ONLY ON PAY-FILE. (PAYMAIN)",
+  "all-digit paragraph names 0100. / 0200."
+ ],
+ "asserts": "SPECIAL-NAMES and I-O-CONTROL are ENVIRONMENT DIVISION paragraphs, not units; 0100 and 0200 are paragraphs.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "SPECIAL-NAMES paragraph (p.124)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The SPECIAL-NAMES paragraph is the name of an ENVIRONMENT DIVISION paragraph in which environment-names are related to user-specified mnemonic-names."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "COBOL words with single-byte characters (p.12)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "Most user-defined words (all except section-names, paragraph-names, priority-numbers, and level-numbers) must contain at least one alphabetic character."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/PAYR/cobol/PAYMAIN.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "0100",
+      "kind": "paragraph",
+      "section": "MAINLINE",
+      "start_line": 38,
+      "end_line": 45,
+      "program": "PAYMAIN",
+      "horror": "H-0022"
+     },
+     {
+      "name": "0200",
+      "kind": "paragraph",
+      "section": "MAINLINE",
+      "start_line": 46,
+      "end_line": 48,
+      "program": "PAYMAIN",
+      "horror": "H-0022"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "0100",
+      "target": "0200",
+      "line": 41,
+      "program": "PAYMAIN",
+      "horror": "H-0022"
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "units",
+     "name": "SPECIAL-NAMES",
+     "why": "an ENVIRONMENT DIVISION paragraph, not a procedure",
+     "horror": "H-0022"
+    },
+    {
+     "channel": "units",
+     "name": "I-O-CONTROL",
+     "why": "an ENVIRONMENT DIVISION paragraph, not a procedure",
+     "horror": "H-0022"
+    }
+   ]
+  }
+ ]
+}

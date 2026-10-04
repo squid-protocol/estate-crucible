@@ -1,0 +1,211 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0034",
+ "title": "Same-named copybook in two libraries: SYSLIB order picks the app's own",
+ "category": "copy",
+ "issue": 4265,
+ "shapes": [
+  "DATEWS in PAYRCPY (18 bytes, ISO date) and in SHRCPY (16 bytes): PAYMAIN's plain COPY DATEWS takes PAYR's, COPY DATEWS IN SHRCPY the shared one",
+  "ACCTPOST and CUSTINQ COPY DATEWS: their SYSLIB has no PAYRCPY, so the shared one (depends_on H-0034)"
+ ],
+ "asserts": "COPY searches the program's own library concatenation and the first library holding the member wins; a library-name restricts the search to that library.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Copy member search order (p.697)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "If no library name is specified in the COPY statement, the concatenation of datasets allocated to the SYSLIB ddname is searched."
+  },
+  {
+   "doc": "z/OS V2R2 DFSMS Using Data Sets (SC23-6855-03)",
+   "section": "Concatenating PDSs",
+   "url": "https://publibz.boulder.ibm.com/epubs/pdf/dgt3d410.pdf",
+   "quote": "If two members of different data sets in the concatenation have the same name, the FIND macro determines the address of the first one in the concatenation."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/PAYR/cobol/PAYMAIN.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "DATEWS",
+      "kind": "copy",
+      "line": 33,
+      "resolves_to": "apps/PAYR/copybook/DATEWS.cpy",
+      "horror": "H-0034"
+     },
+     {
+      "member": "DATEWS",
+      "kind": "copy",
+      "line": 35,
+      "resolves_to": "shared/copylib/DATEWS.cpy",
+      "library": "SHRCPY",
+      "horror": "H-0034"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-LOCAL-DATE",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 32,
+      "copy_members": [
+       "DATEWS"
+      ],
+      "horror": "H-0034"
+     },
+     {
+      "level": 1,
+      "name": "WS-SHARED-DATE",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 34,
+      "copy_members": [
+       "DATEWS"
+      ],
+      "horror": "H-0034",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-LOCAL-DATE",
+      "line": 32,
+      "bytes": 18,
+      "fields": [
+       {
+        "name": "WS-CURR-DATE",
+        "level": 5,
+        "pic": "X(10)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 10,
+        "file": "apps/PAYR/copybook/DATEWS.cpy"
+       },
+       {
+        "name": "WS-CURR-TIME",
+        "level": 5,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 10,
+        "bytes": 8,
+        "file": "apps/PAYR/copybook/DATEWS.cpy"
+       }
+      ],
+      "horror": "H-0034"
+     },
+     {
+      "record": "WS-SHARED-DATE",
+      "line": 34,
+      "bytes": 16,
+      "fields": [
+       {
+        "name": "WS-CURR-DATE",
+        "level": 5,
+        "pic": "9(8)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 8,
+        "file": "shared/copylib/DATEWS.cpy"
+       },
+       {
+        "name": "WS-CURR-YYYY",
+        "level": 10,
+        "pic": "9(4)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 4,
+        "file": "shared/copylib/DATEWS.cpy",
+        "overlay": true
+       },
+       {
+        "name": "WS-CURR-MM",
+        "level": 10,
+        "pic": "99",
+        "usage": null,
+        "offset": 4,
+        "bytes": 2,
+        "file": "shared/copylib/DATEWS.cpy",
+        "overlay": true
+       },
+       {
+        "name": "WS-CURR-DD",
+        "level": 10,
+        "pic": "99",
+        "usage": null,
+        "offset": 6,
+        "bytes": 2,
+        "file": "shared/copylib/DATEWS.cpy",
+        "overlay": true
+       },
+       {
+        "name": "WS-CURR-TIME",
+        "level": 5,
+        "pic": "9(8)",
+        "usage": null,
+        "offset": 8,
+        "bytes": 8,
+        "file": "shared/copylib/DATEWS.cpy"
+       }
+      ],
+      "horror": "H-0034",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/PAYR/copybook/DATEWS.cpy",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 5,
+      "name": "WS-CURR-DATE",
+      "pic": "X(10)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 2,
+      "horror": "H-0034"
+     },
+     {
+      "level": 5,
+      "name": "WS-CURR-TIME",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 3,
+      "horror": "H-0034"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

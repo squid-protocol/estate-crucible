@@ -1,0 +1,51 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0019",
+ "title": "PROGRAM-ID. alone on its line, the name on the next (numbered)",
+ "category": "identification",
+ "issue": 3418,
+ "defect": "D007",
+ "shapes": [
+  "000200 PROGRAM-ID. / 000300     GLPOST. in a numbered member"
+ ],
+ "asserts": "The program-name is GLPOST, the next word after the PROGRAM-ID paragraph header, never the next line's sequence number.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "PROGRAM-ID paragraph (p.101)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A user-defined word or alphanumeric literal, but not a figurative constant, that identifies your program."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Reference format > Sequence number area",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=format-sequence-number-area",
+   "quote": "The content of this area can consist of any character in the character set of the computer."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/GLED/cobol/GLPOST.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "GLPOST",
+      "line": 2,
+      "horror": "H-0019"
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "programs",
+     "program_id": "000300",
+     "why": "the next line's sequence number, not the program-name",
+     "horror": "H-0019"
+    }
+   ]
+  }
+ ]
+}

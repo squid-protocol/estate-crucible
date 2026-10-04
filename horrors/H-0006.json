@@ -102,6 +102,23 @@
      "horror": "H-0006"
     }
    ]
+  },
+  {
+   "member": "apps/PAYR/cobol/PAYMAIN.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {},
+   "phantoms": [
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "1000-CALC",
+     "target": "END-IF",
+     "why": "EXIT PERFORM (line 61) is not a PERFORM; END-IF follows it",
+     "horror": "H-0006"
+    }
+   ]
   }
  ]
 }

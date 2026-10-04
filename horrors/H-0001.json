@@ -154,6 +154,13 @@
       ],
       "horror": "H-0001"
      }
+    ],
+    "file_edges": [
+     {
+      "kind": "call",
+      "target": "apps/ACCT/cobol/ACCTAUD.cbl",
+      "horror": "H-0001"
+     }
     ]
    },
    "phantoms": [

@@ -1,0 +1,205 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0010",
+ "title": "A COPY of a member holding its own 01 is folded into the copy_members of the 01 above it",
+ "category": "copy",
+ "issue": 4330,
+ "shapes": [
+  "01 WS-COMMAREA. / COPY CUSTCOMM. / COPY CUSTMS. / COPY DFHAID. (CUSTINQ; DFHAID is outside the estate)",
+  "01 WS-INV-AREA. / COPY INVCOMM. / COPY INVMSG. where INVMSG holds its own 01 (INVUPD)"
+ ],
+ "asserts": "A level-01 entry in copied text begins a new record: the 01 above it holds only the first COPY's entries.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Levels of data in a record description entry (p.167)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "01 This level-number specifies the record itself, and is the most inclusive level-number possible."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Levels of data in a record description entry (p.167)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A group item includes all group and elementary items that follow it until a level-number less than or equal to the level-number of that group is encountered."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/CUST/cobol/CUSTINQ.cbl",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "CUSTCOMM",
+      "kind": "copy",
+      "line": 12,
+      "resolves_to": "apps/CUST/copybook/CUSTCOMM.cpy",
+      "horror": "H-0010"
+     },
+     {
+      "member": "CUSTMS",
+      "kind": "copy",
+      "line": 13,
+      "resolves_to": "apps/CUST/copybook/CUSTMS.cpy",
+      "horror": "H-0010",
+      "alternatives": [
+       "apps/CUST/bms/CUSTMS.bms"
+      ]
+     },
+     {
+      "member": "DFHAID",
+      "kind": "copy",
+      "line": 14,
+      "resolves_to": null,
+      "horror": "H-0010"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-COMMAREA",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 11,
+      "copy_members": [
+       "CUSTCOMM"
+      ],
+      "horror": "H-0010"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-COMMAREA",
+      "line": 11,
+      "bytes": 50,
+      "fields": [
+       {
+        "name": "CA-CUST-ID",
+        "level": 5,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 8,
+        "file": "apps/CUST/copybook/CUSTCOMM.cpy"
+       },
+       {
+        "name": "CA-RETURN-CODE",
+        "level": 5,
+        "pic": "S9(4)",
+        "usage": "COMP",
+        "offset": 8,
+        "bytes": 2,
+        "file": "apps/CUST/copybook/CUSTCOMM.cpy"
+       },
+       {
+        "name": "CA-MSG",
+        "level": 5,
+        "pic": "X(40)",
+        "usage": null,
+        "offset": 10,
+        "bytes": 40,
+        "file": "apps/CUST/copybook/CUSTCOMM.cpy"
+       }
+      ],
+      "horror": "H-0010"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/INVN/cobol/INVUPD.cbl",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "INVCOMM",
+      "kind": "copy",
+      "line": 10,
+      "resolves_to": "apps/INVN/copybook/INVCOMM.cpy",
+      "horror": "H-0010"
+     },
+     {
+      "member": "INVMSG",
+      "kind": "copy",
+      "line": 11,
+      "resolves_to": "apps/INVN/copybook/INVMSG.cpy",
+      "horror": "H-0010"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-INV-AREA",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 9,
+      "copy_members": [
+       "INVCOMM"
+      ],
+      "horror": "H-0010"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-INV-AREA",
+      "line": 9,
+      "bytes": 24,
+      "fields": [
+       {
+        "name": "IC-ITEM-ID",
+        "level": 5,
+        "pic": "X(12)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 12,
+        "file": "apps/INVN/copybook/INVCOMM.cpy"
+       },
+       {
+        "name": "IC-QTY",
+        "level": 5,
+        "pic": "S9(7)",
+        "usage": "COMP-3",
+        "offset": 12,
+        "bytes": 4,
+        "file": "apps/INVN/copybook/INVCOMM.cpy"
+       },
+       {
+        "name": "IC-RC",
+        "level": 5,
+        "pic": "S9(4)",
+        "usage": "COMP",
+        "offset": 16,
+        "bytes": 2,
+        "file": "apps/INVN/copybook/INVCOMM.cpy"
+       },
+       {
+        "name": "IC-FUNC",
+        "level": 5,
+        "pic": "X(6)",
+        "usage": null,
+        "offset": 18,
+        "bytes": 6,
+        "file": "apps/INVN/copybook/INVCOMM.cpy"
+       }
+      ],
+      "horror": "H-0010"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

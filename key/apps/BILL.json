@@ -1,0 +1,758 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "BILL",
+ "members": {
+  "apps/BILL/cobol/BILLCALC.cbl": {
+   "app": "BILL",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 68,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "BILLCALC",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 38,
+     "end_line": 44,
+     "horror": "H-0012"
+    },
+    {
+     "name": "1000-NEXT-BILL",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 46,
+     "end_line": 52,
+     "horror": "H-0012"
+    },
+    {
+     "name": "2000-COMPUTE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 54,
+     "end_line": 59,
+     "horror": "H-0012"
+    },
+    {
+     "name": "2100-ADJUST",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 61,
+     "end_line": 62,
+     "horror": "H-0012"
+    },
+    {
+     "name": "3000-PRINT",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 64,
+     "end_line": 67,
+     "horror": "H-0012"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-NEXT-BILL",
+     "line": 42,
+     "horror": "H-0012"
+    },
+    {
+     "kind": "perform",
+     "from": "1000-NEXT-BILL",
+     "target": "2000-COMPUTE",
+     "line": 51,
+     "horror": "H-0012"
+    },
+    {
+     "kind": "perform",
+     "from": "2000-COMPUTE",
+     "target": "2100-ADJUST",
+     "line": 57,
+     "horror": "H-0012"
+    },
+    {
+     "kind": "perform",
+     "from": "2000-COMPUTE",
+     "target": "3000-PRINT",
+     "line": 59,
+     "horror": "H-0012"
+    }
+   ],
+   "copies": [
+    {
+     "member": "BILREC",
+     "kind": "copy",
+     "line": 22,
+     "resolves_to": "apps/BILL/copybook/BILREC.cpy"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-BIL-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 24
+    },
+    {
+     "level": 88,
+     "name": "WS-BIL-EOF",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'10'",
+     "section": "WORKING-STORAGE",
+     "line": 25
+    },
+    {
+     "level": 1,
+     "name": "WS-PRINT-LINE",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 26,
+     "horror": "H-0030"
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(6)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'BILL: '",
+     "section": "WORKING-STORAGE",
+     "line": 27,
+     "implicit_filler": true,
+     "horror": "H-0030"
+    },
+    {
+     "level": 5,
+     "name": "WS-PRT-ACCT",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 28,
+     "horror": "H-0030"
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "SPACES",
+     "section": "WORKING-STORAGE",
+     "line": 29,
+     "implicit_filler": true,
+     "horror": "H-0030"
+    },
+    {
+     "level": 5,
+     "name": "WS-PRT-AMOUNT",
+     "pic": "-Z(8)9.99",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 30,
+     "horror": "H-0030"
+    },
+    {
+     "level": 1,
+     "name": "WS-SIGNED",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 31,
+     "horror": "H-0025"
+    },
+    {
+     "level": 5,
+     "name": "WS-ADJUST",
+     "pic": "S9(7)V99",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 32,
+     "sign_separate": true,
+     "sign_leading": true,
+     "horror": "H-0025"
+    },
+    {
+     "level": 5,
+     "name": "WS-CREDIT",
+     "pic": "S9(5)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 33,
+     "sign_separate": true,
+     "sign_leading": false,
+     "horror": "H-0025"
+    },
+    {
+     "level": 1,
+     "name": "WS-RATE",
+     "pic": "9V9(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "0.0725",
+     "section": "WORKING-STORAGE",
+     "line": 34
+    },
+    {
+     "level": 1,
+     "name": "WS-MODE",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 35
+    },
+    {
+     "level": 1,
+     "name": "WS-LEN",
+     "pic": "9(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 36,
+     "horror": "H-0009"
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-BIL-STATUS",
+     "line": 24,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-BIL-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/BILL/cobol/BILLCALC.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-PRINT-LINE",
+     "line": 26,
+     "bytes": 31,
+     "fields": [
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(6)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 6,
+       "file": "apps/BILL/cobol/BILLCALC.cbl"
+      },
+      {
+       "name": "WS-PRT-ACCT",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 6,
+       "bytes": 10,
+       "file": "apps/BILL/cobol/BILLCALC.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 16,
+       "bytes": 2,
+       "file": "apps/BILL/cobol/BILLCALC.cbl"
+      },
+      {
+       "name": "WS-PRT-AMOUNT",
+       "level": 5,
+       "pic": "-Z(8)9.99",
+       "usage": null,
+       "offset": 18,
+       "bytes": 13,
+       "file": "apps/BILL/cobol/BILLCALC.cbl"
+      }
+     ],
+     "horror": "H-0030"
+    },
+    {
+     "record": "WS-SIGNED",
+     "line": 31,
+     "bytes": 16,
+     "fields": [
+      {
+       "name": "WS-ADJUST",
+       "level": 5,
+       "pic": "S9(7)V99",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/BILL/cobol/BILLCALC.cbl"
+      },
+      {
+       "name": "WS-CREDIT",
+       "level": 5,
+       "pic": "S9(5)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 6,
+       "file": "apps/BILL/cobol/BILLCALC.cbl"
+      }
+     ],
+     "horror": "H-0025"
+    },
+    {
+     "record": "WS-RATE",
+     "line": 34,
+     "bytes": 5,
+     "fields": [
+      {
+       "name": "WS-RATE",
+       "level": 1,
+       "pic": "9V9(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 5,
+       "file": "apps/BILL/cobol/BILLCALC.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-MODE",
+     "line": 35,
+     "bytes": 8,
+     "fields": [
+      {
+       "name": "WS-MODE",
+       "level": 1,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/BILL/cobol/BILLCALC.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-LEN",
+     "line": 36,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-LEN",
+       "level": 1,
+       "pic": "9(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/BILL/cobol/BILLCALC.cbl"
+      }
+     ],
+     "horror": "H-0009"
+    }
+   ],
+   "file_control": [
+    {
+     "select": "BIL-FILE",
+     "assign": "BILLIN",
+     "organization": "SEQUENTIAL",
+     "access_mode": null,
+     "record_key": null,
+     "file_status": "WS-BIL-STATUS",
+     "fd_copies": [
+      "BILREC"
+     ],
+     "line": 15
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "BILLCALC",
+     "params": [],
+     "line": 37
+    }
+   ],
+   "horrors": [
+    "H-0009",
+    "H-0012",
+    "H-0025",
+    "H-0030"
+   ]
+  },
+  "apps/BILL/copybook/BILREC.cpy": {
+   "app": "BILL",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 16,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 1,
+     "name": "BIL-RECORD",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2,
+     "horror": "H-0014"
+    },
+    {
+     "level": 5,
+     "name": "BIL-KEY",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3,
+     "horror": "H-0014"
+    },
+    {
+     "level": 10,
+     "name": "BIL-ACCT",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4,
+     "horror": "H-0014"
+    },
+    {
+     "level": 10,
+     "name": "BIL-CYCLE",
+     "pic": "9(6)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5,
+     "horror": "H-0014"
+    },
+    {
+     "level": 5,
+     "name": "BIL-KEY-R",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": "BIL-KEY",
+     "value": null,
+     "section": null,
+     "line": 6,
+     "horror": "H-0014"
+    },
+    {
+     "level": 10,
+     "name": "BIL-KEY-ALL",
+     "pic": "X(16)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 7,
+     "horror": "H-0014"
+    },
+    {
+     "level": 5,
+     "name": "BIL-CUST",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 8,
+     "horror": "H-0014"
+    },
+    {
+     "level": 10,
+     "name": "BIL-NAME",
+     "pic": "X(30)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 9,
+     "horror": "H-0014"
+    },
+    {
+     "level": 10,
+     "name": "BIL-ADDR",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 10,
+     "horror": "H-0014"
+    },
+    {
+     "level": 15,
+     "name": "BIL-STREET",
+     "pic": "X(30)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 11,
+     "horror": "H-0014"
+    },
+    {
+     "level": 15,
+     "name": "BIL-ZIP",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 12,
+     "horror": "H-0014"
+    },
+    {
+     "level": 5,
+     "name": "BIL-AMOUNT",
+     "pic": "S9(9)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 13,
+     "horror": "H-0014"
+    },
+    {
+     "level": 5,
+     "name": "BIL-TAX",
+     "pic": "S9(7)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 14,
+     "horror": "H-0014"
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 15,
+     "horror": "H-0014"
+    },
+    {
+     "level": 1,
+     "name": "BIL-TRAILER-COUNT",
+     "pic": "9(7)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 16,
+     "horror": "H-0014"
+    }
+   ],
+   "horrors": [
+    "H-0014"
+   ]
+  },
+  "apps/BILL/jcl/BILLMTH.jcl": {
+   "app": "BILL",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 10,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "BILLCALC",
+     "target": "BILLCALC",
+     "line": 4,
+     "resolves_to": "apps/BILL/cobol/BILLCALC.cbl"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "BILLMTH",
+     "proc": null,
+     "step": "CALC",
+     "ordinal": 1,
+     "program": "BILLCALC",
+     "exec_proc": null,
+     "cond": null,
+     "line": 4
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "BILLMTH",
+     "proc": null,
+     "step": "CALC",
+     "dd": "STEPLIB",
+     "dsn": "PROD.BILL.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 5
+    },
+    {
+     "job": "BILLMTH",
+     "proc": null,
+     "step": "CALC",
+     "dd": "BILLIN",
+     "dsn": "PROD.BILL.MASTER",
+     "generation": "0",
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 6
+    },
+    {
+     "job": "BILLMTH",
+     "proc": null,
+     "step": "CALC",
+     "dd": "BILLPRV",
+     "dsn": "PROD.BILL.MASTER",
+     "generation": "-1",
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 7
+    },
+    {
+     "job": "BILLMTH",
+     "proc": null,
+     "step": "CALC",
+     "dd": "BILLOUT",
+     "dsn": "PROD.BILL.MASTER",
+     "generation": "+1",
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 8
+    },
+    {
+     "job": "BILLMTH",
+     "proc": null,
+     "step": "CALC",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 10
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.BILL.LOADLIB",
+     "generation": null,
+     "step": "CALC",
+     "dd": "STEPLIB",
+     "line": 5
+    },
+    {
+     "dsn": "PROD.BILL.MASTER",
+     "generation": "0",
+     "step": "CALC",
+     "dd": "BILLIN",
+     "line": 6,
+     "horror": "H-0011"
+    },
+    {
+     "dsn": "PROD.BILL.MASTER",
+     "generation": "-1",
+     "step": "CALC",
+     "dd": "BILLPRV",
+     "line": 7,
+     "horror": "H-0011"
+    },
+    {
+     "dsn": "PROD.BILL.MASTER",
+     "generation": "+1",
+     "step": "CALC",
+     "dd": "BILLOUT",
+     "line": 8,
+     "horror": "H-0011"
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/BILL/cobol/BILLCALC.cbl"
+    }
+   ],
+   "horrors": [
+    "H-0011"
+   ]
+  }
+ }
+}

@@ -1,0 +1,231 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "MODN",
+ "members": {
+  "apps/MODN/cobol/MODRATE.cbl": {
+   "app": "MODN",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 27,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "MODRATE",
+     "line": 3
+    }
+   ],
+   "units": [
+    {
+     "name": "MAIN-PARA",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 18,
+     "end_line": 24
+    },
+    {
+     "name": "LOOKUP-RATE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 25,
+     "end_line": 27,
+     "horror": "H-0028"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "MAIN-PARA",
+     "target": "LOOKUP-RATE",
+     "line": 20
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "VALUE-BYTES",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 9,
+     "horror": "H-0028"
+    },
+    {
+     "level": 5,
+     "name": "VB-CODE",
+     "pic": "X(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 10,
+     "horror": "H-0028"
+    },
+    {
+     "level": 5,
+     "name": "VB-RATE",
+     "pic": "9V9(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 11,
+     "horror": "H-0028"
+    },
+    {
+     "level": 1,
+     "name": "WS-FOUND",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'N'",
+     "section": "WORKING-STORAGE",
+     "line": 12,
+     "horror": "H-0028"
+    },
+    {
+     "level": 1,
+     "name": "LK-REQUEST",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 14,
+     "horror": "H-0028"
+    },
+    {
+     "level": 5,
+     "name": "LK-CODE",
+     "pic": "X(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 15,
+     "horror": "H-0028"
+    },
+    {
+     "level": 5,
+     "name": "LK-RATE",
+     "pic": "9V9(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 16,
+     "horror": "H-0028",
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "VALUE-BYTES",
+     "line": 9,
+     "bytes": 9,
+     "fields": [
+      {
+       "name": "VB-CODE",
+       "level": 5,
+       "pic": "X(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/MODN/cobol/MODRATE.cbl"
+      },
+      {
+       "name": "VB-RATE",
+       "level": 5,
+       "pic": "9V9(4)",
+       "usage": null,
+       "offset": 4,
+       "bytes": 5,
+       "file": "apps/MODN/cobol/MODRATE.cbl"
+      }
+     ],
+     "horror": "H-0028"
+    },
+    {
+     "record": "WS-FOUND",
+     "line": 12,
+     "bytes": 1,
+     "fields": [
+      {
+       "name": "WS-FOUND",
+       "level": 1,
+       "pic": "X",
+       "usage": null,
+       "offset": 0,
+       "bytes": 1,
+       "file": "apps/MODN/cobol/MODRATE.cbl"
+      }
+     ],
+     "horror": "H-0028"
+    },
+    {
+     "record": "LK-REQUEST",
+     "line": 14,
+     "bytes": 9,
+     "fields": [
+      {
+       "name": "LK-CODE",
+       "level": 5,
+       "pic": "X(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/MODN/cobol/MODRATE.cbl"
+      },
+      {
+       "name": "LK-RATE",
+       "level": 5,
+       "pic": "9V9(4)",
+       "usage": null,
+       "offset": 4,
+       "bytes": 5,
+       "file": "apps/MODN/cobol/MODRATE.cbl"
+      }
+     ],
+     "horror": "H-0028",
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "MODRATE",
+     "params": [
+      "LK-REQUEST"
+     ],
+     "line": 17
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "units",
+     "name": "RATE",
+     "why": "LOOKUP-RATE is one paragraph-name; free format has no column 7",
+     "horror": "H-0028"
+    }
+   ],
+   "horrors": [
+    "H-0028"
+   ]
+  }
+ }
+}

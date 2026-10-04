@@ -1,0 +1,61 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0033",
+ "title": "PERFORM UNTIL EXIT (an inline loop left only by EXIT PERFORM)",
+ "category": "edges",
+ "issue": null,
+ "shapes": [
+  "PERFORM UNTIL EXIT ... IF WS-I > 12 EXIT PERFORM END-IF ... END-PERFORM, then PERFORM 2000-ROUND (PAYCALC)"
+ ],
+ "asserts": "An inline loop: no edge from its header; the PERFORM after it belongs to the paragraph.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "PERFORM with UNTIL phrase (p.417)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "If the UNTIL phrase with the EXIT reserved word is specified, execution proceeds exactly as if the same PERFORM statement were coded with condition-1 specified, except that condition-1 never evaluates as true."
+  }
+ ],
+ "notes": "New in Enterprise COBOL 6.4 (Summary of changes: PERFORM ... UNTIL EXIT support); it does not compile on 6.3 or earlier. No gitgalaxy issue: an IBM dialect corner planted ahead of any defect.",
+ "planted": [
+  {
+   "member": "apps/PAYR/cobol/PAYMAIN.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "1000-CALC",
+      "kind": "paragraph",
+      "section": "MAINLINE",
+      "start_line": 57,
+      "end_line": 66,
+      "program": "PAYCALC",
+      "horror": "H-0033"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "1000-CALC",
+      "target": "2000-ROUND",
+      "line": 65,
+      "program": "PAYCALC",
+      "horror": "H-0033"
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "1000-CALC",
+     "target": "UNTIL",
+     "why": "an inline PERFORM (line 58) names no procedure; UNTIL is part of its header",
+     "horror": "H-0033"
+    }
+   ]
+  }
+ ]
+}

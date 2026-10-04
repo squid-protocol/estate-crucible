@@ -1,7 +1,7 @@
 {
  "format": "estate-crucible-key/1",
  "generator": {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "seed": 1,
   "size": "small"
  },
@@ -21,6 +21,36 @@
    "id": "LOAN",
    "title": "Loan servicing (IDMS, batch)",
    "style": "mixed: numbered IDMS-DC member, unnumbered batch; PROGRAM-ID periods missing"
+  },
+  {
+   "id": "BILL",
+   "title": "Monthly billing (batch)",
+   "style": "numbered, blank numbered lines, change markers in cols 1-6, GDG generations"
+  },
+  {
+   "id": "INVN",
+   "title": "Inventory maintenance (CICS, VSAM, Db2)",
+   "style": "unnumbered, CICS file and TS queue commands, a job named after a program"
+  },
+  {
+   "id": "PAYR",
+   "title": "Payroll (batch, multi-program source)",
+   "style": "unnumbered; nested and sibling programs in one member; every COPY form"
+  },
+  {
+   "id": "GLED",
+   "title": "General ledger (batch, oldest code)",
+   "style": "numbered, cols 73-80 identification, every paragraph-header form"
+  },
+  {
+   "id": "MODN",
+   "title": "Modernised rate service (free format)",
+   "style": "free-format COBOL"
+  },
+  {
+   "id": "CLMS",
+   "title": "Claims (PL/I with a COBOL routine)",
+   "style": "PL/I external procedure with internal procedures"
   }
  ],
  "channels": [
@@ -37,24 +67,34 @@
   "jcl_dds",
   "screen_fields",
   "csd_resources",
-  "transactions"
+  "transactions",
+  "cics_resources",
+  "jcl_datasets",
+  "file_control",
+  "entry_points",
+  "file_edges"
  ],
  "fact_totals": {
-  "programs": 10,
-  "units": 40,
-  "edges": 34,
-  "call_sites": 15,
-  "copies": 18,
-  "data_items": 131,
-  "layouts": 34,
-  "sql_statements": 4,
-  "sql_tables": 1,
-  "jcl_steps": 9,
-  "jcl_dds": 15,
+  "programs": 20,
+  "units": 72,
+  "edges": 56,
+  "call_sites": 23,
+  "copies": 30,
+  "data_items": 273,
+  "layouts": 63,
+  "sql_statements": 5,
+  "sql_tables": 2,
+  "jcl_steps": 13,
+  "jcl_dds": 25,
   "screen_fields": 10,
-  "csd_resources": 6,
-  "transactions": 2,
-  "phantoms": 21
+  "csd_resources": 10,
+  "transactions": 3,
+  "cics_resources": 6,
+  "jcl_datasets": 18,
+  "file_control": 7,
+  "entry_points": 20,
+  "file_edges": 13,
+  "phantoms": 32
  },
  "horrors": [
   "H-0001",
@@ -64,7 +104,33 @@
   "H-0005",
   "H-0006",
   "H-0007",
-  "H-0008"
+  "H-0008",
+  "H-0009",
+  "H-0010",
+  "H-0011",
+  "H-0012",
+  "H-0013",
+  "H-0014",
+  "H-0015",
+  "H-0016",
+  "H-0017",
+  "H-0018",
+  "H-0019",
+  "H-0020",
+  "H-0021",
+  "H-0022",
+  "H-0023",
+  "H-0024",
+  "H-0025",
+  "H-0026",
+  "H-0027",
+  "H-0028",
+  "H-0029",
+  "H-0030",
+  "H-0031",
+  "H-0032",
+  "H-0033",
+  "H-0034"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -115,7 +181,8 @@
     "status": "compiled"
    },
    "horrors": [
-    "H-0001"
+    "H-0001",
+    "H-0009"
    ]
   },
   "apps/ACCT/copybook/ACCTREC.cpy": {
@@ -196,7 +263,76 @@
    "key": "key/apps/ACCT.json",
    "compile": {
     "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0011"
+   ]
+  },
+  "apps/BILL/cobol/BILLCALC.cbl": {
+   "app": "BILL",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "2082503192749d270cefd9578b0284dc9ed39862b2b7edae43df4c0a318c0ffd",
+   "key": "key/apps/BILL.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0009",
+    "H-0012",
+    "H-0025",
+    "H-0030"
+   ]
+  },
+  "apps/BILL/copybook/BILREC.cpy": {
+   "app": "BILL",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "800cb1841dbb97fcada3df78a00368df527002a2f0efe2abece01ed155ad806d",
+   "key": "key/apps/BILL.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0014"
+   ]
+  },
+  "apps/BILL/jcl/BILLMTH.jcl": {
+   "app": "BILL",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "398fef8311dcf6041036d1b696ba80b3abc963ba1f26413c9ab36fdfc6d67b82",
+   "key": "key/apps/BILL.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0011"
+   ]
+  },
+  "apps/CLMS/cobol/CLMEDIT.cbl": {
+   "app": "CLMS",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "439c38bc94ac5fc7b8cfae1e2246e14946858a6b1902487299862b9488c54791",
+   "key": "key/apps/CLMS.json",
+   "compile": {
+    "status": "compiled"
    }
+  },
+  "apps/CLMS/pli/CLMPROC.pli": {
+   "app": "CLMS",
+   "library": "pli",
+   "language": "pli",
+   "sha256": "aebcfb273aed4348dd08d3f3b3deeb6443ab6775891450ea32a53d7508157687",
+   "key": "key/apps/CLMS.json",
+   "compile": {
+    "status": "ibm-only",
+    "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"
+   },
+   "horrors": [
+    "H-0002"
+   ]
   },
   "apps/CUST/bms/CUSTMS.bms": {
    "app": "CUST",
@@ -218,7 +354,8 @@
     "status": "compiled-stubbed"
    },
    "horrors": [
-    "H-0005"
+    "H-0005",
+    "H-0017"
    ]
   },
   "apps/CUST/cobol/CUSTINQ.cbl": {
@@ -232,7 +369,9 @@
    },
    "horrors": [
     "H-0002",
-    "H-0006"
+    "H-0006",
+    "H-0010",
+    "H-0024"
    ]
   },
   "apps/CUST/cobol/CUSTMNU.cbl": {
@@ -284,6 +423,133 @@
    "key": "key/apps/CUST.json",
    "compile": {
     "status": "copybook"
+   },
+   "horrors": [
+    "H-0015"
+   ]
+  },
+  "apps/GLED/cobol/GLPOST.cbl": {
+   "app": "GLED",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "f8cedc1484823f3a0ebd4da9d50b6bd84f37248bae8c061b99162bb60a34dd30",
+   "key": "key/apps/GLED.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0013",
+    "H-0019",
+    "H-0020",
+    "H-0023",
+    "H-0026",
+    "H-0027",
+    "H-0032"
+   ]
+  },
+  "apps/GLED/jcl/GLNIGHT.jcl": {
+   "app": "GLED",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "0086ac217bee41e782e6c664d56e22d223af0addd79c93c04448aff6a5b60963",
+   "key": "key/apps/GLED.json",
+   "compile": {
+    "status": "not-cobol"
+   }
+  },
+  "apps/INVN/cobol/INVDB.cbl": {
+   "app": "INVN",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "39772de2e5dfea1b72c50dda1083044de1938dd856c856c345edd167348e2b79",
+   "key": "key/apps/INVN.json",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "horrors": [
+    "H-0017"
+   ]
+  },
+  "apps/INVN/cobol/INVUPD.cbl": {
+   "app": "INVN",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "6b570db10022b0e6eab07176d2827efdf85a6987245fbfbee7efaef4c3229a80",
+   "key": "key/apps/INVN.json",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "horrors": [
+    "H-0010",
+    "H-0018",
+    "H-0021",
+    "H-0024"
+   ]
+  },
+  "apps/INVN/copybook/INVCOMM.cpy": {
+   "app": "INVN",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "ce073991f40900024446b9c22c3a4ff8c2c8ba8a1b1461a813f0d954b0f2014b",
+   "key": "key/apps/INVN.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/INVN/copybook/INVITEM.cpy": {
+   "app": "INVN",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "0855cdd81842d8f36c756f767bccf1c79479712b3020d39657aa6e867021d009",
+   "key": "key/apps/INVN.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0018"
+   ]
+  },
+  "apps/INVN/copybook/INVMSG.cpy": {
+   "app": "INVN",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "eb199f55f732891c81450b82169a4dd40f53bb499640e3b0a7ac24f028f021ea",
+   "key": "key/apps/INVN.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/INVN/csd/INVGRP.csd": {
+   "app": "INVN",
+   "library": "csd",
+   "language": "csd",
+   "sha256": "ed5efa232a195eef314844ead738486511451ac9ec2750a340124b452705790b",
+   "key": "key/apps/INVN.json",
+   "compile": {
+    "status": "not-cobol"
+   }
+  },
+  "apps/INVN/dclgen/DCLINVT.dcl": {
+   "app": "INVN",
+   "library": "dclgen",
+   "language": "cobol",
+   "sha256": "50e06afd57e86d112782cb4bfea855ae3467c68026b2084e597a8fa80966ca2d",
+   "key": "key/apps/INVN.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0015"
+   ]
+  },
+  "apps/INVN/jcl/INVDB.jcl": {
+   "app": "INVN",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "6ff0009863c9392e303d261f96ef47dcb817128407fcbfdd100365f21d18c713",
+   "key": "key/apps/INVN.json",
+   "compile": {
+    "status": "not-cobol"
    }
   },
   "apps/LOAN/cobol/LNCALC.cbl": {
@@ -351,6 +617,87 @@
    "compile": {
     "status": "not-cobol"
    }
+  },
+  "apps/MODN/cobol/MODRATE.cbl": {
+   "app": "MODN",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "980bb2dd532a02c4a148778d162be4497b471d5b0b0eb9622f8a36d313cd7e05",
+   "key": "key/apps/MODN.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0028"
+   ]
+  },
+  "apps/PAYR/cobol/PAYMAIN.cbl": {
+   "app": "PAYR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "f22f2316dfac3f6f632eb153867329a5df680919221232d3c38eba36b5ef88d5",
+   "key": "key/apps/PAYR.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0006",
+    "H-0016",
+    "H-0022",
+    "H-0029",
+    "H-0031",
+    "H-0033",
+    "H-0034"
+   ]
+  },
+  "apps/PAYR/copybook/DATEWS.cpy": {
+   "app": "PAYR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "ebb45b487161a33c06a97a5c3546544109d81685522718ef551d7c29c9c7a25b",
+   "key": "key/apps/PAYR.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0034"
+   ]
+  },
+  "apps/PAYR/copybook/PAYCON.cpy": {
+   "app": "PAYR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "ea3c08a1bfed22de33ce75391689e9365cf047bd9b03252366b1178b0e02b368",
+   "key": "key/apps/PAYR.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/PAYR/copybook/PAYTPL.cpy": {
+   "app": "PAYR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "d391481f5f0a899a73ee0cc8c9333dcfd7b8933c7dfd839bf62240000d1601e2",
+   "key": "key/apps/PAYR.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0016"
+   ]
+  },
+  "apps/PAYR/jcl/PAYWKLY.jcl": {
+   "app": "PAYR",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "906268cf51003735c10d87ae8c36abeb58cf0e9e5ed99a060ee3c5d3b1e0377d",
+   "key": "key/apps/PAYR.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0011"
+   ]
   },
   "shared/copylib/DATEWS.cpy": {
    "app": null,

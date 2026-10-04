@@ -7,7 +7,8 @@
  "shapes": [
   "EXEC CICS / RETURN TRANSID(...) / END-EXEC inside IF ... END-IF, more statements after it (CUSTINQ 0000-MAIN)",
   "a paragraph whose name starts with RETURN (CUSTINQ RETURN-TO-MENU)",
-  "EXIT PERFORM inside an inline PERFORM, more statements after the loop: unnumbered (CUSTINQ 4000-FIND-BLANK) and numbered (ACCTRPT 2500-SCAN-HISTORY)"
+  "EXIT PERFORM inside an inline PERFORM, more statements after the loop: unnumbered (CUSTINQ 4000-FIND-BLANK) and numbered (ACCTRPT 2500-SCAN-HISTORY)",
+  "PL/I: IF CLM_AMT > 0 THEN ... ELSE RETURN; then CALL LOG_CLAIM / WRITE_CLAIM in CHECK_CLAIM (CLMPROC)"
  ],
  "asserts": "A paragraph runs from its header to just before the next paragraph or section header; the key's end_line is the last code line before that header. Every PERFORM after the conditional terminator belongs to the paragraph.",
  "citations": [
@@ -28,9 +29,15 @@
    "section": "EXIT statement (EXIT PERFORM)",
    "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-exit-statement",
    "quote": "The EXIT statement ... provides a way to exit from a section, a paragraph, or an inline PERFORM statement."
+  },
+  {
+   "doc": "Enterprise PL/I for z/OS 6.1 Language Reference (SC31-5716-00)",
+   "section": "RETURN statement (p.232)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/c3157160.pdf",
+   "quote": "The RETURN statement terminates execution of the subroutine or function procedure that contains the RETURN statement and returns control to the invoking procedure."
   }
  ],
- "notes": "In a numbered member the engine's line-leading terminator test does not see EXIT behind the sequence number, so the numbered plant can pass for the wrong reason while #4300 is open; the unnumbered plant is the one that exercises the cut. Shape 1's PL/I form (ELSE RETURN;) waits for PL/I members (phase 1).",
+ "notes": "In a numbered member the engine's line-leading terminator test does not see EXIT behind the sequence number, so the numbered plant can pass for the wrong reason; the unnumbered plants exercise the cut.",
  "planted": [
   {
    "member": "apps/ACCT/cobol/ACCTRPT.cbl",
@@ -68,6 +75,44 @@
      "horror": "H-0002"
     }
    ]
+  },
+  {
+   "member": "apps/CLMS/pli/CLMPROC.pli",
+   "compile": {
+    "status": "ibm-only",
+    "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "CHECK_CLAIM",
+      "kind": "procedure",
+      "section": null,
+      "start_line": 19,
+      "end_line": 25,
+      "horror": "H-0002"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "call",
+      "from": "CHECK_CLAIM",
+      "target": "LOG_CLAIM",
+      "line": 23,
+      "form": "literal",
+      "horror": "H-0002"
+     },
+     {
+      "kind": "call",
+      "from": "CHECK_CLAIM",
+      "target": "WRITE_CLAIM",
+      "line": 24,
+      "form": "literal",
+      "horror": "H-0002"
+     }
+    ]
+   },
+   "phantoms": []
   },
   {
    "member": "apps/CUST/cobol/CUSTINQ.cbl",
@@ -178,6 +223,25 @@
       "target": "CUSTMNU",
       "line": 51,
       "resolves_to": "apps/CUST/cobol/CUSTMNU.cbl",
+      "horror": "H-0002"
+     }
+    ],
+    "cics_resources": [
+     {
+      "verb": "SEND",
+      "kind": "MAP",
+      "name": "CUSTMAP",
+      "qualifier": "CUSTMS",
+      "record": null,
+      "access": "write",
+      "line": 25,
+      "horror": "H-0002"
+     }
+    ],
+    "file_edges": [
+     {
+      "kind": "call",
+      "target": "apps/CUST/cobol/CUSTMNU.cbl",
       "horror": "H-0002"
      }
     ]
