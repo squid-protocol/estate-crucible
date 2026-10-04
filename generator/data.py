@@ -22,9 +22,10 @@ Resolver = Callable[..., tuple[Optional[str], Optional[list[Item]]]]
 
 
 def CP(member: str, *, lib: Optional[str] = None, quoted: bool = False,
-       replacing: Optional[tuple[str, str]] = None) -> Copy:
-    """One COPY statement: `COPY member [IN lib] [REPLACING ==a== BY ==b==]`, or `COPY 'member'`."""
-    return {"member": member, "lib": lib, "quoted": quoted, "replacing": replacing}
+       replacing: Optional[tuple[str, str]] = None, sep: str = " ") -> Copy:
+    """One COPY statement: `COPY member [IN lib] [REPLACING ==a== BY ==b==]`, or `COPY 'member'`.
+    `sep` is the separator after COPY (a full-width space U+3000 in some Japanese estates)."""
+    return {"member": member, "lib": lib, "quoted": quoted, "replacing": replacing, "sep": sep}
 
 
 def _cp(c: Any) -> Copy:
@@ -35,7 +36,7 @@ def I(lvl: int, name: Optional[str], pic: Optional[str] = None, usage: Optional[
       occurs: Optional[int] = None, redefines: Optional[str] = None, value: Optional[str] = None,
       sign: Optional[str] = None, kids: Optional[list[Item]] = None, copy: Optional[list[Any]] = None,
       copy_style: str = "next-line", horror: Optional[str] = None,
-      depends_on: Optional[list[str]] = None, seq: Optional[str] = None) -> Item:
+      depends_on: Optional[list[str]] = None, seq: Optional[str] = None, sep: Optional[str] = None) -> Item:
     """One data description entry. `name` None writes no data-name (an implicit FILLER).
     `sign` is a SIGN clause body (`LEADING SEPARATE`). `copy` makes it a group whose
     subordinate entries come from COPY statements (member names or CP(...)); `copy_style`
@@ -43,7 +44,7 @@ def I(lvl: int, name: Optional[str], pic: Optional[str] = None, usage: Optional[
     or split (`COPY` / member on the next line)."""
     return {"lvl": lvl, "name": name, "pic": pic, "usage": usage, "occurs": occurs, "redefines": redefines,
             "value": value, "sign": sign, "kids": kids or [], "copy": [_cp(c) for c in copy or []],
-            "copy_style": copy_style, "horror": horror, "depends_on": depends_on, "seq": seq}
+            "copy_style": copy_style, "horror": horror, "depends_on": depends_on, "seq": seq, "sep": sep}
 
 
 def C(member: Any, *, horror: Optional[str] = None, style: str = "next-line",
@@ -68,6 +69,9 @@ def pic_positions(pic: str) -> str:
 def elementary_bytes(pic: str, usage: Optional[str], sign: Optional[str] = None) -> int:
     """Bytes of one elementary item. SIGN ... SEPARATE gives the sign a byte of its own."""
     expanded = pic_positions(pic)
+    if "N" in expanded or "G" in expanded:
+        # national (USAGE NATIONAL) and DBCS (USAGE DISPLAY-1): 2 bytes per character position
+        return 2 * sum(1 for ch in expanded if ch in "NG")
     if sign and "SEPARATE" in sign.upper():
         return sum(1 for ch in expanded if ch not in "SVP") + 1
     u = norm_usage(usage) or "DISPLAY"
@@ -81,6 +85,15 @@ def elementary_bytes(pic: str, usage: Optional[str], sign: Optional[str] = None)
     if u in ("COMP-3", "PACKED-DECIMAL"):
         return digits // 2 + 1
     return sum(1 for ch in expanded if ch not in "SVP")
+
+
+def implied_usage(pic: Optional[str]) -> Optional[str]:
+    """A PICTURE of N (NSYMBOL(NATIONAL), the default) implies USAGE NATIONAL, of G USAGE
+    DISPLAY-1; an implied DISPLAY is recorded as no usage."""
+    if not pic:
+        return None
+    p = pic_positions(pic)
+    return "NATIONAL" if "N" in p else "DISPLAY-1" if "G" in p else None
 
 
 def norm_usage(usage: Optional[str]) -> Optional[str]:
@@ -111,6 +124,10 @@ def item_clauses(it: Item) -> list[str]:
 
 
 def item_text(it: Item) -> str:
+    if it.get("sep"):
+        # every separator written as `sep` (a full-width space, #3956)
+        return it["sep"].join([f"{it['lvl']:02d}", *([it["name"]] if it.get("name") else []),
+                               *(c.replace(" ", it["sep"]) for c in item_clauses(it))])
     head = f"{it['lvl']:02d}  {it['name']}" if it.get("name") else f"{it['lvl']:02d}"
     rest = " ".join(item_clauses(it))
     if not rest:
@@ -139,7 +156,7 @@ def copy_text(c: Copy) -> str:
     name = f"'{c['member']}'" if c["quoted"] else c["member"]
     lib = f" IN {c['lib']}" if c["lib"] else ""
     rep = f" REPLACING =={c['replacing'][0]}== BY =={c['replacing'][1]}==" if c["replacing"] else ""
-    return f"COPY {name}{lib}{rep}."
+    return f"COPY{c.get('sep', ' ')}{name}{lib}{rep}."
 
 
 def is_data_name(name: Optional[str]) -> bool:
@@ -220,7 +237,7 @@ class DataWriter:
                     level=it["lvl"],
                     name=it["name"] or "FILLER",
                     pic=it.get("pic"),
-                    usage=norm_usage(it.get("usage")),
+                    usage=norm_usage(it.get("usage")) or implied_usage(it.get("pic")),
                     occurs=it.get("occurs"),
                     redefines=it.get("redefines"),
                     value=it.get("value"),
@@ -301,7 +318,7 @@ def layout(root: Item, owner_path: str, resolve: Resolver, line: int) -> dict[st
             if it.get("pic"):
                 fields.append({
                     "name": it["name"] or "FILLER", "level": it["lvl"], "pic": it["pic"],
-                    "usage": norm_usage(it.get("usage")),
+                    "usage": norm_usage(it.get("usage")) or implied_usage(it["pic"]),
                     "offset": offset,
                     "bytes": elementary_bytes(it["pic"], it.get("usage"), it.get("sign")) * (it.get("occurs") or 1),
                     "file": path,

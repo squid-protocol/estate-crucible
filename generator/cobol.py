@@ -6,6 +6,7 @@ from typing import Any, Optional
 
 from .data import DataWriter, Item, Resolver, layout
 from .model import Member
+from .moves import cobol_moves
 from .stmt import Stmt
 
 # How the compile check treats a member (SPEC.md, "Validity"). The status is part of the key.
@@ -58,6 +59,9 @@ class ProgramWriter:
         self.data()
         self.procedure()
         self.resolve_exit_performs()
+        for ph in s.get("phantoms", []):
+            with m.horror(ph.get("horror")):
+                m.phantom(**{k: v for k, v in ph.items() if k != "horror"})
         for nested in s.get("nested", []):
             ProgramWriter(m, nested, self.resolve, self.program_paths, True).write()
         if self.multi:
@@ -160,7 +164,8 @@ class ProgramWriter:
         m = self.m
         if not (s.get("idms") or s.get("fds") or s.get("ws") or s.get("linkage")):
             return
-        m.cobol("DATA DIVISION.", area="A")
+        with m.horror(s.get("data_header_horror")):
+            m.cobol(s.get("data_header", "DATA DIVISION") + ".", area="A")
         dw = DataWriter(m, self.resolve)
         if s.get("idms"):
             with m.horror(s["idms"].get("horror")):
@@ -197,9 +202,18 @@ class ProgramWriter:
             layouts[-1].setdefault("depends_on", ["H-0009"])
 
     def records(self, items: list[Item], section: str, dw: DataWriter) -> None:
+        prev: Optional[tuple[int, int]] = None  # (data_items index, layouts index) of the last 01 written
         for it in items:
             if "lvl" not in it:  # a bare COPY or EXEC SQL INCLUDE
+                if "copy_only" in it and prev is not None and it.get("horror") != "H-0010":
+                    # #4330: the engine folds a bare COPY into the 01 above it; that 01 can only
+                    # pass once H-0010 is fixed
+                    for ch, idx in zip(("data_items", "layouts"), prev):  # noqa: B905 -- equal lengths; 3.9
+                        f = self.m.facts[ch][idx]
+                        if f.get("horror") != "H-0010":
+                            f.setdefault("depends_on", ["H-0010"])
                 dw.items([it], section)
+                prev = None
                 continue
             for x in [it, *it.get("kids", [])]:
                 if x.get("value") and (x.get("pic") or "").startswith("X") and x["value"].startswith("'"):
@@ -207,9 +221,11 @@ class ProgramWriter:
             start = self.m.line_no
             dw.items([it], section)
             if it.get("lvl") == 1:
+                first_item = next(i for i, f in enumerate(self.m.facts["data_items"]) if f["line"] == start)
                 with self.m.horror(it.get("horror")):
                     extra = {"depends_on": it["depends_on"]} if it.get("depends_on") else {}
                     self.m.fact("layouts", **layout(it, self.m.path, self.resolve, start), **extra)
+                prev = (first_item, len(self.m.facts["layouts"]) - 1)
 
     # ------------------------------------------------------------ procedure
     def procedure(self) -> None:
@@ -245,6 +261,8 @@ class ProgramWriter:
                     if first["op"] != "raw" or len(first["lines"]) != 1:
                         raise ValueError(f"{self.m.path}: an inline header takes one raw statement")
                     start = self.line(f"{u['name']}. {first['lines'][0]}", area="A", seq=u.get("seq"))
+                    with self.m.horror(first.get("horror")):
+                        self.moves(first["lines"][0], start)
                     stmts = rest
                 else:
                     start = self.line(f"{u['name']}.", area="A", seq=u.get("seq"))
@@ -277,7 +295,12 @@ class ProgramWriter:
 
     def op_raw(self, st: Stmt, indent: int) -> None:
         for text in st["lines"]:
-            self.line(text, indent)
+            line = self.line(text, indent)
+            self.moves(text, line)
+
+    def moves(self, text: str, line: int) -> None:
+        for row in cobol_moves(text, line):
+            self.m.fact("data_moves", **row)
 
     def op_comment(self, st: Stmt, indent: int) -> None:
         for text in st["lines"]:
@@ -357,7 +380,11 @@ class ProgramWriter:
         self.line("END-IF", indent)
 
     def op_read(self, st: Stmt, indent: int) -> None:
-        self.line(f"READ {st['file']}" + (f" INTO {st['into']}" if st["into"] else ""), indent)
+        line = self.line(f"READ {st['file']}" + (f" INTO {st['into']}" if st["into"] else ""), indent)
+        if st["into"]:
+            self.m.fact("data_moves", verb="READ", source=st["file"], source_kind="file", target=st["into"],
+                        corresponding=False, source_refmod=False, target_refmod=False, source_refmod_text=None,
+                        target_refmod_text=None, line=line)
         self.line("AT END", indent + 3)
         self.stmts(st["at_end"], indent + 6)
         if st["not_at_end"]:

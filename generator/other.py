@@ -33,6 +33,11 @@ def _disp(d: tuple[str, ...]) -> str:
 
 def write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], *, proc: bool) -> None:
     """A job (proc=False) or a cataloged procedure (proc=True)."""
+    with m.horror(spec.get("horror")):
+        _write_jcl(m, spec, program_paths, proc)
+
+
+def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], proc: bool) -> None:
     owner = spec["name"]
     if proc:
         _jcl_stmt(m, owner, "PROC", spec.get("symbolics", []) or [""])
@@ -101,6 +106,12 @@ def _bms_macro(m: Member, label: str, op: str, operands: list[str]) -> int:
 
 
 def write_bms(m: Member, spec: dict[str, Any]) -> None:
+    with m.horror(spec.get("horror")):
+        _write_bms(m, spec)
+    m.compile = {"status": "not-cobol"}
+
+
+def _write_bms(m: Member, spec: dict[str, Any]) -> None:
     ms = spec["mapset"]
     line = _bms_macro(m, ms, "DFHMSD", ["TYPE=&SYSPARM", "MODE=INOUT", "LANG=COBOL", "STORAGE=AUTO",
                                          "CTRL=(FREEKB,FRSET)", "TIOAPFX=YES"])

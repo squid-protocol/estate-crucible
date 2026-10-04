@@ -93,8 +93,12 @@ class PliWriter:
                 getattr(self, "op_" + st["op"])(st, indent)
 
     def op_raw(self, st: PliStmt, indent: int) -> None:
+        from .moves import pli_moves
+
         for text in st["lines"]:
-            self.line(text, indent)
+            line = self.line(text, indent)
+            for row in pli_moves(text, line):
+                self.m.fact("data_moves", **row)
 
     def op_call(self, st: PliStmt, indent: int) -> None:
         args = f"({', '.join(st['args'])})" if st["args"] else ""
@@ -112,6 +116,8 @@ class PliWriter:
             if len(els) == 1 and els[0]["op"] == "raw" and len(els[0]["lines"]) == 1:
                 with self.m.horror(els[0].get("horror")):
                     self.line(f"ELSE {els[0]['lines'][0]}", indent)
+                    if "=" in els[0]["lines"][0]:
+                        raise ValueError("an assignment as an ELSE unit is not modelled")
             else:
                 self.line("ELSE", indent)
                 self.stmts(els, indent + 2)
