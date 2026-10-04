@@ -44,7 +44,8 @@
    "shapes": [
     "EXEC CICS / RETURN TRANSID(...) / END-EXEC inside IF ... END-IF, more statements after it (CUSTINQ 0000-MAIN)",
     "a paragraph whose name starts with RETURN (CUSTINQ RETURN-TO-MENU)",
-    "EXIT PERFORM inside an inline PERFORM, more statements after the loop: unnumbered (CUSTINQ 4000-FIND-BLANK) and numbered (ACCTRPT 2500-SCAN-HISTORY)"
+    "EXIT PERFORM inside an inline PERFORM, more statements after the loop: unnumbered (CUSTINQ 4000-FIND-BLANK) and numbered (ACCTRPT 2500-SCAN-HISTORY)",
+    "PL/I: IF CLM_AMT > 0 THEN ... ELSE RETURN; then CALL LOG_CLAIM / WRITE_CLAIM in CHECK_CLAIM (CLMPROC)"
    ],
    "asserts": "A paragraph runs from its header to just before the next paragraph or section header; the key's end_line is the last code line before that header. Every PERFORM after the conditional terminator belongs to the paragraph.",
    "citations": [
@@ -65,9 +66,15 @@
      "section": "EXIT statement (EXIT PERFORM)",
      "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-exit-statement",
      "quote": "The EXIT statement ... provides a way to exit from a section, a paragraph, or an inline PERFORM statement."
+    },
+    {
+     "doc": "Enterprise PL/I for z/OS 6.1 Language Reference (SC31-5716-00)",
+     "section": "RETURN statement (p.232)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/c3157160.pdf",
+     "quote": "The RETURN statement terminates execution of the subroutine or function procedure that contains the RETURN statement and returns control to the invoking procedure."
     }
    ],
-   "notes": "In a numbered member the engine's line-leading terminator test does not see EXIT behind the sequence number, so the numbered plant can pass for the wrong reason while #4300 is open; the unnumbered plant is the one that exercises the cut. Shape 1's PL/I form (ELSE RETURN;) waits for PL/I members (phase 1)."
+   "notes": "In a numbered member the engine's line-leading terminator test does not see EXIT behind the sequence number, so the numbered plant can pass for the wrong reason; the unnumbered plants exercise the cut."
   },
   {
    "id": "H-0003",
@@ -179,7 +186,7 @@
      "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
     }
    ],
-   "notes": "IDMS is a Broadcom product, so its rule is cited from Broadcom's documentation. The member is IBM-only (not compiled): GnuCOBOL has no IDMS precompiler."
+   "notes": "IDMS is a Broadcom product, so its rule is cited from Broadcom's documentation. The member is IBM-only (not compiled): GnuCOBOL has no IDMS precompiler. The SCHEMA SECTION shape is reported on #4306."
   },
   {
    "id": "H-0008",
@@ -201,6 +208,702 @@
    ],
    "lower_confidence": "IBM's syntax diagram shows both periods as required. That Enterprise COBOL compiles the period-less forms with a diagnostic rests on #4307's evidence (cobol-programming-course CBLDB22 compiles in its own JCL), not on an IBM sentence. The fact the key asserts, the program-name, does not depend on it. Both members are IBM-only here; the check compiles a variant with the periods restored.",
    "notes": "LNRATE has no AUTHOR paragraph, as #4307's CBLDB22 has none: when a period-terminated AUTHOR. line follows the period-less PROGRAM-ID, the engine records the name, which would hide shape 1."
+  },
+  {
+   "id": "H-0009",
+   "title": "The last DATA DIVISION entry takes its USAGE from the PROCEDURE DIVISION",
+   "category": "data-items",
+   "issue": 4329,
+   "shapes": [
+    "01 WS-MSG PIC X(40). as the last WORKING-STORAGE entry, DISPLAY WS-MSG in the procedure (ACCTUPD)",
+    "01 WS-LEN PIC 9(4). as the last entry, MOVE 'BINARY' TO WS-MODE in the procedure (BILLCALC): the engine sizes WS-LEN 2 bytes, not 4"
+   ],
+   "asserts": "A data description entry ends at its separator period: an entry with no USAGE clause has no usage (DISPLAY by default, 4 bytes for PIC 9(4)). Every other program's last entry is marked depends_on H-0009.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Separators (p.49)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A separator period is composed of a period followed by a space."
+    }
+   ]
+  },
+  {
+   "id": "H-0010",
+   "title": "A COPY of a member holding its own 01 is folded into the copy_members of the 01 above it",
+   "category": "copy",
+   "issue": 4330,
+   "shapes": [
+    "01 WS-COMMAREA. / COPY CUSTCOMM. / COPY CUSTMS. / COPY DFHAID. (CUSTINQ; DFHAID is outside the estate)",
+    "01 WS-INV-AREA. / COPY INVCOMM. / COPY INVMSG. where INVMSG holds its own 01 (INVUPD)"
+   ],
+   "asserts": "A level-01 entry in copied text begins a new record: the 01 above it holds only the first COPY's entries.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Levels of data in a record description entry (p.167)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "01 This level-number specifies the record itself, and is the most inclusive level-number possible."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Levels of data in a record description entry (p.167)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A group item includes all group and elementary items that follow it until a level-number less than or equal to the level-number of that group is encountered."
+    }
+   ]
+  },
+  {
+   "id": "H-0011",
+   "title": "A GDG relative generation (+1) / (-1) is captured as a truncated DSN",
+   "category": "jcl",
+   "issue": 4331,
+   "shapes": [
+    "DSN=PROD.ACCT.MASTER(+1) (ACCTPRC)",
+    "DSN=PROD.BILL.MASTER(0) / (-1) / (+1) in one step (BILLMTH)",
+    "DSN=PROD.PAYR.REGISTER(+1) (PAYWKLY)"
+   ],
+   "asserts": "A DD names the GDG base and a relative generation; the dataset reference is the base, with or without its generation, never a name cut at the sign.",
+   "citations": [
+    {
+     "doc": "z/OS V2R2 MVS JCL Reference (SA23-1385-03)",
+     "section": "DD statement: DSNAME parameter, cataloged data set name (p.178-179)",
+     "url": "https://publibz.boulder.ibm.com/epubs/pdf/iea3b611.pdf",
+     "quote": "dsname(generation) Specifies the name of a generation data group (GDG) and the generation number (zero or a signed integer) of a generation data set within the GDG."
+    },
+    {
+     "doc": "z/OS V2R2 DFSMS Using Data Sets (SC23-6855-03)",
+     "section": "Processing generation data groups",
+     "url": "https://publibz.boulder.ibm.com/epubs/pdf/dgt3d410.pdf",
+     "quote": "The relative name is a signed integer used to refer to the latest (0), the next to the latest (-1), and so forth, generation."
+    }
+   ]
+  },
+  {
+   "id": "H-0012",
+   "title": "A sequence-numbered blank line extends the previous unit's extent",
+   "category": "unit-extent",
+   "issue": 4332,
+   "shapes": [
+    "empty numbered lines (cols 1-6 only) between BILLCALC's paragraphs"
+   ],
+   "asserts": "A line with nothing in cols 7-72 holds no code: a paragraph's extent ends at its last code line, whatever cols 1-6 hold.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Reference format > Sequence number area",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=format-sequence-number-area",
+     "quote": "The content of this area can consist of any character in the character set of the computer."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Procedure division structure > Procedures",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-procedures",
+     "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
+    }
+   ]
+  },
+  {
+   "id": "H-0013",
+   "title": "Columns 73-80 identification text on paragraph lines",
+   "category": "reference-format",
+   "issue": 3244,
+   "defect": "D001",
+   "shapes": [
+    "identification text GL000100 / GL002000 in cols 73-80 of every line of two GLPOST paragraphs, including their headers"
+   ],
+   "asserts": "Cols 73-80 are outside the program text: the paragraphs, their PERFORM edges and extents are what cols 1-72 say.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Reference format",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-reference-format",
+     "quote": "Reference format consists of the following areas in a 72-character line."
+    }
+   ],
+   "notes": "IBM's 6.4 Language Reference defines a 72-character line and does not describe cols 73-80 for source; the compiler ignores them."
+  },
+  {
+   "id": "H-0014",
+   "title": "Record copybook: level-01 elementary items, REDEFINES, nested groups, change markers in cols 1-6",
+   "category": "data-items",
+   "issue": 3348,
+   "defect": "D002",
+   "shapes": [
+    "BILREC: two 01 records (one elementary), nested 05/10/15 groups, a REDEFINES group, change marker BL0412 in cols 1-6 of two entries"
+   ],
+   "asserts": "Every entry is a data item at its level, under its parent, whatever cols 1-6 hold; the elementary 01 is a record of its own.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Reference format > Sequence number area",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=format-sequence-number-area",
+     "quote": "The content of this area can consist of any character in the character set of the computer."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Levels of data in a record description entry (p.167)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A group item includes all group and elementary items that follow it until a level-number less than or equal to the level-number of that group is encountered."
+    }
+   ]
+  },
+  {
+   "id": "H-0015",
+   "title": "A DCLGEN member (.dcl) is a COBOL / SQL member to scan",
+   "category": "embedded-sql",
+   "issue": 3365,
+   "defect": "D003",
+   "shapes": [
+    "DCLCUST.dcl and DCLINVT.dcl in the app's dclgen library: DECLARE TABLE plus the host structure"
+   ],
+   "asserts": "A DCLGEN member's DECLARE TABLE columns and its COBOL host structure are facts of that member.",
+   "citations": [
+    {
+     "doc": "Db2 13 for z/OS Commands",
+     "section": "DCLGEN (declarations generator) (DSN)",
+     "url": "https://www.ibm.com/docs/en/db2-for-zos/13?topic=commands-dclgen-declarations-generator-dsn",
+     "quote": "The declarations generator (DCLGEN) produces an SQL DECLARE TABLE statement and a COBOL, PL/I, or C data declaration for a table or a view named in the catalog."
+    }
+   ]
+  },
+  {
+   "id": "H-0016",
+   "title": "COPY forms: REPLACING ==pseudo-text==, a quoted text-name, IN library",
+   "category": "copy",
+   "issue": 3414,
+   "defect": "D004",
+   "shapes": [
+    "COPY PAYTPL REPLACING ==:TAG:== BY ==EMP==. (the copybook's :TAG:- names are not data-names)",
+    "COPY 'PAYCON'. (a literal text-name)",
+    "COPY DATEWS IN SHRCPY. (a library-name)"
+   ],
+   "asserts": "REPLACING applies before the entries exist: WS-EMP holds EMP-ID / EMP-NAME / EMP-RATE (40 bytes); the copybook's own :TAG: entries are not data-names. A quoted text-name and IN library resolve like the plain forms.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "COPY statement (p.688-692)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The COPY statement with REPLACING phrase can be used to replace parts of words, either by using the LEADING|TRAILING partial-word-1 BY partial-word-2 phrase, or by using the pseudo-text :TAG: or (TAG) method."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "COBOL words with single-byte characters (p.12)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "Latin uppercase letters A through Z, Latin lowercase letters a through z, digits 0 through 9, - (hyphen), _ (underscore)"
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "COPY statement (p.688-692)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "literal-1, literal-2 Must be alphanumeric literals. literal-1 identifies the copy text. literal-2 identifies where the copy text exists."
+    }
+   ]
+  },
+  {
+   "id": "H-0017",
+   "title": "A one-line EXEC SQL INCLUDE member END-EXEC",
+   "category": "copy",
+   "issue": 3416,
+   "defect": "D005",
+   "shapes": [
+    "EXEC SQL INCLUDE SQLCA END-EXEC. and EXEC SQL INCLUDE DCLCUST END-EXEC. on one line each (CUSTDBIO, INVDB)"
+   ],
+   "asserts": "Each INCLUDE is an import of its member (SQLCA is Db2-supplied: no member in the estate).",
+   "citations": [
+    {
+     "doc": "Db2 13 for z/OS SQL Reference",
+     "section": "INCLUDE statement",
+     "url": "https://www.ibm.com/docs/en/db2-for-zos/13?topic=statements-include",
+     "quote": "The INCLUDE statement inserts application code, including declarations and statements, into a source program."
+    }
+   ]
+  },
+  {
+   "id": "H-0018",
+   "title": "A data-only copybook (no procedure code, 60+ lines) is still an import target",
+   "category": "copy",
+   "issue": 3417,
+   "defect": "D006",
+   "shapes": [
+    "INVITEM: 60+ lines of data entries and nothing else, COPYed by INVUPD"
+   ],
+   "asserts": "A copybook with no procedure code is still a member the program imports; its entries are data items.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "COPY statement",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-copy-statement",
+     "quote": "A COPY statement can appear in the source text anywhere a character string or a separator can appear."
+    }
+   ]
+  },
+  {
+   "id": "H-0019",
+   "title": "PROGRAM-ID. alone on its line, the name on the next (numbered)",
+   "category": "identification",
+   "issue": 3418,
+   "defect": "D007",
+   "shapes": [
+    "000200 PROGRAM-ID. / 000300     GLPOST. in a numbered member"
+   ],
+   "asserts": "The program-name is GLPOST, the next word after the PROGRAM-ID paragraph header, never the next line's sequence number.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "PROGRAM-ID paragraph (p.101)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A user-defined word or alphanumeric literal, but not a figurative constant, that identifies your program."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Reference format > Sequence number area",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=format-sequence-number-area",
+     "quote": "The content of this area can consist of any character in the character set of the computer."
+    }
+   ]
+  },
+  {
+   "id": "H-0020",
+   "title": "A paragraph header whose separator period is on the next line",
+   "category": "unit-extent",
+   "issue": 3419,
+   "defect": "D008",
+   "shapes": [
+    "1100-OPEN-MSG alone on its line, the separator period alone on the next (GLPOST)"
+   ],
+   "asserts": "1100-OPEN-MSG is a paragraph from its name to its last code line.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Separators (p.49-50)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A space can immediately precede or follow any separator except: The opening pseudo-text delimiter ... Within quotation marks."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Continuation lines (p.58)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "If there is no hyphen (-) in the indicator area (column 7) of a line, the last character of the preceding line is assumed to be followed by a space."
+    }
+   ],
+   "lower_confidence": "No IBM sentence states outright that a paragraph-name's separator period may be on the next line; it follows from the separator and continuation rules (an end of line is a space; a space may precede a separator period). GnuCOBOL -std=ibm accepts it."
+  },
+  {
+   "id": "H-0021",
+   "title": "Commented-out CALL / PERFORM (indicator *) are not statements",
+   "category": "edges",
+   "issue": 3420,
+   "defect": "D010",
+   "shapes": [
+    "*    CALL 'OLDINVAD' USING WS-INV-AREA and *    PERFORM 2500-OLD-REORDER as comment lines (INVUPD)"
+   ],
+   "asserts": "A comment line holds no statement: no call site, no edge.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Comment lines (p.60)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A comment line is any line with an asterisk (*) or slash (/) in the indicator area (column 7) of the line, or with a floating comment indicator (*>) as the first character-string in the program text area (Area A plus Area B)."
+    }
+   ]
+  },
+  {
+   "id": "H-0022",
+   "title": "SPECIAL-NAMES / I-O-CONTROL are not units; all-digit paragraph names are",
+   "category": "units",
+   "issue": 3533,
+   "defect": "D019",
+   "shapes": [
+    "SPECIAL-NAMES. C01 IS TOP-OF-PAGE. and I-O-CONTROL. APPLY WRITE-ONLY ON PAY-FILE. (PAYMAIN)",
+    "all-digit paragraph names 0100. / 0200."
+   ],
+   "asserts": "SPECIAL-NAMES and I-O-CONTROL are ENVIRONMENT DIVISION paragraphs, not units; 0100 and 0200 are paragraphs.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "SPECIAL-NAMES paragraph (p.124)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The SPECIAL-NAMES paragraph is the name of an ENVIRONMENT DIVISION paragraph in which environment-names are related to user-specified mnemonic-names."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "COBOL words with single-byte characters (p.12)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "Most user-defined words (all except section-names, paragraph-names, priority-numbers, and level-numbers) must contain at least one alphabetic character."
+    }
+   ]
+  },
+  {
+   "id": "H-0023",
+   "title": "A spaced-out PROCEDURE        DIVISION header and an inline paragraph header",
+   "category": "units",
+   "issue": 3533,
+   "defect": "D020",
+   "shapes": [
+    "PROCEDURE        DIVISION. (multiple spaces, GLPOST)",
+    "1000-INIT. MOVE ZERO TO WS-TOTAL (the first statement on the header line)"
+   ],
+   "asserts": "The procedure division starts at the spaced header; 1000-INIT is a paragraph whose first statement shares its header line.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Separators (p.49)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "Anywhere a space is used as a separator or as part of a separator, more than one space can be used."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Procedure division structure > Procedures",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-procedures",
+     "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
+    }
+   ]
+  },
+  {
+   "id": "H-0024",
+   "title": "A called program also named in a CSD group and as a JCL job resolves to the COBOL source",
+   "category": "call-resolution",
+   "issue": 3616,
+   "defect": "D022",
+   "shapes": [
+    "EXEC CICS LINK PROGRAM('CUSTDBIO'), CUSTDBIO also DEFINEd in CSD group CUSTGRP",
+    "EXEC CICS LINK PROGRAM('INVDB'), INVDB also a CSD PROGRAM and the name of a JCL job"
+   ],
+   "asserts": "The LINK target is the COBOL program whose PROGRAM-ID is that name, not the CSD deck or the job.",
+   "citations": [
+    {
+     "doc": "CICS Transaction Server for z/OS 6.x",
+     "section": "PROGRAM resource definitions",
+     "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=attributes-program-resource-definitions",
+     "quote": "PROGRAM resources control information for a program that is stored in the program library and used to process a transaction, or part of a transaction."
+    },
+    {
+     "doc": "CICS Transaction Server for z/OS 6.x",
+     "section": "EXEC CICS LINK",
+     "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=summary-link",
+     "quote": "LINK passes control from an application program at one logical level to an application program at the next lower logical level."
+    }
+   ]
+  },
+  {
+   "id": "H-0025",
+   "title": "SIGN LEADING / TRAILING SEPARATE takes a byte of its own",
+   "category": "layouts",
+   "issue": 3694,
+   "defect": "D024",
+   "shapes": [
+    "05 WS-ADJUST PIC S9(7)V99 SIGN LEADING SEPARATE (10 bytes)",
+    "05 WS-CREDIT PIC S9(5) SIGN TRAILING SEPARATE (6 bytes)"
+   ],
+   "asserts": "With SEPARATE CHARACTER the sign takes its own byte: the layout counts it.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "SIGN clause (p.231)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The character S in the PICTURE character string is counted in determining the size of the data item (in terms of standard data format characters)."
+    }
+   ]
+  },
+  {
+   "id": "H-0026",
+   "title": "A paragraph named END-xxx (END-IPROC1) is a paragraph",
+   "category": "units",
+   "issue": 4026,
+   "defect": "D036",
+   "shapes": [
+    "paragraph END-IPROC1. PERFORMed from 0000-MAIN (GLPOST)"
+   ],
+   "asserts": "END-IPROC1 is a user-defined word, so a legal paragraph-name; only the reserved END-xxx words are scope terminators.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "COBOL words with single-byte characters (p.12)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "Most user-defined words (all except section-names, paragraph-names, priority-numbers, and level-numbers) must contain at least one alphabetic character."
+    }
+   ]
+  },
+  {
+   "id": "H-0027",
+   "title": "A mixed-case paragraph name (End-Program) is a paragraph",
+   "category": "units",
+   "issue": 4031,
+   "defect": "D037",
+   "shapes": [
+    "paragraph End-Program. (mixed case), PERFORM End-Program (GLPOST)"
+   ],
+   "asserts": "End-Program is a paragraph; COBOL words are not case-sensitive.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "COBOL words with single-byte characters (p.12)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "Latin uppercase letters A through Z, Latin lowercase letters a through z, digits 0 through 9, - (hyphen), _ (underscore)"
+    }
+   ]
+  },
+  {
+   "id": "H-0028",
+   "title": "Free-format source: indented level numbers are data entries, not paragraphs",
+   "category": "reference-format",
+   "issue": 4203,
+   "defect": "D040",
+   "shapes": [
+    ">>SOURCE FORMAT FREE, data entries indented under their parents (    01 VALUE-BYTES.) (MODRATE)",
+    "paragraph LOOKUP-RATE. starting in column 1, its hyphen in column 7: not in #4203, found by this crucible"
+   ],
+   "asserts": "In free format there are no columns: indented level numbers are data entries, and LOOKUP-RATE is one paragraph-name.",
+   "citations": [
+    {
+     "doc": "GnuCOBOL 3.x Programmer's Guide",
+     "section": "2.1.16 Format of Program Source Lines",
+     "url": "https://gnucobol.sourceforge.io/HTML/gnucobpg.html",
+     "quote": "in this mode of operation, COBOL statements may each be up to 255 characters long, with no specific requirements as to what should appear in which columns."
+    }
+   ],
+   "notes": "Not IBM dialect: Enterprise COBOL for z/OS 6.4 has only the 72-column reference format, and IBM COBOL for Linux needs a conversion utility for free-format source. The member stands for code rehosted off z/OS and is compiled by GnuCOBOL (-std=ibm accepts the directive)."
+  },
+  {
+   "id": "H-0029",
+   "title": "A PROGRAM-ID written as a literal ('PAYRPT')",
+   "category": "identification",
+   "issue": 4242,
+   "defect": "D041",
+   "shapes": [
+    "PROGRAM-ID. 'PAYRPT'. starting in column 9, and END PROGRAM 'PAYRPT'."
+   ],
+   "asserts": "The program-name is PAYRPT.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "PROGRAM-ID paragraph (p.101)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A user-defined word or alphanumeric literal, but not a figurative constant, that identifies your program."
+    }
+   ]
+  },
+  {
+   "id": "H-0030",
+   "title": "An unnamed data description entry is an implicit FILLER",
+   "category": "data-items",
+   "issue": 4246,
+   "defect": "D042",
+   "shapes": [
+    "05 PIC X(6) VALUE 'BILL: ' and 05 PIC X(2) VALUE SPACES inside WS-PRINT-LINE (BILLCALC)"
+   ],
+   "asserts": "An entry with no data-name is FILLER: it is a data item named FILLER with its picture, and it occupies storage.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Data-name or FILLER clause (p.195)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "If data-name-1 or the FILLER clause is omitted, the data item being described is treated as though FILLER had been specified."
+    }
+   ]
+  },
+  {
+   "id": "H-0031",
+   "title": "Several programs in one member: nested and batch-compiled siblings, each with MAINLINE SECTION",
+   "category": "units",
+   "issue": 4243,
+   "defect": "D043",
+   "shapes": [
+    "PAYMAIN holds PAYCALC (nested, END PROGRAM PAYCALC) and is followed by the batch-compiled sibling 'PAYRPT'; each program opens with MAINLINE SECTION",
+    "each program's own WORKING-STORAGE; CALL 'PAYCALC' / CALL 'PAYRPT' resolve inside the member"
+   ],
+   "asserts": "Each program has its own units, data items and entry point; a CALL of a nested or sibling program resolves to this member.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "COBOL program structure; End program markers (p.57, p.84-85)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A COBOL program can contain other COBOL programs, which in turn can contain still other COBOL programs. These contained programs are called nested programs."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "End program, end class, and end method markers (p.57)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "An end program marker separates each program in the sequence of programs."
+    }
+   ]
+  },
+  {
+   "id": "H-0032",
+   "title": "ASSIGN TO at the end of a line with cols 73-80 identification; the assignment-name on the next line",
+   "category": "file-control",
+   "issue": 4264,
+   "defect": "D044",
+   "shapes": [
+    "SELECT JRNL-FILE ASSIGN TO + GL001000 in cols 73-80; the assignment-name JRNLIN on the next line, also tagged"
+   ],
+   "asserts": "The assignment-name is JRNLIN: cols 73-80 are outside the line and the clause continues in Area B of the next.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Reference format",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-reference-format",
+     "quote": "Reference format consists of the following areas in a 72-character line."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Area B / Continuation lines (p.57-58)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "Any sentence, entry, clause, or phrase that requires more than one line can be continued in Area B of the next line that is neither a comment line nor a blank line."
+    }
+   ]
+  },
+  {
+   "id": "H-0033",
+   "title": "PERFORM UNTIL EXIT (an inline loop left only by EXIT PERFORM)",
+   "category": "edges",
+   "issue": null,
+   "shapes": [
+    "PERFORM UNTIL EXIT ... IF WS-I > 12 EXIT PERFORM END-IF ... END-PERFORM, then PERFORM 2000-ROUND (PAYCALC)"
+   ],
+   "asserts": "An inline loop: no edge from its header; the PERFORM after it belongs to the paragraph.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "PERFORM with UNTIL phrase (p.417)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "If the UNTIL phrase with the EXIT reserved word is specified, execution proceeds exactly as if the same PERFORM statement were coded with condition-1 specified, except that condition-1 never evaluates as true."
+    }
+   ],
+   "notes": "New in Enterprise COBOL 6.4 (Summary of changes: PERFORM ... UNTIL EXIT support); it does not compile on 6.3 or earlier. No gitgalaxy issue: an IBM dialect corner planted ahead of any defect."
+  },
+  {
+   "id": "H-0034",
+   "title": "Same-named copybook in two libraries: SYSLIB order picks the app's own",
+   "category": "copy",
+   "issue": 4265,
+   "shapes": [
+    "DATEWS in PAYRCPY (18 bytes, ISO date) and in SHRCPY (16 bytes): PAYMAIN's plain COPY DATEWS takes PAYR's, COPY DATEWS IN SHRCPY the shared one",
+    "ACCTPOST and CUSTINQ COPY DATEWS: their SYSLIB has no PAYRCPY, so the shared one (depends_on H-0034)"
+   ],
+   "asserts": "COPY searches the program's own library concatenation and the first library holding the member wins; a library-name restricts the search to that library.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Copy member search order (p.697)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "If no library name is specified in the COPY statement, the concatenation of datasets allocated to the SYSLIB ddname is searched."
+    },
+    {
+     "doc": "z/OS V2R2 DFSMS Using Data Sets (SC23-6855-03)",
+     "section": "Concatenating PDSs",
+     "url": "https://publibz.boulder.ibm.com/epubs/pdf/dgt3d410.pdf",
+     "quote": "If two members of different data sets in the concatenation have the same name, the FIND macro determines the address of the first one in the concatenation."
+    }
+   ]
+  }
+ ],
+ "not_planted": [
+  {
+   "defects": [
+    "D009",
+    "D011",
+    "D014"
+   ],
+   "issues": [
+    3420,
+    3510
+   ],
+   "why": "reachability (dead / live units): no reachability channel is keyed yet"
+  },
+  {
+   "defects": [
+    "D012"
+   ],
+   "why": "template JCL with <PLACEHOLDER> names is not valid JCL; no IBM rule says what it means"
+  },
+  {
+   "defects": [
+    "D013",
+    "D023",
+    "D038",
+    "D039"
+   ],
+   "issues": [
+    3649,
+    4204,
+    4205
+   ],
+   "why": "data moves, reference modification and MOVE truncation: not keyed yet (phase 2 candidate channel)"
+  },
+  {
+   "defects": [
+    "D015",
+    "D016",
+    "D029",
+    "D030",
+    "D031"
+   ],
+   "issues": [
+    3520,
+    3955,
+    3956,
+    3991
+   ],
+   "why": "national characters, encodings and full-width forms: phase 2 (multicultural district, #3988)"
+  },
+  {
+   "defects": [
+    "D017",
+    "D018",
+    "D021",
+    "D026",
+    "D027"
+   ],
+   "issues": [
+    3577,
+    3720,
+    3728
+   ],
+   "why": "PL/I CICS operands, ON-unit data moves and PL/I structure mapping: the PL/I members key units, edges, call sites and data items only"
+  },
+  {
+   "defects": [
+    "D025"
+   ],
+   "issues": [
+    3688
+   ],
+   "why": "COMMAREA contracts across callers: no contract channel keyed yet"
+  },
+  {
+   "defects": [
+    "D028",
+    "D032",
+    "D033",
+    "D035"
+   ],
+   "issues": [
+    3898,
+    3992,
+    3957,
+    3998
+   ],
+   "why": "LINE SEQUENTIAL and ASSIGN TO a literal path are not Enterprise COBOL (Micro Focus / GnuCOBOL)"
+  },
+  {
+   "defects": [
+    "D034"
+   ],
+   "issues": [
+    3958
+   ],
+   "why": "a forge target-config defect, not a source construct"
+  },
+  {
+   "defects": [
+    "B001",
+    "B002",
+    "B003",
+    "B004"
+   ],
+   "why": "census brief (documentation) defects, not source constructs"
   }
  ]
 }

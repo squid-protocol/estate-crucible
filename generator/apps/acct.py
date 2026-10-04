@@ -181,7 +181,7 @@ ACCTUPD = {
     "ws": [
         I(1, "WS-UPD-CONTROL", copy=["UPDCTL"], copy_style="split", horror=H1),
         I(1, "WS-AUDIT-PGM", "X(8)", value="'ACCTAUD'"),
-        I(1, "WS-MSG", "X(40)"),
+        I(1, "WS-MSG", "X(40)", horror="H-0009"),
     ],
     "units": [
         para("0000-MAIN",
@@ -301,7 +301,7 @@ PROCS = [
                 {"name": "STEPLIB", "dsn": "PROD.ACCT.LOADLIB", "disp": ("SHR",)},
                 {"name": "TRANIN", "dsn": "PROD.ACCT.TRANS", "gen": "0", "disp": ("SHR",)},
                 {"name": "ACCTOUT", "dsn": "PROD.ACCT.MASTER", "gen": "+1", "disp": ("NEW", "CATLG", "DELETE"),
-                 "extra": ["SPACE=(CYL,(5,5),RLSE)", "DCB=(RECFM=FB,LRECL=152)"]},
+                 "extra": ["SPACE=(CYL,(5,5),RLSE)", "DCB=(RECFM=FB,LRECL=152)"], "horror": "H-0011"},
                 {"name": "SYSOUT", "sysout": "*"},
             ]},
         ],
