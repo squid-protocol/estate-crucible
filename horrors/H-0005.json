@@ -1,0 +1,82 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0005",
+ "title": "EXEC SQL CALL of a stored procedure recorded as a COBOL dynamic CALL",
+ "category": "embedded-sql",
+ "issue": 4304,
+ "shapes": [
+  "EXEC SQL / CALL PRODPROC.CUSTBAL / (:CUST-ID, :CUST-BAL) / END-EXEC (schema-qualified, multi-line)",
+  "EXEC SQL CALL CUSTAUDT END-EXEC (unqualified, one line)"
+ ],
+ "asserts": "Both are SQL statements with verb CALL and the procedure name; neither is a COBOL CALL site or a call edge.",
+ "citations": [
+  {
+   "doc": "Db2 13 for z/OS SQL Reference",
+   "section": "CALL statement",
+   "url": "https://www.ibm.com/docs/en/db2-for-zos/13?topic=statements-call",
+   "quote": "The CALL statement invokes a stored procedure. ... This statement can be embedded in an application program."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/CUST/cobol/CUSTDBIO.cbl",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "expected": {
+    "sql_statements": [
+     {
+      "verb": "CALL",
+      "table": null,
+      "access": null,
+      "line": 38,
+      "procedure": "PRODPROC.CUSTBAL",
+      "horror": "H-0005"
+     },
+     {
+      "verb": "CALL",
+      "table": null,
+      "access": null,
+      "line": 42,
+      "procedure": "CUSTAUDT",
+      "horror": "H-0005"
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "call_sites",
+     "verb": "CALL",
+     "operand": "PRODPROC",
+     "line": 38,
+     "why": "EXEC SQL CALL PRODPROC.CUSTBAL invokes a Db2 stored procedure, not a COBOL program",
+     "horror": "H-0005"
+    },
+    {
+     "channel": "edges",
+     "kind": "call",
+     "from": "2000-REFRESH-BALANCE",
+     "target": "PRODPROC",
+     "why": "EXEC SQL CALL PRODPROC.CUSTBAL invokes a Db2 stored procedure, not a COBOL program",
+     "horror": "H-0005"
+    },
+    {
+     "channel": "call_sites",
+     "verb": "CALL",
+     "operand": "CUSTAUDT",
+     "line": 42,
+     "why": "EXEC SQL CALL CUSTAUDT invokes a Db2 stored procedure, not a COBOL program",
+     "horror": "H-0005"
+    },
+    {
+     "channel": "edges",
+     "kind": "call",
+     "from": "2000-REFRESH-BALANCE",
+     "target": "CUSTAUDT",
+     "why": "EXEC SQL CALL CUSTAUDT invokes a Db2 stored procedure, not a COBOL program",
+     "horror": "H-0005"
+    }
+   ]
+  }
+ ]
+}

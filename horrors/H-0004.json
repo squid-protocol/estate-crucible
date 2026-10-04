@@ -1,0 +1,177 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0004",
+ "title": "A COPY that does not start its line draws no import",
+ "category": "copy",
+ "issue": 4303,
+ "shapes": [
+  "01  WS-RPT-HEAD.  COPY RPTHDR.",
+  "01  WS-RPT-TOTALS.  COPY RPTTOT. COPY RPTCNT. (two COPYs on one line)"
+ ],
+ "asserts": "Each COPY is an import of its member, resolved to the copybook in the app's library, at the line of its 01.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+   "section": "COPY statement",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-copy-statement",
+   "quote": "A COPY statement can appear in the source text anywhere a character string or a separator can appear. ... Each COPY statement must be preceded by a space and ended with a separator period."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/ACCT/cobol/ACCTRPT.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "RPTHDR",
+      "kind": "copy",
+      "line": 21,
+      "resolves_to": "apps/ACCT/copybook/RPTHDR.cpy",
+      "horror": "H-0004"
+     },
+     {
+      "member": "RPTTOT",
+      "kind": "copy",
+      "line": 22,
+      "resolves_to": "apps/ACCT/copybook/RPTTOT.cpy",
+      "horror": "H-0004"
+     },
+     {
+      "member": "RPTCNT",
+      "kind": "copy",
+      "line": 22,
+      "resolves_to": "apps/ACCT/copybook/RPTCNT.cpy",
+      "horror": "H-0004"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-RPT-HEAD",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 21,
+      "copy_members": [
+       "RPTHDR"
+      ],
+      "horror": "H-0004"
+     },
+     {
+      "level": 1,
+      "name": "WS-RPT-TOTALS",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 22,
+      "copy_members": [
+       "RPTTOT",
+       "RPTCNT"
+      ],
+      "horror": "H-0004"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-RPT-HEAD",
+      "line": 21,
+      "bytes": 51,
+      "fields": [
+       {
+        "name": "RPT-CC",
+        "level": 5,
+        "pic": "X",
+        "usage": null,
+        "offset": 0,
+        "bytes": 1,
+        "file": "apps/ACCT/copybook/RPTHDR.cpy"
+       },
+       {
+        "name": "RPT-TITLE",
+        "level": 5,
+        "pic": "X(40)",
+        "usage": null,
+        "offset": 1,
+        "bytes": 40,
+        "file": "apps/ACCT/copybook/RPTHDR.cpy"
+       },
+       {
+        "name": "RPT-PAGE-LIT",
+        "level": 5,
+        "pic": "X(6)",
+        "usage": null,
+        "offset": 41,
+        "bytes": 6,
+        "file": "apps/ACCT/copybook/RPTHDR.cpy"
+       },
+       {
+        "name": "RPT-PAGE",
+        "level": 5,
+        "pic": "ZZZ9",
+        "usage": null,
+        "offset": 47,
+        "bytes": 4,
+        "file": "apps/ACCT/copybook/RPTHDR.cpy"
+       }
+      ],
+      "horror": "H-0004"
+     },
+     {
+      "record": "WS-RPT-TOTALS",
+      "line": 22,
+      "bytes": 22,
+      "fields": [
+       {
+        "name": "TOT-DEBITS",
+        "level": 5,
+        "pic": "S9(11)V99",
+        "usage": "COMP-3",
+        "offset": 0,
+        "bytes": 7,
+        "file": "apps/ACCT/copybook/RPTTOT.cpy"
+       },
+       {
+        "name": "TOT-CREDITS",
+        "level": 5,
+        "pic": "S9(11)V99",
+        "usage": "COMP-3",
+        "offset": 7,
+        "bytes": 7,
+        "file": "apps/ACCT/copybook/RPTTOT.cpy"
+       },
+       {
+        "name": "CNT-READ",
+        "level": 5,
+        "pic": "S9(7)",
+        "usage": "COMP",
+        "offset": 14,
+        "bytes": 4,
+        "file": "apps/ACCT/copybook/RPTCNT.cpy"
+       },
+       {
+        "name": "CNT-WRITTEN",
+        "level": 5,
+        "pic": "S9(7)",
+        "usage": "COMP",
+        "offset": 18,
+        "bytes": 4,
+        "file": "apps/ACCT/copybook/RPTCNT.cpy"
+       }
+      ],
+      "horror": "H-0004"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

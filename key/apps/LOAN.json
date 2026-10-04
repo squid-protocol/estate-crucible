@@ -1,0 +1,616 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "LOAN",
+ "members": {
+  "apps/LOAN/cobol/LNCALC.cbl": {
+   "app": "LOAN",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 17,
+   "compile": {
+    "status": "ibm-only",
+    "reason": "PROGRAM-ID keyword with no separator period (Enterprise COBOL diagnoses and continues; GnuCOBOL -std=ibm rejects it)",
+    "check_variant": "program-id-period",
+    "check_note": "the PROGRAM-ID line is rewritten to `PROGRAM-ID. <name>.` for the check; everything else compiles as written"
+   },
+   "programs": [
+    {
+     "program_id": "LNCALC",
+     "line": 2,
+     "horror": "H-0008"
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 14,
+     "end_line": 17
+    }
+   ],
+   "copies": [
+    {
+     "member": "LNREC",
+     "kind": "copy",
+     "line": 12,
+     "resolves_to": "apps/LOAN/copybook/LNREC.cpy"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-MONTHLY-RATE",
+     "pic": "S9(3)V9(8)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 9
+    },
+    {
+     "level": 1,
+     "name": "LK-LOAN",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 11,
+     "copy_members": [
+      "LNREC"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-MONTHLY-RATE",
+     "line": 9,
+     "bytes": 6,
+     "fields": [
+      {
+       "name": "WS-MONTHLY-RATE",
+       "level": 1,
+       "pic": "S9(3)V9(8)",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 6,
+       "file": "apps/LOAN/cobol/LNCALC.cbl"
+      }
+     ]
+    },
+    {
+     "record": "LK-LOAN",
+     "line": 11,
+     "bytes": 30,
+     "fields": [
+      {
+       "name": "LN-ID",
+       "level": 5,
+       "pic": "X(12)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 12,
+       "file": "apps/LOAN/copybook/LNREC.cpy"
+      },
+      {
+       "name": "LN-PRINCIPAL",
+       "level": 5,
+       "pic": "S9(9)V99",
+       "usage": "COMP-3",
+       "offset": 12,
+       "bytes": 6,
+       "file": "apps/LOAN/copybook/LNREC.cpy"
+      },
+      {
+       "name": "LN-RATE",
+       "level": 5,
+       "pic": "S9(3)V9(4)",
+       "usage": "COMP-3",
+       "offset": 18,
+       "bytes": 4,
+       "file": "apps/LOAN/copybook/LNREC.cpy"
+      },
+      {
+       "name": "LN-TERM-MONTHS",
+       "level": 5,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 22,
+       "bytes": 3,
+       "file": "apps/LOAN/copybook/LNREC.cpy"
+      },
+      {
+       "name": "LN-PAYMENT",
+       "level": 5,
+       "pic": "S9(7)V99",
+       "usage": "COMP-3",
+       "offset": 25,
+       "bytes": 5,
+       "file": "apps/LOAN/copybook/LNREC.cpy"
+      }
+     ]
+    }
+   ],
+   "horrors": [
+    "H-0008"
+   ]
+  },
+  "apps/LOAN/cobol/LNIDMS01.cbl": {
+   "app": "LOAN",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 31,
+   "compile": {
+    "status": "ibm-only",
+    "reason": "CA IDMS DML: needs the IDMS DML precompiler (IDMS-CONTROL SECTION, SCHEMA SECTION, BIND / OBTAIN / FINISH); GnuCOBOL has no IDMS precompiler"
+   },
+   "programs": [
+    {
+     "program_id": "LNIDMS01",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 18,
+     "end_line": 23,
+     "horror": "H-0007"
+    },
+    {
+     "name": "1000-OBTAIN-LOAN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 24,
+     "end_line": 29,
+     "horror": "H-0007"
+    },
+    {
+     "name": "9000-NOT-FOUND",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 30,
+     "end_line": 31,
+     "horror": "H-0007"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-OBTAIN-LOAN",
+     "line": 21,
+     "horror": "H-0007"
+    },
+    {
+     "kind": "perform",
+     "from": "1000-OBTAIN-LOAN",
+     "target": "9000-NOT-FOUND",
+     "line": 28,
+     "horror": "H-0007"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-LOAN-KEY",
+     "pic": "X(12)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 15
+    },
+    {
+     "level": 1,
+     "name": "WS-NOT-FOUND-CNT",
+     "pic": "S9(5)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 16
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-LOAN-KEY",
+     "line": 15,
+     "bytes": 12,
+     "fields": [
+      {
+       "name": "WS-LOAN-KEY",
+       "level": 1,
+       "pic": "X(12)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 12,
+       "file": "apps/LOAN/cobol/LNIDMS01.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-NOT-FOUND-CNT",
+     "line": 16,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-NOT-FOUND-CNT",
+       "level": 1,
+       "pic": "S9(5)",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/LOAN/cobol/LNIDMS01.cbl"
+      }
+     ]
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "units",
+     "name": "IDMS-CONTROL",
+     "why": "an ENVIRONMENT DIVISION section of the IDMS precompiler, not a procedure",
+     "horror": "H-0007"
+    },
+    {
+     "channel": "units",
+     "name": "PROTOCOL",
+     "why": "the IDMS-CONTROL SECTION's PROTOCOL paragraph, not a procedure",
+     "horror": "H-0007"
+    },
+    {
+     "channel": "units",
+     "name": "SCHEMA",
+     "why": "the IDMS SCHEMA SECTION of the DATA DIVISION, not a procedure",
+     "horror": "H-0007"
+    }
+   ],
+   "horrors": [
+    "H-0007"
+   ]
+  },
+  "apps/LOAN/cobol/LNRATE.cbl": {
+   "app": "LOAN",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 31,
+   "compile": {
+    "status": "ibm-only",
+    "reason": "PROGRAM-ID name with no separator period (Enterprise COBOL diagnoses and continues; GnuCOBOL -std=ibm rejects it)",
+    "check_variant": "program-id-period",
+    "check_note": "the PROGRAM-ID line is rewritten to `PROGRAM-ID. <name>.` for the check; everything else compiles as written"
+   },
+   "programs": [
+    {
+     "program_id": "LNRATE",
+     "line": 2,
+     "horror": "H-0008"
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 22,
+     "end_line": 26
+    },
+    {
+     "name": "1000-NEXT-LOAN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 27,
+     "end_line": 31
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-NEXT-LOAN",
+     "line": 24
+    },
+    {
+     "kind": "call",
+     "from": "1000-NEXT-LOAN",
+     "target": "LNCALC",
+     "line": 30,
+     "form": "literal"
+    }
+   ],
+   "call_sites": [
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "LNCALC",
+     "target": "LNCALC",
+     "line": 30,
+     "resolves_to": "apps/LOAN/cobol/LNCALC.cbl",
+     "depends_on": [
+      "H-0008"
+     ]
+    }
+   ],
+   "copies": [
+    {
+     "member": "LNREC",
+     "kind": "copy",
+     "line": 17,
+     "resolves_to": "apps/LOAN/copybook/LNREC.cpy"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "LOAN-RECORD",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 16,
+     "copy_members": [
+      "LNREC"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-LOAN-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 19
+    },
+    {
+     "level": 88,
+     "name": "WS-LOAN-EOF",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'10'",
+     "section": "WORKING-STORAGE",
+     "line": 20
+    }
+   ],
+   "layouts": [
+    {
+     "record": "LOAN-RECORD",
+     "line": 16,
+     "bytes": 30,
+     "fields": [
+      {
+       "name": "LN-ID",
+       "level": 5,
+       "pic": "X(12)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 12,
+       "file": "apps/LOAN/copybook/LNREC.cpy"
+      },
+      {
+       "name": "LN-PRINCIPAL",
+       "level": 5,
+       "pic": "S9(9)V99",
+       "usage": "COMP-3",
+       "offset": 12,
+       "bytes": 6,
+       "file": "apps/LOAN/copybook/LNREC.cpy"
+      },
+      {
+       "name": "LN-RATE",
+       "level": 5,
+       "pic": "S9(3)V9(4)",
+       "usage": "COMP-3",
+       "offset": 18,
+       "bytes": 4,
+       "file": "apps/LOAN/copybook/LNREC.cpy"
+      },
+      {
+       "name": "LN-TERM-MONTHS",
+       "level": 5,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 22,
+       "bytes": 3,
+       "file": "apps/LOAN/copybook/LNREC.cpy"
+      },
+      {
+       "name": "LN-PAYMENT",
+       "level": 5,
+       "pic": "S9(7)V99",
+       "usage": "COMP-3",
+       "offset": 25,
+       "bytes": 5,
+       "file": "apps/LOAN/copybook/LNREC.cpy"
+      }
+     ]
+    },
+    {
+     "record": "WS-LOAN-STATUS",
+     "line": 19,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-LOAN-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/LOAN/cobol/LNRATE.cbl"
+      }
+     ]
+    }
+   ],
+   "horrors": [
+    "H-0008"
+   ]
+  },
+  "apps/LOAN/copybook/LNREC.cpy": {
+   "app": "LOAN",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 6,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "LN-ID",
+     "pic": "X(12)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 5,
+     "name": "LN-PRINCIPAL",
+     "pic": "S9(9)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 5,
+     "name": "LN-RATE",
+     "pic": "S9(3)V9(4)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4
+    },
+    {
+     "level": 5,
+     "name": "LN-TERM-MONTHS",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5
+    },
+    {
+     "level": 5,
+     "name": "LN-PAYMENT",
+     "pic": "S9(7)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 6
+    }
+   ]
+  },
+  "apps/LOAN/jcl/LNBATCH.jcl": {
+   "app": "LOAN",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 9,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "LNRATE",
+     "target": "LNRATE",
+     "line": 4,
+     "resolves_to": "apps/LOAN/cobol/LNRATE.cbl",
+     "depends_on": [
+      "H-0008"
+     ]
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "LNBATCH",
+     "proc": null,
+     "step": "RESET",
+     "ordinal": 1,
+     "program": "LNRATE",
+     "exec_proc": null,
+     "cond": null,
+     "line": 4
+    },
+    {
+     "job": "LNBATCH",
+     "proc": null,
+     "step": "AUDIT",
+     "ordinal": 2,
+     "program": null,
+     "exec_proc": "AUDLOG",
+     "cond": "(0,NE)",
+     "line": 9
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "LNBATCH",
+     "proc": null,
+     "step": "RESET",
+     "dd": "STEPLIB",
+     "dsn": "PROD.LOAN.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 5
+    },
+    {
+     "job": "LNBATCH",
+     "proc": null,
+     "step": "RESET",
+     "dd": "LOANIN",
+     "dsn": "PROD.LOAN.MASTER",
+     "generation": null,
+     "disp": "OLD",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 6
+    },
+    {
+     "job": "LNBATCH",
+     "proc": null,
+     "step": "RESET",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 7
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,62 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0008",
+ "title": "PROGRAM-ID not recorded when its separator period is missing",
+ "category": "identification",
+ "issue": 4307,
+ "shapes": [
+  "PROGRAM-ID.    LNRATE + blanks to col 72, no period after the name (LNRATE)",
+  "PROGRAM-ID LNCALC. (no period after the keyword) (LNCALC)"
+ ],
+ "asserts": "The program-name is LNRATE / LNCALC: PROGRAM-ID names the program whatever the punctuation around it.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+   "section": "PROGRAM-ID paragraph",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=division-program-id-paragraph",
+   "quote": "program-name ... identifies your program"
+  }
+ ],
+ "lower_confidence": "IBM's syntax diagram shows both periods as required. That Enterprise COBOL compiles the period-less forms with a diagnostic rests on #4307's evidence (cobol-programming-course CBLDB22 compiles in its own JCL), not on an IBM sentence. The fact the key asserts, the program-name, does not depend on it. Both members are IBM-only here; the check compiles a variant with the periods restored.",
+ "notes": "LNRATE has no AUTHOR paragraph, as #4307's CBLDB22 has none: when a period-terminated AUTHOR. line follows the period-less PROGRAM-ID, the engine records the name, which would hide shape 1.",
+ "planted": [
+  {
+   "member": "apps/LOAN/cobol/LNCALC.cbl",
+   "compile": {
+    "status": "ibm-only",
+    "reason": "PROGRAM-ID keyword with no separator period (Enterprise COBOL diagnoses and continues; GnuCOBOL -std=ibm rejects it)",
+    "check_variant": "program-id-period",
+    "check_note": "the PROGRAM-ID line is rewritten to `PROGRAM-ID. <name>.` for the check; everything else compiles as written"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "LNCALC",
+      "line": 2,
+      "horror": "H-0008"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/LOAN/cobol/LNRATE.cbl",
+   "compile": {
+    "status": "ibm-only",
+    "reason": "PROGRAM-ID name with no separator period (Enterprise COBOL diagnoses and continues; GnuCOBOL -std=ibm rejects it)",
+    "check_variant": "program-id-period",
+    "check_note": "the PROGRAM-ID line is rewritten to `PROGRAM-ID. <name>.` for the check; everything else compiles as written"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "LNRATE",
+      "line": 2,
+      "horror": "H-0008"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

@@ -1,0 +1,201 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0001",
+ "title": "A cols 1-6 sequence number read as the operand of a verb whose operand is on the next line",
+ "category": "reference-format",
+ "issue": 4300,
+ "shapes": [
+  "PERFORM / <procedure-name> on the next line",
+  "GO TO / <procedure-name> on the next line (inside IF ... END-IF)",
+  "CALL / '<literal>' on the next line",
+  "CALL / <identifier> on the next line",
+  "COPY / <member>. on the next line"
+ ],
+ "asserts": "The operand is the word on the next line, never that line's sequence number: the edges, the CALL sites and the COPY edge name the real procedure, program and member, and no edge, call site or import names a sequence number.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+   "section": "Reference format > Sequence number area",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=format-sequence-number-area",
+   "quote": "The content of this area can consist of any character in the character set of the computer."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+   "section": "CALL statement",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-call-statement",
+   "quote": "literal-1 or the contents of identifier-1 must specify the program-name of the called subprogram."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+   "section": "COPY statement",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-copy-statement",
+   "quote": "A COPY statement can appear in the source text anywhere a character string or a separator can appear."
+  }
+ ],
+ "notes": "The sequence number area is outside the program text, so a statement may continue onto the next line at any separator. The phantoms name the exact sequence number the engine would read (the next line's cols 1-6).",
+ "planted": [
+  {
+   "member": "apps/ACCT/cobol/ACCTUPD.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "0000-MAIN",
+      "target": "2000-APPLY-UPDATES",
+      "line": 20,
+      "horror": "H-0001"
+     },
+     {
+      "kind": "goto",
+      "from": "0000-MAIN",
+      "target": "9999-ABEND",
+      "line": 23,
+      "horror": "H-0001"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "ACCTLOG",
+      "line": 26,
+      "form": "literal",
+      "horror": "H-0001"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "WS-AUDIT-PGM",
+      "line": 28,
+      "form": "identifier",
+      "horror": "H-0001"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "ACCTLOG",
+      "target": "ACCTLOG",
+      "line": 26,
+      "resolves_to": null,
+      "horror": "H-0001"
+     },
+     {
+      "verb": "CALL",
+      "form": "identifier",
+      "operand": "WS-AUDIT-PGM",
+      "target": "ACCTAUD",
+      "line": 28,
+      "resolves_to": "apps/ACCT/cobol/ACCTAUD.cbl",
+      "horror": "H-0001"
+     }
+    ],
+    "copies": [
+     {
+      "member": "UPDCTL",
+      "kind": "copy",
+      "line": 13,
+      "resolves_to": "apps/ACCT/copybook/UPDCTL.cpy",
+      "horror": "H-0001"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-UPD-CONTROL",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 12,
+      "copy_members": [
+       "UPDCTL"
+      ],
+      "horror": "H-0001"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-UPD-CONTROL",
+      "line": 12,
+      "bytes": 14,
+      "fields": [
+       {
+        "name": "UPD-FLAG",
+        "level": 5,
+        "pic": "X",
+        "usage": null,
+        "offset": 0,
+        "bytes": 1,
+        "file": "apps/ACCT/copybook/UPDCTL.cpy"
+       },
+       {
+        "name": "UPD-COUNT",
+        "level": 5,
+        "pic": "S9(5)",
+        "usage": "COMP-3",
+        "offset": 1,
+        "bytes": 3,
+        "file": "apps/ACCT/copybook/UPDCTL.cpy"
+       },
+       {
+        "name": "UPD-LAST-ACCT",
+        "level": 5,
+        "pic": "X(10)",
+        "usage": null,
+        "offset": 4,
+        "bytes": 10,
+        "file": "apps/ACCT/copybook/UPDCTL.cpy"
+       }
+      ],
+      "horror": "H-0001"
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "copies",
+     "member": "001400",
+     "why": "the sequence number of the line after a split COPY, not the member (UPDCTL)",
+     "horror": "H-0001"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "002100",
+     "why": "the sequence number of the line after a split PERFORM, not 2000-APPLY-UPDATES",
+     "horror": "H-0001"
+    },
+    {
+     "channel": "edges",
+     "kind": "goto",
+     "from": "0000-MAIN",
+     "target": "002400",
+     "why": "the sequence number of the line after a split GO TO, not 9999-ABEND",
+     "horror": "H-0001"
+    },
+    {
+     "channel": "edges",
+     "kind": "call",
+     "from": "0000-MAIN",
+     "target": "002700",
+     "why": "the sequence number of the line after a split CALL, not ACCTLOG",
+     "horror": "H-0001"
+    },
+    {
+     "channel": "edges",
+     "kind": "call",
+     "from": "0000-MAIN",
+     "target": "002900",
+     "why": "the sequence number of the line after a split CALL, not WS-AUDIT-PGM",
+     "horror": "H-0001"
+    }
+   ]
+  }
+ ]
+}

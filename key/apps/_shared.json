@@ -1,0 +1,154 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": null,
+ "members": {
+  "shared/copylib/DATEWS.cpy": {
+   "app": null,
+   "library": "copylib",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 7,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "WS-CURR-DATE",
+     "pic": "9(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 5,
+     "name": "WS-CURR-DATE-R",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": "WS-CURR-DATE",
+     "value": null,
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 10,
+     "name": "WS-CURR-YYYY",
+     "pic": "9(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4
+    },
+    {
+     "level": 10,
+     "name": "WS-CURR-MM",
+     "pic": "99",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5
+    },
+    {
+     "level": 10,
+     "name": "WS-CURR-DD",
+     "pic": "99",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 6
+    },
+    {
+     "level": 5,
+     "name": "WS-CURR-TIME",
+     "pic": "9(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 7
+    }
+   ]
+  },
+  "shared/proclib/AUDLOG.prc": {
+   "app": null,
+   "library": "proclib",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 7,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IEBGENER",
+     "target": "IEBGENER",
+     "line": 3,
+     "resolves_to": null
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": null,
+     "proc": "AUDLOG",
+     "step": "LOG",
+     "ordinal": 1,
+     "program": "IEBGENER",
+     "exec_proc": null,
+     "cond": null,
+     "line": 3
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": null,
+     "proc": "AUDLOG",
+     "step": "LOG",
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 4
+    },
+    {
+     "job": null,
+     "proc": "AUDLOG",
+     "step": "LOG",
+     "dd": "SYSUT1",
+     "dsn": "PROD.SHARED.AUDIT.STAGE",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 5
+    },
+    {
+     "job": null,
+     "proc": "AUDLOG",
+     "step": "LOG",
+     "dd": "SYSUT2",
+     "dsn": "PROD.SHARED.AUDIT.LOG",
+     "generation": null,
+     "disp": "MOD",
+     "disp_normal": "KEEP",
+     "sysout": null,
+     "line": 6
+    }
+   ]
+  }
+ }
+}

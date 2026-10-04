@@ -1,0 +1,107 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0006",
+ "title": "Inline PERFORM headers and EXIT PERFORM read as PERFORM targets",
+ "category": "edges",
+ "issue": 4305,
+ "shapes": [
+  "PERFORM TEST AFTER VARYING ... (WITH omitted)",
+  "PERFORM TEST BEFORE UNTIL ...",
+  "PERFORM WS-N TIMES ... END-PERFORM (inline, identifier count)",
+  "PERFORM 3 TIMES ... END-PERFORM (inline, literal count)",
+  "IF ... EXIT PERFORM END-IF",
+  "PERFORM 3100-FORMAT-TOTAL 2 TIMES (out-of-line: a real edge, the control case)"
+ ],
+ "asserts": "An inline PERFORM names no procedure, so it draws no edge; EXIT PERFORM is not a PERFORM. Out-of-line PERFORM procedure-name n TIMES is an edge to the procedure.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+   "section": "PERFORM statement",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-perform-statement",
+   "quote": "The PERFORM statement is an out-of-line PERFORM statement, when procedure-name-1 is specified. ... The PERFORM statement is an inline PERFORM statement, when procedure-name-1 is omitted."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+   "section": "EXIT statement (EXIT PERFORM)",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-exit-statement",
+   "quote": "The EXIT statement ... provides a way to exit from a section, a paragraph, or an inline PERFORM statement."
+  }
+ ],
+ "notes": "PERFORM FOREVER (#4305's GnuCOBOL / Micro Focus form) is not planted: it is not Enterprise COBOL, and this estate is IBM dialect. Its IBM counterpart, PERFORM UNTIL EXIT, is a phase-1 candidate.",
+ "planted": [
+  {
+   "member": "apps/ACCT/cobol/ACCTRPT.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {},
+   "phantoms": [
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "1000-HEADINGS",
+     "target": "TEST",
+     "why": "an inline PERFORM (line 39) names no procedure; TEST is part of its header",
+     "horror": "H-0006"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "2000-DETAIL",
+     "target": "WS-N",
+     "why": "an inline PERFORM (line 44) names no procedure; WS-N is part of its header",
+     "horror": "H-0006"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "2000-DETAIL",
+     "target": "3",
+     "why": "an inline PERFORM (line 47) names no procedure; 3 is part of its header",
+     "horror": "H-0006"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "2000-DETAIL",
+     "target": "TEST",
+     "why": "an inline PERFORM (line 50) names no procedure; TEST is part of its header",
+     "horror": "H-0006"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "2500-SCAN-HISTORY",
+     "target": "END-IF",
+     "why": "EXIT PERFORM (line 57) is not a PERFORM; END-IF follows it",
+     "horror": "H-0006"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "2500-SCAN-HISTORY",
+     "target": "005800",
+     "why": "EXIT PERFORM (line 57) is not a PERFORM; 005800 follows it",
+     "horror": "H-0006"
+    }
+   ]
+  },
+  {
+   "member": "apps/CUST/cobol/CUSTINQ.cbl",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "expected": {},
+   "phantoms": [
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "4000-FIND-BLANK",
+     "target": "END-IF",
+     "why": "EXIT PERFORM (line 69) is not a PERFORM; END-IF follows it",
+     "horror": "H-0006"
+    }
+   ]
+  }
+ ]
+}

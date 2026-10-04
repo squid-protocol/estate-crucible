@@ -1,0 +1,100 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0007",
+ "title": "IDMS IDMS-CONTROL SECTION / PROTOCOL (ENVIRONMENT DIVISION) recorded as procedure units",
+ "category": "dialect",
+ "issue": 4306,
+ "shapes": [
+  "ENVIRONMENT DIVISION. IDMS-CONTROL SECTION. PROTOCOL. MODE IS IDMS-DC DEBUG IDMS-RECORDS MANUAL. (LNIDMS01, numbered)",
+  "DATA DIVISION. SCHEMA SECTION. DB LOANSS01 WITHIN LOANSCHM. (LNIDMS01): not in #4306, found by this crucible"
+ ],
+ "asserts": "Units come from the PROCEDURE DIVISION only: IDMS-CONTROL, PROTOCOL and SCHEMA are not units; the program's three paragraphs are.",
+ "citations": [
+  {
+   "doc": "Broadcom CA IDMS 19.0 DML Reference for COBOL",
+   "section": "Precompiler-Directive Statements (ENVIRONMENT DIVISION)",
+   "url": "https://techdocs.broadcom.com/us/en/ca-mainframe-software/database-management/ca-idms-reference/19-0/dml-reference-for-cobol/precompiler-directive-statements.html",
+   "quote": "An IDMS-CONTROL SECTION is required in the ENVIRONMENT DIVISION to establish the following: Operating mode, Debug sequencing, Variable storage allocation"
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+   "section": "Procedure division structure > Procedures",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-procedures",
+   "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
+  }
+ ],
+ "notes": "IDMS is a Broadcom product, so its rule is cited from Broadcom's documentation. The member is IBM-only (not compiled): GnuCOBOL has no IDMS precompiler.",
+ "planted": [
+  {
+   "member": "apps/LOAN/cobol/LNIDMS01.cbl",
+   "compile": {
+    "status": "ibm-only",
+    "reason": "CA IDMS DML: needs the IDMS DML precompiler (IDMS-CONTROL SECTION, SCHEMA SECTION, BIND / OBTAIN / FINISH); GnuCOBOL has no IDMS precompiler"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "0000-MAIN",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 18,
+      "end_line": 23,
+      "horror": "H-0007"
+     },
+     {
+      "name": "1000-OBTAIN-LOAN",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 24,
+      "end_line": 29,
+      "horror": "H-0007"
+     },
+     {
+      "name": "9000-NOT-FOUND",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 30,
+      "end_line": 31,
+      "horror": "H-0007"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "0000-MAIN",
+      "target": "1000-OBTAIN-LOAN",
+      "line": 21,
+      "horror": "H-0007"
+     },
+     {
+      "kind": "perform",
+      "from": "1000-OBTAIN-LOAN",
+      "target": "9000-NOT-FOUND",
+      "line": 28,
+      "horror": "H-0007"
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "units",
+     "name": "IDMS-CONTROL",
+     "why": "an ENVIRONMENT DIVISION section of the IDMS precompiler, not a procedure",
+     "horror": "H-0007"
+    },
+    {
+     "channel": "units",
+     "name": "PROTOCOL",
+     "why": "the IDMS-CONTROL SECTION's PROTOCOL paragraph, not a procedure",
+     "horror": "H-0007"
+    },
+    {
+     "channel": "units",
+     "name": "SCHEMA",
+     "why": "the IDMS SCHEMA SECTION of the DATA DIVISION, not a procedure",
+     "horror": "H-0007"
+    }
+   ]
+  }
+ ]
+}

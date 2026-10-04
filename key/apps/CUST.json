@@ -1,0 +1,1464 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "CUST",
+ "members": {
+  "apps/CUST/bms/CUSTMS.bms": {
+   "app": "CUST",
+   "library": "bms",
+   "language": "bms",
+   "numbered": false,
+   "lines": 17,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "screen_fields": [
+    {
+     "kind": "mapset",
+     "mapset": "CUSTMS",
+     "map": null,
+     "name": "CUSTMS",
+     "line": 1
+    },
+    {
+     "kind": "map",
+     "mapset": "CUSTMS",
+     "map": "CUSTMAP",
+     "name": "CUSTMAP",
+     "line": 3
+    },
+    {
+     "kind": "field",
+     "mapset": "CUSTMS",
+     "map": "CUSTMAP",
+     "name": null,
+     "pos_line": 1,
+     "pos_column": 30,
+     "length": 16,
+     "attrb": "ASKIP,BRT",
+     "picin": null,
+     "initial": "CUSTOMER INQUIRY",
+     "line": 4
+    },
+    {
+     "kind": "field",
+     "mapset": "CUSTMS",
+     "map": "CUSTMAP",
+     "name": null,
+     "pos_line": 4,
+     "pos_column": 5,
+     "length": 12,
+     "attrb": "ASKIP,NORM",
+     "picin": null,
+     "initial": "CUSTOMER ID:",
+     "line": 6
+    },
+    {
+     "kind": "field",
+     "mapset": "CUSTMS",
+     "map": "CUSTMAP",
+     "name": "CUSTID",
+     "pos_line": 4,
+     "pos_column": 20,
+     "length": 8,
+     "attrb": "UNPROT,IC,FSET",
+     "picin": "X(8)",
+     "initial": null,
+     "line": 8
+    },
+    {
+     "kind": "field",
+     "mapset": "CUSTMS",
+     "map": "CUSTMAP",
+     "name": null,
+     "pos_line": 6,
+     "pos_column": 5,
+     "length": 12,
+     "attrb": "ASKIP,NORM",
+     "picin": null,
+     "initial": "NAME       :",
+     "line": 9
+    },
+    {
+     "kind": "field",
+     "mapset": "CUSTMS",
+     "map": "CUSTMAP",
+     "name": "CUSTNM",
+     "pos_line": 6,
+     "pos_column": 20,
+     "length": 30,
+     "attrb": "ASKIP,NORM",
+     "picin": null,
+     "initial": null,
+     "line": 11
+    },
+    {
+     "kind": "field",
+     "mapset": "CUSTMS",
+     "map": "CUSTMAP",
+     "name": null,
+     "pos_line": 7,
+     "pos_column": 5,
+     "length": 12,
+     "attrb": "ASKIP,NORM",
+     "picin": null,
+     "initial": "BALANCE    :",
+     "line": 12
+    },
+    {
+     "kind": "field",
+     "mapset": "CUSTMS",
+     "map": "CUSTMAP",
+     "name": "CUSTBAL",
+     "pos_line": 7,
+     "pos_column": 20,
+     "length": 15,
+     "attrb": "ASKIP,NORM",
+     "picin": null,
+     "initial": null,
+     "line": 14
+    },
+    {
+     "kind": "field",
+     "mapset": "CUSTMS",
+     "map": "CUSTMAP",
+     "name": "MSG",
+     "pos_line": 23,
+     "pos_column": 1,
+     "length": 79,
+     "attrb": "ASKIP,BRT",
+     "picin": null,
+     "initial": null,
+     "line": 15
+    }
+   ]
+  },
+  "apps/CUST/cobol/CUSTDBIO.cbl": {
+   "app": "CUST",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 47,
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "programs": [
+    {
+     "program_id": "CUSTDBIO",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 18,
+     "end_line": 25
+    },
+    {
+     "name": "1000-SELECT-CUSTOMER",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 26,
+     "end_line": 36
+    },
+    {
+     "name": "2000-REFRESH-BALANCE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 37,
+     "end_line": 47
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-SELECT-CUSTOMER",
+     "line": 20
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-REFRESH-BALANCE",
+     "line": 22
+    }
+   ],
+   "copies": [
+    {
+     "member": "SQLCA",
+     "kind": "sql-include",
+     "line": 10,
+     "resolves_to": null
+    },
+    {
+     "member": "DCLCUST",
+     "kind": "sql-include",
+     "line": 11,
+     "resolves_to": "apps/CUST/dclgen/DCLCUST.dcl"
+    },
+    {
+     "member": "CUSTCOMM",
+     "kind": "copy",
+     "line": 16,
+     "resolves_to": "apps/CUST/copybook/CUSTCOMM.cpy"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-SQLCODE",
+     "pic": "-9(9)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 12
+    },
+    {
+     "level": 1,
+     "name": "WS-BAL-IND",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 13
+    },
+    {
+     "level": 1,
+     "name": "DFHCOMMAREA",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 15,
+     "copy_members": [
+      "CUSTCOMM"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-SQLCODE",
+     "line": 12,
+     "bytes": 10,
+     "fields": [
+      {
+       "name": "WS-SQLCODE",
+       "level": 1,
+       "pic": "-9(9)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/CUST/cobol/CUSTDBIO.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BAL-IND",
+     "line": 13,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-BAL-IND",
+       "level": 1,
+       "pic": "S9(4)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/CUST/cobol/CUSTDBIO.cbl"
+      }
+     ]
+    },
+    {
+     "record": "DFHCOMMAREA",
+     "line": 15,
+     "bytes": 50,
+     "fields": [
+      {
+       "name": "CA-CUST-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/CUST/copybook/CUSTCOMM.cpy"
+      },
+      {
+       "name": "CA-RETURN-CODE",
+       "level": 5,
+       "pic": "S9(4)",
+       "usage": "COMP",
+       "offset": 8,
+       "bytes": 2,
+       "file": "apps/CUST/copybook/CUSTCOMM.cpy"
+      },
+      {
+       "name": "CA-MSG",
+       "level": 5,
+       "pic": "X(40)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 40,
+       "file": "apps/CUST/copybook/CUSTCOMM.cpy"
+      }
+     ]
+    }
+   ],
+   "sql_statements": [
+    {
+     "verb": "SELECT",
+     "table": "PROD.CUSTOMER",
+     "access": "read",
+     "line": 27
+    },
+    {
+     "verb": "CALL",
+     "table": null,
+     "access": null,
+     "line": 38,
+     "procedure": "PRODPROC.CUSTBAL",
+     "horror": "H-0005"
+    },
+    {
+     "verb": "CALL",
+     "table": null,
+     "access": null,
+     "line": 42,
+     "procedure": "CUSTAUDT",
+     "horror": "H-0005"
+    },
+    {
+     "verb": "UPDATE",
+     "table": "PROD.CUSTOMER",
+     "access": "update",
+     "line": 43
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "call_sites",
+     "verb": "CALL",
+     "operand": "PRODPROC",
+     "line": 38,
+     "why": "EXEC SQL CALL PRODPROC.CUSTBAL invokes a Db2 stored procedure, not a COBOL program",
+     "horror": "H-0005"
+    },
+    {
+     "channel": "edges",
+     "kind": "call",
+     "from": "2000-REFRESH-BALANCE",
+     "target": "PRODPROC",
+     "why": "EXEC SQL CALL PRODPROC.CUSTBAL invokes a Db2 stored procedure, not a COBOL program",
+     "horror": "H-0005"
+    },
+    {
+     "channel": "call_sites",
+     "verb": "CALL",
+     "operand": "CUSTAUDT",
+     "line": 42,
+     "why": "EXEC SQL CALL CUSTAUDT invokes a Db2 stored procedure, not a COBOL program",
+     "horror": "H-0005"
+    },
+    {
+     "channel": "edges",
+     "kind": "call",
+     "from": "2000-REFRESH-BALANCE",
+     "target": "CUSTAUDT",
+     "why": "EXEC SQL CALL CUSTAUDT invokes a Db2 stored procedure, not a COBOL program",
+     "horror": "H-0005"
+    }
+   ],
+   "horrors": [
+    "H-0005"
+   ]
+  },
+  "apps/CUST/cobol/CUSTINQ.cbl": {
+   "app": "CUST",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 74,
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "programs": [
+    {
+     "program_id": "CUSTINQ",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 22,
+     "end_line": 42,
+     "horror": "H-0002"
+    },
+    {
+     "name": "1000-RECEIVE-MAP",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 43,
+     "end_line": 47
+    },
+    {
+     "name": "RETURN-TO-MENU",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 48,
+     "end_line": 53,
+     "horror": "H-0002"
+    },
+    {
+     "name": "2000-LOOKUP-CUSTOMER",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 54,
+     "end_line": 60
+    },
+    {
+     "name": "3000-SEND-MAP",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 61,
+     "end_line": 65
+    },
+    {
+     "name": "4000-FIND-BLANK",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 66,
+     "end_line": 72,
+     "horror": "H-0002"
+    },
+    {
+     "name": "9100-SAVE-STATE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 73,
+     "end_line": 74
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-RECEIVE-MAP",
+     "line": 33,
+     "horror": "H-0002"
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "RETURN-TO-MENU",
+     "line": 35,
+     "horror": "H-0002"
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-LOOKUP-CUSTOMER",
+     "line": 37,
+     "horror": "H-0002"
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "3000-SEND-MAP",
+     "line": 38,
+     "horror": "H-0002"
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "4000-FIND-BLANK",
+     "line": 39,
+     "horror": "H-0002"
+    },
+    {
+     "kind": "perform",
+     "from": "RETURN-TO-MENU",
+     "target": "9100-SAVE-STATE",
+     "line": 50,
+     "horror": "H-0002"
+    },
+    {
+     "kind": "perform",
+     "from": "4000-FIND-BLANK",
+     "target": "9100-SAVE-STATE",
+     "line": 72,
+     "horror": "H-0002"
+    }
+   ],
+   "call_sites": [
+    {
+     "verb": "RETURN TRANSID",
+     "form": "literal",
+     "operand": "CINQ",
+     "target": "CINQ",
+     "line": 27,
+     "resolves_to": null,
+     "horror": "H-0002"
+    },
+    {
+     "verb": "RETURN TRANSID",
+     "form": "literal",
+     "operand": "CINQ",
+     "target": "CINQ",
+     "line": 40,
+     "resolves_to": null,
+     "horror": "H-0002"
+    },
+    {
+     "verb": "XCTL",
+     "form": "literal",
+     "operand": "CUSTMNU",
+     "target": "CUSTMNU",
+     "line": 51,
+     "resolves_to": "apps/CUST/cobol/CUSTMNU.cbl",
+     "horror": "H-0002"
+    },
+    {
+     "verb": "LINK",
+     "form": "literal",
+     "operand": "CUSTDBIO",
+     "target": "CUSTDBIO",
+     "line": 55,
+     "resolves_to": "apps/CUST/cobol/CUSTDBIO.cbl"
+    }
+   ],
+   "copies": [
+    {
+     "member": "CUSTCOMM",
+     "kind": "copy",
+     "line": 12,
+     "resolves_to": "apps/CUST/copybook/CUSTCOMM.cpy"
+    },
+    {
+     "member": "CUSTMS",
+     "kind": "copy",
+     "line": 13,
+     "resolves_to": "apps/CUST/copybook/CUSTMS.cpy",
+     "alternatives": [
+      "apps/CUST/bms/CUSTMS.bms"
+     ]
+    },
+    {
+     "member": "DFHAID",
+     "kind": "copy",
+     "line": 14,
+     "resolves_to": null
+    },
+    {
+     "member": "DATEWS",
+     "kind": "copy",
+     "line": 17,
+     "resolves_to": "shared/copylib/DATEWS.cpy"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-COMMAREA",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 11,
+     "copy_members": [
+      "CUSTCOMM"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-RESP",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 15
+    },
+    {
+     "level": 1,
+     "name": "WS-DATE-AREA",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 16,
+     "copy_members": [
+      "DATEWS"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-I",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 18
+    },
+    {
+     "level": 1,
+     "name": "DFHCOMMAREA",
+     "pic": "X(50)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 20
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-COMMAREA",
+     "line": 11,
+     "bytes": 50,
+     "fields": [
+      {
+       "name": "CA-CUST-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/CUST/copybook/CUSTCOMM.cpy"
+      },
+      {
+       "name": "CA-RETURN-CODE",
+       "level": 5,
+       "pic": "S9(4)",
+       "usage": "COMP",
+       "offset": 8,
+       "bytes": 2,
+       "file": "apps/CUST/copybook/CUSTCOMM.cpy"
+      },
+      {
+       "name": "CA-MSG",
+       "level": 5,
+       "pic": "X(40)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 40,
+       "file": "apps/CUST/copybook/CUSTCOMM.cpy"
+      }
+     ]
+    },
+    {
+     "record": "WS-RESP",
+     "line": 15,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-RESP",
+       "level": 1,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/CUST/cobol/CUSTINQ.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-DATE-AREA",
+     "line": 16,
+     "bytes": 16,
+     "fields": [
+      {
+       "name": "WS-CURR-DATE",
+       "level": 5,
+       "pic": "9(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "shared/copylib/DATEWS.cpy"
+      },
+      {
+       "name": "WS-CURR-YYYY",
+       "level": 10,
+       "pic": "9(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4,
+       "file": "shared/copylib/DATEWS.cpy",
+       "overlay": true
+      },
+      {
+       "name": "WS-CURR-MM",
+       "level": 10,
+       "pic": "99",
+       "usage": null,
+       "offset": 4,
+       "bytes": 2,
+       "file": "shared/copylib/DATEWS.cpy",
+       "overlay": true
+      },
+      {
+       "name": "WS-CURR-DD",
+       "level": 10,
+       "pic": "99",
+       "usage": null,
+       "offset": 6,
+       "bytes": 2,
+       "file": "shared/copylib/DATEWS.cpy",
+       "overlay": true
+      },
+      {
+       "name": "WS-CURR-TIME",
+       "level": 5,
+       "pic": "9(8)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 8,
+       "file": "shared/copylib/DATEWS.cpy"
+      }
+     ]
+    },
+    {
+     "record": "WS-I",
+     "line": 18,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-I",
+       "level": 1,
+       "pic": "S9(4)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/CUST/cobol/CUSTINQ.cbl"
+      }
+     ]
+    },
+    {
+     "record": "DFHCOMMAREA",
+     "line": 20,
+     "bytes": 50,
+     "fields": [
+      {
+       "name": "DFHCOMMAREA",
+       "level": 1,
+       "pic": "X(50)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 50,
+       "file": "apps/CUST/cobol/CUSTINQ.cbl"
+      }
+     ]
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "4000-FIND-BLANK",
+     "target": "VARYING",
+     "why": "an inline PERFORM (line 67) names no procedure; VARYING is part of its header",
+     "horror": "H-0002"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "4000-FIND-BLANK",
+     "target": "END-IF",
+     "why": "EXIT PERFORM (line 69) is not a PERFORM; END-IF follows it",
+     "horror": "H-0006"
+    }
+   ],
+   "horrors": [
+    "H-0002",
+    "H-0006"
+   ]
+  },
+  "apps/CUST/cobol/CUSTMNU.cbl": {
+   "app": "CUST",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 16,
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "programs": [
+    {
+     "program_id": "CUSTMNU",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 12,
+     "end_line": 16
+    }
+   ],
+   "call_sites": [
+    {
+     "verb": "RETURN TRANSID",
+     "form": "literal",
+     "operand": "CMNU",
+     "target": "CMNU",
+     "line": 15,
+     "resolves_to": null
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-MENU-TEXT",
+     "pic": "X(40)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'CUSTOMER SYSTEMS: CINQ = INQUIRY'",
+     "section": "WORKING-STORAGE",
+     "line": 9
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-MENU-TEXT",
+     "line": 9,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "WS-MENU-TEXT",
+       "level": 1,
+       "pic": "X(40)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 40,
+       "file": "apps/CUST/cobol/CUSTMNU.cbl"
+      }
+     ]
+    }
+   ]
+  },
+  "apps/CUST/copybook/CUSTCOMM.cpy": {
+   "app": "CUST",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 4,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "CA-CUST-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 5,
+     "name": "CA-RETURN-CODE",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 5,
+     "name": "CA-MSG",
+     "pic": "X(40)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4
+    }
+   ]
+  },
+  "apps/CUST/copybook/CUSTMS.cpy": {
+   "app": "CUST",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 33,
+   "compile": {
+    "status": "copybook"
+   },
+   "generated_from": "apps/CUST/bms/CUSTMS.bms",
+   "data_items": [
+    {
+     "level": 1,
+     "name": "CUSTMAPI",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": "X(12)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 2,
+     "name": "CUSTIDL",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4
+    },
+    {
+     "level": 2,
+     "name": "CUSTIDF",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": "CUSTIDF",
+     "value": null,
+     "section": null,
+     "line": 6
+    },
+    {
+     "level": 3,
+     "name": "CUSTIDA",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 7
+    },
+    {
+     "level": 2,
+     "name": "CUSTIDI",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 8
+    },
+    {
+     "level": 2,
+     "name": "CUSTNML",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 9
+    },
+    {
+     "level": 2,
+     "name": "CUSTNMF",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 10
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": "CUSTNMF",
+     "value": null,
+     "section": null,
+     "line": 11
+    },
+    {
+     "level": 3,
+     "name": "CUSTNMA",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 12
+    },
+    {
+     "level": 2,
+     "name": "CUSTNMI",
+     "pic": "X(30)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 13
+    },
+    {
+     "level": 2,
+     "name": "CUSTBALL",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 14
+    },
+    {
+     "level": 2,
+     "name": "CUSTBALF",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 15
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": "CUSTBALF",
+     "value": null,
+     "section": null,
+     "line": 16
+    },
+    {
+     "level": 3,
+     "name": "CUSTBALA",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 17
+    },
+    {
+     "level": 2,
+     "name": "CUSTBALI",
+     "pic": "X(15)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 18
+    },
+    {
+     "level": 2,
+     "name": "MSGL",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 19
+    },
+    {
+     "level": 2,
+     "name": "MSGF",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 20
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": "MSGF",
+     "value": null,
+     "section": null,
+     "line": 21
+    },
+    {
+     "level": 3,
+     "name": "MSGA",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 22
+    },
+    {
+     "level": 2,
+     "name": "MSGI",
+     "pic": "X(79)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 23
+    },
+    {
+     "level": 1,
+     "name": "CUSTMAPO",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": "CUSTMAPI",
+     "value": null,
+     "section": null,
+     "line": 24
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": "X(12)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 25
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": "X(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 26
+    },
+    {
+     "level": 2,
+     "name": "CUSTIDO",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 27
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": "X(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 28
+    },
+    {
+     "level": 2,
+     "name": "CUSTNMO",
+     "pic": "X(30)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 29
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": "X(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 30
+    },
+    {
+     "level": 2,
+     "name": "CUSTBALO",
+     "pic": "X(15)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 31
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": "X(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 32
+    },
+    {
+     "level": 2,
+     "name": "MSGO",
+     "pic": "X(79)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 33
+    }
+   ]
+  },
+  "apps/CUST/csd/CUSTGRP.csd": {
+   "app": "CUST",
+   "library": "csd",
+   "language": "csd",
+   "numbered": false,
+   "lines": 7,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "csd_resources": [
+    {
+     "type": "PROGRAM",
+     "name": "CUSTINQ",
+     "group": "CUSTGRP",
+     "line": 2
+    },
+    {
+     "type": "PROGRAM",
+     "name": "CUSTDBIO",
+     "group": "CUSTGRP",
+     "line": 3
+    },
+    {
+     "type": "PROGRAM",
+     "name": "CUSTMNU",
+     "group": "CUSTGRP",
+     "line": 4
+    },
+    {
+     "type": "MAPSET",
+     "name": "CUSTMS",
+     "group": "CUSTGRP",
+     "line": 5
+    },
+    {
+     "type": "TRANSACTION",
+     "name": "CINQ",
+     "group": "CUSTGRP",
+     "line": 6,
+     "program": "CUSTINQ"
+    },
+    {
+     "type": "TRANSACTION",
+     "name": "CMNU",
+     "group": "CUSTGRP",
+     "line": 7,
+     "program": "CUSTMNU"
+    }
+   ],
+   "transactions": [
+    {
+     "transid": "CINQ",
+     "program": "CUSTINQ",
+     "group": "CUSTGRP",
+     "line": 6,
+     "resolves_to": "apps/CUST/cobol/CUSTINQ.cbl"
+    },
+    {
+     "transid": "CMNU",
+     "program": "CUSTMNU",
+     "group": "CUSTGRP",
+     "line": 7,
+     "resolves_to": "apps/CUST/cobol/CUSTMNU.cbl"
+    }
+   ]
+  },
+  "apps/CUST/dclgen/DCLCUST.dcl": {
+   "app": "CUST",
+   "library": "dclgen",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 24,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 1,
+     "name": "DCLCUSTOMER",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 15
+    },
+    {
+     "level": 10,
+     "name": "CUST-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 16
+    },
+    {
+     "level": 10,
+     "name": "CUST-NAME",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 17
+    },
+    {
+     "level": 49,
+     "name": "CUST-NAME-LEN",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 18
+    },
+    {
+     "level": 49,
+     "name": "CUST-NAME-TEXT",
+     "pic": "X(30)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 19
+    },
+    {
+     "level": 10,
+     "name": "CUST-BAL",
+     "pic": "S9(9)V9(2)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 20
+    },
+    {
+     "level": 10,
+     "name": "CUST-UPD-DATE",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 21
+    }
+   ],
+   "sql_tables": [
+    {
+     "table": "PROD.CUSTOMER",
+     "line": 6,
+     "columns": [
+      {
+       "name": "CUST_ID",
+       "type": "CHAR",
+       "length": 8,
+       "scale": null,
+       "nullable": false,
+       "line": 7
+      },
+      {
+       "name": "CUST_NAME",
+       "type": "VARCHAR",
+       "length": 30,
+       "scale": null,
+       "nullable": false,
+       "line": 8
+      },
+      {
+       "name": "CUST_BAL",
+       "type": "DECIMAL",
+       "length": 11,
+       "scale": 2,
+       "nullable": true,
+       "line": 9
+      },
+      {
+       "name": "CUST_UPD_DATE",
+       "type": "DATE",
+       "length": null,
+       "scale": null,
+       "nullable": true,
+       "line": 10
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,2324 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "ACCT",
+ "members": {
+  "apps/ACCT/cobol/ACCTAUD.cbl": {
+   "app": "ACCT",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 14,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "ACCTAUD",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 12,
+     "end_line": 14
+    }
+   ],
+   "copies": [
+    {
+     "member": "UPDCTL",
+     "kind": "copy",
+     "line": 10,
+     "resolves_to": "apps/ACCT/copybook/UPDCTL.cpy"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "LK-UPD-CONTROL",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 9,
+     "copy_members": [
+      "UPDCTL"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "LK-UPD-CONTROL",
+     "line": 9,
+     "bytes": 14,
+     "fields": [
+      {
+       "name": "UPD-FLAG",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 0,
+       "bytes": 1,
+       "file": "apps/ACCT/copybook/UPDCTL.cpy"
+      },
+      {
+       "name": "UPD-COUNT",
+       "level": 5,
+       "pic": "S9(5)",
+       "usage": "COMP-3",
+       "offset": 1,
+       "bytes": 3,
+       "file": "apps/ACCT/copybook/UPDCTL.cpy"
+      },
+      {
+       "name": "UPD-LAST-ACCT",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 4,
+       "bytes": 10,
+       "file": "apps/ACCT/copybook/UPDCTL.cpy"
+      }
+     ]
+    }
+   ]
+  },
+  "apps/ACCT/cobol/ACCTPOST.cbl": {
+   "app": "ACCT",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 94,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "ACCTPOST",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": null,
+     "kind": "mainline",
+     "section": null,
+     "start_line": 50,
+     "end_line": 55,
+     "horror": "H-0003"
+    },
+    {
+     "name": "1000-INITIALIZE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 56,
+     "end_line": 59
+    },
+    {
+     "name": "1000-EXIT",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 60,
+     "end_line": 61
+    },
+    {
+     "name": "2000-PROCESS-TRAN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 62,
+     "end_line": 69
+    },
+    {
+     "name": "2000-EXIT",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 70,
+     "end_line": 71
+    },
+    {
+     "name": "2100-POST-DEBIT",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 72,
+     "end_line": 76
+    },
+    {
+     "name": "2200-POST-CREDIT",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 77,
+     "end_line": 78
+    },
+    {
+     "name": "2900-REJECT",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 79,
+     "end_line": 81
+    },
+    {
+     "name": "8000-READ-TRAN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 82,
+     "end_line": 88
+    },
+    {
+     "name": "9000-TERMINATE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 89,
+     "end_line": 94
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": null,
+     "target": "1000-INITIALIZE",
+     "line": 52,
+     "thru": "1000-EXIT",
+     "horror": "H-0003"
+    },
+    {
+     "kind": "perform",
+     "from": null,
+     "target": "2000-PROCESS-TRAN",
+     "line": 53,
+     "thru": "2000-EXIT",
+     "horror": "H-0003"
+    },
+    {
+     "kind": "perform",
+     "from": null,
+     "target": "9000-TERMINATE",
+     "line": 54,
+     "horror": "H-0003"
+    },
+    {
+     "kind": "call",
+     "from": "1000-INITIALIZE",
+     "target": "WS-DATE-PGM",
+     "line": 58,
+     "form": "identifier"
+    },
+    {
+     "kind": "perform",
+     "from": "1000-INITIALIZE",
+     "target": "8000-READ-TRAN",
+     "line": 59
+    },
+    {
+     "kind": "perform",
+     "from": "2000-PROCESS-TRAN",
+     "target": "2100-POST-DEBIT",
+     "line": 64
+    },
+    {
+     "kind": "perform",
+     "from": "2000-PROCESS-TRAN",
+     "target": "2200-POST-CREDIT",
+     "line": 66
+    },
+    {
+     "kind": "perform",
+     "from": "2000-PROCESS-TRAN",
+     "target": "8000-READ-TRAN",
+     "line": 69
+    },
+    {
+     "kind": "perform",
+     "from": "2100-POST-DEBIT",
+     "target": "2900-REJECT",
+     "line": 75
+    }
+   ],
+   "call_sites": [
+    {
+     "verb": "CALL",
+     "form": "identifier",
+     "operand": "WS-DATE-PGM",
+     "target": "DATEUTIL",
+     "line": 58,
+     "resolves_to": null
+    }
+   ],
+   "copies": [
+    {
+     "member": "TRANREC",
+     "kind": "copy",
+     "line": 29,
+     "resolves_to": "apps/ACCT/copybook/TRANREC.cpy"
+    },
+    {
+     "member": "ACCTREC",
+     "kind": "copy",
+     "line": 33,
+     "resolves_to": "apps/ACCT/copybook/ACCTREC.cpy"
+    },
+    {
+     "member": "DATEWS",
+     "kind": "copy",
+     "line": 45,
+     "resolves_to": "shared/copylib/DATEWS.cpy"
+    },
+    {
+     "member": "ACCTREC",
+     "kind": "copy",
+     "line": 47,
+     "resolves_to": "apps/ACCT/copybook/ACCTREC.cpy"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "TRAN-RECORD",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 28,
+     "copy_members": [
+      "TRANREC"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "ACCT-OUT-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 32,
+     "copy_members": [
+      "ACCTREC"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-FLAGS",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 35
+    },
+    {
+     "level": 5,
+     "name": "WS-EOF-FLAG",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'N'",
+     "section": "WORKING-STORAGE",
+     "line": 36
+    },
+    {
+     "level": 88,
+     "name": "WS-EOF",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'Y'",
+     "section": "WORKING-STORAGE",
+     "line": 37
+    },
+    {
+     "level": 5,
+     "name": "WS-TRAN-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 38
+    },
+    {
+     "level": 5,
+     "name": "WS-ACCT-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 39
+    },
+    {
+     "level": 1,
+     "name": "WS-COUNTERS",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 40
+    },
+    {
+     "level": 5,
+     "name": "WS-READ-CNT",
+     "pic": "S9(7)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 41
+    },
+    {
+     "level": 5,
+     "name": "WS-POST-CNT",
+     "pic": "S9(7)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 42
+    },
+    {
+     "level": 5,
+     "name": "WS-REJ-CNT",
+     "pic": "S9(7)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 43
+    },
+    {
+     "level": 1,
+     "name": "WS-DATE-AREA",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 44,
+     "copy_members": [
+      "DATEWS"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-ACCOUNT",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 46,
+     "copy_members": [
+      "ACCTREC"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-DATE-PGM",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'DATEUTIL'",
+     "section": "WORKING-STORAGE",
+     "line": 48
+    }
+   ],
+   "layouts": [
+    {
+     "record": "TRAN-RECORD",
+     "line": 28,
+     "bytes": 51,
+     "fields": [
+      {
+       "name": "TRAN-ACCT-ID",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/ACCT/copybook/TRANREC.cpy"
+      },
+      {
+       "name": "TRAN-TYPE",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 10,
+       "bytes": 1,
+       "file": "apps/ACCT/copybook/TRANREC.cpy"
+      },
+      {
+       "name": "TRAN-AMOUNT",
+       "level": 5,
+       "pic": "S9(9)V99",
+       "usage": "COMP-3",
+       "offset": 11,
+       "bytes": 6,
+       "file": "apps/ACCT/copybook/TRANREC.cpy"
+      },
+      {
+       "name": "TRAN-DATE",
+       "level": 5,
+       "pic": "9(8)",
+       "usage": null,
+       "offset": 17,
+       "bytes": 8,
+       "file": "apps/ACCT/copybook/TRANREC.cpy"
+      },
+      {
+       "name": "TRAN-REF",
+       "level": 5,
+       "pic": "X(16)",
+       "usage": null,
+       "offset": 25,
+       "bytes": 16,
+       "file": "apps/ACCT/copybook/TRANREC.cpy"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 41,
+       "bytes": 10,
+       "file": "apps/ACCT/copybook/TRANREC.cpy"
+      }
+     ]
+    },
+    {
+     "record": "ACCT-OUT-REC",
+     "line": 32,
+     "bytes": 152,
+     "fields": [
+      {
+       "name": "ACCT-ID",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      },
+      {
+       "name": "ACCT-STATUS",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 10,
+       "bytes": 1,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      },
+      {
+       "name": "ACCT-NAME",
+       "level": 5,
+       "pic": "X(30)",
+       "usage": null,
+       "offset": 11,
+       "bytes": 30,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      },
+      {
+       "name": "ACCT-BALANCE",
+       "level": 5,
+       "pic": "S9(11)V99",
+       "usage": "COMP-3",
+       "offset": 41,
+       "bytes": 7,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      },
+      {
+       "name": "ACCT-OPEN-DATE",
+       "level": 5,
+       "pic": "9(8)",
+       "usage": null,
+       "offset": 48,
+       "bytes": 8,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      },
+      {
+       "name": "ACCT-OPEN-YYYY",
+       "level": 10,
+       "pic": "9(4)",
+       "usage": null,
+       "offset": 48,
+       "bytes": 4,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy",
+       "overlay": true
+      },
+      {
+       "name": "ACCT-OPEN-MM",
+       "level": 10,
+       "pic": "99",
+       "usage": null,
+       "offset": 52,
+       "bytes": 2,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy",
+       "overlay": true
+      },
+      {
+       "name": "ACCT-OPEN-DD",
+       "level": 10,
+       "pic": "99",
+       "usage": null,
+       "offset": 54,
+       "bytes": 2,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy",
+       "overlay": true
+      },
+      {
+       "name": "ACCT-TRAN-CNT",
+       "level": 5,
+       "pic": "S9(7)",
+       "usage": "COMP",
+       "offset": 56,
+       "bytes": 4,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      },
+      {
+       "name": "ACCT-HIST-AMT",
+       "level": 10,
+       "pic": "S9(9)V99",
+       "usage": "COMP-3",
+       "offset": 60,
+       "bytes": 6,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(20)",
+       "usage": null,
+       "offset": 132,
+       "bytes": 20,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      }
+     ]
+    },
+    {
+     "record": "WS-FLAGS",
+     "line": 35,
+     "bytes": 5,
+     "fields": [
+      {
+       "name": "WS-EOF-FLAG",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 0,
+       "bytes": 1,
+       "file": "apps/ACCT/cobol/ACCTPOST.cbl"
+      },
+      {
+       "name": "WS-TRAN-STATUS",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 1,
+       "bytes": 2,
+       "file": "apps/ACCT/cobol/ACCTPOST.cbl"
+      },
+      {
+       "name": "WS-ACCT-STATUS",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 3,
+       "bytes": 2,
+       "file": "apps/ACCT/cobol/ACCTPOST.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-COUNTERS",
+     "line": 40,
+     "bytes": 12,
+     "fields": [
+      {
+       "name": "WS-READ-CNT",
+       "level": 5,
+       "pic": "S9(7)",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/ACCT/cobol/ACCTPOST.cbl"
+      },
+      {
+       "name": "WS-POST-CNT",
+       "level": 5,
+       "pic": "S9(7)",
+       "usage": "COMP-3",
+       "offset": 4,
+       "bytes": 4,
+       "file": "apps/ACCT/cobol/ACCTPOST.cbl"
+      },
+      {
+       "name": "WS-REJ-CNT",
+       "level": 5,
+       "pic": "S9(7)",
+       "usage": "COMP-3",
+       "offset": 8,
+       "bytes": 4,
+       "file": "apps/ACCT/cobol/ACCTPOST.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-DATE-AREA",
+     "line": 44,
+     "bytes": 16,
+     "fields": [
+      {
+       "name": "WS-CURR-DATE",
+       "level": 5,
+       "pic": "9(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "shared/copylib/DATEWS.cpy"
+      },
+      {
+       "name": "WS-CURR-YYYY",
+       "level": 10,
+       "pic": "9(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4,
+       "file": "shared/copylib/DATEWS.cpy",
+       "overlay": true
+      },
+      {
+       "name": "WS-CURR-MM",
+       "level": 10,
+       "pic": "99",
+       "usage": null,
+       "offset": 4,
+       "bytes": 2,
+       "file": "shared/copylib/DATEWS.cpy",
+       "overlay": true
+      },
+      {
+       "name": "WS-CURR-DD",
+       "level": 10,
+       "pic": "99",
+       "usage": null,
+       "offset": 6,
+       "bytes": 2,
+       "file": "shared/copylib/DATEWS.cpy",
+       "overlay": true
+      },
+      {
+       "name": "WS-CURR-TIME",
+       "level": 5,
+       "pic": "9(8)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 8,
+       "file": "shared/copylib/DATEWS.cpy"
+      }
+     ]
+    },
+    {
+     "record": "WS-ACCOUNT",
+     "line": 46,
+     "bytes": 152,
+     "fields": [
+      {
+       "name": "ACCT-ID",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      },
+      {
+       "name": "ACCT-STATUS",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 10,
+       "bytes": 1,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      },
+      {
+       "name": "ACCT-NAME",
+       "level": 5,
+       "pic": "X(30)",
+       "usage": null,
+       "offset": 11,
+       "bytes": 30,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      },
+      {
+       "name": "ACCT-BALANCE",
+       "level": 5,
+       "pic": "S9(11)V99",
+       "usage": "COMP-3",
+       "offset": 41,
+       "bytes": 7,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      },
+      {
+       "name": "ACCT-OPEN-DATE",
+       "level": 5,
+       "pic": "9(8)",
+       "usage": null,
+       "offset": 48,
+       "bytes": 8,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      },
+      {
+       "name": "ACCT-OPEN-YYYY",
+       "level": 10,
+       "pic": "9(4)",
+       "usage": null,
+       "offset": 48,
+       "bytes": 4,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy",
+       "overlay": true
+      },
+      {
+       "name": "ACCT-OPEN-MM",
+       "level": 10,
+       "pic": "99",
+       "usage": null,
+       "offset": 52,
+       "bytes": 2,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy",
+       "overlay": true
+      },
+      {
+       "name": "ACCT-OPEN-DD",
+       "level": 10,
+       "pic": "99",
+       "usage": null,
+       "offset": 54,
+       "bytes": 2,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy",
+       "overlay": true
+      },
+      {
+       "name": "ACCT-TRAN-CNT",
+       "level": 5,
+       "pic": "S9(7)",
+       "usage": "COMP",
+       "offset": 56,
+       "bytes": 4,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      },
+      {
+       "name": "ACCT-HIST-AMT",
+       "level": 10,
+       "pic": "S9(9)V99",
+       "usage": "COMP-3",
+       "offset": 60,
+       "bytes": 6,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(20)",
+       "usage": null,
+       "offset": 132,
+       "bytes": 20,
+       "file": "apps/ACCT/copybook/ACCTREC.cpy"
+      }
+     ]
+    },
+    {
+     "record": "WS-DATE-PGM",
+     "line": 48,
+     "bytes": 8,
+     "fields": [
+      {
+       "name": "WS-DATE-PGM",
+       "level": 1,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/ACCT/cobol/ACCTPOST.cbl"
+      }
+     ]
+    }
+   ],
+   "horrors": [
+    "H-0003"
+   ]
+  },
+  "apps/ACCT/cobol/ACCTRPT.cbl": {
+   "app": "ACCT",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 68,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "ACCTRPT",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 30,
+     "end_line": 37
+    },
+    {
+     "name": "1000-HEADINGS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 38,
+     "end_line": 42
+    },
+    {
+     "name": "2000-DETAIL",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 43,
+     "end_line": 53
+    },
+    {
+     "name": "2500-SCAN-HISTORY",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 54,
+     "end_line": 61,
+     "horror": "H-0002"
+    },
+    {
+     "name": "2600-HISTORY-DONE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 62,
+     "end_line": 63
+    },
+    {
+     "name": "3000-TOTALS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 64,
+     "end_line": 66
+    },
+    {
+     "name": "3100-FORMAT-TOTAL",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 67,
+     "end_line": 68
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-HEADINGS",
+     "line": 32
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-DETAIL",
+     "line": 33
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2500-SCAN-HISTORY",
+     "line": 34
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "3000-TOTALS",
+     "line": 35
+    },
+    {
+     "kind": "perform",
+     "from": "2500-SCAN-HISTORY",
+     "target": "2600-HISTORY-DONE",
+     "line": 61,
+     "horror": "H-0002"
+    },
+    {
+     "kind": "perform",
+     "from": "3000-TOTALS",
+     "target": "3100-FORMAT-TOTAL",
+     "line": 65
+    }
+   ],
+   "copies": [
+    {
+     "member": "RPTHDR",
+     "kind": "copy",
+     "line": 21,
+     "resolves_to": "apps/ACCT/copybook/RPTHDR.cpy",
+     "horror": "H-0004"
+    },
+    {
+     "member": "RPTTOT",
+     "kind": "copy",
+     "line": 22,
+     "resolves_to": "apps/ACCT/copybook/RPTTOT.cpy",
+     "horror": "H-0004"
+    },
+    {
+     "member": "RPTCNT",
+     "kind": "copy",
+     "line": 22,
+     "resolves_to": "apps/ACCT/copybook/RPTCNT.cpy",
+     "horror": "H-0004"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "RPT-LINE",
+     "pic": "X(133)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 19
+    },
+    {
+     "level": 1,
+     "name": "WS-RPT-HEAD",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 21,
+     "copy_members": [
+      "RPTHDR"
+     ],
+     "horror": "H-0004"
+    },
+    {
+     "level": 1,
+     "name": "WS-RPT-TOTALS",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 22,
+     "copy_members": [
+      "RPTTOT",
+      "RPTCNT"
+     ],
+     "horror": "H-0004"
+    },
+    {
+     "level": 1,
+     "name": "WS-RPT-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 23
+    },
+    {
+     "level": 1,
+     "name": "WS-I",
+     "pic": "9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 24
+    },
+    {
+     "level": 1,
+     "name": "WS-J",
+     "pic": "9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 25
+    },
+    {
+     "level": 1,
+     "name": "WS-N",
+     "pic": "9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "3",
+     "section": "WORKING-STORAGE",
+     "line": 26
+    },
+    {
+     "level": 1,
+     "name": "WS-HIST-TABLE",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 27
+    },
+    {
+     "level": 5,
+     "name": "WS-HIST-AMT",
+     "pic": "S9(9)V99",
+     "usage": "COMP-3",
+     "occurs": 12,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 28
+    }
+   ],
+   "layouts": [
+    {
+     "record": "RPT-LINE",
+     "line": 19,
+     "bytes": 133,
+     "fields": [
+      {
+       "name": "RPT-LINE",
+       "level": 1,
+       "pic": "X(133)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 133,
+       "file": "apps/ACCT/cobol/ACCTRPT.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-RPT-HEAD",
+     "line": 21,
+     "bytes": 51,
+     "fields": [
+      {
+       "name": "RPT-CC",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 0,
+       "bytes": 1,
+       "file": "apps/ACCT/copybook/RPTHDR.cpy"
+      },
+      {
+       "name": "RPT-TITLE",
+       "level": 5,
+       "pic": "X(40)",
+       "usage": null,
+       "offset": 1,
+       "bytes": 40,
+       "file": "apps/ACCT/copybook/RPTHDR.cpy"
+      },
+      {
+       "name": "RPT-PAGE-LIT",
+       "level": 5,
+       "pic": "X(6)",
+       "usage": null,
+       "offset": 41,
+       "bytes": 6,
+       "file": "apps/ACCT/copybook/RPTHDR.cpy"
+      },
+      {
+       "name": "RPT-PAGE",
+       "level": 5,
+       "pic": "ZZZ9",
+       "usage": null,
+       "offset": 47,
+       "bytes": 4,
+       "file": "apps/ACCT/copybook/RPTHDR.cpy"
+      }
+     ],
+     "horror": "H-0004"
+    },
+    {
+     "record": "WS-RPT-TOTALS",
+     "line": 22,
+     "bytes": 22,
+     "fields": [
+      {
+       "name": "TOT-DEBITS",
+       "level": 5,
+       "pic": "S9(11)V99",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 7,
+       "file": "apps/ACCT/copybook/RPTTOT.cpy"
+      },
+      {
+       "name": "TOT-CREDITS",
+       "level": 5,
+       "pic": "S9(11)V99",
+       "usage": "COMP-3",
+       "offset": 7,
+       "bytes": 7,
+       "file": "apps/ACCT/copybook/RPTTOT.cpy"
+      },
+      {
+       "name": "CNT-READ",
+       "level": 5,
+       "pic": "S9(7)",
+       "usage": "COMP",
+       "offset": 14,
+       "bytes": 4,
+       "file": "apps/ACCT/copybook/RPTCNT.cpy"
+      },
+      {
+       "name": "CNT-WRITTEN",
+       "level": 5,
+       "pic": "S9(7)",
+       "usage": "COMP",
+       "offset": 18,
+       "bytes": 4,
+       "file": "apps/ACCT/copybook/RPTCNT.cpy"
+      }
+     ],
+     "horror": "H-0004"
+    },
+    {
+     "record": "WS-RPT-STATUS",
+     "line": 23,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-RPT-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/ACCT/cobol/ACCTRPT.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-I",
+     "line": 24,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-I",
+       "level": 1,
+       "pic": "9(4)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/ACCT/cobol/ACCTRPT.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-J",
+     "line": 25,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-J",
+       "level": 1,
+       "pic": "9(4)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/ACCT/cobol/ACCTRPT.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-N",
+     "line": 26,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-N",
+       "level": 1,
+       "pic": "9(4)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/ACCT/cobol/ACCTRPT.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-HIST-TABLE",
+     "line": 27,
+     "bytes": 72,
+     "fields": [
+      {
+       "name": "WS-HIST-AMT",
+       "level": 5,
+       "pic": "S9(9)V99",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 72,
+       "file": "apps/ACCT/cobol/ACCTRPT.cbl"
+      }
+     ]
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "1000-HEADINGS",
+     "target": "TEST",
+     "why": "an inline PERFORM (line 39) names no procedure; TEST is part of its header",
+     "horror": "H-0006"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "2000-DETAIL",
+     "target": "WS-N",
+     "why": "an inline PERFORM (line 44) names no procedure; WS-N is part of its header",
+     "horror": "H-0006"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "2000-DETAIL",
+     "target": "3",
+     "why": "an inline PERFORM (line 47) names no procedure; 3 is part of its header",
+     "horror": "H-0006"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "2000-DETAIL",
+     "target": "TEST",
+     "why": "an inline PERFORM (line 50) names no procedure; TEST is part of its header",
+     "horror": "H-0006"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "2500-SCAN-HISTORY",
+     "target": "VARYING",
+     "why": "an inline PERFORM (line 55) names no procedure; VARYING is part of its header",
+     "horror": "H-0002"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "2500-SCAN-HISTORY",
+     "target": "END-IF",
+     "why": "EXIT PERFORM (line 57) is not a PERFORM; END-IF follows it",
+     "horror": "H-0006"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "2500-SCAN-HISTORY",
+     "target": "005800",
+     "why": "EXIT PERFORM (line 57) is not a PERFORM; 005800 follows it",
+     "horror": "H-0006"
+    }
+   ],
+   "horrors": [
+    "H-0002",
+    "H-0004",
+    "H-0006"
+   ]
+  },
+  "apps/ACCT/cobol/ACCTUPD.cbl": {
+   "app": "ACCT",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 44,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "ACCTUPD",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 18,
+     "end_line": 31
+    },
+    {
+     "name": "1000-OPEN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 32,
+     "end_line": 34
+    },
+    {
+     "name": "2000-APPLY-UPDATES",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 35,
+     "end_line": 37
+    },
+    {
+     "name": "9000-CLOSE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 38,
+     "end_line": 40
+    },
+    {
+     "name": "9999-ABEND",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 41,
+     "end_line": 44
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-OPEN",
+     "line": 19
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-APPLY-UPDATES",
+     "line": 20,
+     "horror": "H-0001"
+    },
+    {
+     "kind": "goto",
+     "from": "0000-MAIN",
+     "target": "9999-ABEND",
+     "line": 23,
+     "horror": "H-0001"
+    },
+    {
+     "kind": "call",
+     "from": "0000-MAIN",
+     "target": "ACCTLOG",
+     "line": 26,
+     "form": "literal",
+     "horror": "H-0001"
+    },
+    {
+     "kind": "call",
+     "from": "0000-MAIN",
+     "target": "WS-AUDIT-PGM",
+     "line": 28,
+     "form": "identifier",
+     "horror": "H-0001"
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "9000-CLOSE",
+     "line": 30
+    }
+   ],
+   "call_sites": [
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "ACCTLOG",
+     "target": "ACCTLOG",
+     "line": 26,
+     "resolves_to": null,
+     "horror": "H-0001"
+    },
+    {
+     "verb": "CALL",
+     "form": "identifier",
+     "operand": "WS-AUDIT-PGM",
+     "target": "ACCTAUD",
+     "line": 28,
+     "resolves_to": "apps/ACCT/cobol/ACCTAUD.cbl",
+     "horror": "H-0001"
+    }
+   ],
+   "copies": [
+    {
+     "member": "UPDCTL",
+     "kind": "copy",
+     "line": 13,
+     "resolves_to": "apps/ACCT/copybook/UPDCTL.cpy",
+     "horror": "H-0001"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-UPD-CONTROL",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 12,
+     "copy_members": [
+      "UPDCTL"
+     ],
+     "horror": "H-0001"
+    },
+    {
+     "level": 1,
+     "name": "WS-AUDIT-PGM",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'ACCTAUD'",
+     "section": "WORKING-STORAGE",
+     "line": 15
+    },
+    {
+     "level": 1,
+     "name": "WS-MSG",
+     "pic": "X(40)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 16
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-UPD-CONTROL",
+     "line": 12,
+     "bytes": 14,
+     "fields": [
+      {
+       "name": "UPD-FLAG",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 0,
+       "bytes": 1,
+       "file": "apps/ACCT/copybook/UPDCTL.cpy"
+      },
+      {
+       "name": "UPD-COUNT",
+       "level": 5,
+       "pic": "S9(5)",
+       "usage": "COMP-3",
+       "offset": 1,
+       "bytes": 3,
+       "file": "apps/ACCT/copybook/UPDCTL.cpy"
+      },
+      {
+       "name": "UPD-LAST-ACCT",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 4,
+       "bytes": 10,
+       "file": "apps/ACCT/copybook/UPDCTL.cpy"
+      }
+     ],
+     "horror": "H-0001"
+    },
+    {
+     "record": "WS-AUDIT-PGM",
+     "line": 15,
+     "bytes": 8,
+     "fields": [
+      {
+       "name": "WS-AUDIT-PGM",
+       "level": 1,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/ACCT/cobol/ACCTUPD.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-MSG",
+     "line": 16,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "WS-MSG",
+       "level": 1,
+       "pic": "X(40)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 40,
+       "file": "apps/ACCT/cobol/ACCTUPD.cbl"
+      }
+     ]
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "copies",
+     "member": "001400",
+     "why": "the sequence number of the line after a split COPY, not the member (UPDCTL)",
+     "horror": "H-0001"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "002100",
+     "why": "the sequence number of the line after a split PERFORM, not 2000-APPLY-UPDATES",
+     "horror": "H-0001"
+    },
+    {
+     "channel": "edges",
+     "kind": "goto",
+     "from": "0000-MAIN",
+     "target": "002400",
+     "why": "the sequence number of the line after a split GO TO, not 9999-ABEND",
+     "horror": "H-0001"
+    },
+    {
+     "channel": "edges",
+     "kind": "call",
+     "from": "0000-MAIN",
+     "target": "002700",
+     "why": "the sequence number of the line after a split CALL, not ACCTLOG",
+     "horror": "H-0001"
+    },
+    {
+     "channel": "edges",
+     "kind": "call",
+     "from": "0000-MAIN",
+     "target": "002900",
+     "why": "the sequence number of the line after a split CALL, not WS-AUDIT-PGM",
+     "horror": "H-0001"
+    }
+   ],
+   "horrors": [
+    "H-0001"
+   ]
+  },
+  "apps/ACCT/copybook/ACCTREC.cpy": {
+   "app": "ACCT",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 16,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "ACCT-ID",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 5,
+     "name": "ACCT-STATUS",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 88,
+     "name": "ACCT-ACTIVE",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'A'",
+     "section": null,
+     "line": 4
+    },
+    {
+     "level": 88,
+     "name": "ACCT-CLOSED",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'C'",
+     "section": null,
+     "line": 5
+    },
+    {
+     "level": 5,
+     "name": "ACCT-NAME",
+     "pic": "X(30)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 6
+    },
+    {
+     "level": 5,
+     "name": "ACCT-BALANCE",
+     "pic": "S9(11)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 7
+    },
+    {
+     "level": 5,
+     "name": "ACCT-OPEN-DATE",
+     "pic": "9(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 8
+    },
+    {
+     "level": 5,
+     "name": "ACCT-OPEN-DATE-R",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": "ACCT-OPEN-DATE",
+     "value": null,
+     "section": null,
+     "line": 9
+    },
+    {
+     "level": 10,
+     "name": "ACCT-OPEN-YYYY",
+     "pic": "9(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 10
+    },
+    {
+     "level": 10,
+     "name": "ACCT-OPEN-MM",
+     "pic": "99",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 11
+    },
+    {
+     "level": 10,
+     "name": "ACCT-OPEN-DD",
+     "pic": "99",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 12
+    },
+    {
+     "level": 5,
+     "name": "ACCT-TRAN-CNT",
+     "pic": "S9(7)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 13
+    },
+    {
+     "level": 5,
+     "name": "ACCT-HIST",
+     "pic": null,
+     "usage": null,
+     "occurs": 12,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 14
+    },
+    {
+     "level": 10,
+     "name": "ACCT-HIST-AMT",
+     "pic": "S9(9)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 15
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(20)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 16
+    }
+   ]
+  },
+  "apps/ACCT/copybook/RPTCNT.cpy": {
+   "app": "ACCT",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 3,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "CNT-READ",
+     "pic": "S9(7)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 5,
+     "name": "CNT-WRITTEN",
+     "pic": "S9(7)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3
+    }
+   ]
+  },
+  "apps/ACCT/copybook/RPTHDR.cpy": {
+   "app": "ACCT",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 5,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "RPT-CC",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'1'",
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 5,
+     "name": "RPT-TITLE",
+     "pic": "X(40)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'DAILY ACCOUNT ACTIVITY'",
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 5,
+     "name": "RPT-PAGE-LIT",
+     "pic": "X(6)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'PAGE '",
+     "section": null,
+     "line": 4
+    },
+    {
+     "level": 5,
+     "name": "RPT-PAGE",
+     "pic": "ZZZ9",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5
+    }
+   ]
+  },
+  "apps/ACCT/copybook/RPTTOT.cpy": {
+   "app": "ACCT",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 3,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "TOT-DEBITS",
+     "pic": "S9(11)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 5,
+     "name": "TOT-CREDITS",
+     "pic": "S9(11)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3
+    }
+   ]
+  },
+  "apps/ACCT/copybook/TRANREC.cpy": {
+   "app": "ACCT",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 9,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "TRAN-ACCT-ID",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 5,
+     "name": "TRAN-TYPE",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 88,
+     "name": "TRAN-DEBIT",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'D'",
+     "section": null,
+     "line": 4
+    },
+    {
+     "level": 88,
+     "name": "TRAN-CREDIT",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'C'",
+     "section": null,
+     "line": 5
+    },
+    {
+     "level": 5,
+     "name": "TRAN-AMOUNT",
+     "pic": "S9(9)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 6
+    },
+    {
+     "level": 5,
+     "name": "TRAN-DATE",
+     "pic": "9(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 7
+    },
+    {
+     "level": 5,
+     "name": "TRAN-REF",
+     "pic": "X(16)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 8
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 9
+    }
+   ]
+  },
+  "apps/ACCT/copybook/UPDCTL.cpy": {
+   "app": "ACCT",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 5,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "UPD-FLAG",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 88,
+     "name": "UPD-REQUESTED",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'Y'",
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 5,
+     "name": "UPD-COUNT",
+     "pic": "S9(5)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4
+    },
+    {
+     "level": 5,
+     "name": "UPD-LAST-ACCT",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5
+    }
+   ]
+  },
+  "apps/ACCT/jcl/ACCTDLY.jcl": {
+   "app": "ACCT",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 19,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IEFBR14",
+     "target": "IEFBR14",
+     "line": 5,
+     "resolves_to": null
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "ACCTUPD",
+     "target": "ACCTUPD",
+     "line": 11,
+     "resolves_to": "apps/ACCT/cobol/ACCTUPD.cbl"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "ACCTRPT",
+     "target": "ACCTRPT",
+     "line": 15,
+     "resolves_to": "apps/ACCT/cobol/ACCTRPT.cbl"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "ACCTDLY",
+     "proc": null,
+     "step": "STEP010",
+     "ordinal": 1,
+     "program": "IEFBR14",
+     "exec_proc": null,
+     "cond": null,
+     "line": 5
+    },
+    {
+     "job": "ACCTDLY",
+     "proc": null,
+     "step": "STEP020",
+     "ordinal": 2,
+     "program": null,
+     "exec_proc": "ACCTPRC",
+     "cond": null,
+     "line": 9
+    },
+    {
+     "job": "ACCTDLY",
+     "proc": null,
+     "step": "STEP030",
+     "ordinal": 3,
+     "program": "ACCTUPD",
+     "exec_proc": null,
+     "cond": "(4,LT)",
+     "line": 11
+    },
+    {
+     "job": "ACCTDLY",
+     "proc": null,
+     "step": "STEP040",
+     "ordinal": 4,
+     "program": "ACCTRPT",
+     "exec_proc": null,
+     "cond": "(4,LT)",
+     "line": 15
+    },
+    {
+     "job": "ACCTDLY",
+     "proc": null,
+     "step": "STEP050",
+     "ordinal": 5,
+     "program": null,
+     "exec_proc": "AUDLOG",
+     "cond": null,
+     "line": 19
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "ACCTDLY",
+     "proc": null,
+     "step": "STEP010",
+     "dd": "POSTWORK",
+     "dsn": "PROD.ACCT.POSTWORK",
+     "generation": null,
+     "disp": "MOD",
+     "disp_normal": "DELETE",
+     "sysout": null,
+     "line": 6
+    },
+    {
+     "job": "ACCTDLY",
+     "proc": null,
+     "step": "STEP030",
+     "dd": "STEPLIB",
+     "dsn": "PROD.ACCT.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 12
+    },
+    {
+     "job": "ACCTDLY",
+     "proc": null,
+     "step": "STEP030",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 13
+    },
+    {
+     "job": "ACCTDLY",
+     "proc": null,
+     "step": "STEP040",
+     "dd": "STEPLIB",
+     "dsn": "PROD.ACCT.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 16
+    },
+    {
+     "job": "ACCTDLY",
+     "proc": null,
+     "step": "STEP040",
+     "dd": "RPTOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "A",
+     "line": 17
+    }
+   ]
+  },
+  "apps/ACCT/proclib/ACCTPRC.prc": {
+   "app": "ACCT",
+   "library": "proclib",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 9,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "ACCTPOST",
+     "target": "ACCTPOST",
+     "line": 3,
+     "resolves_to": "apps/ACCT/cobol/ACCTPOST.cbl"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": null,
+     "proc": "ACCTPRC",
+     "step": "POST",
+     "ordinal": 1,
+     "program": "ACCTPOST",
+     "exec_proc": null,
+     "cond": null,
+     "line": 3
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": null,
+     "proc": "ACCTPRC",
+     "step": "POST",
+     "dd": "STEPLIB",
+     "dsn": "PROD.ACCT.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 4
+    },
+    {
+     "job": null,
+     "proc": "ACCTPRC",
+     "step": "POST",
+     "dd": "TRANIN",
+     "dsn": "PROD.ACCT.TRANS",
+     "generation": "0",
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 5
+    },
+    {
+     "job": null,
+     "proc": "ACCTPRC",
+     "step": "POST",
+     "dd": "ACCTOUT",
+     "dsn": "PROD.ACCT.MASTER",
+     "generation": "+1",
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 6
+    },
+    {
+     "job": null,
+     "proc": "ACCTPRC",
+     "step": "POST",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 8
+    }
+   ]
+  }
+ }
+}

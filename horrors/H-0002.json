@@ -1,0 +1,197 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0002",
+ "title": "A paragraph cut at a conditional or non-terminating GOBACK / RETURN / EXIT",
+ "category": "unit-extent",
+ "issue": 4301,
+ "shapes": [
+  "EXEC CICS / RETURN TRANSID(...) / END-EXEC inside IF ... END-IF, more statements after it (CUSTINQ 0000-MAIN)",
+  "a paragraph whose name starts with RETURN (CUSTINQ RETURN-TO-MENU)",
+  "EXIT PERFORM inside an inline PERFORM, more statements after the loop: unnumbered (CUSTINQ 4000-FIND-BLANK) and numbered (ACCTRPT 2500-SCAN-HISTORY)"
+ ],
+ "asserts": "A paragraph runs from its header to just before the next paragraph or section header; the key's end_line is the last code line before that header. Every PERFORM after the conditional terminator belongs to the paragraph.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+   "section": "Procedure division structure > Procedures",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-procedures",
+   "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
+  },
+  {
+   "doc": "CICS Transaction Server for z/OS 6.x",
+   "section": "EXEC CICS RETURN",
+   "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=summary-return",
+   "quote": "RETURN returns control from an application program either to an application program at the next higher logical level, or to CICS."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+   "section": "EXIT statement (EXIT PERFORM)",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-exit-statement",
+   "quote": "The EXIT statement ... provides a way to exit from a section, a paragraph, or an inline PERFORM statement."
+  }
+ ],
+ "notes": "In a numbered member the engine's line-leading terminator test does not see EXIT behind the sequence number, so the numbered plant can pass for the wrong reason while #4300 is open; the unnumbered plant is the one that exercises the cut. Shape 1's PL/I form (ELSE RETURN;) waits for PL/I members (phase 1).",
+ "planted": [
+  {
+   "member": "apps/ACCT/cobol/ACCTRPT.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "2500-SCAN-HISTORY",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 54,
+      "end_line": 61,
+      "horror": "H-0002"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "2500-SCAN-HISTORY",
+      "target": "2600-HISTORY-DONE",
+      "line": 61,
+      "horror": "H-0002"
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "2500-SCAN-HISTORY",
+     "target": "VARYING",
+     "why": "an inline PERFORM (line 55) names no procedure; VARYING is part of its header",
+     "horror": "H-0002"
+    }
+   ]
+  },
+  {
+   "member": "apps/CUST/cobol/CUSTINQ.cbl",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "0000-MAIN",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 22,
+      "end_line": 42,
+      "horror": "H-0002"
+     },
+     {
+      "name": "RETURN-TO-MENU",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 48,
+      "end_line": 53,
+      "horror": "H-0002"
+     },
+     {
+      "name": "4000-FIND-BLANK",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 66,
+      "end_line": 72,
+      "horror": "H-0002"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "0000-MAIN",
+      "target": "1000-RECEIVE-MAP",
+      "line": 33,
+      "horror": "H-0002"
+     },
+     {
+      "kind": "perform",
+      "from": "0000-MAIN",
+      "target": "RETURN-TO-MENU",
+      "line": 35,
+      "horror": "H-0002"
+     },
+     {
+      "kind": "perform",
+      "from": "0000-MAIN",
+      "target": "2000-LOOKUP-CUSTOMER",
+      "line": 37,
+      "horror": "H-0002"
+     },
+     {
+      "kind": "perform",
+      "from": "0000-MAIN",
+      "target": "3000-SEND-MAP",
+      "line": 38,
+      "horror": "H-0002"
+     },
+     {
+      "kind": "perform",
+      "from": "0000-MAIN",
+      "target": "4000-FIND-BLANK",
+      "line": 39,
+      "horror": "H-0002"
+     },
+     {
+      "kind": "perform",
+      "from": "RETURN-TO-MENU",
+      "target": "9100-SAVE-STATE",
+      "line": 50,
+      "horror": "H-0002"
+     },
+     {
+      "kind": "perform",
+      "from": "4000-FIND-BLANK",
+      "target": "9100-SAVE-STATE",
+      "line": 72,
+      "horror": "H-0002"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "RETURN TRANSID",
+      "form": "literal",
+      "operand": "CINQ",
+      "target": "CINQ",
+      "line": 27,
+      "resolves_to": null,
+      "horror": "H-0002"
+     },
+     {
+      "verb": "RETURN TRANSID",
+      "form": "literal",
+      "operand": "CINQ",
+      "target": "CINQ",
+      "line": 40,
+      "resolves_to": null,
+      "horror": "H-0002"
+     },
+     {
+      "verb": "XCTL",
+      "form": "literal",
+      "operand": "CUSTMNU",
+      "target": "CUSTMNU",
+      "line": 51,
+      "resolves_to": "apps/CUST/cobol/CUSTMNU.cbl",
+      "horror": "H-0002"
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "4000-FIND-BLANK",
+     "target": "VARYING",
+     "why": "an inline PERFORM (line 67) names no procedure; VARYING is part of its header",
+     "horror": "H-0002"
+    }
+   ]
+  }
+ ]
+}

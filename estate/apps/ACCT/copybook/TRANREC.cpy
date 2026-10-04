@@ -1,0 +1,9 @@
+000100* TRANREC  - DAILY TRANSACTION RECORD (51 BYTES)
+000200     05  TRAN-ACCT-ID           PIC X(10).
+000300     05  TRAN-TYPE              PIC X.
+000400     88  TRAN-DEBIT             VALUE 'D'.
+000500     88  TRAN-CREDIT            VALUE 'C'.
+000600     05  TRAN-AMOUNT            PIC S9(9)V99 COMP-3.
+000700     05  TRAN-DATE              PIC 9(8).
+000800     05  TRAN-REF               PIC X(16).
+000900     05  FILLER                 PIC X(10).

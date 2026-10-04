@@ -1,0 +1,65 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0003",
+ "title": "Main-line statements between PROCEDURE DIVISION and the first paragraph belong to no unit",
+ "category": "unit-extent",
+ "issue": 4302,
+ "shapes": [
+  "OPEN / PERFORM ... THRU / PERFORM ... UNTIL / GOBACK right after PROCEDURE DIVISION, before the first paragraph name (ACCTPOST)"
+ ],
+ "asserts": "The main line is a unit (kind mainline, no name) from the first statement after the PROCEDURE DIVISION header to the line before the first paragraph; its PERFORM targets are edges from it. The scorer accepts a function_data unit or a synthetic_unit_data row there.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference",
+   "section": "Procedure division structure > Procedures",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-procedures",
+   "quote": "If there are no declaratives (format 2), a paragraph-name is not required in the PROCEDURE DIVISION."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/ACCT/cobol/ACCTPOST.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": null,
+      "kind": "mainline",
+      "section": null,
+      "start_line": 50,
+      "end_line": 55,
+      "horror": "H-0003"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": null,
+      "target": "1000-INITIALIZE",
+      "line": 52,
+      "thru": "1000-EXIT",
+      "horror": "H-0003"
+     },
+     {
+      "kind": "perform",
+      "from": null,
+      "target": "2000-PROCESS-TRAN",
+      "line": 53,
+      "thru": "2000-EXIT",
+      "horror": "H-0003"
+     },
+     {
+      "kind": "perform",
+      "from": null,
+      "target": "9000-TERMINATE",
+      "line": 54,
+      "horror": "H-0003"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
