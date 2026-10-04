@@ -217,6 +217,34 @@
       ],
       "horror": "H-0031"
      }
+    ],
+    "data_moves": [
+     {
+      "verb": "COMPUTE",
+      "source": "WS-GROSS",
+      "source_kind": "item",
+      "target": "WS-GROSS",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 68,
+      "horror": "H-0031"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-LINES",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 79,
+      "horror": "H-0031"
+     }
     ]
    },
    "phantoms": []

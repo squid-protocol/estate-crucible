@@ -60,6 +60,47 @@
       "program": "PAYMAIN",
       "horror": "H-0022"
      }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "SPACES",
+      "source_kind": "figurative",
+      "target": "EMP-NAME",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 40,
+      "horror": "H-0022"
+     },
+     {
+      "verb": "MOVE",
+      "source": "'E00001'",
+      "source_kind": "literal",
+      "target": "EMP-ID",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 47,
+      "horror": "H-0022"
+     },
+     {
+      "verb": "MOVE",
+      "source": "PC-MAX-HOURS",
+      "source_kind": "item",
+      "target": "WS-PAY-STATUS",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 48,
+      "horror": "H-0022"
+     }
     ]
    },
    "phantoms": [

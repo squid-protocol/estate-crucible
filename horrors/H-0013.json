@@ -72,6 +72,21 @@
       "line": 34,
       "horror": "H-0013"
      }
+    ],
+    "data_moves": [
+     {
+      "verb": "ADD",
+      "source": "JRNL-AMT",
+      "source_kind": "item",
+      "target": "WS-TOTAL",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 46,
+      "horror": "H-0013"
+     }
     ]
    },
    "phantoms": []

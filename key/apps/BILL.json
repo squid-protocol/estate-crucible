@@ -416,6 +416,99 @@
      "line": 37
     }
    ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "'BINARY'",
+     "source_kind": "literal",
+     "target": "WS-MODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 39,
+     "horror": "H-0012"
+    },
+    {
+     "verb": "MOVE",
+     "source": "12",
+     "source_kind": "literal",
+     "target": "WS-LEN",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 40,
+     "horror": "H-0012"
+    },
+    {
+     "verb": "COMPUTE",
+     "source": "BIL-AMOUNT",
+     "source_kind": "item",
+     "target": "BIL-TAX",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 55,
+     "horror": "H-0012"
+    },
+    {
+     "verb": "COMPUTE",
+     "source": "WS-RATE",
+     "source_kind": "item",
+     "target": "BIL-TAX",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 55,
+     "horror": "H-0012"
+    },
+    {
+     "verb": "MOVE",
+     "source": "BIL-TAX",
+     "source_kind": "item",
+     "target": "WS-ADJUST",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 62,
+     "horror": "H-0012"
+    },
+    {
+     "verb": "MOVE",
+     "source": "BIL-ACCT",
+     "source_kind": "item",
+     "target": "WS-PRT-ACCT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 65,
+     "horror": "H-0012"
+    },
+    {
+     "verb": "MOVE",
+     "source": "BIL-AMOUNT",
+     "source_kind": "item",
+     "target": "WS-PRT-AMOUNT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 66,
+     "horror": "H-0012"
+    }
+   ],
    "horrors": [
     "H-0009",
     "H-0012",

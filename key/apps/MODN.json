@@ -215,6 +215,58 @@
      "line": 17
     }
    ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "LK-CODE",
+     "source_kind": "item",
+     "target": "VB-CODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 19
+    },
+    {
+     "verb": "MOVE",
+     "source": "VB-RATE",
+     "source_kind": "item",
+     "target": "LK-RATE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 22
+    },
+    {
+     "verb": "MOVE",
+     "source": "0.0500",
+     "source_kind": "literal",
+     "target": "VB-RATE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 26,
+     "horror": "H-0028"
+    },
+    {
+     "verb": "MOVE",
+     "source": "'Y'",
+     "source_kind": "literal",
+     "target": "WS-FOUND",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 27,
+     "horror": "H-0028"
+    }
+   ],
    "phantoms": [
     {
      "channel": "units",

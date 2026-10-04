@@ -1,0 +1,86 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0036",
+ "title": "Raw EBCDIC members with NEL (X'15') line ends",
+ "category": "encoding",
+ "issue": 3816,
+ "shapes": [
+  "ZINSBER: cp273 (Germany / Austria), NEL",
+  "KUNDEÅ: cp277, NEL; SHAINREC: cp939, NEL; GULFMS (BMS): cp420, NEL"
+ ],
+ "asserts": "NEL ends a line in z/OS text; the member's lines and facts are what its NEL-separated records say.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+   "section": "CODEPAGE compiler option (p.353)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+   "quote": "Use CODEPAGE to specify the coded character set identifier (CCSID) for an EBCDIC code page for processing compile-time and runtime COBOL operations that are sensitive to character encoding."
+  },
+  {
+   "doc": "IBM i 7.5 Globalization",
+   "section": "CCSID values defined on IBM i",
+   "url": "https://www.ibm.com/docs/en/i/7.5.0?topic=information-ccsid-values-defined-i",
+   "quote": "00273: Austria, Germany"
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/DEUT/cobol/ZINSBER.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "ZINSBER",
+      "line": 2,
+      "horror": "H-0036"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-ENDE",
+      "pic": "S9(4)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 22,
+      "horror": "H-0036"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-ENDE",
+      "line": 22,
+      "bytes": 2,
+      "fields": [
+       {
+        "name": "WS-ENDE",
+        "level": 1,
+        "pic": "S9(4)",
+        "usage": "COMP",
+        "offset": 0,
+        "bytes": 2,
+        "file": "apps/DEUT/cobol/ZINSBER.cbl"
+       }
+      ],
+      "horror": "H-0036"
+     }
+    ],
+    "entry_points": [
+     {
+      "kind": "PROCEDURE",
+      "program": "ZINSBER",
+      "params": [],
+      "line": 23,
+      "horror": "H-0036"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

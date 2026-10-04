@@ -1,0 +1,909 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "KYUY",
+ "members": {
+  "apps/KYUY/cobol/KYUYJP.cbl": {
+   "app": "KYUY",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 28,
+   "compile": {
+    "status": "other-dialect",
+    "reason": "opensourcecobol4j dialect: GnuCOBOL 3.1 does not take the full-width space U+3000 as a separator",
+    "check_variant": "u3000-to-space",
+    "check_note": "every U+3000 is replaced by a space for the check; the rest compiles as written"
+   },
+   "programs": [
+    {
+     "program_id": "給与計算",
+     "line": 2,
+     "horror": "H-0040"
+    }
+   ],
+   "units": [
+    {
+     "name": "主処理",
+     "kind": "section",
+     "section": null,
+     "start_line": 18,
+     "end_line": 18,
+     "horror": "H-0040",
+     "span_end": 24
+    },
+    {
+     "name": "開始",
+     "kind": "paragraph",
+     "section": "主処理",
+     "start_line": 19,
+     "end_line": 24,
+     "horror": "H-0040"
+    },
+    {
+     "name": "Ｓ−初期化",
+     "kind": "section",
+     "section": null,
+     "start_line": 25,
+     "end_line": 25,
+     "horror": "H-0041",
+     "span_end": 28
+    },
+    {
+     "name": "初期化１",
+     "kind": "paragraph",
+     "section": "Ｓ−初期化",
+     "start_line": 26,
+     "end_line": 28,
+     "horror": "H-0041"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "開始",
+     "target": "Ｓ−初期化",
+     "line": 23,
+     "horror": "H-0041"
+    }
+   ],
+   "copies": [
+    {
+     "member": "KYUYCPY",
+     "kind": "copy",
+     "line": 16,
+     "resolves_to": "apps/KYUY/copybook/KYUYCPY.cpy",
+     "horror": "H-0038"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "Ｆ０２",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 8,
+     "horror": "H-0038"
+    },
+    {
+     "level": 1,
+     "name": "社員コード",
+     "pic": "X(6)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 9,
+     "horror": "H-0040"
+    },
+    {
+     "level": 1,
+     "name": "X項目",
+     "pic": "X(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 10,
+     "horror": "H-0040"
+    },
+    {
+     "level": 1,
+     "name": "FIXED_FLD",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 11,
+     "horror": "H-0040"
+    },
+    {
+     "level": 1,
+     "name": "ＴＥＳＴ−ＤＡＴＡ１",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 12,
+     "horror": "H-0041"
+    },
+    {
+     "level": 1,
+     "name": "ＴＥＳＴ−ＲＥＣＯＲＤ１",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 13,
+     "horror": "H-0041"
+    },
+    {
+     "level": 1,
+     "name": "ＴＥＳＴ－ＤＡＴＡ２",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 14,
+     "horror": "H-0041"
+    },
+    {
+     "level": 1,
+     "name": "WS-KYUY",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 15,
+     "copy_members": [
+      "KYUYCPY"
+     ],
+     "horror": "H-0038",
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "Ｆ０２",
+     "line": 8,
+     "bytes": 1,
+     "fields": [
+      {
+       "name": "Ｆ０２",
+       "level": 1,
+       "pic": "X",
+       "usage": null,
+       "offset": 0,
+       "bytes": 1,
+       "file": "apps/KYUY/cobol/KYUYJP.cbl"
+      }
+     ],
+     "horror": "H-0038"
+    },
+    {
+     "record": "社員コード",
+     "line": 9,
+     "bytes": 6,
+     "fields": [
+      {
+       "name": "社員コード",
+       "level": 1,
+       "pic": "X(6)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 6,
+       "file": "apps/KYUY/cobol/KYUYJP.cbl"
+      }
+     ],
+     "horror": "H-0040"
+    },
+    {
+     "record": "X項目",
+     "line": 10,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "X項目",
+       "level": 1,
+       "pic": "X(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/KYUY/cobol/KYUYJP.cbl"
+      }
+     ],
+     "horror": "H-0040"
+    },
+    {
+     "record": "FIXED_FLD",
+     "line": 11,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "FIXED_FLD",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/KYUY/cobol/KYUYJP.cbl"
+      }
+     ],
+     "horror": "H-0040"
+    },
+    {
+     "record": "ＴＥＳＴ−ＤＡＴＡ１",
+     "line": 12,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "ＴＥＳＴ−ＤＡＴＡ１",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/KYUY/cobol/KYUYJP.cbl"
+      }
+     ],
+     "horror": "H-0041"
+    },
+    {
+     "record": "ＴＥＳＴ−ＲＥＣＯＲＤ１",
+     "line": 13,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "ＴＥＳＴ−ＲＥＣＯＲＤ１",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/KYUY/cobol/KYUYJP.cbl"
+      }
+     ],
+     "horror": "H-0041"
+    },
+    {
+     "record": "ＴＥＳＴ－ＤＡＴＡ２",
+     "line": 14,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "ＴＥＳＴ－ＤＡＴＡ２",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/KYUY/cobol/KYUYJP.cbl"
+      }
+     ],
+     "horror": "H-0041"
+    },
+    {
+     "record": "WS-KYUY",
+     "line": 15,
+     "bytes": 12,
+     "fields": [
+      {
+       "name": "共通コード",
+       "level": 5,
+       "pic": "X(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/KYUY/copybook/KYUYCPY.cpy"
+      },
+      {
+       "name": "共通日付",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 4,
+       "bytes": 8,
+       "file": "apps/KYUY/copybook/KYUYCPY.cpy"
+      }
+     ],
+     "horror": "H-0038",
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "給与計算",
+     "params": [],
+     "line": 17,
+     "horror": "H-0040"
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "'000001'",
+     "source_kind": "literal",
+     "target": "社員コード",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 20,
+     "horror": "H-0040"
+    },
+    {
+     "verb": "MOVE",
+     "source": "SPACES",
+     "source_kind": "figurative",
+     "target": "ＴＥＳＴ−ＤＡＴＡ１",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 21,
+     "horror": "H-0040"
+    },
+    {
+     "verb": "MOVE",
+     "source": "'AB'",
+     "source_kind": "literal",
+     "target": "ＴＥＳＴ−ＲＥＣＯＲＤ１",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 22,
+     "horror": "H-0040"
+    },
+    {
+     "verb": "MOVE",
+     "source": "SPACE",
+     "source_kind": "figurative",
+     "target": "X項目",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 27,
+     "horror": "H-0041"
+    },
+    {
+     "verb": "MOVE",
+     "source": "'Z'",
+     "source_kind": "literal",
+     "target": "Ｆ０２",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 28,
+     "horror": "H-0041"
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "data_moves",
+     "target": "X",
+     "why": "X項目 is one name: a move into it is not a move into X",
+     "horror": "H-0040"
+    }
+   ],
+   "horrors": [
+    "H-0038",
+    "H-0040",
+    "H-0041"
+   ]
+  },
+  "apps/KYUY/cobol/KYUYO01.cbl": {
+   "app": "KYUY",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 22,
+   "compile": {
+    "status": "ibm-only",
+    "reason": "PIC G / G'...' (DBCS, USAGE DISPLAY-1): GnuCOBOL 3.1 has no DBCS category",
+    "check_variant": "pic-g-to-n",
+    "check_note": "PIC G and G'...' become PIC N and N'...' for the check (same 2-byte width)"
+   },
+   "encoding": "cp930",
+   "storage": "fb80",
+   "programs": [
+    {
+     "program_id": "KYUYO01",
+     "line": 2,
+     "horror": "H-0042"
+    }
+   ],
+   "units": [
+    {
+     "name": "主処理",
+     "kind": "section",
+     "section": null,
+     "start_line": 16,
+     "end_line": 16,
+     "horror": "H-0042",
+     "span_end": 22
+    },
+    {
+     "name": "開始",
+     "kind": "paragraph",
+     "section": "主処理",
+     "start_line": 17,
+     "end_line": 20,
+     "horror": "H-0042"
+    },
+    {
+     "name": "集計",
+     "kind": "paragraph",
+     "section": "主処理",
+     "start_line": 21,
+     "end_line": 22,
+     "horror": "H-0042"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "開始",
+     "target": "集計",
+     "line": 18,
+     "horror": "H-0042"
+    }
+   ],
+   "copies": [
+    {
+     "member": "SHAINREC",
+     "kind": "copy",
+     "line": 14,
+     "resolves_to": "apps/KYUY/copybook/SHAINREC.cpy",
+     "horror": "H-0042"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "処理件数",
+     "pic": "9(5)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 10,
+     "horror": "H-0042"
+    },
+    {
+     "level": 1,
+     "name": "見出し",
+     "pic": "X(20)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'給与明細ABC'",
+     "section": "WORKING-STORAGE",
+     "line": 11,
+     "horror": "H-0042"
+    },
+    {
+     "level": 1,
+     "name": "漢字欄",
+     "pic": "G(4)",
+     "usage": "DISPLAY-1",
+     "occurs": null,
+     "redefines": null,
+     "value": "G'漢字欄名'",
+     "section": "WORKING-STORAGE",
+     "line": 12,
+     "horror": "H-0042"
+    },
+    {
+     "level": 1,
+     "name": "WS-END",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 13,
+     "horror": "H-0042",
+     "depends_on": [
+      "H-0010"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "処理件数",
+     "line": 10,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "処理件数",
+       "level": 1,
+       "pic": "9(5)",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/KYUY/cobol/KYUYO01.cbl"
+      }
+     ],
+     "horror": "H-0042"
+    },
+    {
+     "record": "見出し",
+     "line": 11,
+     "bytes": 20,
+     "fields": [
+      {
+       "name": "見出し",
+       "level": 1,
+       "pic": "X(20)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 20,
+       "file": "apps/KYUY/cobol/KYUYO01.cbl"
+      }
+     ],
+     "horror": "H-0042"
+    },
+    {
+     "record": "漢字欄",
+     "line": 12,
+     "bytes": 8,
+     "fields": [
+      {
+       "name": "漢字欄",
+       "level": 1,
+       "pic": "G(4)",
+       "usage": "DISPLAY-1",
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/KYUY/cobol/KYUYO01.cbl"
+      }
+     ],
+     "horror": "H-0042"
+    },
+    {
+     "record": "WS-END",
+     "line": 13,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-END",
+       "level": 1,
+       "pic": "S9(4)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/KYUY/cobol/KYUYO01.cbl"
+      }
+     ],
+     "horror": "H-0042",
+     "depends_on": [
+      "H-0010"
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "KYUYO01",
+     "params": [],
+     "line": 15,
+     "horror": "H-0042"
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "見出し",
+     "source_kind": "item",
+     "target": "社員番号",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 19,
+     "horror": "H-0042"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "処理件数",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 22,
+     "horror": "H-0042"
+    }
+   ],
+   "horrors": [
+    "H-0042"
+   ]
+  },
+  "apps/KYUY/cobol/KYUYO02.cbl": {
+   "app": "KYUY",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 15,
+   "compile": {
+    "status": "compiled"
+   },
+   "encoding": "shift_jis",
+   "storage": "lf",
+   "programs": [
+    {
+     "program_id": "KYUYO02",
+     "line": 2,
+     "horror": "H-0046"
+    }
+   ],
+   "units": [
+    {
+     "name": "賞与処理",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 12,
+     "end_line": 15,
+     "horror": "H-0046"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "賞与額",
+     "pic": "9(7)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 8,
+     "horror": "H-0046"
+    },
+    {
+     "level": 1,
+     "name": "表題",
+     "pic": "X(16)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'賞与明細'",
+     "section": "WORKING-STORAGE",
+     "line": 9,
+     "horror": "H-0046"
+    },
+    {
+     "level": 1,
+     "name": "WS-END",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 10,
+     "horror": "H-0046"
+    }
+   ],
+   "layouts": [
+    {
+     "record": "賞与額",
+     "line": 8,
+     "bytes": 7,
+     "fields": [
+      {
+       "name": "賞与額",
+       "level": 1,
+       "pic": "9(7)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 7,
+       "file": "apps/KYUY/cobol/KYUYO02.cbl"
+      }
+     ],
+     "horror": "H-0046"
+    },
+    {
+     "record": "表題",
+     "line": 9,
+     "bytes": 16,
+     "fields": [
+      {
+       "name": "表題",
+       "level": 1,
+       "pic": "X(16)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 16,
+       "file": "apps/KYUY/cobol/KYUYO02.cbl"
+      }
+     ],
+     "horror": "H-0046"
+    },
+    {
+     "record": "WS-END",
+     "line": 10,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-END",
+       "level": 1,
+       "pic": "S9(4)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/KYUY/cobol/KYUYO02.cbl"
+      }
+     ],
+     "horror": "H-0046"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "KYUYO02",
+     "params": [],
+     "line": 11,
+     "horror": "H-0046"
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "ADD",
+     "source": "1000",
+     "source_kind": "literal",
+     "target": "賞与額",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 13,
+     "horror": "H-0046"
+    }
+   ],
+   "horrors": [
+    "H-0046"
+   ]
+  },
+  "apps/KYUY/copybook/KYUYCPY.cpy": {
+   "app": "KYUY",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 3,
+   "compile": {
+    "status": "copybook"
+   },
+   "encoding": "utf-8-sig",
+   "storage": "lf",
+   "data_items": [
+    {
+     "level": 5,
+     "name": "共通コード",
+     "pic": "X(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2,
+     "horror": "H-0038"
+    },
+    {
+     "level": 5,
+     "name": "共通日付",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3,
+     "horror": "H-0038"
+    }
+   ],
+   "horrors": [
+    "H-0038"
+   ]
+  },
+  "apps/KYUY/copybook/SHAINREC.cpy": {
+   "app": "KYUY",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 5,
+   "compile": {
+    "status": "copybook"
+   },
+   "encoding": "cp939",
+   "storage": "nel",
+   "data_items": [
+    {
+     "level": 1,
+     "name": "社員レコード",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2,
+     "horror": "H-0042"
+    },
+    {
+     "level": 5,
+     "name": "社員番号",
+     "pic": "X(6)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3,
+     "horror": "H-0042"
+    },
+    {
+     "level": 5,
+     "name": "社員名",
+     "pic": "G(10)",
+     "usage": "DISPLAY-1",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4,
+     "horror": "H-0042"
+    },
+    {
+     "level": 5,
+     "name": "給与額",
+     "pic": "S9(7)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5,
+     "horror": "H-0042"
+    }
+   ],
+   "horrors": [
+    "H-0042"
+   ]
+  }
+ }
+}

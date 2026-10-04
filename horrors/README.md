@@ -40,6 +40,21 @@ facts and phantoms the answer key carries for it.
 | H-0032 | [#4264](https://github.com/squid-protocol/gitgalaxy/issues/4264) (D044) | file-control | ASSIGN TO at the end of a line with cols 73-80 identification; the assignment-name on the next line | `apps/GLED/cobol/GLPOST.cbl` |
 | H-0033 |  | edges | PERFORM UNTIL EXIT (an inline loop left only by EXIT PERFORM) | `apps/PAYR/cobol/PAYMAIN.cbl` |
 | H-0034 | [#4265](https://github.com/squid-protocol/gitgalaxy/issues/4265) | copy | Same-named copybook in two libraries: SYSLIB order picks the app's own | `apps/PAYR/cobol/PAYMAIN.cbl`, `apps/PAYR/copybook/DATEWS.cpy` |
+| H-0035 | [#3816](https://github.com/squid-protocol/gitgalaxy/issues/3816) | encoding | Raw EBCDIC members as 80-byte records with no line ends (a binary PDS transfer) | `apps/NORD/cobol/KØBREG.cbl` |
+| H-0036 | [#3816](https://github.com/squid-protocol/gitgalaxy/issues/3816) | encoding | Raw EBCDIC members with NEL (X'15') line ends | `apps/DEUT/cobol/ZINSBER.cbl` |
+| H-0037 | [#3534](https://github.com/squid-protocol/gitgalaxy/issues/3534) (D016) | encoding | Stray NUL bytes in a source member (a transfer artifact) | `apps/NORD/pli/NULREST.pli` |
+| H-0038 | [#3956](https://github.com/squid-protocol/gitgalaxy/issues/3956) (D030) | national | The full-width space U+3000 as a separator | `apps/KYUY/cobol/KYUYJP.cbl`, `apps/KYUY/copybook/KYUYCPY.cpy` |
+| H-0039 | [#3520](https://github.com/squid-protocol/gitgalaxy/issues/3520) (D015) | national | Nordic national characters Æ Ø Å in member, program, PL/I and JCL names | `apps/NORD/cobol/KØBREG.cbl`, `apps/NORD/copybook/KUNDEÅ.cpy`, `apps/NORD/jcl/KØBDAG.jcl`, `apps/NORD/pli/RENTEØ.pli` |
+| H-0040 | [#3955](https://github.com/squid-protocol/gitgalaxy/issues/3955) (D029) | national | Japanese user-defined words: PROGRAM-ID, data names (leading and trailing Japanese), sections, paragraphs, `_` in names | `apps/KYUY/cobol/KYUYJP.cbl` |
+| H-0041 | [#3991](https://github.com/squid-protocol/gitgalaxy/issues/3991) (D031) | national | Full-width hyphens and digits in names; names that must not collide | `apps/KYUY/cobol/KYUYJP.cbl` |
+| H-0042 | [#3816](https://github.com/squid-protocol/gitgalaxy/issues/3816) | national | DBCS in EBCDIC: SO/SI-delimited words, mixed and G literals, unbalanced and nested shift codes in comments | `apps/KYUY/cobol/KYUYO01.cbl`, `apps/KYUY/copybook/SHAINREC.cpy` |
+| H-0043 | [#3942](https://github.com/squid-protocol/gitgalaxy/issues/3942) | national | DECIMAL-POINT IS COMMA, with VALUE 1,50 in a copybook | `apps/DEUT/cobol/ZINSBER.cbl`, `apps/DEUT/copybook/ZINSSATZ.cpy` |
+| H-0044 |  | semantics | EBCDIC collation: logic that relies on letters sorting before digits | `apps/NORD/cobol/KØBREG.cbl` |
+| H-0045 | [#3987](https://github.com/squid-protocol/gitgalaxy/issues/3987) | national | A BMS map in EBCDIC cp420 with Arabic text in visual order | `apps/GULF/bms/GULFMS.bms` |
+| H-0046 | [#3878](https://github.com/squid-protocol/gitgalaxy/issues/3878) | encoding | A member downloaded to a PC in Shift-JIS | `apps/KYUY/cobol/KYUYO02.cbl` |
+| H-0047 |  (D013) | data-moves | A data name that starts with END- (END-OF-FILE) as a move target | `apps/NORD/cobol/KØBREG.cbl` |
+| H-0048 | [#3649](https://github.com/squid-protocol/gitgalaxy/issues/3649) (D023) | data-moves | Reference modification of a FUNCTION result as a move source | `apps/NORD/cobol/KØBREG.cbl` |
+| H-0049 | [#4205](https://github.com/squid-protocol/gitgalaxy/issues/4205) (D039) | data-moves | MOVE ALL X'..' (a hexadecimal figurative) is a data move | `apps/NORD/cobol/KØBREG.cbl` |
 
 ## Field-testing defects not planted
 
@@ -49,10 +64,9 @@ From gitgalaxy `tests/cobol_mainframe/field_testing.json`; each waits for what t
 |---|---|
 | D009, D011, D014 | reachability (dead / live units): no reachability channel is keyed yet |
 | D012 | template JCL with <PLACEHOLDER> names is not valid JCL; no IBM rule says what it means |
-| D013, D023, D038, D039 | data moves, reference modification and MOVE truncation: not keyed yet (phase 2 candidate channel) |
-| D015, D016, D029, D030, D031 | national characters, encodings and full-width forms: phase 2 (multicultural district, #3988) |
 | D017, D018, D021, D026, D027 | PL/I CICS operands, ON-unit data moves and PL/I structure mapping: the PL/I members key units, edges, call sites and data items only |
 | D025 | COMMAREA contracts across callers: no contract channel keyed yet |
 | D028, D032, D033, D035 | LINE SEQUENTIAL and ASSIGN TO a literal path are not Enterprise COBOL (Micro Focus / GnuCOBOL) |
 | D034 | a forge target-config defect, not a source construct |
 | B001, B002, B003, B004 | census brief (documentation) defects, not source constructs |
+| D038 | MOVE truncation of a qualified source: a sizing analysis over data moves (GalaxyIR), not a channel this key holds yet |

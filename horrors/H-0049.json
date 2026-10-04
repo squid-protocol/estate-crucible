@@ -1,0 +1,79 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0049",
+ "title": "MOVE ALL X'..' (a hexadecimal figurative) is a data move",
+ "category": "data-moves",
+ "issue": 4205,
+ "defect": "D039",
+ "shapes": [
+  "MOVE ALL X'00' TO WS-BUF (KØBREG)"
+ ],
+ "asserts": "A data move with source ALL X'00' (figurative) into WS-BUF.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Figurative constants: ALL literal",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "When literal is not a figurative constant, ALL literal represents one or more occurrences of the string of characters that compose the literal."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/NORD/cobol/KØBREG.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-BUF",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 14,
+      "horror": "H-0049"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-BUF",
+      "line": 14,
+      "bytes": 8,
+      "fields": [
+       {
+        "name": "WS-BUF",
+        "level": 1,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 8,
+        "file": "apps/NORD/cobol/KØBREG.cbl"
+       }
+      ],
+      "horror": "H-0049"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "ALL X'00'",
+      "source_kind": "figurative",
+      "target": "WS-BUF",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 24,
+      "horror": "H-0049"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

@@ -44,6 +44,34 @@
       "program": "PAYCALC",
       "horror": "H-0033"
      }
+    ],
+    "data_moves": [
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-I",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 59,
+      "horror": "H-0033"
+     },
+     {
+      "verb": "ADD",
+      "source": "100",
+      "source_kind": "literal",
+      "target": "WS-GROSS",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 63,
+      "horror": "H-0033"
+     }
     ]
    },
    "phantoms": [

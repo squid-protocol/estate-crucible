@@ -1,0 +1,79 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0048",
+ "title": "Reference modification of a FUNCTION result as a move source",
+ "category": "data-moves",
+ "issue": 3649,
+ "defect": "D023",
+ "shapes": [
+  "MOVE FUNCTION CURRENT-DATE (1:4) TO WS-AAR (KØBREG)"
+ ],
+ "asserts": "The source is FUNCTION CURRENT-DATE with reference modification 1:4.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Reference modification",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "function-name-1 Must reference an alphanumeric or national function."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/NORD/cobol/KØBREG.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-AAR",
+      "pic": "X(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 13,
+      "horror": "H-0048"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-AAR",
+      "line": 13,
+      "bytes": 4,
+      "fields": [
+       {
+        "name": "WS-AAR",
+        "level": 1,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/NORD/cobol/KØBREG.cbl"
+       }
+      ],
+      "horror": "H-0048"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "FUNCTION CURRENT-DATE",
+      "source_kind": "function",
+      "target": "WS-AAR",
+      "corresponding": false,
+      "source_refmod": true,
+      "target_refmod": false,
+      "source_refmod_text": "1:4",
+      "target_refmod_text": null,
+      "line": 23,
+      "horror": "H-0048"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

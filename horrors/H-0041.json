@@ -1,0 +1,189 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0041",
+ "title": "Full-width hyphens and digits in names; names that must not collide",
+ "category": "national",
+ "issue": 3991,
+ "defect": "D031",
+ "shapes": [
+  "ＴＥＳＴ−ＤＡＴＡ１ and ＴＥＳＴ−ＲＥＣＯＲＤ１ (U+2212), ＴＥＳＴ－ＤＡＴＡ２ (U+FF0D): three different items",
+  "SECTION Ｓ−初期化 and paragraph 初期化１ (a full-width digit)"
+ ],
+ "asserts": "Full-width hyphens and digits are characters of the word: the three items stay three items, and Ｓ−初期化 is a section.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "User-defined words with DBCS characters (p.12)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "DBCS user-defined words can contain only double-byte characters, and must contain at least one DBCS character that is not in the set A through Z, a through z, 0 through 9, hyphen, and underscore"
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "User-defined words with DBCS characters (p.12)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "DBCS characters that correspond to single-byte EBCDIC characters follow the normal rules for COBOL user-defined words; that is, the characters A - Z, a - z, 0 - 9, the hyphen (-), and the underscore (_) are allowed."
+  }
+ ],
+ "lower_confidence": "U+2212 (MINUS SIGN) is not the DBCS hyphen IBM means (U+FF0D); it is planted because opensourcecobol4j estates carry it (#3991).",
+ "planted": [
+  {
+   "member": "apps/KYUY/cobol/KYUYJP.cbl",
+   "compile": {
+    "status": "other-dialect",
+    "reason": "opensourcecobol4j dialect: GnuCOBOL 3.1 does not take the full-width space U+3000 as a separator",
+    "check_variant": "u3000-to-space",
+    "check_note": "every U+3000 is replaced by a space for the check; the rest compiles as written"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "Ｓ−初期化",
+      "kind": "section",
+      "section": null,
+      "start_line": 25,
+      "end_line": 25,
+      "horror": "H-0041",
+      "span_end": 28
+     },
+     {
+      "name": "初期化１",
+      "kind": "paragraph",
+      "section": "Ｓ−初期化",
+      "start_line": 26,
+      "end_line": 28,
+      "horror": "H-0041"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "開始",
+      "target": "Ｓ−初期化",
+      "line": 23,
+      "horror": "H-0041"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "ＴＥＳＴ−ＤＡＴＡ１",
+      "pic": "X(2)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 12,
+      "horror": "H-0041"
+     },
+     {
+      "level": 1,
+      "name": "ＴＥＳＴ−ＲＥＣＯＲＤ１",
+      "pic": "X(2)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 13,
+      "horror": "H-0041"
+     },
+     {
+      "level": 1,
+      "name": "ＴＥＳＴ－ＤＡＴＡ２",
+      "pic": "X(2)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 14,
+      "horror": "H-0041"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "ＴＥＳＴ−ＤＡＴＡ１",
+      "line": 12,
+      "bytes": 2,
+      "fields": [
+       {
+        "name": "ＴＥＳＴ−ＤＡＴＡ１",
+        "level": 1,
+        "pic": "X(2)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 2,
+        "file": "apps/KYUY/cobol/KYUYJP.cbl"
+       }
+      ],
+      "horror": "H-0041"
+     },
+     {
+      "record": "ＴＥＳＴ−ＲＥＣＯＲＤ１",
+      "line": 13,
+      "bytes": 2,
+      "fields": [
+       {
+        "name": "ＴＥＳＴ−ＲＥＣＯＲＤ１",
+        "level": 1,
+        "pic": "X(2)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 2,
+        "file": "apps/KYUY/cobol/KYUYJP.cbl"
+       }
+      ],
+      "horror": "H-0041"
+     },
+     {
+      "record": "ＴＥＳＴ－ＤＡＴＡ２",
+      "line": 14,
+      "bytes": 2,
+      "fields": [
+       {
+        "name": "ＴＥＳＴ－ＤＡＴＡ２",
+        "level": 1,
+        "pic": "X(2)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 2,
+        "file": "apps/KYUY/cobol/KYUYJP.cbl"
+       }
+      ],
+      "horror": "H-0041"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "SPACE",
+      "source_kind": "figurative",
+      "target": "X項目",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 27,
+      "horror": "H-0041"
+     },
+     {
+      "verb": "MOVE",
+      "source": "'Z'",
+      "source_kind": "literal",
+      "target": "Ｆ０２",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 28,
+      "horror": "H-0041"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

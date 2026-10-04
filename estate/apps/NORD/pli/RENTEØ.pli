@@ -1,0 +1,14 @@
+ /* RENTEØ - RENTEBEREGNING (PL/I).                                  */
+ RENTEØ: PROC OPTIONS(MAIN);
+   DCL SATS_ÅR FIXED DEC(5,2);
+   DCL 1 KUNDE_Ø,
+       2 KONTO_NR     CHAR(10),
+       2 BELØB_ÅR     FIXED DEC(11,2);
+   SATS_ÅR = 2;
+   CALL NULSTIL_Ø;
+   RETURN;
+
+ NULSTIL_Ø: PROC;
+   BELØB_ÅR = 0;
+ END NULSTIL_Ø;
+ END RENTEØ;

@@ -923,6 +923,104 @@
      "line": 49
     }
    ],
+   "data_moves": [
+    {
+     "verb": "INITIALIZE",
+     "source": null,
+     "source_kind": null,
+     "target": "WS-COUNTERS",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 57
+    },
+    {
+     "verb": "INITIALIZE",
+     "source": null,
+     "source_kind": null,
+     "target": "WS-ACCOUNT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 57
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-POST-CNT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 68
+    },
+    {
+     "verb": "SUBTRACT",
+     "source": "TRAN-AMOUNT",
+     "source_kind": "item",
+     "target": "ACCT-BALANCE OF WS-ACCOUNT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 73
+    },
+    {
+     "verb": "ADD",
+     "source": "TRAN-AMOUNT",
+     "source_kind": "item",
+     "target": "ACCT-BALANCE OF WS-ACCOUNT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 78
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-REJ-CNT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 80
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-READ-CNT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 87
+    },
+    {
+     "verb": "WRITE",
+     "source": "WS-ACCOUNT",
+     "source_kind": "item",
+     "target": "ACCT-OUT-REC",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 90
+    }
+   ],
    "horrors": [
     "H-0003"
    ]
@@ -1372,6 +1470,133 @@
      "line": 29
     }
    ],
+   "data_moves": [
+    {
+     "verb": "WRITE",
+     "source": "WS-RPT-HEAD",
+     "source_kind": "item",
+     "target": "RPT-LINE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 40,
+     "horror": "H-0006"
+    },
+    {
+     "verb": "MOVE",
+     "source": "0",
+     "source_kind": "literal",
+     "target": "WS-I",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 42
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "CNT-READ",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 45,
+     "horror": "H-0006"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "CNT-WRITTEN",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 48,
+     "horror": "H-0006"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-J",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 51,
+     "horror": "H-0006"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-I",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 53
+    },
+    {
+     "verb": "ADD",
+     "source": "WS-HIST-AMT",
+     "source_kind": "item",
+     "target": "TOT-DEBITS",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 59,
+     "horror": "H-0002"
+    },
+    {
+     "verb": "MOVE",
+     "source": "0",
+     "source_kind": "literal",
+     "target": "WS-J",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 63
+    },
+    {
+     "verb": "WRITE",
+     "source": "WS-RPT-TOTALS",
+     "source_kind": "item",
+     "target": "RPT-LINE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 66
+    },
+    {
+     "verb": "ADD",
+     "source": "TOT-DEBITS",
+     "source_kind": "item",
+     "target": "TOT-CREDITS",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 68
+    }
+   ],
    "phantoms": [
     {
      "channel": "edges",
@@ -1684,6 +1909,68 @@
      "kind": "call",
      "target": "apps/ACCT/cobol/ACCTAUD.cbl",
      "horror": "H-0001"
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "'ACCTUPD STARTED'",
+     "source_kind": "literal",
+     "target": "WS-MSG",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 33
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "UPD-COUNT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 36
+    },
+    {
+     "verb": "MOVE",
+     "source": "'Y'",
+     "source_kind": "literal",
+     "target": "UPD-FLAG",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 37
+    },
+    {
+     "verb": "MOVE",
+     "source": "'ACCTUPD ENDED'",
+     "source_kind": "literal",
+     "target": "WS-MSG",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 39
+    },
+    {
+     "verb": "MOVE",
+     "source": "16",
+     "source_kind": "literal",
+     "target": "RETURN-CODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 43
     }
    ],
    "phantoms": [

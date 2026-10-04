@@ -1,7 +1,7 @@
 {
  "format": "estate-crucible-key/1",
  "generator": {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "seed": 1,
   "size": "small"
  },
@@ -51,6 +51,26 @@
    "id": "CLMS",
    "title": "Claims (PL/I with a COBOL routine)",
    "style": "PL/I external procedure with internal procedures"
+  },
+  {
+   "id": "NORD",
+   "title": "Danish interest run (EBCDIC cp277)",
+   "style": "raw EBCDIC cp277: programs FB80, copybooks NEL; UTF-8 job and PL/I; Æ Ø Å names"
+  },
+  {
+   "id": "DEUT",
+   "title": "German interest calculation (EBCDIC cp273, decimal comma)",
+   "style": "raw EBCDIC cp273: program NEL, copybook FB80; DECIMAL-POINT IS COMMA"
+  },
+  {
+   "id": "KYUY",
+   "title": "Japanese payroll (cp930, cp939, Shift-JIS, UTF-8)",
+   "style": "DBCS: SO/SI in EBCDIC, Shift-JIS and UTF-8 members; Japanese and full-width names"
+  },
+  {
+   "id": "GULF",
+   "title": "Arabic account inquiry (EBCDIC cp420 BMS)",
+   "style": "BMS in cp420 with visual-order Arabic; program and symbolic map in cp037 FB80"
   }
  ],
  "channels": [
@@ -72,29 +92,43 @@
   "jcl_datasets",
   "file_control",
   "entry_points",
-  "file_edges"
+  "file_edges",
+  "data_moves"
  ],
  "fact_totals": {
-  "programs": 20,
-  "units": 72,
-  "edges": 56,
-  "call_sites": 23,
-  "copies": 30,
-  "data_items": 273,
-  "layouts": 63,
+  "programs": 28,
+  "units": 88,
+  "edges": 61,
+  "call_sites": 24,
+  "copies": 35,
+  "data_items": 337,
+  "layouts": 87,
   "sql_statements": 5,
   "sql_tables": 2,
-  "jcl_steps": 13,
-  "jcl_dds": 25,
-  "screen_fields": 10,
+  "jcl_steps": 14,
+  "jcl_dds": 27,
+  "screen_fields": 16,
   "csd_resources": 10,
   "transactions": 3,
-  "cics_resources": 6,
-  "jcl_datasets": 18,
+  "cics_resources": 7,
+  "jcl_datasets": 20,
   "file_control": 7,
-  "entry_points": 20,
-  "file_edges": 13,
-  "phantoms": 32
+  "entry_points": 28,
+  "file_edges": 14,
+  "data_moves": 90,
+  "phantoms": 37
+ },
+ "code_pages": {
+  "apps/DEUT/cobol/ZINSBER.cbl": "cp273",
+  "apps/DEUT/copybook/ZINSSATZ.cpy": "cp273",
+  "apps/GULF/bms/GULFMS.bms": "cp420",
+  "apps/GULF/cobol/GULFINQ.cbl": "cp037",
+  "apps/GULF/copybook/GULFMS.cpy": "cp037",
+  "apps/KYUY/cobol/KYUYO01.cbl": "cp930",
+  "apps/KYUY/cobol/KYUYO02.cbl": "shift_jis",
+  "apps/KYUY/copybook/SHAINREC.cpy": "cp939",
+  "apps/NORD/cobol/KØBREG.cbl": "cp277",
+  "apps/NORD/copybook/KUNDEÅ.cpy": "cp277"
  },
  "horrors": [
   "H-0001",
@@ -130,7 +164,22 @@
   "H-0031",
   "H-0032",
   "H-0033",
-  "H-0034"
+  "H-0034",
+  "H-0035",
+  "H-0036",
+  "H-0037",
+  "H-0038",
+  "H-0039",
+  "H-0040",
+  "H-0041",
+  "H-0042",
+  "H-0043",
+  "H-0044",
+  "H-0045",
+  "H-0046",
+  "H-0047",
+  "H-0048",
+  "H-0049"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -138,6 +187,9 @@
    "library": "cobol",
    "language": "cobol",
    "sha256": "5f0101ea5ee51993af079fd38fcf805c852f2d8f32832673d442cfbf7ea7050f",
+   "bytes": 543,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/ACCT.json",
    "compile": {
     "status": "compiled"
@@ -148,6 +200,9 @@
    "library": "cobol",
    "language": "cobol",
    "sha256": "99c4a31b75a2f9c24a271907360b825bae4fcb65d9705396ab575d114a4a8724",
+   "bytes": 3798,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/ACCT.json",
    "compile": {
     "status": "compiled"
@@ -161,6 +216,9 @@
    "library": "cobol",
    "language": "cobol",
    "sha256": "0b06335f3a2dc5a9f6527cdf4a3fb6e7abbfc04d1f09c74ae159286beed1b16d",
+   "bytes": 2474,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/ACCT.json",
    "compile": {
     "status": "compiled"
@@ -176,6 +234,9 @@
    "library": "cobol",
    "language": "cobol",
    "sha256": "06e18d888dfb109fd3285bce336ed9014973afa730331cd0d621467b973ffca3",
+   "bytes": 1485,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/ACCT.json",
    "compile": {
     "status": "compiled"
@@ -190,6 +251,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "24ca9b424501e1afb361ff2d6136378b5c4e6ac4405c37082e5511bec9105d94",
+   "bytes": 823,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/ACCT.json",
    "compile": {
     "status": "copybook"
@@ -200,6 +264,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "52cad74eac0073f5cfa2e00ff038fc7b0b271d973cb45b508debee3e13f05858",
+   "bytes": 148,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/ACCT.json",
    "compile": {
     "status": "copybook"
@@ -210,6 +277,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "4e1fd43fb14047a352d63777327832078c5ad32412e353ad7c4d5b02038a3b1d",
+   "bytes": 271,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/ACCT.json",
    "compile": {
     "status": "copybook"
@@ -220,6 +290,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "3290b129d605d8515fccf841df907f24d5e4cfdf58159b537549ae8521cdc6fe",
+   "bytes": 159,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/ACCT.json",
    "compile": {
     "status": "copybook"
@@ -230,6 +303,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "17a3a1e5db14ce6493bcf5ce02bee700fab3f988d93a5e379bb346be3b316f49",
+   "bytes": 452,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/ACCT.json",
    "compile": {
     "status": "copybook"
@@ -240,6 +316,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "46f72990c1135424f58918e0799961ca8a035b7288b741549211fdf5bd46fbde",
+   "bytes": 246,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/ACCT.json",
    "compile": {
     "status": "copybook"
@@ -250,6 +329,9 @@
    "library": "jcl",
    "language": "jcl",
    "sha256": "28fa24984e56998a7720640687a300786349ec6ceef2410aefaefa9711b0bf27",
+   "bytes": 568,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/ACCT.json",
    "compile": {
     "status": "not-cobol"
@@ -260,6 +342,9 @@
    "library": "proclib",
    "language": "jcl",
    "sha256": "d31cb63e312b0bf98a408773f404db2d3614afdea08287fa6bff869a10f7abea",
+   "bytes": 306,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/ACCT.json",
    "compile": {
     "status": "not-cobol"
@@ -273,6 +358,9 @@
    "library": "cobol",
    "language": "cobol",
    "sha256": "2082503192749d270cefd9578b0284dc9ed39862b2b7edae43df4c0a318c0ffd",
+   "bytes": 2335,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/BILL.json",
    "compile": {
     "status": "compiled"
@@ -289,6 +377,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "800cb1841dbb97fcada3df78a00368df527002a2f0efe2abece01ed155ad806d",
+   "bytes": 739,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/BILL.json",
    "compile": {
     "status": "copybook"
@@ -302,6 +393,9 @@
    "library": "jcl",
    "language": "jcl",
    "sha256": "398fef8311dcf6041036d1b696ba80b3abc963ba1f26413c9ab36fdfc6d67b82",
+   "bytes": 394,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/BILL.json",
    "compile": {
     "status": "not-cobol"
@@ -315,6 +409,9 @@
    "library": "cobol",
    "language": "cobol",
    "sha256": "439c38bc94ac5fc7b8cfae1e2246e14946858a6b1902487299862b9488c54791",
+   "bytes": 682,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/CLMS.json",
    "compile": {
     "status": "compiled"
@@ -325,6 +422,9 @@
    "library": "pli",
    "language": "pli",
    "sha256": "aebcfb273aed4348dd08d3f3b3deeb6443ab6775891450ea32a53d7508157687",
+   "bytes": 710,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/CLMS.json",
    "compile": {
     "status": "ibm-only",
@@ -339,6 +439,9 @@
    "library": "bms",
    "language": "bms",
    "sha256": "306497f8c10e1a765d1988d6dc8c0ade28f279bbf5a0ef2198d12570dd9986f5",
+   "bytes": 892,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/CUST.json",
    "compile": {
     "status": "not-cobol"
@@ -349,6 +452,9 @@
    "library": "cobol",
    "language": "cobol",
    "sha256": "2dcba0989c0e3e6370d265c210055a031ce5983ee35dc9a2d8d7631d0e271c48",
+   "bytes": 1666,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/CUST.json",
    "compile": {
     "status": "compiled-stubbed"
@@ -363,6 +469,9 @@
    "library": "cobol",
    "language": "cobol",
    "sha256": "a2cad8762d521a21be56e27854255450dd7412bf4f4479359b1b23b51a76bc67",
+   "bytes": 2604,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/CUST.json",
    "compile": {
     "status": "compiled-stubbed"
@@ -379,6 +488,9 @@
    "library": "cobol",
    "language": "cobol",
    "sha256": "650be8dd6c9bec25e591aa20518bccff41dd76c5379002154aecc28ec6a5050b",
+   "bytes": 644,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/CUST.json",
    "compile": {
     "status": "compiled-stubbed"
@@ -389,6 +501,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "879afdd7a5e6803c21483d38152d01992acbd5b778d66e2c8ddab9da238127a4",
+   "bytes": 207,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/CUST.json",
    "compile": {
     "status": "copybook"
@@ -399,6 +514,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "f5fdabb0b4466e720bf65b38132323dfad564e5371edfd30f781aa905b66af26",
+   "bytes": 1641,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/CUST.json",
    "compile": {
     "status": "copybook"
@@ -410,6 +528,9 @@
    "library": "csd",
    "language": "csd",
    "sha256": "0c192b3d04d1a290721f7eeb4a6173c8d1bd1212c7f6aad110fcd4e4a0cbcb90",
+   "bytes": 357,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/CUST.json",
    "compile": {
     "status": "not-cobol"
@@ -420,6 +541,9 @@
    "library": "dclgen",
    "language": "cobol",
    "sha256": "f431aab3fe2616be38829a704b6b597421e4227a88766a5c62ebc1e41ad3a42c",
+   "bytes": 1420,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/CUST.json",
    "compile": {
     "status": "copybook"
@@ -428,11 +552,47 @@
     "H-0015"
    ]
   },
+  "apps/DEUT/cobol/ZINSBER.cbl": {
+   "app": "DEUT",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "7d6688ee5d9b6bd0df4f488089b88387f98806b460ecdb7821ae3e32d91704ad",
+   "bytes": 1071,
+   "encoding": "cp273",
+   "storage": "nel",
+   "key": "key/apps/DEUT.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0036",
+    "H-0043"
+   ]
+  },
+  "apps/DEUT/copybook/ZINSSATZ.cpy": {
+   "app": "DEUT",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "66e501edb397318c443a4e2ff575612ee3bc90160bc355ec4eefee6c20dea63b",
+   "bytes": 240,
+   "encoding": "cp273",
+   "storage": "fb80",
+   "key": "key/apps/DEUT.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0043"
+   ]
+  },
   "apps/GLED/cobol/GLPOST.cbl": {
    "app": "GLED",
    "library": "cobol",
    "language": "cobol",
    "sha256": "f8cedc1484823f3a0ebd4da9d50b6bd84f37248bae8c061b99162bb60a34dd30",
+   "bytes": 2547,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/GLED.json",
    "compile": {
     "status": "compiled"
@@ -452,16 +612,65 @@
    "library": "jcl",
    "language": "jcl",
    "sha256": "0086ac217bee41e782e6c664d56e22d223af0addd79c93c04448aff6a5b60963",
+   "bytes": 218,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/GLED.json",
    "compile": {
     "status": "not-cobol"
    }
+  },
+  "apps/GULF/bms/GULFMS.bms": {
+   "app": "GULF",
+   "library": "bms",
+   "language": "bms",
+   "sha256": "e7f241a5ca58779c7636eb442b1f43d1e278db6db063e3bc69d407a40c9f5bcd",
+   "bytes": 496,
+   "encoding": "cp420",
+   "storage": "nel",
+   "key": "key/apps/GULF.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0045"
+   ]
+  },
+  "apps/GULF/cobol/GULFINQ.cbl": {
+   "app": "GULF",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "0551c0aa102af26b014cb1d0994d1d1a4c399ed3a48c92e6cc731a50b4411d13",
+   "bytes": 1280,
+   "encoding": "cp037",
+   "storage": "fb80",
+   "key": "key/apps/GULF.json",
+   "compile": {
+    "status": "compiled-stubbed"
+   }
+  },
+  "apps/GULF/copybook/GULFMS.cpy": {
+   "app": "GULF",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "7a7f5c67eb5a81f2b1e9db8703951d8f9aa2fdd85f73903ce90e8b85ec67b7dc",
+   "bytes": 1520,
+   "encoding": "cp037",
+   "storage": "fb80",
+   "key": "key/apps/GULF.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "generated_from": "apps/GULF/bms/GULFMS.bms"
   },
   "apps/INVN/cobol/INVDB.cbl": {
    "app": "INVN",
    "library": "cobol",
    "language": "cobol",
    "sha256": "39772de2e5dfea1b72c50dda1083044de1938dd856c856c345edd167348e2b79",
+   "bytes": 968,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/INVN.json",
    "compile": {
     "status": "compiled-stubbed"
@@ -475,6 +684,9 @@
    "library": "cobol",
    "language": "cobol",
    "sha256": "6b570db10022b0e6eab07176d2827efdf85a6987245fbfbee7efaef4c3229a80",
+   "bytes": 1622,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/INVN.json",
    "compile": {
     "status": "compiled-stubbed"
@@ -491,6 +703,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "ce073991f40900024446b9c22c3a4ff8c2c8ba8a1b1461a813f0d954b0f2014b",
+   "bytes": 256,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/INVN.json",
    "compile": {
     "status": "copybook"
@@ -501,6 +716,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "0855cdd81842d8f36c756f767bccf1c79479712b3020d39657aa6e867021d009",
+   "bytes": 3140,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/INVN.json",
    "compile": {
     "status": "copybook"
@@ -514,6 +732,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "eb199f55f732891c81450b82169a4dd40f53bb499640e3b0a7ac24f028f021ea",
+   "bytes": 181,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/INVN.json",
    "compile": {
     "status": "copybook"
@@ -524,6 +745,9 @@
    "library": "csd",
    "language": "csd",
    "sha256": "ed5efa232a195eef314844ead738486511451ac9ec2750a340124b452705790b",
+   "bytes": 251,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/INVN.json",
    "compile": {
     "status": "not-cobol"
@@ -534,6 +758,9 @@
    "library": "dclgen",
    "language": "cobol",
    "sha256": "50e06afd57e86d112782cb4bfea855ae3467c68026b2084e597a8fa80966ca2d",
+   "bytes": 1218,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/INVN.json",
    "compile": {
     "status": "copybook"
@@ -547,16 +774,110 @@
    "library": "jcl",
    "language": "jcl",
    "sha256": "6ff0009863c9392e303d261f96ef47dcb817128407fcbfdd100365f21d18c713",
+   "bytes": 177,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/INVN.json",
    "compile": {
     "status": "not-cobol"
    }
+  },
+  "apps/KYUY/cobol/KYUYJP.cbl": {
+   "app": "KYUY",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "6de82cd166a28567ab16ce1ec52d17ebb1f2acd5975329610dc348d1444e3470",
+   "bytes": 1134,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/KYUY.json",
+   "compile": {
+    "status": "other-dialect",
+    "reason": "opensourcecobol4j dialect: GnuCOBOL 3.1 does not take the full-width space U+3000 as a separator",
+    "check_variant": "u3000-to-space",
+    "check_note": "every U+3000 is replaced by a space for the check; the rest compiles as written"
+   },
+   "horrors": [
+    "H-0038",
+    "H-0040",
+    "H-0041"
+   ]
+  },
+  "apps/KYUY/cobol/KYUYO01.cbl": {
+   "app": "KYUY",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "58345c89f160b8de6b5f7003717d6b413b10c66a92a1398d7a756cb1424ac1c5",
+   "bytes": 1760,
+   "encoding": "cp930",
+   "storage": "fb80",
+   "key": "key/apps/KYUY.json",
+   "compile": {
+    "status": "ibm-only",
+    "reason": "PIC G / G'...' (DBCS, USAGE DISPLAY-1): GnuCOBOL 3.1 has no DBCS category",
+    "check_variant": "pic-g-to-n",
+    "check_note": "PIC G and G'...' become PIC N and N'...' for the check (same 2-byte width)"
+   },
+   "horrors": [
+    "H-0042"
+   ]
+  },
+  "apps/KYUY/cobol/KYUYO02.cbl": {
+   "app": "KYUY",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "15fea260d7a134a021332a70a046f4e167a5e531ba122c9cc9731c5c55ebe03a",
+   "bytes": 591,
+   "encoding": "shift_jis",
+   "storage": "lf",
+   "key": "key/apps/KYUY.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0046"
+   ]
+  },
+  "apps/KYUY/copybook/KYUYCPY.cpy": {
+   "app": "KYUY",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "572f3d4ce965792479728fde3d8268b57699d201fec573daa909e451adebdb2c",
+   "bytes": 161,
+   "encoding": "utf-8-sig",
+   "storage": "lf",
+   "key": "key/apps/KYUY.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0038"
+   ]
+  },
+  "apps/KYUY/copybook/SHAINREC.cpy": {
+   "app": "KYUY",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "0b0cca91df032eaa29bb70c1cbfd6e3f0436a6bfd4b9a47a5749a28201121300",
+   "bytes": 238,
+   "encoding": "cp939",
+   "storage": "nel",
+   "key": "key/apps/KYUY.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0042"
+   ]
   },
   "apps/LOAN/cobol/LNCALC.cbl": {
    "app": "LOAN",
    "library": "cobol",
    "language": "cobol",
    "sha256": "772ac748a40ac4afea419dce3e2b9bad7e31f2ff73a1836087d41194b27083ec",
+   "bytes": 671,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/LOAN.json",
    "compile": {
     "status": "ibm-only",
@@ -573,6 +894,9 @@
    "library": "cobol",
    "language": "cobol",
    "sha256": "9d45a4651566f1368592d0e5df747014d3caedb19b273853a784ed272135103b",
+   "bytes": 1095,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/LOAN.json",
    "compile": {
     "status": "ibm-only",
@@ -587,6 +911,9 @@
    "library": "cobol",
    "language": "cobol",
    "sha256": "72e6561adb5dadf60470f6ef7b126550895f1ce44be279f3d0e3f5dd5b332324",
+   "bytes": 1101,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/LOAN.json",
    "compile": {
     "status": "ibm-only",
@@ -603,6 +930,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "5cb00c840b3185e3ec0e0dd8f4e35b295b184b50ba73f1eaee5408c5573d4432",
+   "bytes": 325,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/LOAN.json",
    "compile": {
     "status": "copybook"
@@ -613,6 +943,9 @@
    "library": "jcl",
    "language": "jcl",
    "sha256": "50cd75b334dc8b51844f9c24f4be505000ea2024b4a90d54055a7a55018842bd",
+   "bytes": 277,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/LOAN.json",
    "compile": {
     "status": "not-cobol"
@@ -623,6 +956,9 @@
    "library": "cobol",
    "language": "cobol",
    "sha256": "980bb2dd532a02c4a148778d162be4497b471d5b0b0eb9622f8a36d313cd7e05",
+   "bytes": 826,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/MODN.json",
    "compile": {
     "status": "compiled"
@@ -631,11 +967,101 @@
     "H-0028"
    ]
   },
+  "apps/NORD/cobol/KØBREG.cbl": {
+   "app": "NORD",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "f9e615d9d6c025c22a890904b8187e9489ea67dca0e1cc85edae55c93f1332c7",
+   "bytes": 2320,
+   "encoding": "cp277",
+   "storage": "fb80",
+   "key": "key/apps/NORD.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0035",
+    "H-0039",
+    "H-0044",
+    "H-0047",
+    "H-0048",
+    "H-0049"
+   ]
+  },
+  "apps/NORD/copybook/KUNDEÅ.cpy": {
+   "app": "NORD",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "797b503fd6d1f431a362310ab9ff0738be028b227f122daa4a4cd933d140b62f",
+   "bytes": 313,
+   "encoding": "cp277",
+   "storage": "nel",
+   "key": "key/apps/NORD.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0039"
+   ]
+  },
+  "apps/NORD/jcl/KØBDAG.jcl": {
+   "app": "NORD",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "dc0c3ba56a144c68f873910522ad80ccefa0b29997d7788dd2559b8ab387b6dc",
+   "bytes": 214,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/NORD.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0039"
+   ]
+  },
+  "apps/NORD/pli/NULREST.pli": {
+   "app": "NORD",
+   "library": "pli",
+   "language": "pli",
+   "sha256": "73c1588942ca548ff146f282475e908bf2c178b9b9fb91a3cbee4316bc4e8e53",
+   "bytes": 168,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/NORD.json",
+   "compile": {
+    "status": "ibm-only",
+    "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"
+   },
+   "horrors": [
+    "H-0037"
+   ]
+  },
+  "apps/NORD/pli/RENTEØ.pli": {
+   "app": "NORD",
+   "library": "pli",
+   "language": "pli",
+   "sha256": "0d54d73311eb8e093b6785f632ccfc01b98274168d6403726aaa53fe14d716fc",
+   "bytes": 345,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/NORD.json",
+   "compile": {
+    "status": "ibm-only",
+    "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"
+   },
+   "horrors": [
+    "H-0039"
+   ]
+  },
   "apps/PAYR/cobol/PAYMAIN.cbl": {
    "app": "PAYR",
    "library": "cobol",
    "language": "cobol",
    "sha256": "f22f2316dfac3f6f632eb153867329a5df680919221232d3c38eba36b5ef88d5",
+   "bytes": 2592,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/PAYR.json",
    "compile": {
     "status": "compiled"
@@ -655,6 +1081,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "ebb45b487161a33c06a97a5c3546544109d81685522718ef551d7c29c9c7a25b",
+   "bytes": 156,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/PAYR.json",
    "compile": {
     "status": "copybook"
@@ -668,6 +1097,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "ea3c08a1bfed22de33ce75391689e9365cf047bd9b03252366b1178b0e02b368",
+   "bytes": 180,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/PAYR.json",
    "compile": {
     "status": "copybook"
@@ -678,6 +1110,9 @@
    "library": "copybook",
    "language": "cobol",
    "sha256": "d391481f5f0a899a73ee0cc8c9333dcfd7b8933c7dfd839bf62240000d1601e2",
+   "bytes": 223,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/PAYR.json",
    "compile": {
     "status": "copybook"
@@ -691,6 +1126,9 @@
    "library": "jcl",
    "language": "jcl",
    "sha256": "906268cf51003735c10d87ae8c36abeb58cf0e9e5ed99a060ee3c5d3b1e0377d",
+   "bytes": 277,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/PAYR.json",
    "compile": {
     "status": "not-cobol"
@@ -704,6 +1142,9 @@
    "library": "copylib",
    "language": "cobol",
    "sha256": "672ba096646e2330f2dcd8ed60ae0818f3d9bab101b10e6c13bbdd8a0b8a4edd",
+   "bytes": 359,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/_shared.json",
    "compile": {
     "status": "copybook"
@@ -714,6 +1155,9 @@
    "library": "proclib",
    "language": "jcl",
    "sha256": "357da79fe68164c22caab5375cff437cb6cb649ddcca2e193dadbfaea4248b80",
+   "bytes": 195,
+   "encoding": "utf-8",
+   "storage": "lf",
    "key": "key/apps/_shared.json",
    "compile": {
     "status": "not-cobol"

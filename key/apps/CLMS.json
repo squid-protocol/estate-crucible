@@ -123,6 +123,20 @@
      ],
      "line": 13
     }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "'R'",
+     "source_kind": "literal",
+     "target": "LK-CLM-STATUS",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 16
+    }
    ]
   },
   "apps/CLMS/pli/CLMPROC.pli": {
@@ -300,6 +314,45 @@
     {
      "kind": "call",
      "target": "apps/CLMS/cobol/CLMEDIT.cbl"
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "ASSIGN",
+     "source": "''",
+     "source_kind": "literal",
+     "target": "CLM_ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 15
+    },
+    {
+     "verb": "ASSIGN",
+     "source": "0",
+     "source_kind": "literal",
+     "target": "CLM_AMT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 16
+    },
+    {
+     "verb": "ASSIGN",
+     "source": "'A'",
+     "source_kind": "literal",
+     "target": "CLM_STATUS",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 21,
+     "horror": "H-0002"
     }
    ],
    "horrors": [

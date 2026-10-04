@@ -73,6 +73,34 @@
       "line": 28,
       "horror": "H-0007"
      }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "WS-LOAN-KEY",
+      "source_kind": "item",
+      "target": "LOAN-ID",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 25,
+      "horror": "H-0007"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-NOT-FOUND-CNT",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 31,
+      "horror": "H-0007"
+     }
     ]
    },
    "phantoms": [
@@ -92,6 +120,24 @@
      "channel": "units",
      "name": "SCHEMA",
      "why": "the IDMS SCHEMA SECTION of the DATA DIVISION, not a procedure",
+     "horror": "H-0007"
+    },
+    {
+     "channel": "data_moves",
+     "target": "OBTAIN",
+     "why": "OBTAIN CALC LOAN is an IDMS DML statement, not more MOVE receivers",
+     "horror": "H-0007"
+    },
+    {
+     "channel": "data_moves",
+     "target": "CALC",
+     "why": "OBTAIN CALC LOAN is an IDMS DML statement, not more MOVE receivers",
+     "horror": "H-0007"
+    },
+    {
+     "channel": "data_moves",
+     "target": "LOAN",
+     "why": "OBTAIN CALC LOAN is an IDMS DML statement, not more MOVE receivers",
      "horror": "H-0007"
     }
    ]

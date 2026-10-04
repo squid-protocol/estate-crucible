@@ -1,0 +1,167 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0038",
+ "title": "The full-width space U+3000 as a separator",
+ "category": "national",
+ "issue": 3956,
+ "defect": "D030",
+ "shapes": [
+  "01　Ｆ０２　PIC　X. (KYUYJP)",
+  "DATA　DIVISION.",
+  "COPY　KYUYCPY. (a copybook stored as UTF-8 with a BOM)"
+ ],
+ "asserts": "A full-width space separates words exactly as a space does: the entry, its picture, the division header and the COPY are read.",
+ "citations": [
+  {
+   "doc": "opensourcecobol4j test suite, as recorded in gitgalaxy#3956",
+   "section": "tests/jp-compat mb-space.at",
+   "url": "https://github.com/squid-protocol/gitgalaxy/issues/3956",
+   "quote": "opensourcecobol4j / opensource COBOL do so: `mb-space.at` tests \"Zenkaku SPC delims in headings / record def / COPY stmt\" and expects them to compile and run."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Figurative constants: SPACE (p.42)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The EBCDIC DBCS space character has the value X'4040', the national space character has the value NX'0020', and the UTF-8 space character has the value UX'20'."
+  }
+ ],
+ "lower_confidence": "Not IBM: Enterprise COBOL separates words with single-byte spaces. The member stands for opensourcecobol4j code; the dialect's rule is evidenced by its own test suite (via #3956), not by a language reference.",
+ "planted": [
+  {
+   "member": "apps/KYUY/cobol/KYUYJP.cbl",
+   "compile": {
+    "status": "other-dialect",
+    "reason": "opensourcecobol4j dialect: GnuCOBOL 3.1 does not take the full-width space U+3000 as a separator",
+    "check_variant": "u3000-to-space",
+    "check_note": "every U+3000 is replaced by a space for the check; the rest compiles as written"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "KYUYCPY",
+      "kind": "copy",
+      "line": 16,
+      "resolves_to": "apps/KYUY/copybook/KYUYCPY.cpy",
+      "horror": "H-0038"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "Ｆ０２",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 8,
+      "horror": "H-0038"
+     },
+     {
+      "level": 1,
+      "name": "WS-KYUY",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 15,
+      "copy_members": [
+       "KYUYCPY"
+      ],
+      "horror": "H-0038",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "layouts": [
+     {
+      "record": "Ｆ０２",
+      "line": 8,
+      "bytes": 1,
+      "fields": [
+       {
+        "name": "Ｆ０２",
+        "level": 1,
+        "pic": "X",
+        "usage": null,
+        "offset": 0,
+        "bytes": 1,
+        "file": "apps/KYUY/cobol/KYUYJP.cbl"
+       }
+      ],
+      "horror": "H-0038"
+     },
+     {
+      "record": "WS-KYUY",
+      "line": 15,
+      "bytes": 12,
+      "fields": [
+       {
+        "name": "共通コード",
+        "level": 5,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/KYUY/copybook/KYUYCPY.cpy"
+       },
+       {
+        "name": "共通日付",
+        "level": 5,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 4,
+        "bytes": 8,
+        "file": "apps/KYUY/copybook/KYUYCPY.cpy"
+       }
+      ],
+      "horror": "H-0038",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/KYUY/copybook/KYUYCPY.cpy",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 5,
+      "name": "共通コード",
+      "pic": "X(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 2,
+      "horror": "H-0038"
+     },
+     {
+      "level": 5,
+      "name": "共通日付",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 3,
+      "horror": "H-0038"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

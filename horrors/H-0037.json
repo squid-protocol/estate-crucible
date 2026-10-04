@@ -1,0 +1,89 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0037",
+ "title": "Stray NUL bytes in a source member (a transfer artifact)",
+ "category": "encoding",
+ "issue": 3534,
+ "defect": "D016",
+ "shapes": [
+  "two NUL bytes at the end of NULREST's first comment (PL/I, UTF-8)"
+ ],
+ "asserts": "The member is source, not binary: its procedure, data items and entry point are facts.",
+ "citations": [
+  {
+   "doc": "Enterprise PL/I for z/OS 6.1 Language Reference (SC31-5716-00)",
+   "section": "Comments",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/c3157160.pdf",
+   "quote": "Comments are allowed wherever blanks are allowed"
+  }
+ ],
+ "lower_confidence": "The PL/I quote says where a comment may stand, not which bytes it may hold; that a compiler takes NULs inside a comment is the ledger's evidence (DSF's programs compile with them).",
+ "planted": [
+  {
+   "member": "apps/NORD/pli/NULREST.pli",
+   "compile": {
+    "status": "ibm-only",
+    "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "NULREST",
+      "line": 2,
+      "horror": "H-0037"
+     }
+    ],
+    "units": [
+     {
+      "name": "NULREST",
+      "kind": "procedure",
+      "section": null,
+      "start_line": 2,
+      "end_line": 5,
+      "horror": "H-0037",
+      "span_end": 6
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "REST",
+      "pic": null,
+      "usage": "FIXED DEC(9,2)",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 3,
+      "horror": "H-0037"
+     }
+    ],
+    "entry_points": [
+     {
+      "kind": "PROCEDURE",
+      "program": "NULREST",
+      "params": [],
+      "line": 2,
+      "horror": "H-0037"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "ASSIGN",
+      "source": "0",
+      "source_kind": "literal",
+      "target": "REST",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 4,
+      "horror": "H-0037"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

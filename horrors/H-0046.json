@@ -1,0 +1,162 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0046",
+ "title": "A member downloaded to a PC in Shift-JIS",
+ "category": "encoding",
+ "issue": 3878,
+ "shapes": [
+  "KYUYO02: Shift-JIS, LF line ends; DBCS names and a mixed literal"
+ ],
+ "asserts": "Decoded as Shift-JIS, the member's facts are those of its text; no line straddles column 72 in its own bytes.",
+ "citations": [
+  {
+   "doc": "IBM i 7.5 Globalization",
+   "section": "CCSID values defined on IBM i",
+   "url": "https://www.ibm.com/docs/en/i/7.5.0?topic=information-ccsid-values-defined-i",
+   "quote": "00943: Japanese PC Data Mixed for Open environment (Multi-vendor code)"
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/KYUY/cobol/KYUYO02.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "KYUYO02",
+      "line": 2,
+      "horror": "H-0046"
+     }
+    ],
+    "units": [
+     {
+      "name": "賞与処理",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 12,
+      "end_line": 15,
+      "horror": "H-0046"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "賞与額",
+      "pic": "9(7)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "0",
+      "section": "WORKING-STORAGE",
+      "line": 8,
+      "horror": "H-0046"
+     },
+     {
+      "level": 1,
+      "name": "表題",
+      "pic": "X(16)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'賞与明細'",
+      "section": "WORKING-STORAGE",
+      "line": 9,
+      "horror": "H-0046"
+     },
+     {
+      "level": 1,
+      "name": "WS-END",
+      "pic": "S9(4)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 10,
+      "horror": "H-0046"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "賞与額",
+      "line": 8,
+      "bytes": 7,
+      "fields": [
+       {
+        "name": "賞与額",
+        "level": 1,
+        "pic": "9(7)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 7,
+        "file": "apps/KYUY/cobol/KYUYO02.cbl"
+       }
+      ],
+      "horror": "H-0046"
+     },
+     {
+      "record": "表題",
+      "line": 9,
+      "bytes": 16,
+      "fields": [
+       {
+        "name": "表題",
+        "level": 1,
+        "pic": "X(16)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 16,
+        "file": "apps/KYUY/cobol/KYUYO02.cbl"
+       }
+      ],
+      "horror": "H-0046"
+     },
+     {
+      "record": "WS-END",
+      "line": 10,
+      "bytes": 2,
+      "fields": [
+       {
+        "name": "WS-END",
+        "level": 1,
+        "pic": "S9(4)",
+        "usage": "COMP",
+        "offset": 0,
+        "bytes": 2,
+        "file": "apps/KYUY/cobol/KYUYO02.cbl"
+       }
+      ],
+      "horror": "H-0046"
+     }
+    ],
+    "entry_points": [
+     {
+      "kind": "PROCEDURE",
+      "program": "KYUYO02",
+      "params": [],
+      "line": 11,
+      "horror": "H-0046"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "ADD",
+      "source": "1000",
+      "source_kind": "literal",
+      "target": "賞与額",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 13,
+      "horror": "H-0046"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

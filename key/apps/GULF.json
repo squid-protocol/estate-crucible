@@ -1,0 +1,379 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "GULF",
+ "members": {
+  "apps/GULF/bms/GULFMS.bms": {
+   "app": "GULF",
+   "library": "bms",
+   "language": "bms",
+   "numbered": false,
+   "lines": 10,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "encoding": "cp420",
+   "storage": "nel",
+   "screen_fields": [
+    {
+     "kind": "mapset",
+     "mapset": "GULFMS",
+     "map": null,
+     "name": "GULFMS",
+     "line": 1,
+     "horror": "H-0045"
+    },
+    {
+     "kind": "map",
+     "mapset": "GULFMS",
+     "map": "GULFMAP",
+     "name": "GULFMAP",
+     "line": 3,
+     "horror": "H-0045"
+    },
+    {
+     "kind": "field",
+     "mapset": "GULFMS",
+     "map": "GULFMAP",
+     "name": null,
+     "pos_line": 2,
+     "pos_column": 60,
+     "length": 10,
+     "attrb": "ASKIP,NORM",
+     "picin": null,
+     "initial": "باسحلا مقر",
+     "line": 4,
+     "horror": "H-0045"
+    },
+    {
+     "kind": "field",
+     "mapset": "GULFMS",
+     "map": "GULFMAP",
+     "name": "ACCTNO",
+     "pos_line": 2,
+     "pos_column": 40,
+     "length": 10,
+     "attrb": "UNPROT,IC",
+     "picin": null,
+     "initial": null,
+     "line": 6,
+     "horror": "H-0045"
+    },
+    {
+     "kind": "field",
+     "mapset": "GULFMS",
+     "map": "GULFMAP",
+     "name": null,
+     "pos_line": 4,
+     "pos_column": 70,
+     "length": 5,
+     "attrb": "ASKIP,NORM",
+     "picin": null,
+     "initial": "مسالا",
+     "line": 7,
+     "horror": "H-0045"
+    },
+    {
+     "kind": "field",
+     "mapset": "GULFMS",
+     "map": "GULFMAP",
+     "name": "CUSTNM",
+     "pos_line": 4,
+     "pos_column": 40,
+     "length": 30,
+     "attrb": "ASKIP,NORM",
+     "picin": null,
+     "initial": null,
+     "line": 8,
+     "horror": "H-0045"
+    }
+   ],
+   "horrors": [
+    "H-0045"
+   ]
+  },
+  "apps/GULF/cobol/GULFINQ.cbl": {
+   "app": "GULF",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 16,
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "encoding": "cp037",
+   "storage": "fb80",
+   "programs": [
+    {
+     "program_id": "GULFINQ",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 11,
+     "end_line": 16
+    }
+   ],
+   "copies": [
+    {
+     "member": "GULFMS",
+     "kind": "copy",
+     "line": 9,
+     "resolves_to": "apps/GULF/copybook/GULFMS.cpy",
+     "alternatives": [
+      "apps/GULF/bms/GULFMS.bms"
+     ]
+    }
+   ],
+   "cics_resources": [
+    {
+     "verb": "SEND",
+     "kind": "MAP",
+     "name": "GULFMAP",
+     "qualifier": "GULFMS",
+     "record": null,
+     "access": "write",
+     "line": 13
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "GULFINQ",
+     "params": [],
+     "line": 10
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "LOW-VALUES",
+     "source_kind": "figurative",
+     "target": "GULFMAPO",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 12
+    }
+   ]
+  },
+  "apps/GULF/copybook/GULFMS.cpy": {
+   "app": "GULF",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 19,
+   "compile": {
+    "status": "copybook"
+   },
+   "encoding": "cp037",
+   "storage": "fb80",
+   "generated_from": "apps/GULF/bms/GULFMS.bms",
+   "data_items": [
+    {
+     "level": 1,
+     "name": "GULFMAPI",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": "X(12)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 2,
+     "name": "ACCTNOL",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4
+    },
+    {
+     "level": 2,
+     "name": "ACCTNOF",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": "ACCTNOF",
+     "value": null,
+     "section": null,
+     "line": 6
+    },
+    {
+     "level": 3,
+     "name": "ACCTNOA",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 7
+    },
+    {
+     "level": 2,
+     "name": "ACCTNOI",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 8
+    },
+    {
+     "level": 2,
+     "name": "CUSTNML",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 9
+    },
+    {
+     "level": 2,
+     "name": "CUSTNMF",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 10
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": "CUSTNMF",
+     "value": null,
+     "section": null,
+     "line": 11
+    },
+    {
+     "level": 3,
+     "name": "CUSTNMA",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 12
+    },
+    {
+     "level": 2,
+     "name": "CUSTNMI",
+     "pic": "X(30)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 13
+    },
+    {
+     "level": 1,
+     "name": "GULFMAPO",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": "GULFMAPI",
+     "value": null,
+     "section": null,
+     "line": 14
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": "X(12)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 15
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": "X(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 16
+    },
+    {
+     "level": 2,
+     "name": "ACCTNOO",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 17
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": "X(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 18
+    },
+    {
+     "level": 2,
+     "name": "CUSTNMO",
+     "pic": "X(30)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 19
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,111 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0045",
+ "title": "A BMS map in EBCDIC cp420 with Arabic text in visual order",
+ "category": "national",
+ "issue": 3987,
+ "shapes": [
+  "GULFMS (cp420, NEL): INITIAL text stored right-to-left as the 3270 shows it"
+ ],
+ "asserts": "The field's INITIAL value is the characters as stored (visual order), decoded with cp420; positions, lengths and attributes are unchanged.",
+ "citations": [
+  {
+   "doc": "IBM i 7.5 Globalization",
+   "section": "CCSID values defined on IBM i",
+   "url": "https://www.ibm.com/docs/en/i/7.5.0?topic=information-ccsid-values-defined-i",
+   "quote": "00420: Arabic-speaking countries"
+  },
+  {
+   "doc": "IBM Host On-Demand",
+   "section": "Help for bidirectional language support",
+   "url": "https://public.dhe.ibm.com/software/rational/web/hod/en/help/bidi.html",
+   "quote": "The Lam-Alef character is traditionally stored as a single character in files tagged with visual CCSID 420."
+  }
+ ],
+ "lower_confidence": "That CCSID 420 host text is held in visual order is evidenced by IBM's emulator documentation, not by the CICS BMS reference.",
+ "planted": [
+  {
+   "member": "apps/GULF/bms/GULFMS.bms",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "screen_fields": [
+     {
+      "kind": "mapset",
+      "mapset": "GULFMS",
+      "map": null,
+      "name": "GULFMS",
+      "line": 1,
+      "horror": "H-0045"
+     },
+     {
+      "kind": "map",
+      "mapset": "GULFMS",
+      "map": "GULFMAP",
+      "name": "GULFMAP",
+      "line": 3,
+      "horror": "H-0045"
+     },
+     {
+      "kind": "field",
+      "mapset": "GULFMS",
+      "map": "GULFMAP",
+      "name": null,
+      "pos_line": 2,
+      "pos_column": 60,
+      "length": 10,
+      "attrb": "ASKIP,NORM",
+      "picin": null,
+      "initial": "باسحلا مقر",
+      "line": 4,
+      "horror": "H-0045"
+     },
+     {
+      "kind": "field",
+      "mapset": "GULFMS",
+      "map": "GULFMAP",
+      "name": "ACCTNO",
+      "pos_line": 2,
+      "pos_column": 40,
+      "length": 10,
+      "attrb": "UNPROT,IC",
+      "picin": null,
+      "initial": null,
+      "line": 6,
+      "horror": "H-0045"
+     },
+     {
+      "kind": "field",
+      "mapset": "GULFMS",
+      "map": "GULFMAP",
+      "name": null,
+      "pos_line": 4,
+      "pos_column": 70,
+      "length": 5,
+      "attrb": "ASKIP,NORM",
+      "picin": null,
+      "initial": "مسالا",
+      "line": 7,
+      "horror": "H-0045"
+     },
+     {
+      "kind": "field",
+      "mapset": "GULFMS",
+      "map": "GULFMAP",
+      "name": "CUSTNM",
+      "pos_line": 4,
+      "pos_column": 40,
+      "length": 30,
+      "attrb": "ASKIP,NORM",
+      "picin": null,
+      "initial": null,
+      "line": 8,
+      "horror": "H-0045"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

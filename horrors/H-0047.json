@@ -1,0 +1,80 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0047",
+ "title": "A data name that starts with END- (END-OF-FILE) as a move target",
+ "category": "data-moves",
+ "issue": null,
+ "defect": "D013",
+ "shapes": [
+  "01 END-OF-FILE PIC X; MOVE 'Y' TO END-OF-FILE (KØBREG)"
+ ],
+ "asserts": "END-OF-FILE is a user-defined word, not an explicit scope terminator: the MOVE is a data move into it.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Explicit scope terminators (p.293)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "An explicit scope terminator marks the end of certain PROCEDURE DIVISION statements."
+  }
+ ],
+ "notes": "The ledger records D013 with no issue of its own (fixed by #3511).",
+ "planted": [
+  {
+   "member": "apps/NORD/cobol/KØBREG.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 1,
+      "name": "END-OF-FILE",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'N'",
+      "section": "WORKING-STORAGE",
+      "line": 12,
+      "horror": "H-0047"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "END-OF-FILE",
+      "line": 12,
+      "bytes": 1,
+      "fields": [
+       {
+        "name": "END-OF-FILE",
+        "level": 1,
+        "pic": "X",
+        "usage": null,
+        "offset": 0,
+        "bytes": 1,
+        "file": "apps/NORD/cobol/KØBREG.cbl"
+       }
+      ],
+      "horror": "H-0047"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "'Y'",
+      "source_kind": "literal",
+      "target": "END-OF-FILE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 22,
+      "horror": "H-0047"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

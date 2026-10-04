@@ -1,0 +1,142 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0035",
+ "title": "Raw EBCDIC members as 80-byte records with no line ends (a binary PDS transfer)",
+ "category": "encoding",
+ "issue": 3816,
+ "shapes": [
+  "KØBREG: cp277 (Denmark / Norway), FB80, the program's every fact keyed as for a UTF-8 member",
+  "GULFINQ and the GULFMS symbolic map: cp037, FB80",
+  "ZINSSATZ: cp273, FB80; KYUYO01: cp930 (mixed DBCS), FB80"
+ ],
+ "asserts": "Told the member's code page (key/manifest.json code_pages), a reader sees the same lines a UTF-8 member would give: record n is line n.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+   "section": "CODEPAGE compiler option (p.353)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+   "quote": "Use CODEPAGE to specify the coded character set identifier (CCSID) for an EBCDIC code page for processing compile-time and runtime COBOL operations that are sensitive to character encoding."
+  },
+  {
+   "doc": "IBM i 7.5 Globalization",
+   "section": "CCSID values defined on IBM i",
+   "url": "https://www.ibm.com/docs/en/i/7.5.0?topic=information-ccsid-values-defined-i",
+   "quote": "00277: Denmark, Norway"
+  }
+ ],
+ "notes": "The scanner is told each member's code page by path (the scorer passes --source-encoding with the manifest's code_pages). Nothing in the bytes says which EBCDIC page they are.",
+ "planted": [
+  {
+   "member": "apps/NORD/cobol/KØBREG.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "0000-HOVED",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 17,
+      "end_line": 25,
+      "horror": "H-0035"
+     },
+     {
+      "name": "BEREGN-RENTE-AAR",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 26,
+      "end_line": 27,
+      "horror": "H-0035"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "0000-HOVED",
+      "target": "BEREGN-RENTE-AAR",
+      "line": 18,
+      "horror": "H-0035"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "RENTE-PCT",
+      "pic": "9V99",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "2.50",
+      "section": "WORKING-STORAGE",
+      "line": 15,
+      "horror": "H-0035",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "layouts": [
+     {
+      "record": "RENTE-PCT",
+      "line": 15,
+      "bytes": 3,
+      "fields": [
+       {
+        "name": "RENTE-PCT",
+        "level": 1,
+        "pic": "9V99",
+        "usage": null,
+        "offset": 0,
+        "bytes": 3,
+        "file": "apps/NORD/cobol/KØBREG.cbl"
+       }
+      ],
+      "horror": "H-0035",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "entry_points": [
+     {
+      "kind": "PROCEDURE",
+      "program": "KØBREG",
+      "params": [],
+      "line": 16,
+      "horror": "H-0035"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "COMPUTE",
+      "source": "BELOEB",
+      "source_kind": "item",
+      "target": "AAR-TIL-DATO",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 27,
+      "horror": "H-0035"
+     },
+     {
+      "verb": "COMPUTE",
+      "source": "RENTE-PCT",
+      "source_kind": "item",
+      "target": "AAR-TIL-DATO",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 27,
+      "horror": "H-0035"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

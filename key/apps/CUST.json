@@ -356,6 +356,44 @@
      "line": 17
     }
    ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "CA-CUST-ID",
+     "source_kind": "item",
+     "target": "CUST-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 19
+    },
+    {
+     "verb": "MOVE",
+     "source": "SQLCODE",
+     "source_kind": "item",
+     "target": "WS-SQLCODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 34
+    },
+    {
+     "verb": "MOVE",
+     "source": "8",
+     "source_kind": "literal",
+     "target": "CA-RETURN-CODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 35
+    }
+   ],
    "phantoms": [
     {
      "channel": "call_sites",
@@ -849,6 +887,95 @@
      "kind": "call",
      "target": "apps/CUST/cobol/CUSTDBIO.cbl",
      "horror": "H-0024"
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "LOW-VALUES",
+     "source_kind": "figurative",
+     "target": "CUSTMAPO",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 24,
+     "horror": "H-0002"
+    },
+    {
+     "verb": "MOVE",
+     "source": "DFHCOMMAREA",
+     "source_kind": "item",
+     "target": "WS-COMMAREA",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 32,
+     "horror": "H-0002"
+    },
+    {
+     "verb": "MOVE",
+     "source": "CUSTIDI",
+     "source_kind": "item",
+     "target": "CA-CUST-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 47
+    },
+    {
+     "verb": "MOVE",
+     "source": "'RETURNING TO MENU'",
+     "source_kind": "literal",
+     "target": "CA-MSG",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 49,
+     "horror": "H-0002"
+    },
+    {
+     "verb": "MOVE",
+     "source": "CA-MSG",
+     "source_kind": "item",
+     "target": "MSGO",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 59
+    },
+    {
+     "verb": "MOVE",
+     "source": "CA-CUST-ID",
+     "source_kind": "item",
+     "target": "CUSTIDO",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 62
+    },
+    {
+     "verb": "MOVE",
+     "source": "SPACES",
+     "source_kind": "figurative",
+     "target": "CA-CUST-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 74
     }
    ],
    "phantoms": [

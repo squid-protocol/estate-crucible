@@ -1,0 +1,98 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0044",
+ "title": "EBCDIC collation: logic that relies on letters sorting before digits",
+ "category": "semantics",
+ "issue": null,
+ "shapes": [
+  "IF SAERLIG-KODE < '0' PERFORM 2000-BOGSTAV-FOER-CIFFER (SAERLIG-KODE is 'A'): taken on z/OS, skipped under ASCII order"
+ ],
+ "asserts": "The comparison and the PERFORM under it are facts like any other; what they mean depends on the collating sequence.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Appendix C: EBCDIC collating sequence",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The EBCDIC collating sequence is the order in which characters are defined in EBCDIC."
+  }
+ ],
+ "notes": "#3988 trap 4. No scanner channel records a collating sequence: this horror's facts are structural, and the trap is for translators (a Java port comparing as Unicode). It is planted so the estate carries it.",
+ "planted": [
+  {
+   "member": "apps/NORD/cobol/KØBREG.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "2000-BOGSTAV-FOER-CIFFER",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 28,
+      "end_line": 29,
+      "horror": "H-0044"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "0000-HOVED",
+      "target": "2000-BOGSTAV-FOER-CIFFER",
+      "line": 20,
+      "horror": "H-0044"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "SAERLIG-KODE",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'A'",
+      "section": "WORKING-STORAGE",
+      "line": 11,
+      "horror": "H-0044"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "SAERLIG-KODE",
+      "line": 11,
+      "bytes": 1,
+      "fields": [
+       {
+        "name": "SAERLIG-KODE",
+        "level": 1,
+        "pic": "X",
+        "usage": null,
+        "offset": 0,
+        "bytes": 1,
+        "file": "apps/NORD/cobol/KØBREG.cbl"
+       }
+      ],
+      "horror": "H-0044"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "'J'",
+      "source_kind": "literal",
+      "target": "SAER-KODE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 29,
+      "horror": "H-0044"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

@@ -273,6 +273,34 @@
      "line": 28
     }
    ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "ZERO",
+     "source_kind": "figurative",
+     "target": "WS-TOTAL",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 36,
+     "horror": "H-0023"
+    },
+    {
+     "verb": "ADD",
+     "source": "JRNL-AMT",
+     "source_kind": "item",
+     "target": "WS-TOTAL",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 46,
+     "horror": "H-0013"
+    }
+   ],
    "phantoms": [
     {
      "channel": "programs",

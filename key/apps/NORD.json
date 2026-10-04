@@ -1,0 +1,768 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "NORD",
+ "members": {
+  "apps/NORD/cobol/KØBREG.cbl": {
+   "app": "NORD",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 29,
+   "compile": {
+    "status": "compiled"
+   },
+   "encoding": "cp277",
+   "storage": "fb80",
+   "programs": [
+    {
+     "program_id": "KØBREG",
+     "line": 2,
+     "horror": "H-0039"
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-HOVED",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 17,
+     "end_line": 25,
+     "horror": "H-0035"
+    },
+    {
+     "name": "BEREGN-RENTE-AAR",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 26,
+     "end_line": 27,
+     "horror": "H-0035"
+    },
+    {
+     "name": "2000-BOGSTAV-FOER-CIFFER",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 28,
+     "end_line": 29,
+     "horror": "H-0044"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-HOVED",
+     "target": "BEREGN-RENTE-AAR",
+     "line": 18,
+     "horror": "H-0035"
+    },
+    {
+     "kind": "perform",
+     "from": "0000-HOVED",
+     "target": "2000-BOGSTAV-FOER-CIFFER",
+     "line": 20,
+     "horror": "H-0044"
+    }
+   ],
+   "copies": [
+    {
+     "member": "KUNDEÅ",
+     "kind": "copy",
+     "line": 10,
+     "resolves_to": "apps/NORD/copybook/KUNDEÅ.cpy",
+     "horror": "H-0039"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "KUNDE-DATA",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 9,
+     "copy_members": [
+      "KUNDEÅ"
+     ],
+     "horror": "H-0039"
+    },
+    {
+     "level": 1,
+     "name": "SAERLIG-KODE",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'A'",
+     "section": "WORKING-STORAGE",
+     "line": 11,
+     "horror": "H-0044"
+    },
+    {
+     "level": 1,
+     "name": "END-OF-FILE",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'N'",
+     "section": "WORKING-STORAGE",
+     "line": 12,
+     "horror": "H-0047"
+    },
+    {
+     "level": 1,
+     "name": "WS-AAR",
+     "pic": "X(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 13,
+     "horror": "H-0048"
+    },
+    {
+     "level": 1,
+     "name": "WS-BUF",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 14,
+     "horror": "H-0049"
+    },
+    {
+     "level": 1,
+     "name": "RENTE-PCT",
+     "pic": "9V99",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "2.50",
+     "section": "WORKING-STORAGE",
+     "line": 15,
+     "horror": "H-0035",
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "KUNDE-DATA",
+     "line": 9,
+     "bytes": 51,
+     "fields": [
+      {
+       "name": "KUNDE-NR",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/NORD/copybook/KUNDEÅ.cpy"
+      },
+      {
+       "name": "KUNDE-NAVN",
+       "level": 5,
+       "pic": "X(30)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 30,
+       "file": "apps/NORD/copybook/KUNDEÅ.cpy"
+      },
+      {
+       "name": "BELOEB",
+       "level": 5,
+       "pic": "S9(9)V99",
+       "usage": "COMP-3",
+       "offset": 38,
+       "bytes": 6,
+       "file": "apps/NORD/copybook/KUNDEÅ.cpy"
+      },
+      {
+       "name": "AAR-TIL-DATO",
+       "level": 5,
+       "pic": "S9(9)V99",
+       "usage": "COMP-3",
+       "offset": 44,
+       "bytes": 6,
+       "file": "apps/NORD/copybook/KUNDEÅ.cpy"
+      },
+      {
+       "name": "SAER-KODE",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 50,
+       "bytes": 1,
+       "file": "apps/NORD/copybook/KUNDEÅ.cpy"
+      }
+     ],
+     "horror": "H-0039"
+    },
+    {
+     "record": "SAERLIG-KODE",
+     "line": 11,
+     "bytes": 1,
+     "fields": [
+      {
+       "name": "SAERLIG-KODE",
+       "level": 1,
+       "pic": "X",
+       "usage": null,
+       "offset": 0,
+       "bytes": 1,
+       "file": "apps/NORD/cobol/KØBREG.cbl"
+      }
+     ],
+     "horror": "H-0044"
+    },
+    {
+     "record": "END-OF-FILE",
+     "line": 12,
+     "bytes": 1,
+     "fields": [
+      {
+       "name": "END-OF-FILE",
+       "level": 1,
+       "pic": "X",
+       "usage": null,
+       "offset": 0,
+       "bytes": 1,
+       "file": "apps/NORD/cobol/KØBREG.cbl"
+      }
+     ],
+     "horror": "H-0047"
+    },
+    {
+     "record": "WS-AAR",
+     "line": 13,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-AAR",
+       "level": 1,
+       "pic": "X(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/NORD/cobol/KØBREG.cbl"
+      }
+     ],
+     "horror": "H-0048"
+    },
+    {
+     "record": "WS-BUF",
+     "line": 14,
+     "bytes": 8,
+     "fields": [
+      {
+       "name": "WS-BUF",
+       "level": 1,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/NORD/cobol/KØBREG.cbl"
+      }
+     ],
+     "horror": "H-0049"
+    },
+    {
+     "record": "RENTE-PCT",
+     "line": 15,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "RENTE-PCT",
+       "level": 1,
+       "pic": "9V99",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/NORD/cobol/KØBREG.cbl"
+      }
+     ],
+     "horror": "H-0035",
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "KØBREG",
+     "params": [],
+     "line": 16,
+     "horror": "H-0035"
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "'Y'",
+     "source_kind": "literal",
+     "target": "END-OF-FILE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 22,
+     "horror": "H-0047"
+    },
+    {
+     "verb": "MOVE",
+     "source": "FUNCTION CURRENT-DATE",
+     "source_kind": "function",
+     "target": "WS-AAR",
+     "corresponding": false,
+     "source_refmod": true,
+     "target_refmod": false,
+     "source_refmod_text": "1:4",
+     "target_refmod_text": null,
+     "line": 23,
+     "horror": "H-0048"
+    },
+    {
+     "verb": "MOVE",
+     "source": "ALL X'00'",
+     "source_kind": "figurative",
+     "target": "WS-BUF",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 24,
+     "horror": "H-0049"
+    },
+    {
+     "verb": "COMPUTE",
+     "source": "BELOEB",
+     "source_kind": "item",
+     "target": "AAR-TIL-DATO",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 27,
+     "horror": "H-0035"
+    },
+    {
+     "verb": "COMPUTE",
+     "source": "RENTE-PCT",
+     "source_kind": "item",
+     "target": "AAR-TIL-DATO",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 27,
+     "horror": "H-0035"
+    },
+    {
+     "verb": "MOVE",
+     "source": "'J'",
+     "source_kind": "literal",
+     "target": "SAER-KODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 29,
+     "horror": "H-0044"
+    }
+   ],
+   "horrors": [
+    "H-0035",
+    "H-0039",
+    "H-0044",
+    "H-0047",
+    "H-0048",
+    "H-0049"
+   ]
+  },
+  "apps/NORD/copybook/KUNDEÅ.cpy": {
+   "app": "NORD",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 6,
+   "compile": {
+    "status": "copybook"
+   },
+   "encoding": "cp277",
+   "storage": "nel",
+   "data_items": [
+    {
+     "level": 5,
+     "name": "KUNDE-NR",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2,
+     "horror": "H-0039"
+    },
+    {
+     "level": 5,
+     "name": "KUNDE-NAVN",
+     "pic": "X(30)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3,
+     "horror": "H-0039"
+    },
+    {
+     "level": 5,
+     "name": "BELOEB",
+     "pic": "S9(9)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4,
+     "horror": "H-0039"
+    },
+    {
+     "level": 5,
+     "name": "AAR-TIL-DATO",
+     "pic": "S9(9)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5,
+     "horror": "H-0039"
+    },
+    {
+     "level": 5,
+     "name": "SAER-KODE",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 6,
+     "horror": "H-0039"
+    }
+   ],
+   "horrors": [
+    "H-0039"
+   ]
+  },
+  "apps/NORD/jcl/KØBDAG.jcl": {
+   "app": "NORD",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 6,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "KØBREG",
+     "target": "KØBREG",
+     "line": 4,
+     "resolves_to": "apps/NORD/cobol/KØBREG.cbl",
+     "horror": "H-0039"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "KØBDAG",
+     "proc": null,
+     "step": "RENTE",
+     "ordinal": 1,
+     "program": "KØBREG",
+     "exec_proc": null,
+     "cond": null,
+     "line": 4,
+     "horror": "H-0039"
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "KØBDAG",
+     "proc": null,
+     "step": "RENTE",
+     "dd": "STEPLIB",
+     "dsn": "PROD.KØB.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 5,
+     "horror": "H-0039"
+    },
+    {
+     "job": "KØBDAG",
+     "proc": null,
+     "step": "RENTE",
+     "dd": "KUNDER",
+     "dsn": "PROD.KØB.KUNDER",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 6,
+     "horror": "H-0039"
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.KØB.LOADLIB",
+     "generation": null,
+     "step": "RENTE",
+     "dd": "STEPLIB",
+     "line": 5,
+     "horror": "H-0039"
+    },
+    {
+     "dsn": "PROD.KØB.KUNDER",
+     "generation": null,
+     "step": "RENTE",
+     "dd": "KUNDER",
+     "line": 6,
+     "horror": "H-0039"
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/NORD/cobol/KØBREG.cbl",
+     "horror": "H-0039"
+    }
+   ],
+   "horrors": [
+    "H-0039"
+   ]
+  },
+  "apps/NORD/pli/NULREST.pli": {
+   "app": "NORD",
+   "library": "pli",
+   "language": "pli",
+   "numbered": false,
+   "lines": 6,
+   "compile": {
+    "status": "ibm-only",
+    "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"
+   },
+   "programs": [
+    {
+     "program_id": "NULREST",
+     "line": 2,
+     "horror": "H-0037"
+    }
+   ],
+   "units": [
+    {
+     "name": "NULREST",
+     "kind": "procedure",
+     "section": null,
+     "start_line": 2,
+     "end_line": 5,
+     "horror": "H-0037",
+     "span_end": 6
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "REST",
+     "pic": null,
+     "usage": "FIXED DEC(9,2)",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3,
+     "horror": "H-0037"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "NULREST",
+     "params": [],
+     "line": 2,
+     "horror": "H-0037"
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "ASSIGN",
+     "source": "0",
+     "source_kind": "literal",
+     "target": "REST",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 4,
+     "horror": "H-0037"
+    }
+   ],
+   "horrors": [
+    "H-0037"
+   ]
+  },
+  "apps/NORD/pli/RENTEØ.pli": {
+   "app": "NORD",
+   "library": "pli",
+   "language": "pli",
+   "numbered": false,
+   "lines": 14,
+   "compile": {
+    "status": "ibm-only",
+    "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"
+   },
+   "programs": [
+    {
+     "program_id": "RENTEØ",
+     "line": 2,
+     "horror": "H-0039"
+    }
+   ],
+   "units": [
+    {
+     "name": "RENTEØ",
+     "kind": "procedure",
+     "section": null,
+     "start_line": 2,
+     "end_line": 9,
+     "horror": "H-0039",
+     "span_end": 14
+    },
+    {
+     "name": "NULSTIL_Ø",
+     "kind": "procedure",
+     "section": null,
+     "start_line": 11,
+     "end_line": 13
+    }
+   ],
+   "edges": [
+    {
+     "kind": "call",
+     "from": "RENTEØ",
+     "target": "NULSTIL_Ø",
+     "line": 8,
+     "form": "literal",
+     "horror": "H-0039"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "SATS_ÅR",
+     "pic": null,
+     "usage": "FIXED DEC(5,2)",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3,
+     "horror": "H-0039"
+    },
+    {
+     "level": 1,
+     "name": "KUNDE_Ø",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4,
+     "horror": "H-0039"
+    },
+    {
+     "level": 2,
+     "name": "KONTO_NR",
+     "pic": null,
+     "usage": "CHAR(10)",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5,
+     "horror": "H-0039"
+    },
+    {
+     "level": 2,
+     "name": "BELØB_ÅR",
+     "pic": null,
+     "usage": "FIXED DEC(11,2)",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 6,
+     "horror": "H-0039"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "RENTEØ",
+     "params": [],
+     "line": 2,
+     "horror": "H-0039"
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "ASSIGN",
+     "source": "2",
+     "source_kind": "literal",
+     "target": "SATS_ÅR",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 7,
+     "horror": "H-0039"
+    },
+    {
+     "verb": "ASSIGN",
+     "source": "0",
+     "source_kind": "literal",
+     "target": "BELØB_ÅR",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 12
+    }
+   ],
+   "horrors": [
+    "H-0039"
+   ]
+  }
+ }
+}

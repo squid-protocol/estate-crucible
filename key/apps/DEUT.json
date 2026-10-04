@@ -1,0 +1,329 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "DEUT",
+ "members": {
+  "apps/DEUT/cobol/ZINSBER.cbl": {
+   "app": "DEUT",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 29,
+   "compile": {
+    "status": "compiled"
+   },
+   "encoding": "cp273",
+   "storage": "nel",
+   "programs": [
+    {
+     "program_id": "ZINSBER",
+     "line": 2,
+     "horror": "H-0036"
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-START",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 24,
+     "end_line": 29,
+     "horror": "H-0043"
+    }
+   ],
+   "copies": [
+    {
+     "member": "ZINSSATZ",
+     "kind": "copy",
+     "line": 16,
+     "resolves_to": "apps/DEUT/copybook/ZINSSATZ.cpy",
+     "horror": "H-0043"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-ZINS",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 15,
+     "copy_members": [
+      "ZINSSATZ"
+     ],
+     "horror": "H-0043"
+    },
+    {
+     "level": 1,
+     "name": "BETRÄGE",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 17,
+     "horror": "H-0043"
+    },
+    {
+     "level": 5,
+     "name": "BETRAG",
+     "pic": "9(7)V99",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "1000,00",
+     "section": "WORKING-STORAGE",
+     "line": 18,
+     "horror": "H-0043"
+    },
+    {
+     "level": 5,
+     "name": "ERGEBNIS",
+     "pic": "ZZZ.ZZ9,99",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 19,
+     "horror": "H-0043"
+    },
+    {
+     "level": 5,
+     "name": "TABELLE",
+     "pic": null,
+     "usage": null,
+     "occurs": 3,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 20,
+     "horror": "H-0043"
+    },
+    {
+     "level": 10,
+     "name": "T-WERT",
+     "pic": "9V9",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 21,
+     "horror": "H-0043"
+    },
+    {
+     "level": 1,
+     "name": "WS-ENDE",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 22,
+     "horror": "H-0036"
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-ZINS",
+     "line": 15,
+     "bytes": 8,
+     "fields": [
+      {
+       "name": "ZINS-SATZ",
+       "level": 5,
+       "pic": "9V99",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/DEUT/copybook/ZINSSATZ.cpy"
+      },
+      {
+       "name": "GEBÜHR",
+       "level": 5,
+       "pic": "9(3)V99",
+       "usage": null,
+       "offset": 3,
+       "bytes": 5,
+       "file": "apps/DEUT/copybook/ZINSSATZ.cpy"
+      }
+     ],
+     "horror": "H-0043"
+    },
+    {
+     "record": "BETRÄGE",
+     "line": 17,
+     "bytes": 25,
+     "fields": [
+      {
+       "name": "BETRAG",
+       "level": 5,
+       "pic": "9(7)V99",
+       "usage": null,
+       "offset": 0,
+       "bytes": 9,
+       "file": "apps/DEUT/cobol/ZINSBER.cbl"
+      },
+      {
+       "name": "ERGEBNIS",
+       "level": 5,
+       "pic": "ZZZ.ZZ9,99",
+       "usage": null,
+       "offset": 9,
+       "bytes": 10,
+       "file": "apps/DEUT/cobol/ZINSBER.cbl"
+      },
+      {
+       "name": "T-WERT",
+       "level": 10,
+       "pic": "9V9",
+       "usage": null,
+       "offset": 19,
+       "bytes": 2,
+       "file": "apps/DEUT/cobol/ZINSBER.cbl"
+      }
+     ],
+     "horror": "H-0043"
+    },
+    {
+     "record": "WS-ENDE",
+     "line": 22,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-ENDE",
+       "level": 1,
+       "pic": "S9(4)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/DEUT/cobol/ZINSBER.cbl"
+      }
+     ],
+     "horror": "H-0036"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "ZINSBER",
+     "params": [],
+     "line": 23,
+     "horror": "H-0036"
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "COMPUTE",
+     "source": "BETRAG",
+     "source_kind": "item",
+     "target": "BETRAG",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 25,
+     "horror": "H-0043"
+    },
+    {
+     "verb": "COMPUTE",
+     "source": "ZINS-SATZ",
+     "source_kind": "item",
+     "target": "BETRAG",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 25,
+     "horror": "H-0043"
+    },
+    {
+     "verb": "MOVE",
+     "source": "0,5",
+     "source_kind": "literal",
+     "target": "T-WERT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 26,
+     "horror": "H-0043"
+    },
+    {
+     "verb": "MOVE",
+     "source": "BETRAG",
+     "source_kind": "item",
+     "target": "ERGEBNIS",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 27,
+     "horror": "H-0043"
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "units",
+     "name": "SPECIAL-NAMES",
+     "why": "an ENVIRONMENT DIVISION paragraph, not a procedure",
+     "horror": "H-0043"
+    }
+   ],
+   "horrors": [
+    "H-0036",
+    "H-0043"
+   ]
+  },
+  "apps/DEUT/copybook/ZINSSATZ.cpy": {
+   "app": "DEUT",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 3,
+   "compile": {
+    "status": "copybook"
+   },
+   "encoding": "cp273",
+   "storage": "fb80",
+   "data_items": [
+    {
+     "level": 5,
+     "name": "ZINS-SATZ",
+     "pic": "9V99",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "1,50",
+     "section": null,
+     "line": 2,
+     "horror": "H-0043"
+    },
+    {
+     "level": 5,
+     "name": "GEBÜHR",
+     "pic": "9(3)V99",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "12,50",
+     "section": null,
+     "line": 3,
+     "horror": "H-0043"
+    }
+   ],
+   "horrors": [
+    "H-0043"
+   ]
+  }
+ }
+}

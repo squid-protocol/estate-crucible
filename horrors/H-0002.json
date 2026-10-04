@@ -63,6 +63,21 @@
       "line": 61,
       "horror": "H-0002"
      }
+    ],
+    "data_moves": [
+     {
+      "verb": "ADD",
+      "source": "WS-HIST-AMT",
+      "source_kind": "item",
+      "target": "TOT-DEBITS",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 59,
+      "horror": "H-0002"
+     }
     ]
    },
    "phantoms": [
@@ -108,6 +123,21 @@
       "target": "WRITE_CLAIM",
       "line": 24,
       "form": "literal",
+      "horror": "H-0002"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "ASSIGN",
+      "source": "'A'",
+      "source_kind": "literal",
+      "target": "CLM_STATUS",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 21,
       "horror": "H-0002"
      }
     ]
@@ -242,6 +272,47 @@
      {
       "kind": "call",
       "target": "apps/CUST/cobol/CUSTMNU.cbl",
+      "horror": "H-0002"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "LOW-VALUES",
+      "source_kind": "figurative",
+      "target": "CUSTMAPO",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 24,
+      "horror": "H-0002"
+     },
+     {
+      "verb": "MOVE",
+      "source": "DFHCOMMAREA",
+      "source_kind": "item",
+      "target": "WS-COMMAREA",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 32,
+      "horror": "H-0002"
+     },
+     {
+      "verb": "MOVE",
+      "source": "'RETURNING TO MENU'",
+      "source_kind": "literal",
+      "target": "CA-MSG",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 49,
       "horror": "H-0002"
      }
     ]

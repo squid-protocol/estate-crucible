@@ -158,6 +158,44 @@
      "line": 15
     }
    ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "IC-ITEM-ID",
+     "source_kind": "item",
+     "target": "ITEM-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 17
+    },
+    {
+     "verb": "MOVE",
+     "source": "SQLCODE",
+     "source_kind": "item",
+     "target": "WS-SQLCODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 24
+    },
+    {
+     "verb": "MOVE",
+     "source": "8",
+     "source_kind": "literal",
+     "target": "IC-RC",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 25
+    }
+   ],
    "horrors": [
     "H-0017"
    ]
@@ -935,6 +973,44 @@
      "kind": "call",
      "target": "apps/INVN/cobol/INVDB.cbl",
      "horror": "H-0024"
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "DFHCOMMAREA",
+     "source_kind": "item",
+     "target": "WS-INV-AREA",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 21
+    },
+    {
+     "verb": "ADD",
+     "source": "IC-QTY OF WS-INV-AREA",
+     "source_kind": "item",
+     "target": "INV-WH1-ONHAND",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 35
+    },
+    {
+     "verb": "MOVE",
+     "source": "IC-ITEM-ID OF WS-INV-AREA",
+     "source_kind": "item",
+     "target": "INV-MSG-CODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 43
     }
    ],
    "phantoms": [

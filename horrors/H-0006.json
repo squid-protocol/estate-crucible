@@ -34,7 +34,62 @@
    "compile": {
     "status": "compiled"
    },
-   "expected": {},
+   "expected": {
+    "data_moves": [
+     {
+      "verb": "WRITE",
+      "source": "WS-RPT-HEAD",
+      "source_kind": "item",
+      "target": "RPT-LINE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 40,
+      "horror": "H-0006"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "CNT-READ",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 45,
+      "horror": "H-0006"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "CNT-WRITTEN",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 48,
+      "horror": "H-0006"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-J",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 51,
+      "horror": "H-0006"
+     }
+    ]
+   },
    "phantoms": [
     {
      "channel": "edges",
