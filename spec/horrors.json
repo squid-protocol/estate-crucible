@@ -797,6 +797,375 @@
      "quote": "If two members of different data sets in the concatenation have the same name, the FIND macro determines the address of the first one in the concatenation."
     }
    ]
+  },
+  {
+   "id": "H-0035",
+   "title": "Raw EBCDIC members as 80-byte records with no line ends (a binary PDS transfer)",
+   "category": "encoding",
+   "issue": 3816,
+   "shapes": [
+    "KØBREG: cp277 (Denmark / Norway), FB80, the program's every fact keyed as for a UTF-8 member",
+    "GULFINQ and the GULFMS symbolic map: cp037, FB80",
+    "ZINSSATZ: cp273, FB80; KYUYO01: cp930 (mixed DBCS), FB80"
+   ],
+   "asserts": "Told the member's code page (key/manifest.json code_pages), a reader sees the same lines a UTF-8 member would give: record n is line n.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+     "section": "CODEPAGE compiler option (p.353)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+     "quote": "Use CODEPAGE to specify the coded character set identifier (CCSID) for an EBCDIC code page for processing compile-time and runtime COBOL operations that are sensitive to character encoding."
+    },
+    {
+     "doc": "IBM i 7.5 Globalization",
+     "section": "CCSID values defined on IBM i",
+     "url": "https://www.ibm.com/docs/en/i/7.5.0?topic=information-ccsid-values-defined-i",
+     "quote": "00277: Denmark, Norway"
+    }
+   ],
+   "notes": "The scanner is told each member's code page by path (the scorer passes --source-encoding with the manifest's code_pages). Nothing in the bytes says which EBCDIC page they are."
+  },
+  {
+   "id": "H-0036",
+   "title": "Raw EBCDIC members with NEL (X'15') line ends",
+   "category": "encoding",
+   "issue": 3816,
+   "shapes": [
+    "ZINSBER: cp273 (Germany / Austria), NEL",
+    "KUNDEÅ: cp277, NEL; SHAINREC: cp939, NEL; GULFMS (BMS): cp420, NEL"
+   ],
+   "asserts": "NEL ends a line in z/OS text; the member's lines and facts are what its NEL-separated records say.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+     "section": "CODEPAGE compiler option (p.353)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+     "quote": "Use CODEPAGE to specify the coded character set identifier (CCSID) for an EBCDIC code page for processing compile-time and runtime COBOL operations that are sensitive to character encoding."
+    },
+    {
+     "doc": "IBM i 7.5 Globalization",
+     "section": "CCSID values defined on IBM i",
+     "url": "https://www.ibm.com/docs/en/i/7.5.0?topic=information-ccsid-values-defined-i",
+     "quote": "00273: Austria, Germany"
+    }
+   ]
+  },
+  {
+   "id": "H-0037",
+   "title": "Stray NUL bytes in a source member (a transfer artifact)",
+   "category": "encoding",
+   "issue": 3534,
+   "defect": "D016",
+   "shapes": [
+    "two NUL bytes at the end of NULREST's first comment (PL/I, UTF-8)"
+   ],
+   "asserts": "The member is source, not binary: its procedure, data items and entry point are facts.",
+   "citations": [
+    {
+     "doc": "Enterprise PL/I for z/OS 6.1 Language Reference (SC31-5716-00)",
+     "section": "Comments",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/c3157160.pdf",
+     "quote": "Comments are allowed wherever blanks are allowed"
+    }
+   ],
+   "lower_confidence": "The PL/I quote says where a comment may stand, not which bytes it may hold; that a compiler takes NULs inside a comment is the ledger's evidence (DSF's programs compile with them)."
+  },
+  {
+   "id": "H-0038",
+   "title": "The full-width space U+3000 as a separator",
+   "category": "national",
+   "issue": 3956,
+   "defect": "D030",
+   "shapes": [
+    "01　Ｆ０２　PIC　X. (KYUYJP)",
+    "DATA　DIVISION.",
+    "COPY　KYUYCPY. (a copybook stored as UTF-8 with a BOM)"
+   ],
+   "asserts": "A full-width space separates words exactly as a space does: the entry, its picture, the division header and the COPY are read.",
+   "citations": [
+    {
+     "doc": "opensourcecobol4j test suite, as recorded in gitgalaxy#3956",
+     "section": "tests/jp-compat mb-space.at",
+     "url": "https://github.com/squid-protocol/gitgalaxy/issues/3956",
+     "quote": "opensourcecobol4j / opensource COBOL do so: `mb-space.at` tests \"Zenkaku SPC delims in headings / record def / COPY stmt\" and expects them to compile and run."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Figurative constants: SPACE (p.42)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The EBCDIC DBCS space character has the value X'4040', the national space character has the value NX'0020', and the UTF-8 space character has the value UX'20'."
+    }
+   ],
+   "lower_confidence": "Not IBM: Enterprise COBOL separates words with single-byte spaces. The member stands for opensourcecobol4j code; the dialect's rule is evidenced by its own test suite (via #3956), not by a language reference."
+  },
+  {
+   "id": "H-0039",
+   "title": "Nordic national characters Æ Ø Å in member, program, PL/I and JCL names",
+   "category": "national",
+   "issue": 3520,
+   "defect": "D015",
+   "shapes": [
+    "members KØBREG, KUNDEÅ, RENTEØ, KØBDAG",
+    "PROGRAM-ID. 'KØBREG'. and COPY 'KUNDEÅ'. (literals: Æ Ø Å are not COBOL word characters)",
+    "PL/I identifiers SATS_ÅR, KUNDE_Ø, BELØB_ÅR, NULSTIL_Ø",
+    "JCL job KØBDAG, DSN=PROD.KØB.KUNDER, EXEC PGM=KØBREG"
+   ],
+   "asserts": "Æ Ø Å are whole characters of each name: no name is cut at them, and EXEC PGM=KØBREG resolves to the program whose PROGRAM-ID literal is KØBREG.",
+   "citations": [
+    {
+     "doc": "Enterprise PL/I for z/OS 6.1 Language Reference (SC31-5716-00)",
+     "section": "Extralingual characters",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/c3157160.pdf",
+     "quote": "The default extralingual characters are the number sign (#), the at sign (@), and the currency sign ($). The hexadecimal values for these characters vary across code pages."
+    },
+    {
+     "doc": "z/OS V2R2 MVS JCL Reference (SA23-1385-03)",
+     "section": "Character sets",
+     "url": "https://publibz.boulder.ibm.com/epubs/pdf/iea3b611.pdf",
+     "quote": "In countries other than the U.S., the U.S. National characters represented on terminal keyboards might generate a different hexadecimal representation"
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Program-names as literals (Appendix)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The option to specify a literal as the program-name to be externalized was added for names that are not valid COBOL words or need to be case-sensitive."
+    }
+   ]
+  },
+  {
+   "id": "H-0040",
+   "title": "Japanese user-defined words: PROGRAM-ID, data names (leading and trailing Japanese), sections, paragraphs, `_` in names",
+   "category": "national",
+   "issue": 3955,
+   "defect": "D029",
+   "shapes": [
+    "PROGRAM-ID. 給与計算. (KYUYJP, UTF-8 rehost)",
+    "社員コード (Japanese first), X項目 (Japanese tail), FIXED_FLD",
+    "主処理 SECTION / 開始. in every Japanese member"
+   ],
+   "asserts": "Each name is whole: no Japanese character ends a word, and a Japanese PROGRAM-ID is the program's name.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "User-defined words with DBCS characters (p.12)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "DBCS user-defined words can contain only double-byte characters, and must contain at least one DBCS character that is not in the set A through Z, a through z, 0 through 9, hyphen, and underscore"
+    }
+   ],
+   "lower_confidence": "Enterprise COBOL allows DBCS words of DBCS characters only; X項目 (mixed) and a Japanese PROGRAM-ID belong to the rehosted (opensourcecobol4j / GnuCOBOL) dialect, which GnuCOBOL -std=ibm compiles."
+  },
+  {
+   "id": "H-0041",
+   "title": "Full-width hyphens and digits in names; names that must not collide",
+   "category": "national",
+   "issue": 3991,
+   "defect": "D031",
+   "shapes": [
+    "ＴＥＳＴ−ＤＡＴＡ１ and ＴＥＳＴ−ＲＥＣＯＲＤ１ (U+2212), ＴＥＳＴ－ＤＡＴＡ２ (U+FF0D): three different items",
+    "SECTION Ｓ−初期化 and paragraph 初期化１ (a full-width digit)"
+   ],
+   "asserts": "Full-width hyphens and digits are characters of the word: the three items stay three items, and Ｓ−初期化 is a section.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "User-defined words with DBCS characters (p.12)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "DBCS user-defined words can contain only double-byte characters, and must contain at least one DBCS character that is not in the set A through Z, a through z, 0 through 9, hyphen, and underscore"
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "User-defined words with DBCS characters (p.12)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "DBCS characters that correspond to single-byte EBCDIC characters follow the normal rules for COBOL user-defined words; that is, the characters A - Z, a - z, 0 - 9, the hyphen (-), and the underscore (_) are allowed."
+    }
+   ],
+   "lower_confidence": "U+2212 (MINUS SIGN) is not the DBCS hyphen IBM means (U+FF0D); it is planted because opensourcecobol4j estates carry it (#3991)."
+  },
+  {
+   "id": "H-0042",
+   "title": "DBCS in EBCDIC: SO/SI-delimited words, mixed and G literals, unbalanced and nested shift codes in comments",
+   "category": "national",
+   "issue": 3816,
+   "shapes": [
+    "KYUYO01 (cp930, FB80): data names 処理件数 / 見出し / 漢字欄, sections and paragraphs 主処理 / 開始 / 集計",
+    "VALUE '給与明細ABC' (mixed literal, shift codes paired)",
+    "VALUE G'漢字欄名' (DBCS literal)",
+    "comment lines with a Shift-Out never shifted back in, and with two Shift-Outs nested",
+    "SHAINREC (cp939, NEL): 社員名 PIC G(10) (20 bytes)"
+   ],
+   "asserts": "Every DBCS run reads as its characters, each record starts in single-byte mode whatever the previous one left, and a PIC G / PIC N item takes 2 bytes per character.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "User-defined words with DBCS characters (p.12)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "DBCS user-defined words can contain only double-byte characters, and must contain at least one DBCS character that is not in the set A through Z, a through z, 0 through 9, hyphen, and underscore"
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Alphanumeric literals with DBCS characters (p.40)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "Shift-out and shift-in control characters are part of the literal and must be paired. They must contain zero or an even number of intervening bytes. Nested shift codes are not allowed in the DBCS portion of the literal."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "DBCS literals (p.41)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The opening delimiter must be followed immediately by a shift-out control character."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Reference modification",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "For usages DISPLAY-1 and NATIONAL, each character position occupies 2 bytes."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Comment lines (p.60)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The comment can be written anywhere in the program text area of that line, and can consist of any combination of characters from the character set of the computer."
+    }
+   ],
+   "notes": "#3988's 'mismatched / nested SO-SI' trap lives in comment lines: IBM forbids it in literals, and a comment may hold any characters."
+  },
+  {
+   "id": "H-0043",
+   "title": "DECIMAL-POINT IS COMMA, with VALUE 1,50 in a copybook",
+   "category": "national",
+   "issue": 3942,
+   "shapes": [
+    "ZINSBER: SPECIAL-NAMES. DECIMAL-POINT IS COMMA.; VALUE 1000,00; PIC ZZZ.ZZ9,99; MOVE 0,5 TO T-WERT (2)",
+    "ZINSSATZ copybook: VALUE 1,50 / 12,50 with no SPECIAL-NAMES of its own"
+   ],
+   "asserts": "The literals keep their commas as written; ZZZ.ZZ9,99 is 10 bytes; T-WERT is the move's target (the subscript is not an operand).",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "DECIMAL-POINT IS COMMA clause",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The DECIMAL-POINT IS COMMA clause exchanges the functions of the period and the comma in PICTURE character-strings and in numeric literals."
+    }
+   ]
+  },
+  {
+   "id": "H-0044",
+   "title": "EBCDIC collation: logic that relies on letters sorting before digits",
+   "category": "semantics",
+   "issue": null,
+   "shapes": [
+    "IF SAERLIG-KODE < '0' PERFORM 2000-BOGSTAV-FOER-CIFFER (SAERLIG-KODE is 'A'): taken on z/OS, skipped under ASCII order"
+   ],
+   "asserts": "The comparison and the PERFORM under it are facts like any other; what they mean depends on the collating sequence.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Appendix C: EBCDIC collating sequence",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The EBCDIC collating sequence is the order in which characters are defined in EBCDIC."
+    }
+   ],
+   "notes": "#3988 trap 4. No scanner channel records a collating sequence: this horror's facts are structural, and the trap is for translators (a Java port comparing as Unicode). It is planted so the estate carries it."
+  },
+  {
+   "id": "H-0045",
+   "title": "A BMS map in EBCDIC cp420 with Arabic text in visual order",
+   "category": "national",
+   "issue": 3987,
+   "shapes": [
+    "GULFMS (cp420, NEL): INITIAL text stored right-to-left as the 3270 shows it"
+   ],
+   "asserts": "The field's INITIAL value is the characters as stored (visual order), decoded with cp420; positions, lengths and attributes are unchanged.",
+   "citations": [
+    {
+     "doc": "IBM i 7.5 Globalization",
+     "section": "CCSID values defined on IBM i",
+     "url": "https://www.ibm.com/docs/en/i/7.5.0?topic=information-ccsid-values-defined-i",
+     "quote": "00420: Arabic-speaking countries"
+    },
+    {
+     "doc": "IBM Host On-Demand",
+     "section": "Help for bidirectional language support",
+     "url": "https://public.dhe.ibm.com/software/rational/web/hod/en/help/bidi.html",
+     "quote": "The Lam-Alef character is traditionally stored as a single character in files tagged with visual CCSID 420."
+    }
+   ],
+   "lower_confidence": "That CCSID 420 host text is held in visual order is evidenced by IBM's emulator documentation, not by the CICS BMS reference."
+  },
+  {
+   "id": "H-0046",
+   "title": "A member downloaded to a PC in Shift-JIS",
+   "category": "encoding",
+   "issue": 3878,
+   "shapes": [
+    "KYUYO02: Shift-JIS, LF line ends; DBCS names and a mixed literal"
+   ],
+   "asserts": "Decoded as Shift-JIS, the member's facts are those of its text; no line straddles column 72 in its own bytes.",
+   "citations": [
+    {
+     "doc": "IBM i 7.5 Globalization",
+     "section": "CCSID values defined on IBM i",
+     "url": "https://www.ibm.com/docs/en/i/7.5.0?topic=information-ccsid-values-defined-i",
+     "quote": "00943: Japanese PC Data Mixed for Open environment (Multi-vendor code)"
+    }
+   ]
+  },
+  {
+   "id": "H-0047",
+   "title": "A data name that starts with END- (END-OF-FILE) as a move target",
+   "category": "data-moves",
+   "issue": null,
+   "defect": "D013",
+   "shapes": [
+    "01 END-OF-FILE PIC X; MOVE 'Y' TO END-OF-FILE (KØBREG)"
+   ],
+   "asserts": "END-OF-FILE is a user-defined word, not an explicit scope terminator: the MOVE is a data move into it.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Explicit scope terminators (p.293)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "An explicit scope terminator marks the end of certain PROCEDURE DIVISION statements."
+    }
+   ],
+   "notes": "The ledger records D013 with no issue of its own (fixed by #3511)."
+  },
+  {
+   "id": "H-0048",
+   "title": "Reference modification of a FUNCTION result as a move source",
+   "category": "data-moves",
+   "issue": 3649,
+   "defect": "D023",
+   "shapes": [
+    "MOVE FUNCTION CURRENT-DATE (1:4) TO WS-AAR (KØBREG)"
+   ],
+   "asserts": "The source is FUNCTION CURRENT-DATE with reference modification 1:4.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Reference modification",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "function-name-1 Must reference an alphanumeric or national function."
+    }
+   ]
+  },
+  {
+   "id": "H-0049",
+   "title": "MOVE ALL X'..' (a hexadecimal figurative) is a data move",
+   "category": "data-moves",
+   "issue": 4205,
+   "defect": "D039",
+   "shapes": [
+    "MOVE ALL X'00' TO WS-BUF (KØBREG)"
+   ],
+   "asserts": "A data move with source ALL X'00' (figurative) into WS-BUF.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Figurative constants: ALL literal",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "When literal is not a figurative constant, ALL literal represents one or more occurrences of the string of characters that compose the literal."
+    }
+   ]
   }
  ],
  "not_planted": [
@@ -817,36 +1186,6 @@
     "D012"
    ],
    "why": "template JCL with <PLACEHOLDER> names is not valid JCL; no IBM rule says what it means"
-  },
-  {
-   "defects": [
-    "D013",
-    "D023",
-    "D038",
-    "D039"
-   ],
-   "issues": [
-    3649,
-    4204,
-    4205
-   ],
-   "why": "data moves, reference modification and MOVE truncation: not keyed yet (phase 2 candidate channel)"
-  },
-  {
-   "defects": [
-    "D015",
-    "D016",
-    "D029",
-    "D030",
-    "D031"
-   ],
-   "issues": [
-    3520,
-    3955,
-    3956,
-    3991
-   ],
-   "why": "national characters, encodings and full-width forms: phase 2 (multicultural district, #3988)"
   },
   {
    "defects": [
@@ -904,6 +1243,15 @@
     "B004"
    ],
    "why": "census brief (documentation) defects, not source constructs"
+  },
+  {
+   "defects": [
+    "D038"
+   ],
+   "issues": [
+    4204
+   ],
+   "why": "MOVE truncation of a qualified source: a sizing analysis over data moves (GalaxyIR), not a channel this key holds yet"
   }
  ]
 }

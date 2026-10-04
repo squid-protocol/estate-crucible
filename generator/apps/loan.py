@@ -38,6 +38,10 @@ LNIDMS01 = {
     "compile_reason": "CA IDMS DML: needs the IDMS DML precompiler (IDMS-CONTROL SECTION, SCHEMA SECTION, "
                       "BIND / OBTAIN / FINISH); GnuCOBOL has no IDMS precompiler",
     "idms": {"mode": "IDMS-DC", "subschema": "LOANSS01", "schema": "LOANSCHM", "horror": H7},
+    # MOVE ... TO LOAN-ID ends at the IDMS DML verb on the next line (no period between them)
+    "phantoms": [{"channel": "data_moves", "target": t, "horror": H7,
+                  "why": "OBTAIN CALC LOAN is an IDMS DML statement, not more MOVE receivers"}
+                 for t in ("OBTAIN", "CALC", "LOAN")],
     "ws": [
         I(1, "WS-LOAN-KEY", "X(12)"),
         I(1, "WS-NOT-FOUND-CNT", "S9(5)", "COMP-3", value="ZERO"),
