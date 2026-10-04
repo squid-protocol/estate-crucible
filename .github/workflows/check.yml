@@ -1,0 +1,35 @@
+name: check
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  key:
+    name: regenerate + diff, key consistency
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: The committed estate and key equal a regeneration
+        run: python3 tools/check.py --no-compile
+      - name: The medium preset is deterministic
+        run: make scale-smoke
+
+  compile:
+    name: GnuCOBOL compile (cobc -std=ibm)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install GnuCOBOL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnucobol3 || sudo apt-get install -y gnucobol
+          cobc --version | head -1
+      - name: Compile every program
+        run: python3 tools/compile.py
