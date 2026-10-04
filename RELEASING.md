@@ -41,4 +41,5 @@ change (with a "Cross-repo" PR note), not something to do unilaterally from this
 
 | Tag | Date | Contents |
 |---|---|---|
+| `v0.2.0` | 2026-10-04 | Phase 1 of gitgalaxy#4317: 9 apps, 48 members, 19 channels (new: cics_resources, jcl_datasets, file_control, entry_points, file_edges), 34 horrors: H-0009..H-0012 (gitgalaxy#4329-#4332), H-0013..H-0032 from the field-testing ledger, PERFORM UNTIL EXIT, SYSLIB collisions (#4265); PL/I and free-format members; COPY ... IN library. |
 | `v0.1.0` | 2026-10-04 | Phase 0 of gitgalaxy#4317: format `estate-crucible-key/1`, the generator, 3 apps (ACCT, CUST, LOAN) + shared libraries, 27 members, 14 channels, the 8 seed horrors H-0001..H-0008 from gitgalaxy#4300-#4307. First pinned by gitgalaxy's scorer PR. |

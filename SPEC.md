@@ -48,12 +48,12 @@ at. Line numbers are 1-based physical lines of the member.
 
 | channel | one fact per | fields | asserts |
 |---|---|---|---|
-| `programs` | PROGRAM-ID paragraph | `program_id`, `line` | the program's name |
-| `units` | paragraph, section, main line | `name` (null for the main line), `kind` (`paragraph` / `section` / `mainline`), `section` (enclosing section), `start_line`, `end_line`, `span_end` (sections) | extent: from the header to the **last code line** before the next header (comments and blank lines after it are not part of the extent). A section's `end_line` is its own statements (its header when a paragraph follows at once); `span_end` is the section's full extent per IBM. The main line runs from the first statement after the PROCEDURE DIVISION header to the line before the first header |
+| `programs` | PROGRAM-ID paragraph; PL/I `OPTIONS(MAIN)` procedure | `program_id`, `line` | the program's name |
+| `units` | paragraph, section, main line, PL/I procedure | `name` (null for the main line), `kind` (`paragraph` / `section` / `mainline` / `procedure`), `program` (when a member holds several programs), `section` (enclosing section), `start_line`, `end_line`, `span_end` (sections) | extent: from the header to the **last code line** before the next header (comments and blank lines after it are not part of the extent). A section's `end_line` is its own statements (its header when a paragraph follows at once); `span_end` is the section's full extent per IBM. The main line runs from the first statement after the PROCEDURE DIVISION header to the line before the first header |
 | `edges` | PERFORM / GO TO / CALL statement | `kind` (`perform` / `goto` / `call`), `from` (unit name, null = main line), `target`, `line` (the verb's line), `thru`, `form` (calls: `literal` / `identifier`) | the procedure or program the statement names. A CALL identifier's `target` is the identifier |
 | `call_sites` | CALL, EXEC CICS LINK / XCTL / RETURN TRANSID, JCL EXEC PGM | `verb`, `form`, `operand`, `target` (an identifier's VALUE), `line`, `resolves_to` (the member, or null outside the estate) | |
-| `copies` | COPY, EXEC SQL INCLUDE | `member`, `kind` (`copy` / `sql-include`), `line`, `resolves_to` (null: supplied by CICS / Db2) | resolution follows SYSLIB order: the app's `copybook/`, its `dclgen/`, then `shared/copylib/` |
-| `data_items` | data description entry | `level`, `name`, `pic`, `usage` (the usage word, `USAGE` dropped), `occurs`, `redefines`, `value` (as written), `section`, `line`, `copy_members` | |
+| `copies` | COPY, EXEC SQL INCLUDE | `member`, `kind` (`copy` / `sql-include`), `line`, `resolves_to` (null: supplied by CICS / Db2), `library` (COPY ... IN), `replacing` | resolution: `IN library` searches that library; otherwise SYSLIB order, the app's `<APP>CPY` (`copybook/`), `<APP>DCL` (`dclgen/`), then `SHRCPY` (`shared/copylib/`), first hit wins |
+| `data_items` | data description entry (COBOL), DECLARE item (PL/I) | `level`, `name` (`FILLER` when omitted, with `implicit_filler`), `pic`, `usage` (the usage word, `USAGE` dropped; PL/I: the attributes), `occurs`, `redefines`, `value` (as written), `section`, `line`, `copy_members`, `sign_separate` / `sign_leading` | pseudo-text awaiting COPY REPLACING (`:TAG:-ID`) is not a data-name: a phantom, not a fact |
 | `layouts` | 01 entry written in a program | `record`, `line`, `bytes`, `fields`: every elementary item in storage order with `name`, `level`, `pic`, `usage`, `offset`, `bytes`, `file`; `overlay: true` under a REDEFINES | COPY expanded. An item inside an OCCURS group is listed once at its first occurrence; `bytes` carries only its own OCCURS. Sizes: SPEC 6 |
 | `sql_statements` | EXEC SQL statement | `verb`, `table`, `access`, `line` (EXEC SQL's line), `procedure` (CALL) | |
 | `sql_tables` | EXEC SQL DECLARE TABLE | `table`, `line`, `columns` (`name`, `type`, `length`, `scale`, `nullable`, `line`) | |
@@ -62,6 +62,11 @@ at. Line numbers are 1-based physical lines of the member.
 | `screen_fields` | DFHMSD / DFHMDI / DFHMDF | `kind`, `mapset`, `map`, `name`, `pos_line`, `pos_column`, `length`, `attrb`, `picin`, `initial`, `line` | |
 | `csd_resources` | DEFINE | `type`, `name`, `group`, `line`, `program`, `dsname` | |
 | `transactions` | DEFINE TRANSACTION | `transid`, `program`, `group`, `line`, `resolves_to` | |
+| `cics_resources` | EXEC CICS command naming a resource | `verb`, `kind` (`MAP` / `FILE` / `QUEUE`), `name`, `qualifier` (mapset; TS / TD), `record` (INTO / FROM), `access` (read / write / update), `line` (EXEC CICS's line) | |
+| `jcl_datasets` | DD naming a dataset | `dsn` (the base), `generation` (`0`, `+1`, `-1`), `step`, `dd`, `line` | the dataset a job or proc references; a reader may record a GDG reference as its base or with its generation, never anything else |
+| `file_control` | FILE-CONTROL SELECT | `select`, `assign`, `organization`, `access_mode`, `record_key`, `file_status`, `fd_copies` (COPY members of its FD record), `line` | |
+| `entry_points` | PROCEDURE DIVISION header (COBOL), external PROC (PL/I) | `kind` (`PROCEDURE`), `program`, `params` (USING / parameter list), `line` | |
+| `file_edges` | resolved invocation between two members | `kind` (`call` for CALL / LINK / XCTL, `exec` for EXEC PGM), `target` (member path) | one per (target, kind); a call inside the same member draws none |
 
 ## 4. Phantoms
 
@@ -85,7 +90,7 @@ next line's sequence number as a split operand, IDMS-CONTROL as a unit.
 From Enterprise COBOL for z/OS, Language Reference, "USAGE clause", and Programming
 Guide, "Examples: numeric data and internal representation":
 
-* DISPLAY: one byte per character position; `S` and `V` take none (no SIGN SEPARATE in phase 0).
+* DISPLAY: one byte per character position; `S` and `V` take none, except that SIGN ... SEPARATE gives the sign a byte of its own.
 * BINARY / COMP / COMP-4 / COMP-5: 2, 4 or 8 bytes for 1-4, 5-9 or 10-18 digits.
 * PACKED-DECIMAL / COMP-3: digits / 2 + 1 bytes (integer division).
 * COMP-1: 4 bytes. COMP-2: 8 bytes.
