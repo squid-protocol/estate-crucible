@@ -49,6 +49,9 @@ REQUIRED = {
     "entry_points": ("kind", "program", "params", "line"),
     "file_edges": ("kind", "target"),
     "data_moves": ("verb", "target", "line"),
+    "copy_collisions": ("member", "line", "library", "resolves_to", "shadowed"),
+    "gaps": ("kind", "name", "line", "why"),
+    "dead": ("kind", "name", "line", "why"),
 }
 
 

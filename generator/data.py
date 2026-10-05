@@ -36,15 +36,19 @@ def I(lvl: int, name: Optional[str], pic: Optional[str] = None, usage: Optional[
       occurs: Optional[int] = None, redefines: Optional[str] = None, value: Optional[str] = None,
       sign: Optional[str] = None, kids: Optional[list[Item]] = None, copy: Optional[list[Any]] = None,
       copy_style: str = "next-line", horror: Optional[str] = None,
-      depends_on: Optional[list[str]] = None, seq: Optional[str] = None, sep: Optional[str] = None) -> Item:
+      depends_on: Optional[list[str]] = None, seq: Optional[str] = None, sep: Optional[str] = None,
+      continued: bool = False) -> Item:
     """One data description entry. `name` None writes no data-name (an implicit FILLER).
     `sign` is a SIGN clause body (`LEADING SEPARATE`). `copy` makes it a group whose
     subordinate entries come from COPY statements (member names or CP(...)); `copy_style`
     is how they are written: next-line, same-line (`01 X. COPY Y.`, several on one line)
-    or split (`COPY` / member on the next line)."""
+    or split (`COPY` / member on the next line). `continued` writes an alphanumeric VALUE
+    literal through column 72 and continues it on the next line (`-` in column 7, the rest
+    after a quotation mark); the fact's `value` is the joined literal."""
     return {"lvl": lvl, "name": name, "pic": pic, "usage": usage, "occurs": occurs, "redefines": redefines,
             "value": value, "sign": sign, "kids": kids or [], "copy": [_cp(c) for c in copy or []],
-            "copy_style": copy_style, "horror": horror, "depends_on": depends_on, "seq": seq, "sep": sep}
+            "copy_style": copy_style, "horror": horror, "depends_on": depends_on, "seq": seq, "sep": sep,
+            **({"continued": True} if continued else {})}
 
 
 def C(member: Any, *, horror: Optional[str] = None, style: str = "next-line",
@@ -216,7 +220,9 @@ class DataWriter:
                 text += "".join(" " + copy_text(c) for c in it["copy"])
                 text = text.replace(". COPY", ".  COPY", 1)
             room = 72 - 7 - (0 if area == "A" else 4 + indent)
-            if len(text) <= room:
+            if it.get("continued"):
+                line = self._continued(it, area, indent, room)
+            elif len(text) <= room:
                 # `seq`: a change marker in cols 1-6 instead of the sequence number (#3348)
                 line = self.m.cobol(text, area=area, indent=indent, seq=it.get("seq"))
             else:
@@ -259,6 +265,19 @@ class DataWriter:
                 else:
                     self._copy_lines(it["copy"], it["copy_style"], depth + 1, None)
             self.items(it["kids"], section, depth + 1)
+
+    def _continued(self, it: Item, area: str, indent: int, room: int) -> int:
+        """Enterprise COBOL LR, "Continuation of alphanumeric and national literals": the
+        continued line runs the literal to column 72 with no closing quote; the continuation
+        line has `-` in column 7 and resumes after its first quotation mark."""
+        lit = it["value"]
+        head = item_text({**it, "value": None}) + " VALUE "
+        take = room - len(head)
+        if self.m.free or not (2 < take < len(lit) - 1) or lit[take - 1] == " " or not lit.startswith("'"):
+            raise ValueError(f"{self.m.path}: VALUE {lit} cannot be continued at column 72 here")
+        line = self.m.cobol(head + lit[:take], area=area, indent=indent)
+        self.m.cobol("'" + lit[take:] + ".", indicator="-")
+        return line
 
     def _copy_lines(self, copies: list[Copy], style: str, depth: int, depends_on: Optional[list[str]]) -> None:
         indent = 4 * max(depth - 1, 0)

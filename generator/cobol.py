@@ -44,6 +44,12 @@ class ProgramWriter:
     def write(self) -> None:
         s = self.spec
         m = self.m
+        with m.horror(s.get("banner_horror")):
+            # a legacy banner ahead of the IDENTIFICATION DIVISION header: `*` comment lines,
+            # `/` page ejects, and whatever prose the maintainers wrote in them
+            for text in s.get("banner", []):
+                indicator, text = (text[0], text[1:]) if text[:1] in "*/" else ("*", text)
+                m.cobol(text, area="A", indicator=indicator)
         m.cobol("IDENTIFICATION DIVISION.", area="A")
         self.program_id()
         for label in ("AUTHOR", "INSTALLATION", "DATE-WRITTEN"):
@@ -278,6 +284,8 @@ class ProgramWriter:
                 fact = self.m.fact("units", name=u["name"], kind=u["kind"],
                                    section=current_section["name"] if current_section and u["kind"] != "section" else None,
                                    start_line=start, end_line=len(self.m.lines), **self.prog())
+                if u.get("dead"):
+                    self.m.fact("dead", kind="paragraph", name=u["name"], line=start, why=u["dead"], **self.prog())
                 if u["kind"] == "section":
                     if current_section is not None:
                         current_section["span_end"] = start - 1
@@ -287,6 +295,36 @@ class ProgramWriter:
                     self.m.blank()
         if current_section is not None:
             current_section["span_end"] = last_code_line(self.m)
+        self.check_dead(s)
+
+    def check_dead(self, s: dict[str, Any]) -> None:
+        """A paragraph declared dead must be: no PERFORM / GO TO of this program names it (as a
+        target or inside a THRU range), and the unit before it ends in an unconditional GOBACK,
+        STOP RUN or GO TO, or is dead itself (Language Reference, "Procedures": statements run
+        in the order written unless a statement transfers control)."""
+        names = [u["name"] for u in s["units"]]
+        targets: set = set()
+        gotos = {e["target"] for e in self.m.facts.get("edges", []) if e["kind"] == "goto"
+                 and e.get("program", s["program_id"]) == s["program_id"]}
+        for e in self.m.facts.get("edges", []):
+            if e.get("program", s["program_id"]) != s["program_id"] or e["kind"] not in ("perform", "goto"):
+                continue
+            if e["target"] in names:
+                lo = names.index(e["target"])
+                hi = names.index(e["thru"]) if e.get("thru") in names else lo
+                targets.update(names[lo:hi + 1])
+        def ends(stmts: list[Stmt]) -> bool:
+            last = stmts[-1] if stmts else None
+            return last is not None and (last["op"] == "goto" or (
+                last["op"] == "raw" and last["lines"][-1].strip().upper() in ("GOBACK", "STOP RUN")))
+
+        falls = not (s.get("mainline") and ends(s["mainline"]))  # control can run into this unit
+        for u in s["units"]:
+            if u.get("dead") and (u["kind"] != "paragraph" or u["name"] in targets or falls):
+                raise ValueError(f"{self.m.path}: {u['name']} is declared dead but is reachable")
+            # a unit entered by falling or by GO TO runs on into the next; one entered only by
+            # PERFORM returns at its end
+            falls = (falls or u["name"] in gotos) and not ends(u["stmts"])
 
     def stmts(self, stmts: list[Stmt], indent: int) -> None:
         for st in stmts:
@@ -305,6 +343,9 @@ class ProgramWriter:
     def op_comment(self, st: Stmt, indent: int) -> None:
         for text in st["lines"]:
             self.m.cobol(" " * (indent + 4) + text, area="A", indicator="*")
+        if st.get("perform"):
+            self.m.phantom("edges", kind="perform", **{"from": self.unit}, target=st["perform"],
+                           why="a PERFORM in a comment line (indicator *) is not a statement")
         if st["call"]:
             self.m.phantom("call_sites", verb="CALL", operand=st["call"],
                            why="a CALL in a comment line (indicator *) is not a statement")

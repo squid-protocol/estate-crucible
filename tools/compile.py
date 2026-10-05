@@ -9,9 +9,10 @@ Each program's compile status is part of the answer key (key/manifest.json):
                      a variant with the one IBM-only construct normalised IS compiled,
                      so the rest of the member is still checked.
 
-Copybooks resolve in SYSLIB order: the app's copybook and dclgen libraries, then
-shared/copylib, then tools/stubs/ (stand-ins for SQLCA, DFHAID and DFHEIBLK). Lines keep
-their numbers through the stubbing, so a cobc message points at the real member line.
+Copybooks resolve in the member's SYSLIB order from key/manifest.json `copy_libraries` (by
+default the app's copybook and dclgen libraries, then shared/copylib), then tools/stubs/
+(stand-ins for SQLCA, DFHAID and DFHEIBLK). Lines keep their numbers through the stubbing,
+so a cobc message points at the real member line.
 
     python3 tools/compile.py                   # cobc on PATH, else Docker
     GNUCOBOL_IMAGE=gitgalaxy-gnucobol:3 python3 tools/compile.py
@@ -19,6 +20,7 @@ their numbers through the stubbing, so a cobc message points at the real member 
 
 from __future__ import annotations
 
+import fnmatch
 import json
 import os
 import re
@@ -108,6 +110,17 @@ def to_free(text: str) -> str:
     return "\n".join(out)
 
 
+def stand_in(text: str, include: Path) -> str:
+    """An `incomplete` member COPYs a member the estate lacks (a gap): stand a one-byte FILLER
+    in for each such COPY, so the rest of the member is still compiled."""
+
+    def sub(m: "re.Match[str]") -> str:
+        name = m.group(1)
+        return m.group(0) if (include / f"{name}.cpy").exists() else "05 FILLER PIC X."
+
+    return re.sub(r"\bCOPY\s+([A-Z0-9#@$-]+)\s*\.", sub, text)
+
+
 def variant(text: str, kind: str) -> str:
     if kind == "pic-g-to-n":
         return re.sub(r"\bG'", "N'", re.sub(r"(PIC\s+)G\(", r"\1N(", text))
@@ -152,28 +165,39 @@ def main(argv: list[str]) -> int:
                 continue
             status = meta["compile"]["status"]
             check = meta["compile"].get("check_variant")
-            if status in ("ibm-only", "other-dialect") and not check:
+            if status in ("ibm-only", "other-dialect", "incomplete") and not check:
                 print(f"{path}: not compiled (ibm-only: {meta['compile']['reason']})")
                 continue
             name = Path(path).stem
             d = work / name
             d.mkdir()
-            app = meta["app"]
-            libs = [ESTATE / "apps" / app / "copybook", ESTATE / "apps" / app / "dclgen", ESTATE / "shared" / "copylib",
-                    STUBS]
+            # the member's SYSLIB order, from the key's copy-library declaration
+            decl = manifest["copy_libraries"]
+            order = next((r["order"] for r in decl["syslib"] if fnmatch.fnmatchcase(path, r["programs"])), ["SHRCPY"])
+            libs = [ESTATE / d for n in order for d in decl["libraries"].get(n, [])] + [STUBS]
             cics = "EXEC CICS" in text_of(ESTATE / path).upper()
-            lib_names = [f"{app}CPY", f"{app}DCL", "SHRCPY", None]
+            lib_names = [n for n in order for _d in decl["libraries"].get(n, [])] + [None]
+            # `COPY member IN library` may name a library outside the order
+            for n, dirs in decl["libraries"].items():
+                if n not in order:
+                    libs.append(ESTATE / dirs[0])
+                    lib_names.append(n + "*")
             for lib, lib_name in reversed(list(zip(libs, lib_names))):  # noqa: B905 -- earlier libraries win
                 for cb in sorted(lib.glob("*.*")) if lib.is_dir() else []:
                     if cb.suffix in (".cpy", ".dcl"):
                         text = stub(text_of(cb), cics=False)
-                        (d / f"{cb.stem}.cpy").write_text(text, encoding="utf-8")
+                        if lib_name and lib_name.endswith("*"):  # only reachable by IN library
+                            lib_name = lib_name[:-1]
+                        else:
+                            (d / f"{cb.stem}.cpy").write_text(text, encoding="utf-8")
                         if lib_name:  # `COPY member IN library` reads <library>/<member>
                             (d / lib_name).mkdir(exist_ok=True)
                             (d / lib_name / f"{cb.stem}.cpy").write_text(text, encoding="utf-8")
             src = text_of(ESTATE / path)
-            if status == "compiled-stubbed":
+            if status in ("compiled-stubbed", "incomplete"):
                 src = stub(src, cics=cics)
+            if status == "incomplete":
+                src = stand_in(src, d)
             if status in ("ibm-only", "other-dialect"):
                 src = variant(src, check)
                 for cpy in [*d.glob("*.cpy"), *d.glob("*/*.cpy")]:
@@ -195,6 +219,7 @@ def main(argv: list[str]) -> int:
                 cmd = ["docker", "run", "--rm", "-v", f"{work / name}:/work", "-w", "/work", image] + cmd
             r = subprocess.run(cmd, cwd=work / name, capture_output=True, text=True, check=False)
             how = {"compiled": "as written", "compiled-stubbed": "EXEC blocks stubbed",
+                   "incomplete": "missing members stood in, EXEC blocks stubbed",
                    "ibm-only": "variant: " + str(manifest["members"][path]["compile"].get("check_variant")),
                    "other-dialect": "variant: " + str(manifest["members"][path]["compile"].get("check_variant"))}[status]
             if free:

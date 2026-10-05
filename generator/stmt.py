@@ -80,21 +80,25 @@ def cics(*lines: str, verb: Optional[str] = None, operand: Optional[str] = None,
     return _s("cics", horror, lines=list(lines), verb=verb, operand=operand, own_line=own_line, resource=resource)
 
 
-def comment_code(*lines: str, call: Optional[str] = None, horror: Optional[str] = None) -> Stmt:
+def comment_code(*lines: str, call: Optional[str] = None, perform: Optional[str] = None,
+                 horror: Optional[str] = None) -> Stmt:
     """Commented-out code (`*` in column 7). `call` names a program a commented CALL
-    mentions: it must not become a call site or an edge."""
-    return _s("comment", horror, lines=list(lines), call=call)
+    mentions, `perform` a procedure a commented PERFORM names: neither may become a call
+    site or an edge."""
+    return _s("comment", horror, lines=list(lines), call=call, perform=perform)
 
 
 def para(name: str, *stmts: Stmt, horror: Optional[str] = None, tag: Optional[str] = None,
-         header: str = "normal", blank_after: bool = False, seq: Optional[str] = None) -> dict[str, Any]:
+         header: str = "normal", blank_after: bool = False, seq: Optional[str] = None,
+         dead: Optional[str] = None) -> dict[str, Any]:
     """A paragraph. `tag` writes a change tag in cols 73-80 of every line of it. `header`:
     normal, period-next-line (the name alone, the period on the next line) or inline (the
     first statement on the header line). `blank_after` writes an empty line after it (a
     numbered member keeps the sequence number there). `seq` overrides the header line's
-    cols 1-6 (a change marker)."""
+    cols 1-6 (a change marker). `dead` says why nothing reaches the paragraph (no PERFORM or
+    GO TO names it and the paragraph before it does not fall into it); the writer checks it."""
     return {"name": name, "kind": "paragraph", "stmts": list(stmts), "horror": horror, "tag": tag,
-            "header": header, "blank_after": blank_after, "seq": seq}
+            "header": header, "blank_after": blank_after, "seq": seq, "dead": dead}
 
 
 def section(name: str, *stmts: Stmt, horror: Optional[str] = None, blank_after: bool = False) -> dict[str, Any]:

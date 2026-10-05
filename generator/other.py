@@ -53,12 +53,14 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
             operands.append(f"COND={step['cond']}")
         if step.get("parm"):
             operands.append(f"PARM='{step['parm']}'")
-        line = _jcl_stmt(m, step["name"], "EXEC", operands)
-        m.fact("jcl_steps", job=None if proc else owner, proc=owner if proc else None, step=step["name"],
-               ordinal=ordinal, program=step.get("pgm"), exec_proc=step.get("proc"), cond=step.get("cond"), line=line)
-        if step.get("pgm"):
-            m.fact("call_sites", verb="EXEC PGM", form="literal", operand=step["pgm"], target=step["pgm"], line=line,
-                   resolves_to=program_paths.get(step["pgm"]))
+        with m.horror(step.get("horror")):
+            line = _jcl_stmt(m, step["name"], "EXEC", operands)
+            m.fact("jcl_steps", job=None if proc else owner, proc=owner if proc else None, step=step["name"],
+                   ordinal=ordinal, program=step.get("pgm"), exec_proc=step.get("proc"), cond=step.get("cond"),
+                   line=line)
+            if step.get("pgm"):
+                m.fact("call_sites", verb="EXEC PGM", form="literal", operand=step["pgm"], target=step["pgm"],
+                       line=line, resolves_to=program_paths.get(step["pgm"]))
         for dd in step.get("dds", []):
             if dd.get("sysout"):
                 ops = [f"SYSOUT={dd['sysout']}"]
@@ -160,13 +162,17 @@ def write_csd(m: Member, spec: dict[str, Any], program_paths: dict[str, str]) ->
     group = spec["group"]
     m.raw(f"* CSD GROUP {group} -- {spec['title']}")
     for rtype, name, attrs in spec["defines"]:
+        # `_horror` in attrs tags the definition's facts
+        horror = attrs.get("_horror")
+        attrs = {k: v for k, v in attrs.items() if not k.startswith("_")}
         text = f"DEFINE {rtype}({name}) GROUP({group})" + "".join(f" {k}({v})" for k, v in attrs.items())
-        line = m.raw(text)
-        m.fact("csd_resources", type=rtype, name=name, group=group, line=line,
-               **{k.lower(): v for k, v in attrs.items() if k in ("PROGRAM", "DSNAME")})
-        if rtype == "TRANSACTION":
-            m.fact("transactions", transid=name, program=attrs["PROGRAM"], group=group, line=line,
-                   resolves_to=program_paths.get(attrs["PROGRAM"]))
+        with m.horror(horror):
+            line = m.raw(text)
+            m.fact("csd_resources", type=rtype, name=name, group=group, line=line,
+                   **{k.lower(): v for k, v in attrs.items() if k in ("PROGRAM", "DSNAME")})
+            if rtype == "TRANSACTION":
+                m.fact("transactions", transid=name, program=attrs["PROGRAM"], group=group, line=line,
+                       resolves_to=program_paths.get(attrs["PROGRAM"]))
     m.compile = {"status": "not-cobol"}
 
 

@@ -44,7 +44,28 @@ CHANNELS = (
     "file_edges",
     # phase 2 (#4317)
     "data_moves",
+    # phase 3 (#4317): estate realism
+    "copy_collisions",
+    "gaps",
+    "dead",
 )
+
+
+def lower_code(text: str) -> str:
+    """`text` in lower case outside its alphanumeric literals (a member keyed in lower case:
+    IBM folds COBOL words and PICTURE symbols to upper case; a literal keeps its case)."""
+    out, quote = [], None
+    for ch in text:
+        if quote:
+            out.append(ch)
+            if ch == quote:
+                quote = None
+        elif ch in "'\"":
+            quote = ch
+            out.append(ch)
+        else:
+            out.append(ch.lower())
+    return "".join(out)
 
 
 class Member:
@@ -83,6 +104,13 @@ class Member:
         # a member another member is generated from (a BMS symbolic map's mapset source)
         self.generated_from: Optional[str] = None
         self._horror: Optional[str] = None
+        # estate cruft (phase 3): `lower` writes everything outside literals in lower case;
+        # `tabs` puts a TAB between the first two words of an Area B line and trailing white
+        # space on every third line (a member edited on a PC); `ident` fills cols 73-80 of
+        # every line that has no change tag (the deck identification of a card-era member)
+        self.lower = False
+        self.tabs = False
+        self.ident: Optional[str] = None
 
     # ---------------------------------------------------------------- lines
     @property
@@ -104,6 +132,8 @@ class Member:
         `tag` fills cols 73-80; `pad` keeps the line blank-padded to col 72 (a member saved
         from ISPF with trailing blanks)."""
         lead = "" if area == "A" else " " * (AREA_B_COL - AREA_A_COL + indent)
+        if self.lower:
+            text = lower_code(text)
         if self.free:
             if indicator == "*":
                 self.lines.append((lead + "*> " + text).rstrip())
@@ -111,9 +141,20 @@ class Member:
                 self.lines.append((lead + text).rstrip())
             return len(self.lines)
         seq = (seq if seq is not None else self.seq_of(self.line_no)).ljust(SEQ_WIDTH)
+        if self.tabs and area == "B" and indicator == " ":
+            # a TAB as the separator after the first word (it expands to the next tab stop,
+            # still in Area B and short of column 72); never inside a literal
+            body = text.lstrip()
+            at = body.find(" ")
+            if at > 0 and body[0] not in "'\"" and "'" not in body[:at] and '"' not in body[:at]:
+                text = text[: len(text) - len(body)] + body[:at] + "\t" + body[at + 1:]
         line = seq + indicator + lead + text
         if len(line) > CODE_END_COL:
             raise ValueError(f"{self.path}:{self.line_no}: past column 72: {line!r}")
+        if "\t" in line and len(line.expandtabs(8)) > CODE_END_COL:
+            raise ValueError(f"{self.path}:{self.line_no}: a TAB expands past column 72")
+        if tag is None and self.ident:
+            tag = self.ident
         if tag is not None:
             if len(tag) > 8:
                 raise ValueError(f"tag {tag!r} is longer than cols 73-80")
@@ -122,6 +163,8 @@ class Member:
             line = line.ljust(CODE_END_COL)
         else:
             line = line.rstrip()
+            if self.tabs and self.line_no % 3 == 0 and indicator != "-":
+                line += " \t " if len(line) < 56 else "  "
         self.lines.append(line)
         return len(self.lines)
 
@@ -136,7 +179,7 @@ class Member:
         """Append to the code of the last line (a closing period), keeping a change tag in place."""
         last = self.lines[-1]
         code, tag = (last[:CODE_END_COL].rstrip(), last[CODE_END_COL:]) if len(last) > CODE_END_COL else (last, "")
-        code += suffix
+        code = code.rstrip(" \t") + suffix
         if len(code) > CODE_END_COL:
             raise ValueError(f"{self.path}:{len(self.lines)}: past column 72 after {suffix!r}")
         self.lines[-1] = code.ljust(CODE_END_COL) + tag if tag else code

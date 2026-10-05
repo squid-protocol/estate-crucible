@@ -1,8 +1,10 @@
 """PL/I members: an external procedure with its declarations and internal procedures.
 
-Units follow the same flat model as COBOL (SPEC 3): the external procedure's unit is its
-own statements, from `NAME: PROC` to its last statement before the first internal
-procedure (`span_end` is its END); an internal procedure runs from `NAME: PROC` to its END.
+Units (SPEC 3.1): a procedure runs from `NAME: PROC` through its own `END NAME;` (PL/I LR,
+"Procedures": "a sequence of statements delimited by a PROCEDURE statement and a
+corresponding END statement"). An external procedure that contains internal procedures is
+keyed flat, like a COBOL section: its `end_line` is its last statement before the first
+internal procedure, and `span_end` is its END.
 """
 
 from __future__ import annotations
@@ -54,9 +56,8 @@ class PliWriter:
             for group in s.get("decls", []):
                 self.declare(group)
             self.stmts(s["stmts"], 2)
-            own_end = len(m.lines)
             outer = m.fact("units", name=s["proc"], kind="procedure", section=None, start_line=start,
-                           end_line=own_end)
+                           end_line=len(m.lines))
         for ip in s.get("internal", []):
             with m.horror(ip.get("horror")):
                 self.line("")
@@ -66,6 +67,8 @@ class PliWriter:
                 iend = self.line(f"END {ip['name']};")
                 m.fact("units", name=ip["name"], kind="procedure", section=None, start_line=istart, end_line=iend)
         outer["span_end"] = self.line(f"END {s['proc']};")
+        if not s.get("internal"):
+            outer["end_line"] = outer["span_end"]  # nothing nested: the procedure ends at its END
         m.compile = {"status": "ibm-only", "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"}
 
     def declare(self, group: list[tuple[Any, str, str]]) -> None:
