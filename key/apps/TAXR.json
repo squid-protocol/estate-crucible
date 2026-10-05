@@ -1,0 +1,972 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "TAXR",
+ "members": {
+  "apps/TAXR/cobol/TAXCALC.cbl": {
+   "app": "TAXR",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 26,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "TAXCALC",
+     "line": 2,
+     "horror": "H-0051"
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 19,
+     "end_line": 21
+    },
+    {
+     "name": "1000-CALC",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 22,
+     "end_line": 26
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-CALC",
+     "line": 20
+    }
+   ],
+   "copies": [
+    {
+     "member": "ADDRREC",
+     "kind": "copy",
+     "line": 12,
+     "resolves_to": "apps/TAXR/copybook/ADDRREC.cpy",
+     "horror": "H-0052"
+    },
+    {
+     "member": "TAXPARM",
+     "kind": "copy",
+     "line": 14,
+     "resolves_to": "apps/TAXR/copybook/TAXPARM.cpy"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-ADDRESS",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 11,
+     "copy_members": [
+      "ADDRREC"
+     ],
+     "horror": "H-0052"
+    },
+    {
+     "level": 1,
+     "name": "WS-PARM",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 13,
+     "copy_members": [
+      "TAXPARM"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-GROSS",
+     "pic": "S9(9)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 15
+    },
+    {
+     "level": 1,
+     "name": "WS-TAX",
+     "pic": "S9(9)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 16
+    },
+    {
+     "level": 1,
+     "name": "WS-YY",
+     "pic": "99",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 17,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-ADDRESS",
+     "line": 11,
+     "bytes": 62,
+     "fields": [
+      {
+       "name": "ADR-LINE1",
+       "level": 5,
+       "pic": "X(30)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 30,
+       "file": "apps/TAXR/copybook/ADDRREC.cpy"
+      },
+      {
+       "name": "ADR-CITY",
+       "level": 5,
+       "pic": "X(20)",
+       "usage": null,
+       "offset": 30,
+       "bytes": 20,
+       "file": "apps/TAXR/copybook/ADDRREC.cpy"
+      },
+      {
+       "name": "ADR-STATE",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 50,
+       "bytes": 2,
+       "file": "apps/TAXR/copybook/ADDRREC.cpy"
+      },
+      {
+       "name": "ADR-POSTAL",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 52,
+       "bytes": 10,
+       "file": "apps/TAXR/copybook/ADDRREC.cpy"
+      }
+     ],
+     "horror": "H-0052"
+    },
+    {
+     "record": "WS-PARM",
+     "line": 13,
+     "bytes": 10,
+     "fields": [
+      {
+       "name": "TP-YEAR",
+       "level": 5,
+       "pic": "9(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/TAXR/copybook/TAXPARM.cpy"
+      },
+      {
+       "name": "TP-QTR",
+       "level": 5,
+       "pic": "9",
+       "usage": null,
+       "offset": 4,
+       "bytes": 1,
+       "file": "apps/TAXR/copybook/TAXPARM.cpy"
+      },
+      {
+       "name": "TP-RATE",
+       "level": 5,
+       "pic": "9V9(4)",
+       "usage": null,
+       "offset": 5,
+       "bytes": 5,
+       "file": "apps/TAXR/copybook/TAXPARM.cpy"
+      }
+     ]
+    },
+    {
+     "record": "WS-GROSS",
+     "line": 15,
+     "bytes": 6,
+     "fields": [
+      {
+       "name": "WS-GROSS",
+       "level": 1,
+       "pic": "S9(9)V99",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 6,
+       "file": "apps/TAXR/cobol/TAXCALC.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-TAX",
+     "line": 16,
+     "bytes": 6,
+     "fields": [
+      {
+       "name": "WS-TAX",
+       "level": 1,
+       "pic": "S9(9)V99",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 6,
+       "file": "apps/TAXR/cobol/TAXCALC.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-YY",
+     "line": 17,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-YY",
+       "level": 1,
+       "pic": "99",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/TAXR/cobol/TAXCALC.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "TAXCALC",
+     "params": [],
+     "line": 18
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "COMPUTE",
+     "source": "WS-GROSS",
+     "source_kind": "item",
+     "target": "WS-TAX",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 23
+    },
+    {
+     "verb": "COMPUTE",
+     "source": "TP-RATE",
+     "source_kind": "item",
+     "target": "WS-TAX",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 23
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-TAX",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 25
+    }
+   ],
+   "copy_collisions": [
+    {
+     "member": "ADDRREC",
+     "line": 12,
+     "library": "TAXRCPY",
+     "resolves_to": "apps/TAXR/copybook/ADDRREC.cpy",
+     "shadowed": [
+      {
+       "library": "SHRCPY",
+       "path": "shared/copylib/ADDRREC.cpy"
+      }
+     ],
+     "horror": "H-0052"
+    }
+   ],
+   "dead": [
+    {
+     "kind": "program",
+     "name": "TAXCALC",
+     "line": 2,
+     "why": "replaced by TAXCALC2: no CALL or job step names TAXCALC",
+     "horror": "H-0051"
+    }
+   ],
+   "horrors": [
+    "H-0051",
+    "H-0052"
+   ]
+  },
+  "apps/TAXR/cobol/TAXCALC2.cbl": {
+   "app": "TAXR",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 33,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "TAXCALC2",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 19,
+     "end_line": 22
+    },
+    {
+     "name": "1000-CALC",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 23,
+     "end_line": 27
+    },
+    {
+     "name": "8000-Y2K-WINDOW",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 28,
+     "end_line": 33,
+     "horror": "H-0055"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-CALC",
+     "line": 20
+    },
+    {
+     "kind": "call",
+     "from": "0000-MAIN",
+     "target": "TAXVEND",
+     "line": 21,
+     "form": "literal",
+     "horror": "H-0054"
+    }
+   ],
+   "call_sites": [
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "TAXVEND",
+     "target": "TAXVEND",
+     "line": 21,
+     "resolves_to": null,
+     "horror": "H-0054"
+    }
+   ],
+   "copies": [
+    {
+     "member": "ADDRREC",
+     "kind": "copy",
+     "line": 12,
+     "resolves_to": "apps/TAXR/copybook/ADDRREC.cpy",
+     "horror": "H-0052"
+    },
+    {
+     "member": "TAXPARM",
+     "kind": "copy",
+     "line": 14,
+     "resolves_to": "apps/TAXR/copybook/TAXPARM.cpy"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-ADDRESS",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 11,
+     "copy_members": [
+      "ADDRREC"
+     ],
+     "horror": "H-0052"
+    },
+    {
+     "level": 1,
+     "name": "WS-PARM",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 13,
+     "copy_members": [
+      "TAXPARM"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-GROSS",
+     "pic": "S9(9)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 15
+    },
+    {
+     "level": 1,
+     "name": "WS-TAX",
+     "pic": "S9(9)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 16
+    },
+    {
+     "level": 1,
+     "name": "WS-YY",
+     "pic": "99",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 17,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-ADDRESS",
+     "line": 11,
+     "bytes": 62,
+     "fields": [
+      {
+       "name": "ADR-LINE1",
+       "level": 5,
+       "pic": "X(30)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 30,
+       "file": "apps/TAXR/copybook/ADDRREC.cpy"
+      },
+      {
+       "name": "ADR-CITY",
+       "level": 5,
+       "pic": "X(20)",
+       "usage": null,
+       "offset": 30,
+       "bytes": 20,
+       "file": "apps/TAXR/copybook/ADDRREC.cpy"
+      },
+      {
+       "name": "ADR-STATE",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 50,
+       "bytes": 2,
+       "file": "apps/TAXR/copybook/ADDRREC.cpy"
+      },
+      {
+       "name": "ADR-POSTAL",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 52,
+       "bytes": 10,
+       "file": "apps/TAXR/copybook/ADDRREC.cpy"
+      }
+     ],
+     "horror": "H-0052"
+    },
+    {
+     "record": "WS-PARM",
+     "line": 13,
+     "bytes": 10,
+     "fields": [
+      {
+       "name": "TP-YEAR",
+       "level": 5,
+       "pic": "9(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/TAXR/copybook/TAXPARM.cpy"
+      },
+      {
+       "name": "TP-QTR",
+       "level": 5,
+       "pic": "9",
+       "usage": null,
+       "offset": 4,
+       "bytes": 1,
+       "file": "apps/TAXR/copybook/TAXPARM.cpy"
+      },
+      {
+       "name": "TP-RATE",
+       "level": 5,
+       "pic": "9V9(4)",
+       "usage": null,
+       "offset": 5,
+       "bytes": 5,
+       "file": "apps/TAXR/copybook/TAXPARM.cpy"
+      }
+     ]
+    },
+    {
+     "record": "WS-GROSS",
+     "line": 15,
+     "bytes": 6,
+     "fields": [
+      {
+       "name": "WS-GROSS",
+       "level": 1,
+       "pic": "S9(9)V99",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 6,
+       "file": "apps/TAXR/cobol/TAXCALC2.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-TAX",
+     "line": 16,
+     "bytes": 6,
+     "fields": [
+      {
+       "name": "WS-TAX",
+       "level": 1,
+       "pic": "S9(9)V99",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 6,
+       "file": "apps/TAXR/cobol/TAXCALC2.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-YY",
+     "line": 17,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-YY",
+       "level": 1,
+       "pic": "99",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/TAXR/cobol/TAXCALC2.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "TAXCALC2",
+     "params": [],
+     "line": 18
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "COMPUTE",
+     "source": "WS-GROSS",
+     "source_kind": "item",
+     "target": "WS-TAX",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 24
+    },
+    {
+     "verb": "COMPUTE",
+     "source": "TP-RATE",
+     "source_kind": "item",
+     "target": "WS-TAX",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 24
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-TAX",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 26
+    },
+    {
+     "verb": "COMPUTE",
+     "source": "WS-YY",
+     "source_kind": "item",
+     "target": "TP-YEAR",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 30,
+     "horror": "H-0055"
+    },
+    {
+     "verb": "COMPUTE",
+     "source": "WS-YY",
+     "source_kind": "item",
+     "target": "TP-YEAR",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 32,
+     "horror": "H-0055"
+    }
+   ],
+   "copy_collisions": [
+    {
+     "member": "ADDRREC",
+     "line": 12,
+     "library": "TAXRCPY",
+     "resolves_to": "apps/TAXR/copybook/ADDRREC.cpy",
+     "shadowed": [
+      {
+       "library": "SHRCPY",
+       "path": "shared/copylib/ADDRREC.cpy"
+      }
+     ],
+     "horror": "H-0052"
+    }
+   ],
+   "gaps": [
+    {
+     "kind": "call",
+     "name": "TAXVEND",
+     "line": 21,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0054"
+    }
+   ],
+   "dead": [
+    {
+     "kind": "paragraph",
+     "name": "8000-Y2K-WINDOW",
+     "line": 28,
+     "why": "no PERFORM or GO TO names it; 1000-CALC before it is reached only by PERFORM",
+     "horror": "H-0055"
+    }
+   ],
+   "horrors": [
+    "H-0052",
+    "H-0054",
+    "H-0055"
+   ]
+  },
+  "apps/TAXR/copybook/ADDRREC.cpy": {
+   "app": "TAXR",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 5,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "ADR-LINE1",
+     "pic": "X(30)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2,
+     "horror": "H-0052"
+    },
+    {
+     "level": 5,
+     "name": "ADR-CITY",
+     "pic": "X(20)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3,
+     "horror": "H-0052"
+    },
+    {
+     "level": 5,
+     "name": "ADR-STATE",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4,
+     "horror": "H-0052"
+    },
+    {
+     "level": 5,
+     "name": "ADR-POSTAL",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5,
+     "horror": "H-0052"
+    }
+   ],
+   "horrors": [
+    "H-0052"
+   ]
+  },
+  "apps/TAXR/copybook/TAXPARM.cpy": {
+   "app": "TAXR",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 4,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "TP-YEAR",
+     "pic": "9(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 5,
+     "name": "TP-QTR",
+     "pic": "9",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 5,
+     "name": "TP-RATE",
+     "pic": "9V9(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "0.2200",
+     "section": null,
+     "line": 4
+    }
+   ]
+  },
+  "apps/TAXR/jcl/TAXQTR.jcl": {
+   "app": "TAXR",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 7,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "TAXCALC2",
+     "target": "TAXCALC2",
+     "line": 4,
+     "resolves_to": "apps/TAXR/cobol/TAXCALC2.cbl"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "TAXQTR",
+     "proc": null,
+     "step": "CALC",
+     "ordinal": 1,
+     "program": "TAXCALC2",
+     "exec_proc": null,
+     "cond": null,
+     "line": 4
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "TAXQTR",
+     "proc": null,
+     "step": "CALC",
+     "dd": "STEPLIB",
+     "dsn": "PROD.TAXR.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 5
+    },
+    {
+     "job": "TAXQTR",
+     "proc": null,
+     "step": "CALC",
+     "dd": "STEPLIB2",
+     "dsn": "VENDOR.TAXLINK.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 6
+    },
+    {
+     "job": "TAXQTR",
+     "proc": null,
+     "step": "CALC",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 7
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.TAXR.LOADLIB",
+     "generation": null,
+     "step": "CALC",
+     "dd": "STEPLIB",
+     "line": 5
+    },
+    {
+     "dsn": "VENDOR.TAXLINK.LOADLIB",
+     "generation": null,
+     "step": "CALC",
+     "dd": "STEPLIB2",
+     "line": 6
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/TAXR/cobol/TAXCALC2.cbl"
+    }
+   ]
+  },
+  "apps/TAXR/oldcopy/TAXOLD.cpy": {
+   "app": "TAXR",
+   "library": "oldcopy",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 3,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "TO-BRACKET",
+     "pic": "9(7)",
+     "usage": null,
+     "occurs": 8,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2,
+     "horror": "H-0056"
+    },
+    {
+     "level": 5,
+     "name": "TO-RATE",
+     "pic": "9V99",
+     "usage": null,
+     "occurs": 8,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3,
+     "horror": "H-0056"
+    }
+   ],
+   "dead": [
+    {
+     "kind": "copybook",
+     "name": "TAXOLD",
+     "line": 1,
+     "why": "no COPY names TAXOLD; it sits only in the retired TAXROLD library",
+     "horror": "H-0056"
+    }
+   ],
+   "horrors": [
+    "H-0056"
+   ]
+  }
+ }
+}

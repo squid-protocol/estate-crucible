@@ -1,0 +1,92 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0060",
+ "title": "A nonnumeric VALUE literal continued onto the next line (column 72, then - in column 7)",
+ "category": "data-items",
+ "issue": 4391,
+ "shapes": [
+  "RPTS RPTHDR: two report-heading 01s whose VALUE literal runs to column 72 and continues after a quotation mark on a '-' line"
+ ],
+ "asserts": "The item's value is the joined literal: the first line's characters through column 72, then the continuation line's characters after its quotation mark.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Continuation lines > Continuation of alphanumeric and national literals (p.58)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "If the continued line contains an alphanumeric or national literal without a closing quotation mark, all spaces at the end of the continued line (through column 72) are considered to be part of the literal. The continuation line must contain a hyphen in the indicator area, and the first nonblank character must be a quotation mark. The continuation of the literal begins with the character immediately following the quotation mark."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/RPTS/cobol/RPTHDR.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 1,
+      "name": "HDR-LINE-1",
+      "pic": "X(80)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'ACME MANUFACTURING  -  MONTHLY OPERATIONS SUMMARY  -  CONFIDENTIAL'",
+      "section": "WORKING-STORAGE",
+      "line": 21,
+      "horror": "H-0060"
+     },
+     {
+      "level": 1,
+      "name": "HDR-LINE-2",
+      "pic": "X(80)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'REGION   PLANT    UNITS BUILT    UNITS SHIPPED    BACKLOG  STATUS'",
+      "section": "WORKING-STORAGE",
+      "line": 23,
+      "horror": "H-0060"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "HDR-LINE-1",
+      "line": 21,
+      "bytes": 80,
+      "fields": [
+       {
+        "name": "HDR-LINE-1",
+        "level": 1,
+        "pic": "X(80)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 80,
+        "file": "apps/RPTS/cobol/RPTHDR.cbl"
+       }
+      ],
+      "horror": "H-0060"
+     },
+     {
+      "record": "HDR-LINE-2",
+      "line": 23,
+      "bytes": 80,
+      "fields": [
+       {
+        "name": "HDR-LINE-2",
+        "level": 1,
+        "pic": "X(80)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 80,
+        "file": "apps/RPTS/cobol/RPTHDR.cbl"
+       }
+      ],
+      "horror": "H-0060"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

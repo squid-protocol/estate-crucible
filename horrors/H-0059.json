@@ -1,0 +1,207 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0059",
+ "title": "Source keyed in lower case: divisions, paragraph names, data names and PICTURE strings",
+ "category": "reference-format",
+ "issue": null,
+ "realism": "Programs written on PCs or by newer staff are often all lower case; IBM folds COBOL words, so they compile unchanged.",
+ "shapes": [
+  "PCED pcedlow: everything outside literals in lower case, CALL 'PCEDTAB' kept upper case"
+ ],
+ "asserts": "A lower-case COBOL word is the same word upper case: the units, edges, data items and calls are facts, with names as written (the scorer compares names without case).",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "COBOL words with single-byte characters (p.11)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "In COBOL words (but not in the content of alphanumeric, DBCS, national, and UTF-8 literals), each lowercase single-byte alphabetic letter is considered to be equivalent to its corresponding single-byte uppercase alphabetic letter."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/PCED/cobol/PCEDLOW.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "pcedlow",
+      "line": 2,
+      "horror": "H-0059"
+     }
+    ],
+    "units": [
+     {
+      "name": "main-para",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 15,
+      "end_line": 20,
+      "horror": "H-0059"
+     },
+     {
+      "name": "round-total",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 21,
+      "end_line": 24,
+      "horror": "H-0059"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "main-para",
+      "target": "round-total",
+      "line": 16,
+      "horror": "H-0059"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "ws-cents",
+      "pic": "S9(9)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": "0",
+      "section": "WORKING-STORAGE",
+      "line": 9,
+      "horror": "H-0059"
+     },
+     {
+      "level": 1,
+      "name": "ws-flag",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'n'",
+      "section": "WORKING-STORAGE",
+      "line": 10,
+      "horror": "H-0059"
+     },
+     {
+      "level": 88,
+      "name": "ws-rounded",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'y'",
+      "section": "WORKING-STORAGE",
+      "line": 11,
+      "horror": "H-0059"
+     },
+     {
+      "level": 1,
+      "name": "lk-total",
+      "pic": "S9(7)V99",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 13,
+      "horror": "H-0059"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "ws-cents",
+      "line": 9,
+      "bytes": 4,
+      "fields": [
+       {
+        "name": "ws-cents",
+        "level": 1,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/PCED/cobol/PCEDLOW.cbl"
+       }
+      ],
+      "horror": "H-0059"
+     },
+     {
+      "record": "ws-flag",
+      "line": 10,
+      "bytes": 1,
+      "fields": [
+       {
+        "name": "ws-flag",
+        "level": 1,
+        "pic": "X",
+        "usage": null,
+        "offset": 0,
+        "bytes": 1,
+        "file": "apps/PCED/cobol/PCEDLOW.cbl"
+       }
+      ],
+      "horror": "H-0059"
+     },
+     {
+      "record": "lk-total",
+      "line": 13,
+      "bytes": 5,
+      "fields": [
+       {
+        "name": "lk-total",
+        "level": 1,
+        "pic": "S9(7)V99",
+        "usage": "COMP-3",
+        "offset": 0,
+        "bytes": 5,
+        "file": "apps/PCED/cobol/PCEDLOW.cbl"
+       }
+      ],
+      "horror": "H-0059"
+     }
+    ],
+    "entry_points": [
+     {
+      "kind": "PROCEDURE",
+      "program": "pcedlow",
+      "params": [
+       "lk-total"
+      ],
+      "line": 14,
+      "horror": "H-0059"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "COMPUTE",
+      "source": "lk-total",
+      "source_kind": "item",
+      "target": "ws-cents",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 22,
+      "horror": "H-0059"
+     },
+     {
+      "verb": "COMPUTE",
+      "source": "ws-cents",
+      "source_kind": "item",
+      "target": "lk-total",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 23,
+      "horror": "H-0059"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

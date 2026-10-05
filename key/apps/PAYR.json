@@ -680,6 +680,21 @@
      "horror": "H-0031"
     }
    ],
+   "copy_collisions": [
+    {
+     "member": "DATEWS",
+     "line": 33,
+     "library": "PAYRCPY",
+     "resolves_to": "apps/PAYR/copybook/DATEWS.cpy",
+     "shadowed": [
+      {
+       "library": "SHRCPY",
+       "path": "shared/copylib/DATEWS.cpy"
+      }
+     ],
+     "horror": "H-0034"
+    }
+   ],
    "phantoms": [
     {
      "channel": "units",

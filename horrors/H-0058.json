@@ -1,0 +1,272 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0058",
+ "title": "A member edited on a PC: TAB characters between words and trailing white space",
+ "category": "reference-format",
+ "issue": null,
+ "realism": "Members that went through a PC editor (or a git-hosted estate) carry TABs and trailing blanks or TABs. Mainframe source has none; GnuCOBOL and modern toolchains accept them.",
+ "shapes": [
+  "PCED PCEDTAB: a TAB after the first word of every Area B line; ' <TAB> ' or two blanks at the end of every third line"
+ ],
+ "asserts": "A TAB between words is white space (a separator) and trailing white space is nothing: every fact is what the member says with the TABs read as blanks.",
+ "citations": [
+  {
+   "doc": "GnuCOBOL 3.x Programmer's Guide",
+   "section": "10.1.1 cobc - The GnuCOBOL Compiler (-ftab-width)",
+   "url": "https://gnucobol.sourceforge.io/HTML/gnucobpg.html",
+   "quote": "-ftab-width=1..12 Set number of spaces that are assumed for tabs"
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Separators (p.49)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "Anywhere a space is used as a separator or as part of a separator, more than one space can be used."
+  }
+ ],
+ "lower_confidence": "Enterprise COBOL documents no TAB in source; the assertion follows GnuCOBOL (which expands it to a tab stop, -ftab-width) and is labelled realism, not an IBM rule.",
+ "planted": [
+  {
+   "member": "apps/PCED/cobol/PCEDTAB.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "PCEDTAB",
+      "line": 2,
+      "horror": "H-0058"
+     }
+    ],
+    "units": [
+     {
+      "name": "MAIN-PARA",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 14,
+      "end_line": 17,
+      "horror": "H-0058"
+     },
+     {
+      "name": "LOAD-TABLE",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 18,
+      "end_line": 20,
+      "horror": "H-0058"
+     },
+     {
+      "name": "ADD-PRICE",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 21,
+      "end_line": 23,
+      "horror": "H-0058"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "MAIN-PARA",
+      "target": "LOAD-TABLE",
+      "line": 15,
+      "horror": "H-0058"
+     },
+     {
+      "kind": "call",
+      "from": "MAIN-PARA",
+      "target": "PCEDLOW",
+      "line": 16,
+      "form": "literal",
+      "horror": "H-0058"
+     },
+     {
+      "kind": "perform",
+      "from": "LOAD-TABLE",
+      "target": "ADD-PRICE",
+      "line": 20,
+      "horror": "H-0058"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "PCEDLOW",
+      "target": "PCEDLOW",
+      "line": 16,
+      "resolves_to": "apps/PCED/cobol/PCEDLOW.cbl",
+      "horror": "H-0058",
+      "depends_on": [
+       "H-0059"
+      ]
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-PRICES",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 9,
+      "horror": "H-0058"
+     },
+     {
+      "level": 5,
+      "name": "WS-PRICE",
+      "pic": "S9(5)V99",
+      "usage": "COMP-3",
+      "occurs": 10,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 10,
+      "horror": "H-0058"
+     },
+     {
+      "level": 1,
+      "name": "WS-I",
+      "pic": "S9(4)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": "0",
+      "section": "WORKING-STORAGE",
+      "line": 11,
+      "horror": "H-0058"
+     },
+     {
+      "level": 1,
+      "name": "WS-TOTAL",
+      "pic": "S9(7)V99",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": "0",
+      "section": "WORKING-STORAGE",
+      "line": 12,
+      "horror": "H-0058"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-PRICES",
+      "line": 9,
+      "bytes": 40,
+      "fields": [
+       {
+        "name": "WS-PRICE",
+        "level": 5,
+        "pic": "S9(5)V99",
+        "usage": "COMP-3",
+        "offset": 0,
+        "bytes": 40,
+        "file": "apps/PCED/cobol/PCEDTAB.cbl"
+       }
+      ],
+      "horror": "H-0058"
+     },
+     {
+      "record": "WS-I",
+      "line": 11,
+      "bytes": 2,
+      "fields": [
+       {
+        "name": "WS-I",
+        "level": 1,
+        "pic": "S9(4)",
+        "usage": "COMP",
+        "offset": 0,
+        "bytes": 2,
+        "file": "apps/PCED/cobol/PCEDTAB.cbl"
+       }
+      ],
+      "horror": "H-0058"
+     },
+     {
+      "record": "WS-TOTAL",
+      "line": 12,
+      "bytes": 5,
+      "fields": [
+       {
+        "name": "WS-TOTAL",
+        "level": 1,
+        "pic": "S9(7)V99",
+        "usage": "COMP-3",
+        "offset": 0,
+        "bytes": 5,
+        "file": "apps/PCED/cobol/PCEDTAB.cbl"
+       }
+      ],
+      "horror": "H-0058"
+     }
+    ],
+    "entry_points": [
+     {
+      "kind": "PROCEDURE",
+      "program": "PCEDTAB",
+      "params": [],
+      "line": 13,
+      "horror": "H-0058"
+     }
+    ],
+    "file_edges": [
+     {
+      "kind": "call",
+      "target": "apps/PCED/cobol/PCEDLOW.cbl",
+      "horror": "H-0058",
+      "depends_on": [
+       "H-0059"
+      ]
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-I",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 19,
+      "horror": "H-0058"
+     },
+     {
+      "verb": "ADD",
+      "source": "WS-PRICE",
+      "source_kind": "item",
+      "target": "WS-TOTAL",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 22,
+      "horror": "H-0058"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-I",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 23,
+      "horror": "H-0058"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

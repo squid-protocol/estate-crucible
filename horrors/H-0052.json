@@ -1,0 +1,1640 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0052",
+ "title": "Copybook version drift: one member in three libraries with three layouts; SYSLIB order (per program) picks the layout",
+ "category": "copy",
+ "issue": 4265,
+ "collision": true,
+ "shapes": [
+  "ORDREC in ORDRCPY (41 bytes), SHRCPY (35 bytes) and the retired ORDROLD (36 bytes)",
+  "ORDR's SYSLIB is ORDRCPY, ORDRDCL, SHRCPY, ORDROLD; ORDVOLD's own is ORDROLD, ORDRCPY, SHRCPY",
+  "SHIP has no ORDREC of its own: its COPY ORDREC takes SHRCPY's",
+  "TAXR's ADDRREC shadows SHRCPY's ADDRREC (a longer postal code)"
+ ],
+ "asserts": "Each COPY resolves to the first library in its program's SYSLIB order that holds the member, and the record's layout is that member's. Every unqualified COPY whose member sits in more than one library of that order is a collision the scan should report, with the winner and the shadowed libraries (key channel copy_collisions; the libraries and orders are key/manifest.json copy_libraries).",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Copy member search order (p.697)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "If no library name is specified in the COPY statement, the concatenation of datasets allocated to the SYSLIB ddname is searched."
+  },
+  {
+   "doc": "z/OS V2R2 DFSMS Using Data Sets (SC23-6855-03)",
+   "section": "Concatenating PDSs",
+   "url": "https://publibz.boulder.ibm.com/epubs/pdf/dgt3d410.pdf",
+   "quote": "If two members of different data sets in the concatenation have the same name, the FIND macro determines the address of the first one in the concatenation."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/ORDR/cobol/ORDMAIN.cbl",
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY ORDPRICE: the estate holds no copybook ORDPRICE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "a one-byte FILLER stands in for the missing COPY ORDPRICE"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "ORDREC",
+      "kind": "copy",
+      "line": 25,
+      "resolves_to": "apps/ORDR/copybook/ORDREC.cpy",
+      "horror": "H-0052"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-ORDER",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 24,
+      "copy_members": [
+       "ORDREC"
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-ORDER",
+      "line": 24,
+      "bytes": 41,
+      "fields": [
+       {
+        "name": "ORD-ID",
+        "level": 5,
+        "pic": "X(10)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 10,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-CUST",
+        "level": 5,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 10,
+        "bytes": 8,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-ITEM",
+        "level": 5,
+        "pic": "X(12)",
+        "usage": null,
+        "offset": 18,
+        "bytes": 12,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-QTY",
+        "level": 5,
+        "pic": "S9(5)",
+        "usage": "COMP-3",
+        "offset": 30,
+        "bytes": 3,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-PRICE",
+        "level": 5,
+        "pic": "S9(7)V99",
+        "usage": "COMP-3",
+        "offset": 33,
+        "bytes": 5,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-STATUS",
+        "level": 5,
+        "pic": "X",
+        "usage": null,
+        "offset": 38,
+        "bytes": 1,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-CHANNEL",
+        "level": 5,
+        "pic": "X(2)",
+        "usage": null,
+        "offset": 39,
+        "bytes": 2,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "copy_collisions": [
+     {
+      "member": "ORDREC",
+      "line": 25,
+      "library": "ORDRCPY",
+      "resolves_to": "apps/ORDR/copybook/ORDREC.cpy",
+      "shadowed": [
+       {
+        "library": "SHRCPY",
+        "path": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "library": "ORDROLD",
+        "path": "apps/ORDR/oldcopy/ORDREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/ORDR/cobol/ORDPRICE.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "ORDREC",
+      "kind": "copy",
+      "line": 10,
+      "resolves_to": "apps/ORDR/copybook/ORDREC.cpy",
+      "horror": "H-0052"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "LK-ORDER",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 9,
+      "copy_members": [
+       "ORDREC"
+      ],
+      "horror": "H-0052",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "layouts": [
+     {
+      "record": "LK-ORDER",
+      "line": 9,
+      "bytes": 41,
+      "fields": [
+       {
+        "name": "ORD-ID",
+        "level": 5,
+        "pic": "X(10)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 10,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-CUST",
+        "level": 5,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 10,
+        "bytes": 8,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-ITEM",
+        "level": 5,
+        "pic": "X(12)",
+        "usage": null,
+        "offset": 18,
+        "bytes": 12,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-QTY",
+        "level": 5,
+        "pic": "S9(5)",
+        "usage": "COMP-3",
+        "offset": 30,
+        "bytes": 3,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-PRICE",
+        "level": 5,
+        "pic": "S9(7)V99",
+        "usage": "COMP-3",
+        "offset": 33,
+        "bytes": 5,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-STATUS",
+        "level": 5,
+        "pic": "X",
+        "usage": null,
+        "offset": 38,
+        "bytes": 1,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-CHANNEL",
+        "level": 5,
+        "pic": "X(2)",
+        "usage": null,
+        "offset": 39,
+        "bytes": 2,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       }
+      ],
+      "horror": "H-0052",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "copy_collisions": [
+     {
+      "member": "ORDREC",
+      "line": 10,
+      "library": "ORDRCPY",
+      "resolves_to": "apps/ORDR/copybook/ORDREC.cpy",
+      "shadowed": [
+       {
+        "library": "SHRCPY",
+        "path": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "library": "ORDROLD",
+        "path": "apps/ORDR/oldcopy/ORDREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/ORDR/cobol/ORDV#OLD.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "ORDREC",
+      "kind": "copy",
+      "line": 14,
+      "resolves_to": "apps/ORDR/copybook/ORDREC.cpy",
+      "horror": "H-0052"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "LK-ORDER",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 13,
+      "copy_members": [
+       "ORDREC"
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "LK-ORDER",
+      "line": 13,
+      "bytes": 41,
+      "fields": [
+       {
+        "name": "ORD-ID",
+        "level": 5,
+        "pic": "X(10)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 10,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-CUST",
+        "level": 5,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 10,
+        "bytes": 8,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-ITEM",
+        "level": 5,
+        "pic": "X(12)",
+        "usage": null,
+        "offset": 18,
+        "bytes": 12,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-QTY",
+        "level": 5,
+        "pic": "S9(5)",
+        "usage": "COMP-3",
+        "offset": 30,
+        "bytes": 3,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-PRICE",
+        "level": 5,
+        "pic": "S9(7)V99",
+        "usage": "COMP-3",
+        "offset": 33,
+        "bytes": 5,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-STATUS",
+        "level": 5,
+        "pic": "X",
+        "usage": null,
+        "offset": 38,
+        "bytes": 1,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-CHANNEL",
+        "level": 5,
+        "pic": "X(2)",
+        "usage": null,
+        "offset": 39,
+        "bytes": 2,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "copy_collisions": [
+     {
+      "member": "ORDREC",
+      "line": 14,
+      "library": "ORDRCPY",
+      "resolves_to": "apps/ORDR/copybook/ORDREC.cpy",
+      "shadowed": [
+       {
+        "library": "SHRCPY",
+        "path": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "library": "ORDROLD",
+        "path": "apps/ORDR/oldcopy/ORDREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/ORDR/cobol/ORDVAL.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "ORDREC",
+      "kind": "copy",
+      "line": 13,
+      "resolves_to": "apps/ORDR/copybook/ORDREC.cpy",
+      "horror": "H-0052"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "LK-ORDER",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 12,
+      "copy_members": [
+       "ORDREC"
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "LK-ORDER",
+      "line": 12,
+      "bytes": 41,
+      "fields": [
+       {
+        "name": "ORD-ID",
+        "level": 5,
+        "pic": "X(10)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 10,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-CUST",
+        "level": 5,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 10,
+        "bytes": 8,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-ITEM",
+        "level": 5,
+        "pic": "X(12)",
+        "usage": null,
+        "offset": 18,
+        "bytes": 12,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-QTY",
+        "level": 5,
+        "pic": "S9(5)",
+        "usage": "COMP-3",
+        "offset": 30,
+        "bytes": 3,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-PRICE",
+        "level": 5,
+        "pic": "S9(7)V99",
+        "usage": "COMP-3",
+        "offset": 33,
+        "bytes": 5,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-STATUS",
+        "level": 5,
+        "pic": "X",
+        "usage": null,
+        "offset": 38,
+        "bytes": 1,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-CHANNEL",
+        "level": 5,
+        "pic": "X(2)",
+        "usage": null,
+        "offset": 39,
+        "bytes": 2,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "copy_collisions": [
+     {
+      "member": "ORDREC",
+      "line": 13,
+      "library": "ORDRCPY",
+      "resolves_to": "apps/ORDR/copybook/ORDREC.cpy",
+      "shadowed": [
+       {
+        "library": "SHRCPY",
+        "path": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "library": "ORDROLD",
+        "path": "apps/ORDR/oldcopy/ORDREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/ORDR/cobol/ORDVALV2.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "ORDREC",
+      "kind": "copy",
+      "line": 13,
+      "resolves_to": "apps/ORDR/copybook/ORDREC.cpy",
+      "horror": "H-0052"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "LK-ORDER",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 12,
+      "copy_members": [
+       "ORDREC"
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "LK-ORDER",
+      "line": 12,
+      "bytes": 41,
+      "fields": [
+       {
+        "name": "ORD-ID",
+        "level": 5,
+        "pic": "X(10)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 10,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-CUST",
+        "level": 5,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 10,
+        "bytes": 8,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-ITEM",
+        "level": 5,
+        "pic": "X(12)",
+        "usage": null,
+        "offset": 18,
+        "bytes": 12,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-QTY",
+        "level": 5,
+        "pic": "S9(5)",
+        "usage": "COMP-3",
+        "offset": 30,
+        "bytes": 3,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-PRICE",
+        "level": 5,
+        "pic": "S9(7)V99",
+        "usage": "COMP-3",
+        "offset": 33,
+        "bytes": 5,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-STATUS",
+        "level": 5,
+        "pic": "X",
+        "usage": null,
+        "offset": 38,
+        "bytes": 1,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-CHANNEL",
+        "level": 5,
+        "pic": "X(2)",
+        "usage": null,
+        "offset": 39,
+        "bytes": 2,
+        "file": "apps/ORDR/copybook/ORDREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "copy_collisions": [
+     {
+      "member": "ORDREC",
+      "line": 13,
+      "library": "ORDRCPY",
+      "resolves_to": "apps/ORDR/copybook/ORDREC.cpy",
+      "shadowed": [
+       {
+        "library": "SHRCPY",
+        "path": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "library": "ORDROLD",
+        "path": "apps/ORDR/oldcopy/ORDREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/ORDR/cobol/ORDVOLD.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "ORDREC",
+      "kind": "copy",
+      "line": 14,
+      "resolves_to": "apps/ORDR/oldcopy/ORDREC.cpy",
+      "horror": "H-0052"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "LK-ORDER",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 13,
+      "copy_members": [
+       "ORDREC"
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "LK-ORDER",
+      "line": 13,
+      "bytes": 36,
+      "fields": [
+       {
+        "name": "ORD-ID",
+        "level": 5,
+        "pic": "X(10)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 10,
+        "file": "apps/ORDR/oldcopy/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-CUST",
+        "level": 5,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 10,
+        "bytes": 8,
+        "file": "apps/ORDR/oldcopy/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-ITEM",
+        "level": 5,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 18,
+        "bytes": 8,
+        "file": "apps/ORDR/oldcopy/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-QTY",
+        "level": 5,
+        "pic": "9(5)",
+        "usage": null,
+        "offset": 26,
+        "bytes": 5,
+        "file": "apps/ORDR/oldcopy/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-STATUS",
+        "level": 5,
+        "pic": "X",
+        "usage": null,
+        "offset": 31,
+        "bytes": 1,
+        "file": "apps/ORDR/oldcopy/ORDREC.cpy"
+       },
+       {
+        "name": "FILLER",
+        "level": 5,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 32,
+        "bytes": 4,
+        "file": "apps/ORDR/oldcopy/ORDREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "copy_collisions": [
+     {
+      "member": "ORDREC",
+      "line": 14,
+      "library": "ORDROLD",
+      "resolves_to": "apps/ORDR/oldcopy/ORDREC.cpy",
+      "shadowed": [
+       {
+        "library": "ORDRCPY",
+        "path": "apps/ORDR/copybook/ORDREC.cpy"
+       },
+       {
+        "library": "SHRCPY",
+        "path": "shared/copylib/ORDREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/ORDR/copybook/ORDREC.cpy",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 5,
+      "name": "ORD-ID",
+      "pic": "X(10)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 4,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ORD-CUST",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 5,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ORD-ITEM",
+      "pic": "X(12)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 6,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ORD-QTY",
+      "pic": "S9(5)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 7,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ORD-PRICE",
+      "pic": "S9(7)V99",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 8,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ORD-STATUS",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 9,
+      "horror": "H-0052"
+     },
+     {
+      "level": 88,
+      "name": "ORD-OPEN",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'O'",
+      "section": null,
+      "line": 10,
+      "horror": "H-0052"
+     },
+     {
+      "level": 88,
+      "name": "ORD-REJECTED",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'R'",
+      "section": null,
+      "line": 11,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ORD-CHANNEL",
+      "pic": "X(2)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 12,
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/ORDR/oldcopy/ORDREC.cpy",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 5,
+      "name": "ORD-ID",
+      "pic": "X(10)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 2,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ORD-CUST",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 3,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ORD-ITEM",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 4,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ORD-QTY",
+      "pic": "9(5)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 5,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ORD-STATUS",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 6,
+      "horror": "H-0052"
+     },
+     {
+      "level": 88,
+      "name": "ORD-OPEN",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'O'",
+      "section": null,
+      "line": 7,
+      "horror": "H-0052"
+     },
+     {
+      "level": 88,
+      "name": "ORD-REJECTED",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'R'",
+      "section": null,
+      "line": 8,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "FILLER",
+      "pic": "X(4)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 9,
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/SHIP/cobol/SHPINQ.cbl",
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY SHPRATE: the estate holds no copybook SHPRATE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "ORDREC",
+      "kind": "copy",
+      "line": 12,
+      "resolves_to": "shared/copylib/ORDREC.cpy",
+      "horror": "H-0052"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-ORDER",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 11,
+      "copy_members": [
+       "ORDREC"
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-ORDER",
+      "line": 11,
+      "bytes": 36,
+      "fields": [
+       {
+        "name": "ORD-ID",
+        "level": 5,
+        "pic": "X(10)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 10,
+        "file": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-CUST",
+        "level": 5,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 10,
+        "bytes": 8,
+        "file": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-ITEM",
+        "level": 5,
+        "pic": "X(12)",
+        "usage": null,
+        "offset": 18,
+        "bytes": 12,
+        "file": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-QTY",
+        "level": 5,
+        "pic": "S9(5)",
+        "usage": "COMP-3",
+        "offset": 30,
+        "bytes": 3,
+        "file": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-STATUS",
+        "level": 5,
+        "pic": "X",
+        "usage": null,
+        "offset": 33,
+        "bytes": 1,
+        "file": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "name": "FILLER",
+        "level": 5,
+        "pic": "X(2)",
+        "usage": null,
+        "offset": 34,
+        "bytes": 2,
+        "file": "shared/copylib/ORDREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/SHIP/cobol/SHPINQO.cbl",
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY SHPRATE: the estate holds no copybook SHPRATE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "ORDREC",
+      "kind": "copy",
+      "line": 13,
+      "resolves_to": "shared/copylib/ORDREC.cpy",
+      "horror": "H-0052"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-ORDER",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 12,
+      "copy_members": [
+       "ORDREC"
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-ORDER",
+      "line": 12,
+      "bytes": 36,
+      "fields": [
+       {
+        "name": "ORD-ID",
+        "level": 5,
+        "pic": "X(10)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 10,
+        "file": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-CUST",
+        "level": 5,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 10,
+        "bytes": 8,
+        "file": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-ITEM",
+        "level": 5,
+        "pic": "X(12)",
+        "usage": null,
+        "offset": 18,
+        "bytes": 12,
+        "file": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-QTY",
+        "level": 5,
+        "pic": "S9(5)",
+        "usage": "COMP-3",
+        "offset": 30,
+        "bytes": 3,
+        "file": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "name": "ORD-STATUS",
+        "level": 5,
+        "pic": "X",
+        "usage": null,
+        "offset": 33,
+        "bytes": 1,
+        "file": "shared/copylib/ORDREC.cpy"
+       },
+       {
+        "name": "FILLER",
+        "level": 5,
+        "pic": "X(2)",
+        "usage": null,
+        "offset": 34,
+        "bytes": 2,
+        "file": "shared/copylib/ORDREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/TAXR/cobol/TAXCALC.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "ADDRREC",
+      "kind": "copy",
+      "line": 12,
+      "resolves_to": "apps/TAXR/copybook/ADDRREC.cpy",
+      "horror": "H-0052"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-ADDRESS",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 11,
+      "copy_members": [
+       "ADDRREC"
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-ADDRESS",
+      "line": 11,
+      "bytes": 62,
+      "fields": [
+       {
+        "name": "ADR-LINE1",
+        "level": 5,
+        "pic": "X(30)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 30,
+        "file": "apps/TAXR/copybook/ADDRREC.cpy"
+       },
+       {
+        "name": "ADR-CITY",
+        "level": 5,
+        "pic": "X(20)",
+        "usage": null,
+        "offset": 30,
+        "bytes": 20,
+        "file": "apps/TAXR/copybook/ADDRREC.cpy"
+       },
+       {
+        "name": "ADR-STATE",
+        "level": 5,
+        "pic": "X(2)",
+        "usage": null,
+        "offset": 50,
+        "bytes": 2,
+        "file": "apps/TAXR/copybook/ADDRREC.cpy"
+       },
+       {
+        "name": "ADR-POSTAL",
+        "level": 5,
+        "pic": "X(10)",
+        "usage": null,
+        "offset": 52,
+        "bytes": 10,
+        "file": "apps/TAXR/copybook/ADDRREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "copy_collisions": [
+     {
+      "member": "ADDRREC",
+      "line": 12,
+      "library": "TAXRCPY",
+      "resolves_to": "apps/TAXR/copybook/ADDRREC.cpy",
+      "shadowed": [
+       {
+        "library": "SHRCPY",
+        "path": "shared/copylib/ADDRREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/TAXR/cobol/TAXCALC2.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "ADDRREC",
+      "kind": "copy",
+      "line": 12,
+      "resolves_to": "apps/TAXR/copybook/ADDRREC.cpy",
+      "horror": "H-0052"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-ADDRESS",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 11,
+      "copy_members": [
+       "ADDRREC"
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-ADDRESS",
+      "line": 11,
+      "bytes": 62,
+      "fields": [
+       {
+        "name": "ADR-LINE1",
+        "level": 5,
+        "pic": "X(30)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 30,
+        "file": "apps/TAXR/copybook/ADDRREC.cpy"
+       },
+       {
+        "name": "ADR-CITY",
+        "level": 5,
+        "pic": "X(20)",
+        "usage": null,
+        "offset": 30,
+        "bytes": 20,
+        "file": "apps/TAXR/copybook/ADDRREC.cpy"
+       },
+       {
+        "name": "ADR-STATE",
+        "level": 5,
+        "pic": "X(2)",
+        "usage": null,
+        "offset": 50,
+        "bytes": 2,
+        "file": "apps/TAXR/copybook/ADDRREC.cpy"
+       },
+       {
+        "name": "ADR-POSTAL",
+        "level": 5,
+        "pic": "X(10)",
+        "usage": null,
+        "offset": 52,
+        "bytes": 10,
+        "file": "apps/TAXR/copybook/ADDRREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ],
+    "copy_collisions": [
+     {
+      "member": "ADDRREC",
+      "line": 12,
+      "library": "TAXRCPY",
+      "resolves_to": "apps/TAXR/copybook/ADDRREC.cpy",
+      "shadowed": [
+       {
+        "library": "SHRCPY",
+        "path": "shared/copylib/ADDRREC.cpy"
+       }
+      ],
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/TAXR/copybook/ADDRREC.cpy",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 5,
+      "name": "ADR-LINE1",
+      "pic": "X(30)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 2,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ADR-CITY",
+      "pic": "X(20)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 3,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ADR-STATE",
+      "pic": "X(2)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 4,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ADR-POSTAL",
+      "pic": "X(10)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 5,
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "shared/copylib/ADDRREC.cpy",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 5,
+      "name": "ADR-LINE1",
+      "pic": "X(30)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 2,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ADR-CITY",
+      "pic": "X(20)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 3,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ADR-STATE",
+      "pic": "X(2)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 4,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ADR-POSTAL",
+      "pic": "X(5)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 5,
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "shared/copylib/ORDREC.cpy",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 5,
+      "name": "ORD-ID",
+      "pic": "X(10)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 2,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ORD-CUST",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 3,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ORD-ITEM",
+      "pic": "X(12)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 4,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ORD-QTY",
+      "pic": "S9(5)",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 5,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "ORD-STATUS",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 6,
+      "horror": "H-0052"
+     },
+     {
+      "level": 88,
+      "name": "ORD-OPEN",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'O'",
+      "section": null,
+      "line": 7,
+      "horror": "H-0052"
+     },
+     {
+      "level": 88,
+      "name": "ORD-REJECTED",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'R'",
+      "section": null,
+      "line": 8,
+      "horror": "H-0052"
+     },
+     {
+      "level": 5,
+      "name": "FILLER",
+      "pic": "X(2)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 9,
+      "horror": "H-0052"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

@@ -1,0 +1,1118 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "SHIP",
+ "members": {
+  "apps/SHIP/cobol/SHPINQ.cbl": {
+   "app": "SHIP",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 46,
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY SHPRATE: the estate holds no copybook SHPRATE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
+   },
+   "programs": [
+    {
+     "program_id": "SHPINQ",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 20,
+     "end_line": 37
+    },
+    {
+     "name": "1000-RATE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 38,
+     "end_line": 42
+    },
+    {
+     "name": "2000-AUDIT",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 43,
+     "end_line": 46
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-RATE",
+     "line": 33
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-AUDIT",
+     "line": 34
+    }
+   ],
+   "call_sites": [
+    {
+     "verb": "RETURN TRANSID",
+     "form": "literal",
+     "operand": "SHPI",
+     "target": "SHPI",
+     "line": 24,
+     "resolves_to": null
+    },
+    {
+     "verb": "XCTL",
+     "form": "literal",
+     "operand": "SHPMENU",
+     "target": "SHPMENU",
+     "line": 30,
+     "resolves_to": null,
+     "horror": "H-0054"
+    },
+    {
+     "verb": "RETURN TRANSID",
+     "form": "literal",
+     "operand": "SHPI",
+     "target": "SHPI",
+     "line": 35,
+     "resolves_to": null
+    },
+    {
+     "verb": "LINK",
+     "form": "literal",
+     "operand": "SHPRATE",
+     "target": "SHPRATE",
+     "line": 40,
+     "resolves_to": "apps/SHIP/cobol/SHPRATE.cbl"
+    },
+    {
+     "verb": "LINK",
+     "form": "literal",
+     "operand": "SHPAUDT",
+     "target": "SHPAUDT",
+     "line": 44,
+     "resolves_to": null,
+     "horror": "H-0054"
+    }
+   ],
+   "copies": [
+    {
+     "member": "SHPCOMM",
+     "kind": "copy",
+     "line": 10,
+     "resolves_to": "apps/SHIP/copybook/SHPCOMM.cpy"
+    },
+    {
+     "member": "ORDREC",
+     "kind": "copy",
+     "line": 12,
+     "resolves_to": "shared/copylib/ORDREC.cpy",
+     "horror": "H-0052"
+    },
+    {
+     "member": "SHPRATE",
+     "kind": "copy",
+     "line": 14,
+     "resolves_to": null,
+     "horror": "H-0053"
+    },
+    {
+     "member": "DFHAID",
+     "kind": "copy",
+     "line": 15,
+     "resolves_to": null
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-COMMAREA",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 9,
+     "copy_members": [
+      "SHPCOMM"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-ORDER",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 11,
+     "copy_members": [
+      "ORDREC"
+     ],
+     "horror": "H-0052"
+    },
+    {
+     "level": 1,
+     "name": "WS-RATE-PARM",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 13,
+     "copy_members": [
+      "SHPRATE"
+     ],
+     "horror": "H-0053",
+     "depends_on": [
+      "H-0010"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-RESP",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 16
+    },
+    {
+     "level": 1,
+     "name": "DFHCOMMAREA",
+     "pic": "X(60)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 18,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-COMMAREA",
+     "line": 9,
+     "bytes": 60,
+     "fields": [
+      {
+       "name": "CA-ORD-ID",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/SHIP/copybook/SHPCOMM.cpy"
+      },
+      {
+       "name": "CA-RC",
+       "level": 5,
+       "pic": "S9(4)",
+       "usage": "COMP",
+       "offset": 10,
+       "bytes": 2,
+       "file": "apps/SHIP/copybook/SHPCOMM.cpy"
+      },
+      {
+       "name": "CA-CARRIER",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 12,
+       "bytes": 8,
+       "file": "apps/SHIP/copybook/SHPCOMM.cpy"
+      },
+      {
+       "name": "CA-MSG",
+       "level": 5,
+       "pic": "X(40)",
+       "usage": null,
+       "offset": 20,
+       "bytes": 40,
+       "file": "apps/SHIP/copybook/SHPCOMM.cpy"
+      }
+     ]
+    },
+    {
+     "record": "WS-ORDER",
+     "line": 11,
+     "bytes": 36,
+     "fields": [
+      {
+       "name": "ORD-ID",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "shared/copylib/ORDREC.cpy"
+      },
+      {
+       "name": "ORD-CUST",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 8,
+       "file": "shared/copylib/ORDREC.cpy"
+      },
+      {
+       "name": "ORD-ITEM",
+       "level": 5,
+       "pic": "X(12)",
+       "usage": null,
+       "offset": 18,
+       "bytes": 12,
+       "file": "shared/copylib/ORDREC.cpy"
+      },
+      {
+       "name": "ORD-QTY",
+       "level": 5,
+       "pic": "S9(5)",
+       "usage": "COMP-3",
+       "offset": 30,
+       "bytes": 3,
+       "file": "shared/copylib/ORDREC.cpy"
+      },
+      {
+       "name": "ORD-STATUS",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 33,
+       "bytes": 1,
+       "file": "shared/copylib/ORDREC.cpy"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 34,
+       "bytes": 2,
+       "file": "shared/copylib/ORDREC.cpy"
+      }
+     ],
+     "horror": "H-0052"
+    },
+    {
+     "record": "WS-RATE-PARM",
+     "line": 13,
+     "bytes": null,
+     "fields": [],
+     "unresolved": [
+      "SHPRATE"
+     ],
+     "horror": "H-0053",
+     "depends_on": [
+      "H-0010"
+     ]
+    },
+    {
+     "record": "WS-RESP",
+     "line": 16,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-RESP",
+       "level": 1,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/SHIP/cobol/SHPINQ.cbl"
+      }
+     ]
+    },
+    {
+     "record": "DFHCOMMAREA",
+     "line": 18,
+     "bytes": 60,
+     "fields": [
+      {
+       "name": "DFHCOMMAREA",
+       "level": 1,
+       "pic": "X(60)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 60,
+       "file": "apps/SHIP/cobol/SHPINQ.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "SHPINQ",
+     "params": [],
+     "line": 19
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "call",
+     "target": "apps/SHIP/cobol/SHPRATE.cbl"
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "DFHCOMMAREA",
+     "source_kind": "item",
+     "target": "WS-COMMAREA",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 28
+    },
+    {
+     "verb": "MOVE",
+     "source": "CA-ORD-ID",
+     "source_kind": "item",
+     "target": "ORD-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 39
+    }
+   ],
+   "gaps": [
+    {
+     "kind": "copy",
+     "name": "SHPRATE",
+     "line": 14,
+     "why": "no library in the program's SYSLIB order holds the member",
+     "lookalikes": [
+      "apps/SHIP/cobol/SHPRATE.cbl"
+     ],
+     "horror": "H-0053"
+    },
+    {
+     "kind": "xctl",
+     "name": "SHPMENU",
+     "line": 30,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0054"
+    },
+    {
+     "kind": "link",
+     "name": "SHPAUDT",
+     "line": 44,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0054"
+    }
+   ],
+   "horrors": [
+    "H-0052",
+    "H-0053",
+    "H-0054"
+   ]
+  },
+  "apps/SHIP/cobol/SHPINQO.cbl": {
+   "app": "SHIP",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 42,
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY SHPRATE: the estate holds no copybook SHPRATE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
+   },
+   "programs": [
+    {
+     "program_id": "SHPINQO",
+     "line": 2,
+     "horror": "H-0051"
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 21,
+     "end_line": 37
+    },
+    {
+     "name": "1000-RATE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 38,
+     "end_line": 42
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-RATE",
+     "line": 34
+    }
+   ],
+   "call_sites": [
+    {
+     "verb": "RETURN TRANSID",
+     "form": "literal",
+     "operand": "SHPI",
+     "target": "SHPI",
+     "line": 25,
+     "resolves_to": null
+    },
+    {
+     "verb": "XCTL",
+     "form": "literal",
+     "operand": "SHPMENU",
+     "target": "SHPMENU",
+     "line": 31,
+     "resolves_to": null,
+     "horror": "H-0054"
+    },
+    {
+     "verb": "RETURN TRANSID",
+     "form": "literal",
+     "operand": "SHPI",
+     "target": "SHPI",
+     "line": 35,
+     "resolves_to": null
+    },
+    {
+     "verb": "LINK",
+     "form": "literal",
+     "operand": "SHPRATE",
+     "target": "SHPRATE",
+     "line": 40,
+     "resolves_to": "apps/SHIP/cobol/SHPRATE.cbl"
+    }
+   ],
+   "copies": [
+    {
+     "member": "SHPCOMM",
+     "kind": "copy",
+     "line": 11,
+     "resolves_to": "apps/SHIP/copybook/SHPCOMM.cpy"
+    },
+    {
+     "member": "ORDREC",
+     "kind": "copy",
+     "line": 13,
+     "resolves_to": "shared/copylib/ORDREC.cpy",
+     "horror": "H-0052"
+    },
+    {
+     "member": "SHPRATE",
+     "kind": "copy",
+     "line": 15,
+     "resolves_to": null,
+     "horror": "H-0053"
+    },
+    {
+     "member": "DFHAID",
+     "kind": "copy",
+     "line": 16,
+     "resolves_to": null
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-COMMAREA",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 10,
+     "copy_members": [
+      "SHPCOMM"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-ORDER",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 12,
+     "copy_members": [
+      "ORDREC"
+     ],
+     "horror": "H-0052"
+    },
+    {
+     "level": 1,
+     "name": "WS-RATE-PARM",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 14,
+     "copy_members": [
+      "SHPRATE"
+     ],
+     "horror": "H-0053",
+     "depends_on": [
+      "H-0010"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-RESP",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 17
+    },
+    {
+     "level": 1,
+     "name": "DFHCOMMAREA",
+     "pic": "X(60)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 19,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-COMMAREA",
+     "line": 10,
+     "bytes": 60,
+     "fields": [
+      {
+       "name": "CA-ORD-ID",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/SHIP/copybook/SHPCOMM.cpy"
+      },
+      {
+       "name": "CA-RC",
+       "level": 5,
+       "pic": "S9(4)",
+       "usage": "COMP",
+       "offset": 10,
+       "bytes": 2,
+       "file": "apps/SHIP/copybook/SHPCOMM.cpy"
+      },
+      {
+       "name": "CA-CARRIER",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 12,
+       "bytes": 8,
+       "file": "apps/SHIP/copybook/SHPCOMM.cpy"
+      },
+      {
+       "name": "CA-MSG",
+       "level": 5,
+       "pic": "X(40)",
+       "usage": null,
+       "offset": 20,
+       "bytes": 40,
+       "file": "apps/SHIP/copybook/SHPCOMM.cpy"
+      }
+     ]
+    },
+    {
+     "record": "WS-ORDER",
+     "line": 12,
+     "bytes": 36,
+     "fields": [
+      {
+       "name": "ORD-ID",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "shared/copylib/ORDREC.cpy"
+      },
+      {
+       "name": "ORD-CUST",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 8,
+       "file": "shared/copylib/ORDREC.cpy"
+      },
+      {
+       "name": "ORD-ITEM",
+       "level": 5,
+       "pic": "X(12)",
+       "usage": null,
+       "offset": 18,
+       "bytes": 12,
+       "file": "shared/copylib/ORDREC.cpy"
+      },
+      {
+       "name": "ORD-QTY",
+       "level": 5,
+       "pic": "S9(5)",
+       "usage": "COMP-3",
+       "offset": 30,
+       "bytes": 3,
+       "file": "shared/copylib/ORDREC.cpy"
+      },
+      {
+       "name": "ORD-STATUS",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 33,
+       "bytes": 1,
+       "file": "shared/copylib/ORDREC.cpy"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 34,
+       "bytes": 2,
+       "file": "shared/copylib/ORDREC.cpy"
+      }
+     ],
+     "horror": "H-0052"
+    },
+    {
+     "record": "WS-RATE-PARM",
+     "line": 14,
+     "bytes": null,
+     "fields": [],
+     "unresolved": [
+      "SHPRATE"
+     ],
+     "horror": "H-0053",
+     "depends_on": [
+      "H-0010"
+     ]
+    },
+    {
+     "record": "WS-RESP",
+     "line": 17,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-RESP",
+       "level": 1,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/SHIP/cobol/SHPINQO.cbl"
+      }
+     ]
+    },
+    {
+     "record": "DFHCOMMAREA",
+     "line": 19,
+     "bytes": 60,
+     "fields": [
+      {
+       "name": "DFHCOMMAREA",
+       "level": 1,
+       "pic": "X(60)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 60,
+       "file": "apps/SHIP/cobol/SHPINQO.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "SHPINQO",
+     "params": [],
+     "line": 20
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "call",
+     "target": "apps/SHIP/cobol/SHPRATE.cbl"
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "DFHCOMMAREA",
+     "source_kind": "item",
+     "target": "WS-COMMAREA",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 29
+    },
+    {
+     "verb": "MOVE",
+     "source": "CA-ORD-ID",
+     "source_kind": "item",
+     "target": "ORD-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 39
+    }
+   ],
+   "gaps": [
+    {
+     "kind": "copy",
+     "name": "SHPRATE",
+     "line": 15,
+     "why": "no library in the program's SYSLIB order holds the member",
+     "lookalikes": [
+      "apps/SHIP/cobol/SHPRATE.cbl"
+     ],
+     "horror": "H-0053"
+    },
+    {
+     "kind": "xctl",
+     "name": "SHPMENU",
+     "line": 31,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0054"
+    }
+   ],
+   "dead": [
+    {
+     "kind": "program",
+     "name": "SHPINQO",
+     "line": 2,
+     "why": "the pre-migration SHPINQ: no transaction, LINK or XCTL names SHPINQO",
+     "horror": "H-0051"
+    }
+   ],
+   "horrors": [
+    "H-0051",
+    "H-0052",
+    "H-0053",
+    "H-0054"
+   ]
+  },
+  "apps/SHIP/cobol/SHPRATE.cbl": {
+   "app": "SHIP",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 17,
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "programs": [
+    {
+     "program_id": "SHPRATE",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 12,
+     "end_line": 17
+    }
+   ],
+   "copies": [
+    {
+     "member": "SHPCOMM",
+     "kind": "copy",
+     "line": 10,
+     "resolves_to": "apps/SHIP/copybook/SHPCOMM.cpy"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "DFHCOMMAREA",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 9,
+     "copy_members": [
+      "SHPCOMM"
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "DFHCOMMAREA",
+     "line": 9,
+     "bytes": 60,
+     "fields": [
+      {
+       "name": "CA-ORD-ID",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/SHIP/copybook/SHPCOMM.cpy"
+      },
+      {
+       "name": "CA-RC",
+       "level": 5,
+       "pic": "S9(4)",
+       "usage": "COMP",
+       "offset": 10,
+       "bytes": 2,
+       "file": "apps/SHIP/copybook/SHPCOMM.cpy"
+      },
+      {
+       "name": "CA-CARRIER",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 12,
+       "bytes": 8,
+       "file": "apps/SHIP/copybook/SHPCOMM.cpy"
+      },
+      {
+       "name": "CA-MSG",
+       "level": 5,
+       "pic": "X(40)",
+       "usage": null,
+       "offset": 20,
+       "bytes": 40,
+       "file": "apps/SHIP/copybook/SHPCOMM.cpy"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "SHPRATE",
+     "params": [],
+     "line": 11
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "'GROUND'",
+     "source_kind": "literal",
+     "target": "CA-CARRIER",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 14
+    }
+   ]
+  },
+  "apps/SHIP/copybook/SHPCOMM.cpy": {
+   "app": "SHIP",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 5,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "CA-ORD-ID",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 5,
+     "name": "CA-RC",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 5,
+     "name": "CA-CARRIER",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4
+    },
+    {
+     "level": 5,
+     "name": "CA-MSG",
+     "pic": "X(40)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5
+    }
+   ]
+  },
+  "apps/SHIP/csd/SHPGRP.csd": {
+   "app": "SHIP",
+   "library": "csd",
+   "language": "csd",
+   "numbered": false,
+   "lines": 7,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "csd_resources": [
+    {
+     "type": "PROGRAM",
+     "name": "SHPINQ",
+     "group": "SHPGRP",
+     "line": 2
+    },
+    {
+     "type": "PROGRAM",
+     "name": "SHPRATE",
+     "group": "SHPGRP",
+     "line": 3
+    },
+    {
+     "type": "PROGRAM",
+     "name": "SHPMENU",
+     "group": "SHPGRP",
+     "line": 4,
+     "horror": "H-0054"
+    },
+    {
+     "type": "PROGRAM",
+     "name": "SHPLEGA",
+     "group": "SHPGRP",
+     "line": 5,
+     "horror": "H-0054"
+    },
+    {
+     "type": "TRANSACTION",
+     "name": "SHPI",
+     "group": "SHPGRP",
+     "line": 6,
+     "program": "SHPINQ"
+    },
+    {
+     "type": "TRANSACTION",
+     "name": "SHPL",
+     "group": "SHPGRP",
+     "line": 7,
+     "program": "SHPLEGA",
+     "horror": "H-0054"
+    }
+   ],
+   "transactions": [
+    {
+     "transid": "SHPI",
+     "program": "SHPINQ",
+     "group": "SHPGRP",
+     "line": 6,
+     "resolves_to": "apps/SHIP/cobol/SHPINQ.cbl"
+    },
+    {
+     "transid": "SHPL",
+     "program": "SHPLEGA",
+     "group": "SHPGRP",
+     "line": 7,
+     "resolves_to": null,
+     "horror": "H-0054"
+    }
+   ],
+   "gaps": [
+    {
+     "kind": "transaction",
+     "name": "SHPLEGA",
+     "line": 7,
+     "why": "the transaction's PROGRAM is not in the estate",
+     "horror": "H-0054"
+    },
+    {
+     "kind": "csd-program",
+     "name": "SHPMENU",
+     "line": 4,
+     "why": "DEFINE PROGRAM names a program the estate does not hold",
+     "horror": "H-0054"
+    },
+    {
+     "kind": "csd-program",
+     "name": "SHPLEGA",
+     "line": 5,
+     "why": "DEFINE PROGRAM names a program the estate does not hold",
+     "horror": "H-0054"
+    }
+   ],
+   "horrors": [
+    "H-0054"
+   ]
+  }
+ }
+}

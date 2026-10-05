@@ -1,0 +1,133 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0051",
+ "title": "Forked programs nobody calls: PROGV2 / PROGOLD beside the live PROG",
+ "category": "dead-code",
+ "issue": null,
+ "realism": "Every real estate carries forks: a V2 rewrite that never went live, an OLD version kept for audit, or (TAXR) a V2 that replaced the original, which was never deleted. Their code looks live; only the estate's references say which one runs.",
+ "shapes": [
+  "ORDVALV2 and ORDVOLD beside the live ORDVAL (ORDR)",
+  "TAXCALC replaced by TAXCALC2, which the job runs (TAXR)",
+  "SHPINQO, the pre-CICS-TS version of SHPINQ (SHIP)"
+ ],
+ "asserts": "A program no CALL, LINK, XCTL, EXEC PGM or TRANSACTION in the estate resolves to is dead: nothing draws an invocation edge to it. Its own code is still keyed in full.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+   "section": "Making dynamic calls (p.548)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+   "quote": "The program-name in the PROGRAM-ID paragraph or ENTRY statement must be identical to the corresponding program object name or program object alias of the program object that contains the program."
+  },
+  {
+   "doc": "z/OS 3.1 MVS JCL Reference (SA23-1385-60)",
+   "section": "EXEC statement: PGM parameter (p.337-338)",
+   "url": "https://www.ibm.com/docs/en/zos/3.1.0?topic=statement-pgm-parameter",
+   "quote": "Use the PGM parameter to name the program that the system is to execute. The specified program must be a member of a partitioned data set (PDS) or partitioned data set extended (PDSE) used as a system library, a private library, or a temporary library."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/ORDR/cobol/ORDVALV2.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "ORDVALV2",
+      "line": 2,
+      "horror": "H-0051"
+     }
+    ],
+    "dead": [
+     {
+      "kind": "program",
+      "name": "ORDVALV2",
+      "line": 2,
+      "why": "a rewrite never put into production: no CALL, job step or CSD entry names ORDVALV2",
+      "horror": "H-0051"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/ORDR/cobol/ORDVOLD.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "ORDVOLD",
+      "line": 2,
+      "horror": "H-0051"
+     }
+    ],
+    "dead": [
+     {
+      "kind": "program",
+      "name": "ORDVOLD",
+      "line": 2,
+      "why": "replaced by ORDVAL in 1998: no CALL, job step or CSD entry names ORDVOLD",
+      "horror": "H-0051"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/SHIP/cobol/SHPINQO.cbl",
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY SHPRATE: the estate holds no copybook SHPRATE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "SHPINQO",
+      "line": 2,
+      "horror": "H-0051"
+     }
+    ],
+    "dead": [
+     {
+      "kind": "program",
+      "name": "SHPINQO",
+      "line": 2,
+      "why": "the pre-migration SHPINQ: no transaction, LINK or XCTL names SHPINQO",
+      "horror": "H-0051"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/TAXR/cobol/TAXCALC.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "TAXCALC",
+      "line": 2,
+      "horror": "H-0051"
+     }
+    ],
+    "dead": [
+     {
+      "kind": "program",
+      "name": "TAXCALC",
+      "line": 2,
+      "why": "replaced by TAXCALC2: no CALL or job step names TAXCALC",
+      "horror": "H-0051"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

@@ -1,0 +1,678 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "PCED",
+ "members": {
+  "apps/PCED/cobol/PCEDFREE.cbl": {
+   "app": "PCED",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 17,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "PCEDFREE",
+     "line": 3
+    }
+   ],
+   "units": [
+    {
+     "name": "MAIN-PARA",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 13,
+     "end_line": 15
+    },
+    {
+     "name": "SHOW-BAND",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 16,
+     "end_line": 17
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "MAIN-PARA",
+     "target": "SHOW-BAND",
+     "line": 14
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-BAND",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 9
+    },
+    {
+     "level": 5,
+     "name": "WS-LOW",
+     "pic": "9(5)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 10
+    },
+    {
+     "level": 5,
+     "name": "WS-HIGH",
+     "pic": "9(5)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "99999",
+     "section": "WORKING-STORAGE",
+     "line": 11,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-BAND",
+     "line": 9,
+     "bytes": 10,
+     "fields": [
+      {
+       "name": "WS-LOW",
+       "level": 5,
+       "pic": "9(5)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 5,
+       "file": "apps/PCED/cobol/PCEDFREE.cbl"
+      },
+      {
+       "name": "WS-HIGH",
+       "level": 5,
+       "pic": "9(5)",
+       "usage": null,
+       "offset": 5,
+       "bytes": 5,
+       "file": "apps/PCED/cobol/PCEDFREE.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "PCEDFREE",
+     "params": [],
+     "line": 12
+    }
+   ]
+  },
+  "apps/PCED/cobol/PCEDLOW.cbl": {
+   "app": "PCED",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 24,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "pcedlow",
+     "line": 2,
+     "horror": "H-0059"
+    }
+   ],
+   "units": [
+    {
+     "name": "main-para",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 15,
+     "end_line": 20,
+     "horror": "H-0059"
+    },
+    {
+     "name": "round-total",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 21,
+     "end_line": 24,
+     "horror": "H-0059"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "main-para",
+     "target": "round-total",
+     "line": 16,
+     "horror": "H-0059"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "ws-cents",
+     "pic": "S9(9)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 9,
+     "horror": "H-0059"
+    },
+    {
+     "level": 1,
+     "name": "ws-flag",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'n'",
+     "section": "WORKING-STORAGE",
+     "line": 10,
+     "horror": "H-0059"
+    },
+    {
+     "level": 88,
+     "name": "ws-rounded",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'y'",
+     "section": "WORKING-STORAGE",
+     "line": 11,
+     "horror": "H-0059"
+    },
+    {
+     "level": 1,
+     "name": "lk-total",
+     "pic": "S9(7)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 13,
+     "horror": "H-0059"
+    }
+   ],
+   "layouts": [
+    {
+     "record": "ws-cents",
+     "line": 9,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "ws-cents",
+       "level": 1,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/PCED/cobol/PCEDLOW.cbl"
+      }
+     ],
+     "horror": "H-0059"
+    },
+    {
+     "record": "ws-flag",
+     "line": 10,
+     "bytes": 1,
+     "fields": [
+      {
+       "name": "ws-flag",
+       "level": 1,
+       "pic": "X",
+       "usage": null,
+       "offset": 0,
+       "bytes": 1,
+       "file": "apps/PCED/cobol/PCEDLOW.cbl"
+      }
+     ],
+     "horror": "H-0059"
+    },
+    {
+     "record": "lk-total",
+     "line": 13,
+     "bytes": 5,
+     "fields": [
+      {
+       "name": "lk-total",
+       "level": 1,
+       "pic": "S9(7)V99",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 5,
+       "file": "apps/PCED/cobol/PCEDLOW.cbl"
+      }
+     ],
+     "horror": "H-0059"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "pcedlow",
+     "params": [
+      "lk-total"
+     ],
+     "line": 14,
+     "horror": "H-0059"
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "COMPUTE",
+     "source": "lk-total",
+     "source_kind": "item",
+     "target": "ws-cents",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 22,
+     "horror": "H-0059"
+    },
+    {
+     "verb": "COMPUTE",
+     "source": "ws-cents",
+     "source_kind": "item",
+     "target": "lk-total",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 23,
+     "horror": "H-0059"
+    }
+   ],
+   "horrors": [
+    "H-0059"
+   ]
+  },
+  "apps/PCED/cobol/PCEDTAB.cbl": {
+   "app": "PCED",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 23,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "PCEDTAB",
+     "line": 2,
+     "horror": "H-0058"
+    }
+   ],
+   "units": [
+    {
+     "name": "MAIN-PARA",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 14,
+     "end_line": 17,
+     "horror": "H-0058"
+    },
+    {
+     "name": "LOAD-TABLE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 18,
+     "end_line": 20,
+     "horror": "H-0058"
+    },
+    {
+     "name": "ADD-PRICE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 21,
+     "end_line": 23,
+     "horror": "H-0058"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "MAIN-PARA",
+     "target": "LOAD-TABLE",
+     "line": 15,
+     "horror": "H-0058"
+    },
+    {
+     "kind": "call",
+     "from": "MAIN-PARA",
+     "target": "PCEDLOW",
+     "line": 16,
+     "form": "literal",
+     "horror": "H-0058"
+    },
+    {
+     "kind": "perform",
+     "from": "LOAD-TABLE",
+     "target": "ADD-PRICE",
+     "line": 20,
+     "horror": "H-0058"
+    }
+   ],
+   "call_sites": [
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "PCEDLOW",
+     "target": "PCEDLOW",
+     "line": 16,
+     "resolves_to": "apps/PCED/cobol/PCEDLOW.cbl",
+     "horror": "H-0058",
+     "depends_on": [
+      "H-0059"
+     ]
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-PRICES",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 9,
+     "horror": "H-0058"
+    },
+    {
+     "level": 5,
+     "name": "WS-PRICE",
+     "pic": "S9(5)V99",
+     "usage": "COMP-3",
+     "occurs": 10,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 10,
+     "horror": "H-0058"
+    },
+    {
+     "level": 1,
+     "name": "WS-I",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 11,
+     "horror": "H-0058"
+    },
+    {
+     "level": 1,
+     "name": "WS-TOTAL",
+     "pic": "S9(7)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 12,
+     "horror": "H-0058"
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-PRICES",
+     "line": 9,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "WS-PRICE",
+       "level": 5,
+       "pic": "S9(5)V99",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 40,
+       "file": "apps/PCED/cobol/PCEDTAB.cbl"
+      }
+     ],
+     "horror": "H-0058"
+    },
+    {
+     "record": "WS-I",
+     "line": 11,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-I",
+       "level": 1,
+       "pic": "S9(4)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/PCED/cobol/PCEDTAB.cbl"
+      }
+     ],
+     "horror": "H-0058"
+    },
+    {
+     "record": "WS-TOTAL",
+     "line": 12,
+     "bytes": 5,
+     "fields": [
+      {
+       "name": "WS-TOTAL",
+       "level": 1,
+       "pic": "S9(7)V99",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 5,
+       "file": "apps/PCED/cobol/PCEDTAB.cbl"
+      }
+     ],
+     "horror": "H-0058"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "PCEDTAB",
+     "params": [],
+     "line": 13,
+     "horror": "H-0058"
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "call",
+     "target": "apps/PCED/cobol/PCEDLOW.cbl",
+     "horror": "H-0058",
+     "depends_on": [
+      "H-0059"
+     ]
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-I",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 19,
+     "horror": "H-0058"
+    },
+    {
+     "verb": "ADD",
+     "source": "WS-PRICE",
+     "source_kind": "item",
+     "target": "WS-TOTAL",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 22,
+     "horror": "H-0058"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-I",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 23,
+     "horror": "H-0058"
+    }
+   ],
+   "horrors": [
+    "H-0058"
+   ]
+  },
+  "apps/PCED/jcl/PCEDLOAD.jcl": {
+   "app": "PCED",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 9,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "PCEDTAB",
+     "target": "PCEDTAB",
+     "line": 4,
+     "resolves_to": "apps/PCED/cobol/PCEDTAB.cbl",
+     "depends_on": [
+      "H-0058"
+     ]
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "PCEDFREE",
+     "target": "PCEDFREE",
+     "line": 8,
+     "resolves_to": "apps/PCED/cobol/PCEDFREE.cbl"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "PCEDLOAD",
+     "proc": null,
+     "step": "LOAD",
+     "ordinal": 1,
+     "program": "PCEDTAB",
+     "exec_proc": null,
+     "cond": null,
+     "line": 4
+    },
+    {
+     "job": "PCEDLOAD",
+     "proc": null,
+     "step": "BANDS",
+     "ordinal": 2,
+     "program": "PCEDFREE",
+     "exec_proc": null,
+     "cond": null,
+     "line": 8
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "PCEDLOAD",
+     "proc": null,
+     "step": "LOAD",
+     "dd": "STEPLIB",
+     "dsn": "PROD.PCED.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 5
+    },
+    {
+     "job": "PCEDLOAD",
+     "proc": null,
+     "step": "LOAD",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 6
+    },
+    {
+     "job": "PCEDLOAD",
+     "proc": null,
+     "step": "BANDS",
+     "dd": "STEPLIB",
+     "dsn": "PROD.PCED.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 9
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.PCED.LOADLIB",
+     "generation": null,
+     "step": "LOAD",
+     "dd": "STEPLIB",
+     "line": 5
+    },
+    {
+     "dsn": "PROD.PCED.LOADLIB",
+     "generation": null,
+     "step": "BANDS",
+     "dd": "STEPLIB",
+     "line": 9
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/PCED/cobol/PCEDTAB.cbl",
+     "depends_on": [
+      "H-0058"
+     ]
+    },
+    {
+     "kind": "exec",
+     "target": "apps/PCED/cobol/PCEDFREE.cbl"
+    }
+   ]
+  }
+ }
+}

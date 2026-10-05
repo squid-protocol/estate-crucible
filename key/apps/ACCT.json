@@ -1021,6 +1021,14 @@
      "line": 90
     }
    ],
+   "gaps": [
+    {
+     "kind": "call",
+     "name": "DATEUTIL",
+     "line": 58,
+     "why": "no member of the estate holds the program"
+    }
+   ],
    "horrors": [
     "H-0003"
    ]
@@ -1971,6 +1979,15 @@
      "source_refmod_text": null,
      "target_refmod_text": null,
      "line": 43
+    }
+   ],
+   "gaps": [
+    {
+     "kind": "call",
+     "name": "ACCTLOG",
+     "line": 26,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0001"
     }
    ],
    "phantoms": [

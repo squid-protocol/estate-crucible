@@ -1,0 +1,278 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "DECO",
+ "members": {
+  "apps/DECO/copybook/DECOREC.cpy": {
+   "app": "DECO",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 4,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "DC-DEALER",
+     "pic": "X(6)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2,
+     "horror": "H-0056"
+    },
+    {
+     "level": 5,
+     "name": "DC-MONTH",
+     "pic": "9(6)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3,
+     "horror": "H-0056"
+    },
+    {
+     "level": 5,
+     "name": "DC-AMOUNT",
+     "pic": "S9(7)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4,
+     "horror": "H-0056"
+    }
+   ],
+   "dead": [
+    {
+     "kind": "copybook",
+     "name": "DECOREC",
+     "line": 1,
+     "why": "the DECO programs that COPYed it were deleted in 2015",
+     "horror": "H-0056"
+    }
+   ],
+   "horrors": [
+    "H-0056"
+   ]
+  },
+  "apps/DECO/csd/DECOGRP.csd": {
+   "app": "DECO",
+   "library": "csd",
+   "language": "csd",
+   "numbered": false,
+   "lines": 3,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "csd_resources": [
+    {
+     "type": "PROGRAM",
+     "name": "DECOINQ",
+     "group": "DECOGRP",
+     "line": 2,
+     "horror": "H-0054"
+    },
+    {
+     "type": "TRANSACTION",
+     "name": "DECI",
+     "group": "DECOGRP",
+     "line": 3,
+     "program": "DECOINQ",
+     "horror": "H-0054"
+    }
+   ],
+   "transactions": [
+    {
+     "transid": "DECI",
+     "program": "DECOINQ",
+     "group": "DECOGRP",
+     "line": 3,
+     "resolves_to": null,
+     "horror": "H-0054"
+    }
+   ],
+   "gaps": [
+    {
+     "kind": "transaction",
+     "name": "DECOINQ",
+     "line": 3,
+     "why": "the transaction's PROGRAM is not in the estate",
+     "horror": "H-0054"
+    },
+    {
+     "kind": "csd-program",
+     "name": "DECOINQ",
+     "line": 2,
+     "why": "DEFINE PROGRAM names a program the estate does not hold",
+     "horror": "H-0054"
+    }
+   ],
+   "horrors": [
+    "H-0054"
+   ]
+  },
+  "apps/DECO/jcl/DECOMTH.jcl": {
+   "app": "DECO",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 12,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "DECOEXT",
+     "target": "DECOEXT",
+     "line": 5,
+     "resolves_to": null,
+     "horror": "H-0054"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "DECOLOAD",
+     "target": "DECOLOAD",
+     "line": 9,
+     "resolves_to": null,
+     "horror": "H-0054"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "DECOMTH",
+     "proc": null,
+     "step": "EXTRACT",
+     "ordinal": 1,
+     "program": "DECOEXT",
+     "exec_proc": null,
+     "cond": null,
+     "line": 5,
+     "horror": "H-0054"
+    },
+    {
+     "job": "DECOMTH",
+     "proc": null,
+     "step": "LOAD",
+     "ordinal": 2,
+     "program": "DECOLOAD",
+     "exec_proc": null,
+     "cond": "(0,NE)",
+     "line": 9,
+     "horror": "H-0054"
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "DECOMTH",
+     "proc": null,
+     "step": "EXTRACT",
+     "dd": "STEPLIB",
+     "dsn": "PROD.DECO.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 6
+    },
+    {
+     "job": "DECOMTH",
+     "proc": null,
+     "step": "EXTRACT",
+     "dd": "DEALERS",
+     "dsn": "PROD.DECO.DEALERS",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 7
+    },
+    {
+     "job": "DECOMTH",
+     "proc": null,
+     "step": "LOAD",
+     "dd": "STEPLIB",
+     "dsn": "PROD.DECO.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 10
+    },
+    {
+     "job": "DECOMTH",
+     "proc": null,
+     "step": "LOAD",
+     "dd": "COMMOUT",
+     "dsn": "PROD.DECO.COMMISSN",
+     "generation": "+1",
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 11
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.DECO.LOADLIB",
+     "generation": null,
+     "step": "EXTRACT",
+     "dd": "STEPLIB",
+     "line": 6
+    },
+    {
+     "dsn": "PROD.DECO.DEALERS",
+     "generation": null,
+     "step": "EXTRACT",
+     "dd": "DEALERS",
+     "line": 7
+    },
+    {
+     "dsn": "PROD.DECO.LOADLIB",
+     "generation": null,
+     "step": "LOAD",
+     "dd": "STEPLIB",
+     "line": 10
+    },
+    {
+     "dsn": "PROD.DECO.COMMISSN",
+     "generation": "+1",
+     "step": "LOAD",
+     "dd": "COMMOUT",
+     "line": 11,
+     "depends_on": [
+      "H-0011"
+     ]
+    }
+   ],
+   "gaps": [
+    {
+     "kind": "exec",
+     "name": "DECOEXT",
+     "line": 5,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0054"
+    },
+    {
+     "kind": "exec",
+     "name": "DECOLOAD",
+     "line": 9,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0054"
+    }
+   ],
+   "horrors": [
+    "H-0054"
+   ]
+  }
+ }
+}

@@ -1,0 +1,180 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0056",
+ "title": "Orphan copybooks: members no COPY names",
+ "category": "dead-code",
+ "issue": null,
+ "realism": "Copy libraries accumulate members whose last user was deleted. A scan should still read them (they are source) and draw no import edge to them.",
+ "shapes": [
+  "ORDR ORDHIST",
+  "DECO DECOREC",
+  "TAXR TAXOLD in TAXROLD"
+ ],
+ "asserts": "The copybook's data items are facts of its own member, and nothing imports it.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "COPY statement (p.688)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The effect of processing a COPY statement is that the library text associated with text-name is copied into the compilation unit, logically replacing the entire COPY statement, beginning with the word COPY and ending with the period, inclusive."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/DECO/copybook/DECOREC.cpy",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 5,
+      "name": "DC-DEALER",
+      "pic": "X(6)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 2,
+      "horror": "H-0056"
+     },
+     {
+      "level": 5,
+      "name": "DC-MONTH",
+      "pic": "9(6)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 3,
+      "horror": "H-0056"
+     },
+     {
+      "level": 5,
+      "name": "DC-AMOUNT",
+      "pic": "S9(7)V99",
+      "usage": "COMP-3",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 4,
+      "horror": "H-0056"
+     }
+    ],
+    "dead": [
+     {
+      "kind": "copybook",
+      "name": "DECOREC",
+      "line": 1,
+      "why": "the DECO programs that COPYed it were deleted in 2015",
+      "horror": "H-0056"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/ORDR/copybook/ORDHIST.cpy",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 5,
+      "name": "HST-ORD-ID",
+      "pic": "X(10)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 2,
+      "horror": "H-0056"
+     },
+     {
+      "level": 5,
+      "name": "HST-DATE",
+      "pic": "9(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 3,
+      "horror": "H-0056"
+     },
+     {
+      "level": 5,
+      "name": "HST-ACTION",
+      "pic": "X(2)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 4,
+      "horror": "H-0056"
+     }
+    ],
+    "dead": [
+     {
+      "kind": "copybook",
+      "name": "ORDHIST",
+      "line": 1,
+      "why": "no COPY in the estate names ORDHIST (its only user, ORDHUPD, is gone)",
+      "horror": "H-0056"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/TAXR/oldcopy/TAXOLD.cpy",
+   "compile": {
+    "status": "copybook"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 5,
+      "name": "TO-BRACKET",
+      "pic": "9(7)",
+      "usage": null,
+      "occurs": 8,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 2,
+      "horror": "H-0056"
+     },
+     {
+      "level": 5,
+      "name": "TO-RATE",
+      "pic": "9V99",
+      "usage": null,
+      "occurs": 8,
+      "redefines": null,
+      "value": null,
+      "section": null,
+      "line": 3,
+      "horror": "H-0056"
+     }
+    ],
+    "dead": [
+     {
+      "kind": "copybook",
+      "name": "TAXOLD",
+      "line": 1,
+      "why": "no COPY names TAXOLD; it sits only in the retired TAXROLD library",
+      "horror": "H-0056"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

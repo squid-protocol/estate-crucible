@@ -1,0 +1,370 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "LEGL",
+ "members": {
+  "apps/LEGL/cobol/GLRCON.cbl": {
+   "app": "LEGL",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 47,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "GLRCON",
+     "line": 14,
+     "horror": "H-0057"
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAINLINE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 34,
+     "end_line": 39,
+     "horror": "H-0057"
+    },
+    {
+     "name": "1000-COMPARE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 40,
+     "end_line": 41,
+     "horror": "H-0057"
+    },
+    {
+     "name": "9000-ABEND",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 42,
+     "end_line": 45,
+     "horror": "H-0057"
+    },
+    {
+     "name": "9900-TAPE-RESTART",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 46,
+     "end_line": 47,
+     "horror": "H-0055"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAINLINE",
+     "target": "1000-COMPARE",
+     "line": 35,
+     "horror": "H-0057"
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAINLINE",
+     "target": "9000-ABEND",
+     "line": 37,
+     "horror": "H-0057"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-GL-DATE",
+     "pic": "9(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 30,
+     "horror": "H-0057"
+    },
+    {
+     "level": 1,
+     "name": "WS-DIFF",
+     "pic": "S9(11)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 31,
+     "horror": "H-0057"
+    },
+    {
+     "level": 1,
+     "name": "WS-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'00'",
+     "section": "WORKING-STORAGE",
+     "line": 32,
+     "horror": "H-0057",
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-GL-DATE",
+     "line": 30,
+     "bytes": 8,
+     "fields": [
+      {
+       "name": "WS-GL-DATE",
+       "level": 1,
+       "pic": "9(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/LEGL/cobol/GLRCON.cbl"
+      }
+     ],
+     "horror": "H-0057"
+    },
+    {
+     "record": "WS-DIFF",
+     "line": 31,
+     "bytes": 7,
+     "fields": [
+      {
+       "name": "WS-DIFF",
+       "level": 1,
+       "pic": "S9(11)V99",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 7,
+       "file": "apps/LEGL/cobol/GLRCON.cbl"
+      }
+     ],
+     "horror": "H-0057"
+    },
+    {
+     "record": "WS-STATUS",
+     "line": 32,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/LEGL/cobol/GLRCON.cbl"
+      }
+     ],
+     "horror": "H-0057",
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "GLRCON",
+     "params": [],
+     "line": 33
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "COMPUTE",
+     "source": "WS-DIFF",
+     "source_kind": "item",
+     "target": "WS-DIFF",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 41,
+     "horror": "H-0057"
+    },
+    {
+     "verb": "MOVE",
+     "source": "16",
+     "source_kind": "literal",
+     "target": "RETURN-CODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 44,
+     "horror": "H-0057"
+    }
+   ],
+   "dead": [
+    {
+     "kind": "paragraph",
+     "name": "9900-TAPE-RESTART",
+     "line": 46,
+     "why": "no PERFORM or GO TO names it (only the change log does); 9000-ABEND before it ends in GOBACK",
+     "horror": "H-0055"
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "call_sites",
+     "verb": "CALL",
+     "operand": "DTCONV",
+     "why": "DTCONV appears only in comment lines (the banner and the change log)",
+     "horror": "H-0057"
+    },
+    {
+     "channel": "edges",
+     "kind": "call",
+     "from": null,
+     "target": "DTCONV",
+     "why": "DTCONV appears only in comment lines",
+     "horror": "H-0057"
+    },
+    {
+     "channel": "copies",
+     "member": "OLDDATE",
+     "why": "COPY OLDDATE is change-log prose",
+     "horror": "H-0057"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": null,
+     "target": "9000-ABEND",
+     "why": "PERFORM 9000-ABEND is change-log prose",
+     "horror": "H-0057"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": null,
+     "target": "9900-TAPE-RESTART",
+     "why": "PERFORM 9900-TAPE-RESTART is change-log prose",
+     "horror": "H-0057"
+    }
+   ],
+   "horrors": [
+    "H-0055",
+    "H-0057"
+   ]
+  },
+  "apps/LEGL/cobol/GLRSUM.cbl": {
+   "app": "LEGL",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 18,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "GLRSUM",
+     "line": 7
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAINLINE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 14,
+     "end_line": 16
+    },
+    {
+     "name": "1000-SUM",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 17,
+     "end_line": 18
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAINLINE",
+     "target": "1000-SUM",
+     "line": 15
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-CC-TOTAL",
+     "pic": "S9(11)V99",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 12
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-CC-TOTAL",
+     "line": 12,
+     "bytes": 7,
+     "fields": [
+      {
+       "name": "WS-CC-TOTAL",
+       "level": 1,
+       "pic": "S9(11)V99",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 7,
+       "file": "apps/LEGL/cobol/GLRSUM.cbl"
+      }
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "GLRSUM",
+     "params": [],
+     "line": 13
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-CC-TOTAL",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 18
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "copies",
+     "member": "GLWORK",
+     "why": "COPY GLWORK appears only in the banner",
+     "horror": "H-0057"
+    },
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": null,
+     "target": "1000-COMPARE",
+     "why": "1000-COMPARE is named in the banner; GLRSUM has no such paragraph",
+     "horror": "H-0057"
+    }
+   ],
+   "horrors": [
+    "H-0057"
+   ]
+  }
+ }
+}

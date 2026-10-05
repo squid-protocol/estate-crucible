@@ -1,0 +1,3 @@
+      * TAXOLD   - 1999 WITHHOLDING TABLE. NO LONGER COPIED.
+           05  TO-BRACKET             PIC 9(7) OCCURS 8 TIMES.
+           05  TO-RATE                PIC 9V99 OCCURS 8 TIMES.

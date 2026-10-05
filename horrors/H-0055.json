@@ -1,0 +1,175 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0055",
+ "title": "A paragraph nothing reaches: never PERFORMed, after a GOBACK, its PERFORM commented out",
+ "category": "dead-code",
+ "issue": null,
+ "realism": "Retired logic stays in place with its PERFORM commented out. A reader that takes the comment for a statement makes the paragraph live.",
+ "shapes": [
+  "ORDMAIN 9000-OLD-RECOVERY: its only PERFORM is a comment line; 0000-MAIN ends in GOBACK",
+  "TAXCALC2 8000-Y2K-WINDOW",
+  "LEGL GLRCON 9900-TAPE-RESTART"
+ ],
+ "asserts": "The paragraph is a unit with its full extent, and it is dead: no PERFORM or GO TO names it, and the paragraph before it is not entered by falling through. A commented PERFORM is no edge.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Procedure division structure > Procedures (p.266)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "Execution begins with the first statement in the PROCEDURE DIVISION, excluding declaratives. Statements are executed in the order in which they are presented for compilation, unless the statement rules dictate some other order of execution."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "GOBACK statement (p.345)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The GOBACK statement specifies the logical end of a called program or invoked method."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Comment lines (p.60)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A comment line is any line with an asterisk (*) or slash (/) in the indicator area (column 7) of the line, or with a floating comment indicator (*>) as the first character-string in the program text area (Area A plus Area B)."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/LEGL/cobol/GLRCON.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "9900-TAPE-RESTART",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 46,
+      "end_line": 47,
+      "horror": "H-0055"
+     }
+    ],
+    "dead": [
+     {
+      "kind": "paragraph",
+      "name": "9900-TAPE-RESTART",
+      "line": 46,
+      "why": "no PERFORM or GO TO names it (only the change log does); 9000-ABEND before it ends in GOBACK",
+      "horror": "H-0055"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/ORDR/cobol/ORDMAIN.cbl",
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY ORDPRICE: the estate holds no copybook ORDPRICE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "a one-byte FILLER stands in for the missing COPY ORDPRICE"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "9000-OLD-RECOVERY",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 45,
+      "end_line": 47,
+      "horror": "H-0055"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "'Y'",
+      "source_kind": "literal",
+      "target": "WS-EOF-FLAG",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 47,
+      "horror": "H-0055"
+     }
+    ],
+    "dead": [
+     {
+      "kind": "paragraph",
+      "name": "9000-OLD-RECOVERY",
+      "line": 45,
+      "why": "no PERFORM or GO TO names it (its PERFORM is commented out) and 1000-NEXT-ORDER before it is reached only by PERFORM; 0000-MAIN ends in GOBACK",
+      "horror": "H-0055"
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "edges",
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "9000-OLD-RECOVERY",
+     "why": "a PERFORM in a comment line (indicator *) is not a statement",
+     "horror": "H-0055"
+    }
+   ]
+  },
+  {
+   "member": "apps/TAXR/cobol/TAXCALC2.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "8000-Y2K-WINDOW",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 28,
+      "end_line": 33,
+      "horror": "H-0055"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "COMPUTE",
+      "source": "WS-YY",
+      "source_kind": "item",
+      "target": "TP-YEAR",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 30,
+      "horror": "H-0055"
+     },
+     {
+      "verb": "COMPUTE",
+      "source": "WS-YY",
+      "source_kind": "item",
+      "target": "TP-YEAR",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 32,
+      "horror": "H-0055"
+     }
+    ],
+    "dead": [
+     {
+      "kind": "paragraph",
+      "name": "8000-Y2K-WINDOW",
+      "line": 28,
+      "why": "no PERFORM or GO TO names it; 1000-CALC before it is reached only by PERFORM",
+      "horror": "H-0055"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

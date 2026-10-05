@@ -1,0 +1,233 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0053",
+ "title": "COPY of a member no library holds, while a program member of that name exists",
+ "category": "missing-members",
+ "issue": null,
+ "realism": "Linkage copybooks are often named after their program (ORDPRICE, SHPRATE) and are the first thing lost in an export. A resolver that falls back to any member of that name finds the program source.",
+ "shapes": [
+  "ORDMAIN: COPY ORDPRICE; ORDPRICE.cbl is a program, no copy library holds ORDPRICE",
+  "SHPINQ: COPY SHPRATE; SHPRATE.cbl is a program"
+ ],
+ "asserts": "The COPY is a fact with resolves_to null and a gap: the compiler searches the SYSLIB libraries only, and a program source member is in none of them. No import edge may point at the program member.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "Copy member search order (p.697)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "If no library name is specified in the COPY statement, the concatenation of datasets allocated to the SYSLIB ddname is searched."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "COPY statement (p.688)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The effect of processing a COPY statement is that the library text associated with text-name is copied into the compilation unit, logically replacing the entire COPY statement, beginning with the word COPY and ending with the period, inclusive."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/ORDR/cobol/ORDMAIN.cbl",
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY ORDPRICE: the estate holds no copybook ORDPRICE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "a one-byte FILLER stands in for the missing COPY ORDPRICE"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "ORDPRICE",
+      "kind": "copy",
+      "line": 29,
+      "resolves_to": null,
+      "horror": "H-0053"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-PRICE-PARM",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 28,
+      "copy_members": [
+       "ORDPRICE"
+      ],
+      "horror": "H-0053",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-PRICE-PARM",
+      "line": 28,
+      "bytes": null,
+      "fields": [],
+      "unresolved": [
+       "ORDPRICE"
+      ],
+      "horror": "H-0053",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "copy",
+      "name": "ORDPRICE",
+      "line": 29,
+      "why": "no library in the program's SYSLIB order holds the member",
+      "lookalikes": [
+       "apps/ORDR/cobol/ORDPRICE.cbl"
+      ],
+      "horror": "H-0053"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/SHIP/cobol/SHPINQ.cbl",
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY SHPRATE: the estate holds no copybook SHPRATE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "SHPRATE",
+      "kind": "copy",
+      "line": 14,
+      "resolves_to": null,
+      "horror": "H-0053"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-RATE-PARM",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 13,
+      "copy_members": [
+       "SHPRATE"
+      ],
+      "horror": "H-0053",
+      "depends_on": [
+       "H-0010"
+      ]
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-RATE-PARM",
+      "line": 13,
+      "bytes": null,
+      "fields": [],
+      "unresolved": [
+       "SHPRATE"
+      ],
+      "horror": "H-0053",
+      "depends_on": [
+       "H-0010"
+      ]
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "copy",
+      "name": "SHPRATE",
+      "line": 14,
+      "why": "no library in the program's SYSLIB order holds the member",
+      "lookalikes": [
+       "apps/SHIP/cobol/SHPRATE.cbl"
+      ],
+      "horror": "H-0053"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/SHIP/cobol/SHPINQO.cbl",
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY SHPRATE: the estate holds no copybook SHPRATE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "SHPRATE",
+      "kind": "copy",
+      "line": 15,
+      "resolves_to": null,
+      "horror": "H-0053"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-RATE-PARM",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 14,
+      "copy_members": [
+       "SHPRATE"
+      ],
+      "horror": "H-0053",
+      "depends_on": [
+       "H-0010"
+      ]
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-RATE-PARM",
+      "line": 14,
+      "bytes": null,
+      "fields": [],
+      "unresolved": [
+       "SHPRATE"
+      ],
+      "horror": "H-0053",
+      "depends_on": [
+       "H-0010"
+      ]
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "copy",
+      "name": "SHPRATE",
+      "line": 15,
+      "why": "no library in the program's SYSLIB order holds the member",
+      "lookalikes": [
+       "apps/SHIP/cobol/SHPRATE.cbl"
+      ],
+      "horror": "H-0053"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

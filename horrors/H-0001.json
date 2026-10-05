@@ -161,6 +161,15 @@
       "target": "apps/ACCT/cobol/ACCTAUD.cbl",
       "horror": "H-0001"
      }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "ACCTLOG",
+      "line": 26,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0001"
+     }
     ]
    },
    "phantoms": [

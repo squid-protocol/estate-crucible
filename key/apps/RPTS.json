@@ -1,0 +1,329 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "RPTS",
+ "members": {
+  "apps/RPTS/cobol/RPTHDR.cbl": {
+   "app": "RPTS",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 35,
+   "compile": {
+    "status": "compiled"
+   },
+   "programs": [
+    {
+     "program_id": "RPTHDR",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 27,
+     "end_line": 31
+    },
+    {
+     "name": "1000-HEADINGS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 32,
+     "end_line": 35
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-HEADINGS",
+     "line": 29
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "RPT-LINE",
+     "pic": "X(80)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 18
+    },
+    {
+     "level": 1,
+     "name": "WS-RPT-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 20
+    },
+    {
+     "level": 1,
+     "name": "HDR-LINE-1",
+     "pic": "X(80)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'ACME MANUFACTURING  -  MONTHLY OPERATIONS SUMMARY  -  CONFIDENTIAL'",
+     "section": "WORKING-STORAGE",
+     "line": 21,
+     "horror": "H-0060"
+    },
+    {
+     "level": 1,
+     "name": "HDR-LINE-2",
+     "pic": "X(80)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'REGION   PLANT    UNITS BUILT    UNITS SHIPPED    BACKLOG  STATUS'",
+     "section": "WORKING-STORAGE",
+     "line": 23,
+     "horror": "H-0060"
+    },
+    {
+     "level": 1,
+     "name": "WS-PAGE",
+     "pic": "9(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 25,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "RPT-LINE",
+     "line": 18,
+     "bytes": 80,
+     "fields": [
+      {
+       "name": "RPT-LINE",
+       "level": 1,
+       "pic": "X(80)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 80,
+       "file": "apps/RPTS/cobol/RPTHDR.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-RPT-STATUS",
+     "line": 20,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-RPT-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/RPTS/cobol/RPTHDR.cbl"
+      }
+     ]
+    },
+    {
+     "record": "HDR-LINE-1",
+     "line": 21,
+     "bytes": 80,
+     "fields": [
+      {
+       "name": "HDR-LINE-1",
+       "level": 1,
+       "pic": "X(80)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 80,
+       "file": "apps/RPTS/cobol/RPTHDR.cbl"
+      }
+     ],
+     "horror": "H-0060"
+    },
+    {
+     "record": "HDR-LINE-2",
+     "line": 23,
+     "bytes": 80,
+     "fields": [
+      {
+       "name": "HDR-LINE-2",
+       "level": 1,
+       "pic": "X(80)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 80,
+       "file": "apps/RPTS/cobol/RPTHDR.cbl"
+      }
+     ],
+     "horror": "H-0060"
+    },
+    {
+     "record": "WS-PAGE",
+     "line": 25,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-PAGE",
+       "level": 1,
+       "pic": "9(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/RPTS/cobol/RPTHDR.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "RPT-FILE",
+     "assign": "RPTOUT",
+     "organization": "SEQUENTIAL",
+     "access_mode": null,
+     "record_key": null,
+     "file_status": "WS-RPT-STATUS",
+     "fd_copies": [],
+     "line": 11
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "RPTHDR",
+     "params": [],
+     "line": 26
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-PAGE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 33
+    },
+    {
+     "verb": "WRITE",
+     "source": "HDR-LINE-1",
+     "source_kind": "item",
+     "target": "RPT-LINE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 34
+    },
+    {
+     "verb": "WRITE",
+     "source": "HDR-LINE-2",
+     "source_kind": "item",
+     "target": "RPT-LINE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 35
+    }
+   ],
+   "horrors": [
+    "H-0060"
+   ]
+  },
+  "apps/RPTS/jcl/RPTMTH.jcl": {
+   "app": "RPTS",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 6,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "RPTHDR",
+     "target": "RPTHDR",
+     "line": 4,
+     "resolves_to": "apps/RPTS/cobol/RPTHDR.cbl"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "RPTMTH",
+     "proc": null,
+     "step": "HEAD",
+     "ordinal": 1,
+     "program": "RPTHDR",
+     "exec_proc": null,
+     "cond": null,
+     "line": 4
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "RPTMTH",
+     "proc": null,
+     "step": "HEAD",
+     "dd": "STEPLIB",
+     "dsn": "PROD.MIS.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 5
+    },
+    {
+     "job": "RPTMTH",
+     "proc": null,
+     "step": "HEAD",
+     "dd": "RPTOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "A",
+     "line": 6
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.MIS.LOADLIB",
+     "generation": null,
+     "step": "HEAD",
+     "dd": "STEPLIB",
+     "line": 5
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/RPTS/cobol/RPTHDR.cbl"
+    }
+   ]
+  }
+ }
+}

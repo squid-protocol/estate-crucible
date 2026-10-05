@@ -1,0 +1,118 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0050",
+ "title": "Two members with the same PROGRAM-ID: a CALL resolves to the member named for the program, not its stale copy",
+ "category": "call-resolution",
+ "issue": null,
+ "realism": "Estates keep backup members (PROG#OLD, PROGBKUP) made by copying a member under a new name without touching its PROGRAM-ID. Two source members then claim one program-name.",
+ "shapes": [
+  "ORDV#OLD (member) holds PROGRAM-ID ORDVAL, a copy of ORDVAL taken before a change; ORDMAIN's CALL 'ORDVAL' resolves to ORDVAL.cbl"
+ ],
+ "asserts": "A dynamic CALL 'ORDVAL' loads the program object named ORDVAL, which is built from the member ORDVAL. The stale copy's PROGRAM-ID is a fact of its member, but no call resolves to it, and it is dead.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+   "section": "Making dynamic calls (p.548)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+   "quote": "The program-name in the PROGRAM-ID paragraph or ENTRY statement must be identical to the corresponding program object name or program object alias of the program object that contains the program."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "CALL statement",
+   "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-call-statement",
+   "quote": "literal-1 or the contents of identifier-1 must specify the program-name of the called subprogram."
+  }
+ ],
+ "lower_confidence": "IBM ties a dynamic call to the program object's name; that the object is linked under its source member's name is the standard compile-and-link procedure's convention, not a language rule. The key follows the convention every estate in the field ledger uses.",
+ "planted": [
+  {
+   "member": "apps/ORDR/cobol/ORDMAIN.cbl",
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY ORDPRICE: the estate holds no copybook ORDPRICE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "a one-byte FILLER stands in for the missing COPY ORDPRICE"
+   },
+   "expected": {
+    "edges": [
+     {
+      "kind": "call",
+      "from": "1000-NEXT-ORDER",
+      "target": "ORDVAL",
+      "line": 42,
+      "form": "literal",
+      "horror": "H-0050"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "ORDVAL",
+      "target": "ORDVAL",
+      "line": 42,
+      "resolves_to": "apps/ORDR/cobol/ORDVAL.cbl",
+      "horror": "H-0050"
+     }
+    ],
+    "file_edges": [
+     {
+      "kind": "call",
+      "target": "apps/ORDR/cobol/ORDVAL.cbl",
+      "horror": "H-0050"
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "file_edges",
+     "kind": "call",
+     "target": "apps/ORDR/cobol/ORDV#OLD.cbl",
+     "why": "apps/ORDR/cobol/ORDV#OLD.cbl holds PROGRAM-ID ORDVAL too, but CALL ORDVAL loads the program object built from apps/ORDR/cobol/ORDVAL.cbl",
+     "horror": "H-0050"
+    }
+   ]
+  },
+  {
+   "member": "apps/ORDR/cobol/ORDV#OLD.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "ORDVAL",
+      "line": 2,
+      "horror": "H-0050"
+     }
+    ],
+    "dead": [
+     {
+      "kind": "program",
+      "name": "ORDVAL",
+      "line": 2,
+      "why": "a member copy whose PROGRAM-ID is still ORDVAL: CALL 'ORDVAL' loads the program object ORDVAL, never this member",
+      "horror": "H-0050"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/ORDR/cobol/ORDVAL.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "programs": [
+     {
+      "program_id": "ORDVAL",
+      "line": 2,
+      "horror": "H-0050"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

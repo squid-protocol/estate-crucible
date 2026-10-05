@@ -2,6 +2,69 @@
  "format": "estate-crucible-key/1",
  "app": null,
  "members": {
+  "shared/copylib/ADDRREC.cpy": {
+   "app": null,
+   "library": "copylib",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 5,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "ADR-LINE1",
+     "pic": "X(30)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2,
+     "horror": "H-0052"
+    },
+    {
+     "level": 5,
+     "name": "ADR-CITY",
+     "pic": "X(20)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3,
+     "horror": "H-0052"
+    },
+    {
+     "level": 5,
+     "name": "ADR-STATE",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4,
+     "horror": "H-0052"
+    },
+    {
+     "level": 5,
+     "name": "ADR-POSTAL",
+     "pic": "X(5)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5,
+     "horror": "H-0052"
+    }
+   ],
+   "horrors": [
+    "H-0052"
+   ]
+  },
   "shared/copylib/DATEWS.cpy": {
    "app": null,
    "library": "copylib",
@@ -78,6 +141,117 @@
      "section": null,
      "line": 7
     }
+   ]
+  },
+  "shared/copylib/ORDREC.cpy": {
+   "app": null,
+   "library": "copylib",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 9,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "ORD-ID",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2,
+     "horror": "H-0052"
+    },
+    {
+     "level": 5,
+     "name": "ORD-CUST",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3,
+     "horror": "H-0052"
+    },
+    {
+     "level": 5,
+     "name": "ORD-ITEM",
+     "pic": "X(12)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4,
+     "horror": "H-0052"
+    },
+    {
+     "level": 5,
+     "name": "ORD-QTY",
+     "pic": "S9(5)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5,
+     "horror": "H-0052"
+    },
+    {
+     "level": 5,
+     "name": "ORD-STATUS",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 6,
+     "horror": "H-0052"
+    },
+    {
+     "level": 88,
+     "name": "ORD-OPEN",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'O'",
+     "section": null,
+     "line": 7,
+     "horror": "H-0052"
+    },
+    {
+     "level": 88,
+     "name": "ORD-REJECTED",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'R'",
+     "section": null,
+     "line": 8,
+     "horror": "H-0052"
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 9,
+     "horror": "H-0052"
+    }
+   ],
+   "horrors": [
+    "H-0052"
    ]
   },
   "shared/proclib/AUDLOG.prc": {

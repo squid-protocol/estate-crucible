@@ -1,7 +1,7 @@
 {
  "format": "estate-crucible-key/1",
  "generator": {
-  "version": "0.3.0",
+  "version": "0.4.0",
   "seed": 1,
   "size": "small"
  },
@@ -71,6 +71,41 @@
    "id": "GULF",
    "title": "Arabic account inquiry (EBCDIC cp420 BMS)",
    "style": "BMS in cp420 with visual-order Arabic; program and symbolic map in cp037 FB80"
+  },
+  {
+   "id": "ORDR",
+   "title": "Order entry (forked programs, drifting copybooks)",
+   "style": "forks of one edit routine; one record in three libraries; per-program SYSLIB; dead code"
+  },
+  {
+   "id": "SHIP",
+   "title": "Shipment inquiry (CICS, an incomplete export)",
+   "style": "CICS; XCTL / LINK / CSD entries for programs the export lacks; a dead fork"
+  },
+  {
+   "id": "TAXR",
+   "title": "Tax withholding (V2 live, original dead)",
+   "style": "numbered; a replaced original kept beside its V2; an app copybook shadowing the shared one"
+  },
+  {
+   "id": "DECO",
+   "title": "Dealer commission (decommissioned)",
+   "style": "no programs left: a job, a CSD group and a copybook that outlived them"
+  },
+  {
+   "id": "LEGL",
+   "title": "General-ledger reconciliation (card-era members)",
+   "style": "comment banners before IDENTIFICATION DIVISION, change logs quoting old code, / page ejects, cols 1-6 sequence numbers and the deck name in cols 73-80"
+  },
+  {
+   "id": "PCED",
+   "title": "Pricing tool (PC-edited members)",
+   "style": "TABs and trailing white space, lower-case source, free format"
+  },
+  {
+   "id": "RPTS",
+   "title": "Management reports (continued literals)",
+   "style": "report headings as VALUE literals continued past column 72"
   }
  ],
  "channels": [
@@ -93,30 +128,36 @@
   "file_control",
   "entry_points",
   "file_edges",
-  "data_moves"
+  "data_moves",
+  "copy_collisions",
+  "gaps",
+  "dead"
  ],
  "fact_totals": {
-  "programs": 28,
-  "units": 88,
-  "edges": 61,
-  "call_sites": 24,
-  "copies": 35,
-  "data_items": 337,
-  "layouts": 87,
+  "programs": 45,
+  "units": 129,
+  "edges": 86,
+  "call_sites": 45,
+  "copies": 60,
+  "data_items": 449,
+  "layouts": 143,
   "sql_statements": 5,
   "sql_tables": 2,
-  "jcl_steps": 14,
-  "jcl_dds": 27,
+  "jcl_steps": 22,
+  "jcl_dds": 44,
   "screen_fields": 16,
-  "csd_resources": 10,
-  "transactions": 3,
+  "csd_resources": 18,
+  "transactions": 6,
   "cics_resources": 7,
-  "jcl_datasets": 20,
-  "file_control": 7,
-  "entry_points": 28,
-  "file_edges": 14,
-  "data_moves": 90,
-  "phantoms": 37
+  "jcl_datasets": 33,
+  "file_control": 9,
+  "entry_points": 45,
+  "file_edges": 24,
+  "data_moves": 128,
+  "copy_collisions": 9,
+  "gaps": 17,
+  "dead": 11,
+  "phantoms": 46
  },
  "code_pages": {
   "apps/DEUT/cobol/ZINSBER.cbl": "cp273",
@@ -129,6 +170,215 @@
   "apps/KYUY/copybook/SHAINREC.cpy": "cp939",
   "apps/NORD/cobol/KØBREG.cbl": "cp277",
   "apps/NORD/copybook/KUNDEÅ.cpy": "cp277"
+ },
+ "copy_libraries": {
+  "libraries": {
+   "ACCTCPY": [
+    "apps/ACCT/copybook"
+   ],
+   "BILLCPY": [
+    "apps/BILL/copybook"
+   ],
+   "CUSTCPY": [
+    "apps/CUST/copybook"
+   ],
+   "CUSTDCL": [
+    "apps/CUST/dclgen"
+   ],
+   "DECOCPY": [
+    "apps/DECO/copybook"
+   ],
+   "DEUTCPY": [
+    "apps/DEUT/copybook"
+   ],
+   "GULFCPY": [
+    "apps/GULF/copybook"
+   ],
+   "INVNCPY": [
+    "apps/INVN/copybook"
+   ],
+   "INVNDCL": [
+    "apps/INVN/dclgen"
+   ],
+   "KYUYCPY": [
+    "apps/KYUY/copybook"
+   ],
+   "LOANCPY": [
+    "apps/LOAN/copybook"
+   ],
+   "NORDCPY": [
+    "apps/NORD/copybook"
+   ],
+   "ORDRCPY": [
+    "apps/ORDR/copybook"
+   ],
+   "ORDROLD": [
+    "apps/ORDR/oldcopy"
+   ],
+   "PAYRCPY": [
+    "apps/PAYR/copybook"
+   ],
+   "SHIPCPY": [
+    "apps/SHIP/copybook"
+   ],
+   "SHRCPY": [
+    "shared/copylib"
+   ],
+   "TAXRCPY": [
+    "apps/TAXR/copybook"
+   ],
+   "TAXROLD": [
+    "apps/TAXR/oldcopy"
+   ]
+  },
+  "syslib": [
+   {
+    "programs": "apps/ORDR/cobol/ORDVOLD.cbl",
+    "order": [
+     "ORDROLD",
+     "ORDRCPY",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/ACCT/*",
+    "order": [
+     "ACCTCPY",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/BILL/*",
+    "order": [
+     "BILLCPY",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/CLMS/*",
+    "order": [
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/CUST/*",
+    "order": [
+     "CUSTCPY",
+     "CUSTDCL",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/DECO/*",
+    "order": [
+     "DECOCPY",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/DEUT/*",
+    "order": [
+     "DEUTCPY",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/GLED/*",
+    "order": [
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/GULF/*",
+    "order": [
+     "GULFCPY",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/INVN/*",
+    "order": [
+     "INVNCPY",
+     "INVNDCL",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/KYUY/*",
+    "order": [
+     "KYUYCPY",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/LEGL/*",
+    "order": [
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/LOAN/*",
+    "order": [
+     "LOANCPY",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/MODN/*",
+    "order": [
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/NORD/*",
+    "order": [
+     "NORDCPY",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/ORDR/*",
+    "order": [
+     "ORDRCPY",
+     "SHRCPY",
+     "ORDROLD"
+    ]
+   },
+   {
+    "programs": "apps/PAYR/*",
+    "order": [
+     "PAYRCPY",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/PCED/*",
+    "order": [
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/RPTS/*",
+    "order": [
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/SHIP/*",
+    "order": [
+     "SHIPCPY",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/TAXR/*",
+    "order": [
+     "TAXRCPY",
+     "SHRCPY",
+     "TAXROLD"
+    ]
+   }
+  ]
  },
  "horrors": [
   "H-0001",
@@ -179,7 +429,18 @@
   "H-0046",
   "H-0047",
   "H-0048",
-  "H-0049"
+  "H-0049",
+  "H-0050",
+  "H-0051",
+  "H-0052",
+  "H-0053",
+  "H-0054",
+  "H-0055",
+  "H-0056",
+  "H-0057",
+  "H-0058",
+  "H-0059",
+  "H-0060"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -552,6 +813,54 @@
     "H-0015"
    ]
   },
+  "apps/DECO/copybook/DECOREC.cpy": {
+   "app": "DECO",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "7b488f766bd39cbcb73d8dfc11a294babd2747bf930816864a0b894b973ffba8",
+   "bytes": 226,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/DECO.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0056"
+   ]
+  },
+  "apps/DECO/csd/DECOGRP.csd": {
+   "app": "DECO",
+   "library": "csd",
+   "language": "csd",
+   "sha256": "38f937f5856201239d6f635f4b4b36d3c05f3fab7c6af47ba064f63cc87d27df",
+   "bytes": 171,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/DECO.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0054"
+   ]
+  },
+  "apps/DECO/jcl/DECOMTH.jcl": {
+   "app": "DECO",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "e85ec642029584f54c86a41e7be47bcb768533b87c251ecc82f0e2c3407f797d",
+   "bytes": 475,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/DECO.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0054"
+   ]
+  },
   "apps/DEUT/cobol/ZINSBER.cbl": {
    "app": "DEUT",
    "library": "cobol",
@@ -870,6 +1179,39 @@
     "H-0042"
    ]
   },
+  "apps/LEGL/cobol/GLRCON.cbl": {
+   "app": "LEGL",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "67fdc818b545dff5a4ccf354086c60161a5c6eebf799a4f13691818ff419e164",
+   "bytes": 3713,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/LEGL.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0055",
+    "H-0057"
+   ]
+  },
+  "apps/LEGL/cobol/GLRSUM.cbl": {
+   "app": "LEGL",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "6361e94e7c34f5912907176a42b6dc35a84f9d4cd10670247d6e3f71a8ca7b96",
+   "bytes": 1422,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/LEGL.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0057"
+   ]
+  },
   "apps/LOAN/cobol/LNCALC.cbl": {
    "app": "LOAN",
    "library": "cobol",
@@ -1054,6 +1396,189 @@
     "H-0039"
    ]
   },
+  "apps/ORDR/cobol/ORDMAIN.cbl": {
+   "app": "ORDR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "95a5a2130cc16200d19b90f60ecad40c92c3f46d147b38ac7527f7ad8bd5a586",
+   "bytes": 3760,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/ORDR.json",
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY ORDPRICE: the estate holds no copybook ORDPRICE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "a one-byte FILLER stands in for the missing COPY ORDPRICE"
+   },
+   "horrors": [
+    "H-0050",
+    "H-0052",
+    "H-0053",
+    "H-0055"
+   ]
+  },
+  "apps/ORDR/cobol/ORDPRICE.cbl": {
+   "app": "ORDR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "793c88cb1deee36df7821160f7a9cab8545eab07cd85881386383030f3d56f0b",
+   "bytes": 507,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/ORDR.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0052"
+   ]
+  },
+  "apps/ORDR/cobol/ORDV#OLD.cbl": {
+   "app": "ORDR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "d8af078886d34bdb27b87d4b0572e377a1cbb53835b02902027ed48be37a4d3b",
+   "bytes": 916,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/ORDR.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0050",
+    "H-0052"
+   ]
+  },
+  "apps/ORDR/cobol/ORDVAL.cbl": {
+   "app": "ORDR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "41da218ec2d651dbdc3303805c33124bf662cc9fa285106eda0409908977c342",
+   "bytes": 1022,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/ORDR.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0050",
+    "H-0052"
+   ]
+  },
+  "apps/ORDR/cobol/ORDVALV2.cbl": {
+   "app": "ORDR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "e754497507ea4cbd525506386a48aadef3675e663657178a2c9ac959f74f237d",
+   "bytes": 1182,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/ORDR.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0051",
+    "H-0052"
+   ]
+  },
+  "apps/ORDR/cobol/ORDVOLD.cbl": {
+   "app": "ORDR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "9c266dbb023923f642ea1ed4182d350fb22ef6929e84dc9a55c7a50528989b81",
+   "bytes": 871,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/ORDR.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0051",
+    "H-0052"
+   ]
+  },
+  "apps/ORDR/copybook/ORDHIST.cpy": {
+   "app": "ORDR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "0eb32181a5279d2990137b4e805227318b5121b65e0a1dceb7c433ef12e7b436",
+   "bytes": 209,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/ORDR.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0056"
+   ]
+  },
+  "apps/ORDR/copybook/ORDPARM.cpy": {
+   "app": "ORDR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "bbc783d5db493b72774ba95e5aaa9f1929a9e6a57057eb898298951f13a608cb",
+   "bytes": 201,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/ORDR.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/ORDR/copybook/ORDREC.cpy": {
+   "app": "ORDR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "efb8e684266068ae60ee1d84fa6c764e608c276fae3adfbb2a89ca4759c6b884",
+   "bytes": 619,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/ORDR.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0052"
+   ]
+  },
+  "apps/ORDR/jcl/ORDNITE.jcl": {
+   "app": "ORDR",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "0358cde18caac9dc287f766d4ae51ed175866e599beaa0d92b1163650daca687",
+   "bytes": 457,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/ORDR.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0054"
+   ]
+  },
+  "apps/ORDR/oldcopy/ORDREC.cpy": {
+   "app": "ORDR",
+   "library": "oldcopy",
+   "language": "cobol",
+   "sha256": "5392ff50bbc867e5e374da661435b1e29325fd9b3d4b18660c7703f99e579e84",
+   "bytes": 453,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/ORDR.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0052"
+   ]
+  },
   "apps/PAYR/cobol/PAYMAIN.cbl": {
    "app": "PAYR",
    "library": "cobol",
@@ -1137,6 +1662,287 @@
     "H-0011"
    ]
   },
+  "apps/PCED/cobol/PCEDFREE.cbl": {
+   "app": "PCED",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "bfe34356be0e707f9ef1aae629cf4cf7ebd7acdcff84fc8288352485c0f2d791",
+   "bytes": 536,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/PCED.json",
+   "compile": {
+    "status": "compiled"
+   }
+  },
+  "apps/PCED/cobol/PCEDLOW.cbl": {
+   "app": "PCED",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "778f0fd190d50212f208e47905292c87cc6355e362bfdb98ffadae3638fce0ce",
+   "bytes": 931,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/PCED.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0059"
+   ]
+  },
+  "apps/PCED/cobol/PCEDTAB.cbl": {
+   "app": "PCED",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "2368b065ddfbe888e622fa44d55f63a848c602ba0b341d64432d32a235fdde27",
+   "bytes": 876,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/PCED.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0058"
+   ]
+  },
+  "apps/PCED/jcl/PCEDLOAD.jcl": {
+   "app": "PCED",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "2a31ceaeffa121b57d9e448cfd3842bfb6377068a0f27a3581bfbea4a32bb07b",
+   "bytes": 274,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/PCED.json",
+   "compile": {
+    "status": "not-cobol"
+   }
+  },
+  "apps/RPTS/cobol/RPTHDR.cbl": {
+   "app": "RPTS",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "4c3cbeffeeb59afe5bd1bae2eb8e32798454b51baada893bacf4c2b865e203a6",
+   "bytes": 1354,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/RPTS.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0060"
+   ]
+  },
+  "apps/RPTS/jcl/RPTMTH.jcl": {
+   "app": "RPTS",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "15e0e4ff7cc468a3857c64b99eb3771f89a609638f0413ba9604f1eda0bacad6",
+   "bytes": 195,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/RPTS.json",
+   "compile": {
+    "status": "not-cobol"
+   }
+  },
+  "apps/SHIP/cobol/SHPINQ.cbl": {
+   "app": "SHIP",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "c6aae0b571fea33620b9e8d3f0c86cfdaded876efe1bffb3ff07ad360998d63a",
+   "bytes": 1535,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/SHIP.json",
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY SHPRATE: the estate holds no copybook SHPRATE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
+   },
+   "horrors": [
+    "H-0052",
+    "H-0053",
+    "H-0054"
+   ]
+  },
+  "apps/SHIP/cobol/SHPINQO.cbl": {
+   "app": "SHIP",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "4e06ae8d5d4edd8576ca354dc18bc17444ff4df668627155542b6599b10c1e6f",
+   "bytes": 1418,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/SHIP.json",
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY SHPRATE: the estate holds no copybook SHPRATE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
+   },
+   "horrors": [
+    "H-0051",
+    "H-0052",
+    "H-0053",
+    "H-0054"
+   ]
+  },
+  "apps/SHIP/cobol/SHPRATE.cbl": {
+   "app": "SHIP",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "caab46808e065bc3e82b9509b0bd74c9db31f90be95cdb020a732d50df0edcc8",
+   "bytes": 577,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/SHIP.json",
+   "compile": {
+    "status": "compiled-stubbed"
+   }
+  },
+  "apps/SHIP/copybook/SHPCOMM.cpy": {
+   "app": "SHIP",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "3024bc7aa20c2699c86a90c0cb4991bf6de5fa53922c4ac292d34960129992a9",
+   "bytes": 256,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/SHIP.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/SHIP/csd/SHPGRP.csd": {
+   "app": "SHIP",
+   "library": "csd",
+   "language": "csd",
+   "sha256": "e9fa2c7d7d50a6dca4fd16526997691b79a03f128a85a6eceacfb00fc527a7c6",
+   "bytes": 365,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/SHIP.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0054"
+   ]
+  },
+  "apps/TAXR/cobol/TAXCALC.cbl": {
+   "app": "TAXR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "f00ec6c8bd7c1b77783d99e79ac61dcef7bbee76a4d412dc753681ddacf5eebb",
+   "bytes": 929,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/TAXR.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0051",
+    "H-0052"
+   ]
+  },
+  "apps/TAXR/cobol/TAXCALC2.cbl": {
+   "app": "TAXR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "0f5e840cb5c06754fc283a4b7a572607f8a73f8a4b2bef4cc7bd247e106d00b1",
+   "bytes": 1158,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/TAXR.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "horrors": [
+    "H-0052",
+    "H-0054",
+    "H-0055"
+   ]
+  },
+  "apps/TAXR/copybook/ADDRREC.cpy": {
+   "app": "TAXR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "030cca32d7fded63229a0e9833064fc946522af09ca973003b117b40d3409bb7",
+   "bytes": 265,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/TAXR.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0052"
+   ]
+  },
+  "apps/TAXR/copybook/TAXPARM.cpy": {
+   "app": "TAXR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "65c5724ca647ec59ce7b634b4c6cfc51c7bc1b3d1055159cabb027a17f30469b",
+   "bytes": 198,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/TAXR.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/TAXR/jcl/TAXQTR.jcl": {
+   "app": "TAXR",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "e87c523f7d6dc9e33c88bac6ea70661e31805cb59d69038a980915b5edd6a004",
+   "bytes": 244,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/TAXR.json",
+   "compile": {
+    "status": "not-cobol"
+   }
+  },
+  "apps/TAXR/oldcopy/TAXOLD.cpy": {
+   "app": "TAXR",
+   "library": "oldcopy",
+   "language": "cobol",
+   "sha256": "91851e60db20f934c2402d29908d62c4042b242a8fa2226393fee107f965b5a3",
+   "bytes": 187,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/TAXR.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0056"
+   ]
+  },
+  "shared/copylib/ADDRREC.cpy": {
+   "app": null,
+   "library": "copylib",
+   "language": "cobol",
+   "sha256": "0c9d7270545896b60c8c802ea235de0faf592a6b7677db24f2c91e8323108e37",
+   "bytes": 262,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/_shared.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0052"
+   ]
+  },
   "shared/copylib/DATEWS.cpy": {
    "app": null,
    "library": "copylib",
@@ -1149,6 +1955,22 @@
    "compile": {
     "status": "copybook"
    }
+  },
+  "shared/copylib/ORDREC.cpy": {
+   "app": null,
+   "library": "copylib",
+   "language": "cobol",
+   "sha256": "2752b0dcfe3ed733a7d8df55cc595ca5298273d9db4e72e71ea94e8f48ab9217",
+   "bytes": 456,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/_shared.json",
+   "compile": {
+    "status": "copybook"
+   },
+   "horrors": [
+    "H-0052"
+   ]
   },
   "shared/proclib/AUDLOG.prc": {
    "app": null,

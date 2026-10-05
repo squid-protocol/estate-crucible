@@ -1,0 +1,386 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0054",
+ "title": "References to programs the estate does not hold: EXEC PGM, CALL, LINK, XCTL, CSD PROGRAM and TRANSACTION",
+ "category": "missing-members",
+ "issue": null,
+ "realism": "An export is never complete: purged programs are still in JCL, vendor modules are called, CSD groups outlive their programs. The scan should record each reference and leave it unresolved.",
+ "shapes": [
+  "ORDNITE STEP020 EXEC PGM=ORDPURGE (deleted 2012)",
+  "SHPINQ: EXEC CICS XCTL PROGRAM('SHPMENU') and LINK PROGRAM('SHPAUDT'), neither in the estate",
+  "SHPGRP: DEFINE PROGRAM(SHPMENU), PROGRAM(SHPLEGA) and TRANSACTION(SHPL) PROGRAM(SHPLEGA)",
+  "DECO: a whole decommissioned job and CSD group",
+  "TAXCALC2: CALL 'TAXVEND' (a vendor module)"
+ ],
+ "asserts": "Each reference is a fact of its channel with resolves_to null and a gap (key channel gaps). No invocation edge may be drawn for it.",
+ "citations": [
+  {
+   "doc": "z/OS 3.1 MVS JCL Reference (SA23-1385-60)",
+   "section": "EXEC statement: PGM parameter (p.337-338)",
+   "url": "https://www.ibm.com/docs/en/zos/3.1.0?topic=statement-pgm-parameter",
+   "quote": "Use the PGM parameter to name the program that the system is to execute. The specified program must be a member of a partitioned data set (PDS) or partitioned data set extended (PDSE) used as a system library, a private library, or a temporary library."
+  },
+  {
+   "doc": "CICS Transaction Server for z/OS 6.x",
+   "section": "XCTL",
+   "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=summary-xctl",
+   "quote": "Specifies the identifier (1–8 alphanumeric characters) of the program to which control is to be passed unconditionally."
+  },
+  {
+   "doc": "CICS Transaction Server for z/OS 6.x",
+   "section": "PROGRAM resource definitions",
+   "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=attributes-program-resource-definitions",
+   "quote": "PROGRAM resources control information for a program that is stored in the program library and used to process a transaction, or part of a transaction."
+  }
+ ],
+ "planted": [
+  {
+   "member": "apps/DECO/csd/DECOGRP.csd",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "csd_resources": [
+     {
+      "type": "PROGRAM",
+      "name": "DECOINQ",
+      "group": "DECOGRP",
+      "line": 2,
+      "horror": "H-0054"
+     },
+     {
+      "type": "TRANSACTION",
+      "name": "DECI",
+      "group": "DECOGRP",
+      "line": 3,
+      "program": "DECOINQ",
+      "horror": "H-0054"
+     }
+    ],
+    "transactions": [
+     {
+      "transid": "DECI",
+      "program": "DECOINQ",
+      "group": "DECOGRP",
+      "line": 3,
+      "resolves_to": null,
+      "horror": "H-0054"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "transaction",
+      "name": "DECOINQ",
+      "line": 3,
+      "why": "the transaction's PROGRAM is not in the estate",
+      "horror": "H-0054"
+     },
+     {
+      "kind": "csd-program",
+      "name": "DECOINQ",
+      "line": 2,
+      "why": "DEFINE PROGRAM names a program the estate does not hold",
+      "horror": "H-0054"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/DECO/jcl/DECOMTH.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "DECOEXT",
+      "target": "DECOEXT",
+      "line": 5,
+      "resolves_to": null,
+      "horror": "H-0054"
+     },
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "DECOLOAD",
+      "target": "DECOLOAD",
+      "line": 9,
+      "resolves_to": null,
+      "horror": "H-0054"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": "DECOMTH",
+      "proc": null,
+      "step": "EXTRACT",
+      "ordinal": 1,
+      "program": "DECOEXT",
+      "exec_proc": null,
+      "cond": null,
+      "line": 5,
+      "horror": "H-0054"
+     },
+     {
+      "job": "DECOMTH",
+      "proc": null,
+      "step": "LOAD",
+      "ordinal": 2,
+      "program": "DECOLOAD",
+      "exec_proc": null,
+      "cond": "(0,NE)",
+      "line": 9,
+      "horror": "H-0054"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "exec",
+      "name": "DECOEXT",
+      "line": 5,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0054"
+     },
+     {
+      "kind": "exec",
+      "name": "DECOLOAD",
+      "line": 9,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0054"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/ORDR/jcl/ORDNITE.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "ORDPURGE",
+      "target": "ORDPURGE",
+      "line": 10,
+      "resolves_to": null,
+      "horror": "H-0054"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": "ORDNITE",
+      "proc": null,
+      "step": "STEP020",
+      "ordinal": 2,
+      "program": "ORDPURGE",
+      "exec_proc": null,
+      "cond": "(4,LT)",
+      "line": 10,
+      "horror": "H-0054"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "exec",
+      "name": "ORDPURGE",
+      "line": 10,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0054"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/SHIP/cobol/SHPINQ.cbl",
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY SHPRATE: the estate holds no copybook SHPRATE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "XCTL",
+      "form": "literal",
+      "operand": "SHPMENU",
+      "target": "SHPMENU",
+      "line": 30,
+      "resolves_to": null,
+      "horror": "H-0054"
+     },
+     {
+      "verb": "LINK",
+      "form": "literal",
+      "operand": "SHPAUDT",
+      "target": "SHPAUDT",
+      "line": 44,
+      "resolves_to": null,
+      "horror": "H-0054"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "xctl",
+      "name": "SHPMENU",
+      "line": 30,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0054"
+     },
+     {
+      "kind": "link",
+      "name": "SHPAUDT",
+      "line": 44,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0054"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/SHIP/cobol/SHPINQO.cbl",
+   "compile": {
+    "status": "incomplete",
+    "reason": "COPY SHPRATE: the estate holds no copybook SHPRATE (H-0053), so no compiler finds it",
+    "check_variant": "missing-copy",
+    "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "XCTL",
+      "form": "literal",
+      "operand": "SHPMENU",
+      "target": "SHPMENU",
+      "line": 31,
+      "resolves_to": null,
+      "horror": "H-0054"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "xctl",
+      "name": "SHPMENU",
+      "line": 31,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0054"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/SHIP/csd/SHPGRP.csd",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "csd_resources": [
+     {
+      "type": "PROGRAM",
+      "name": "SHPMENU",
+      "group": "SHPGRP",
+      "line": 4,
+      "horror": "H-0054"
+     },
+     {
+      "type": "PROGRAM",
+      "name": "SHPLEGA",
+      "group": "SHPGRP",
+      "line": 5,
+      "horror": "H-0054"
+     },
+     {
+      "type": "TRANSACTION",
+      "name": "SHPL",
+      "group": "SHPGRP",
+      "line": 7,
+      "program": "SHPLEGA",
+      "horror": "H-0054"
+     }
+    ],
+    "transactions": [
+     {
+      "transid": "SHPL",
+      "program": "SHPLEGA",
+      "group": "SHPGRP",
+      "line": 7,
+      "resolves_to": null,
+      "horror": "H-0054"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "transaction",
+      "name": "SHPLEGA",
+      "line": 7,
+      "why": "the transaction's PROGRAM is not in the estate",
+      "horror": "H-0054"
+     },
+     {
+      "kind": "csd-program",
+      "name": "SHPMENU",
+      "line": 4,
+      "why": "DEFINE PROGRAM names a program the estate does not hold",
+      "horror": "H-0054"
+     },
+     {
+      "kind": "csd-program",
+      "name": "SHPLEGA",
+      "line": 5,
+      "why": "DEFINE PROGRAM names a program the estate does not hold",
+      "horror": "H-0054"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/TAXR/cobol/TAXCALC2.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "edges": [
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "TAXVEND",
+      "line": 21,
+      "form": "literal",
+      "horror": "H-0054"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "TAXVEND",
+      "target": "TAXVEND",
+      "line": 21,
+      "resolves_to": null,
+      "horror": "H-0054"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "TAXVEND",
+      "line": 21,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0054"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
