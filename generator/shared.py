@@ -15,6 +15,29 @@ COPYLIB = [
     },
 ]
 
+# the enterprise-standard order record (ORDR keeps its own, newer one: H-0052)
+ORDREC = {
+    "member": "ORDREC",
+    "header": [" ORDREC   - ENTERPRISE STANDARD ORDER RECORD (35 BYTES)"],
+    "horror": "H-0052",
+    "items": [
+        I(5, "ORD-ID", "X(10)"), I(5, "ORD-CUST", "X(8)"), I(5, "ORD-ITEM", "X(12)"),
+        I(5, "ORD-QTY", "S9(5)", "COMP-3"),
+        I(5, "ORD-STATUS", "X", kids=[I(88, "ORD-OPEN", value="'O'"), I(88, "ORD-REJECTED", value="'R'")]),
+        I(5, "FILLER", "X(2)"),
+    ],
+}
+COPYLIB.append(ORDREC)
+
+# the enterprise address record (TAXR keeps its own with a longer postal code: H-0052)
+COPYLIB.append({
+    "member": "ADDRREC",
+    "header": [" ADDRREC  - ENTERPRISE STANDARD ADDRESS (5-CHAR POSTAL CODE)"],
+    "horror": "H-0052",
+    "items": [I(5, "ADR-LINE1", "X(30)"), I(5, "ADR-CITY", "X(20)"), I(5, "ADR-STATE", "X(2)"),
+              I(5, "ADR-POSTAL", "X(5)")],
+})
+
 PROCLIB = [
     {
         "name": "AUDLOG",

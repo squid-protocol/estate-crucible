@@ -1166,6 +1166,291 @@
      "quote": "When literal is not a figurative constant, ALL literal represents one or more occurrences of the string of characters that compose the literal."
     }
    ]
+  },
+  {
+   "id": "H-0050",
+   "title": "Two members with the same PROGRAM-ID: a CALL resolves to the member named for the program, not its stale copy",
+   "category": "call-resolution",
+   "issue": null,
+   "realism": "Estates keep backup members (PROG#OLD, PROGBKUP) made by copying a member under a new name without touching its PROGRAM-ID. Two source members then claim one program-name.",
+   "shapes": [
+    "ORDV#OLD (member) holds PROGRAM-ID ORDVAL, a copy of ORDVAL taken before a change; ORDMAIN's CALL 'ORDVAL' resolves to ORDVAL.cbl"
+   ],
+   "asserts": "A dynamic CALL 'ORDVAL' loads the program object named ORDVAL, which is built from the member ORDVAL. The stale copy's PROGRAM-ID is a fact of its member, but no call resolves to it, and it is dead.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+     "section": "Making dynamic calls (p.548)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+     "quote": "The program-name in the PROGRAM-ID paragraph or ENTRY statement must be identical to the corresponding program object name or program object alias of the program object that contains the program."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "CALL statement",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-call-statement",
+     "quote": "literal-1 or the contents of identifier-1 must specify the program-name of the called subprogram."
+    }
+   ],
+   "lower_confidence": "IBM ties a dynamic call to the program object's name; that the object is linked under its source member's name is the standard compile-and-link procedure's convention, not a language rule. The key follows the convention every estate in the field ledger uses."
+  },
+  {
+   "id": "H-0051",
+   "title": "Forked programs nobody calls: PROGV2 / PROGOLD beside the live PROG",
+   "category": "dead-code",
+   "issue": null,
+   "realism": "Every real estate carries forks: a V2 rewrite that never went live, an OLD version kept for audit, or (TAXR) a V2 that replaced the original, which was never deleted. Their code looks live; only the estate's references say which one runs.",
+   "shapes": [
+    "ORDVALV2 and ORDVOLD beside the live ORDVAL (ORDR)",
+    "TAXCALC replaced by TAXCALC2, which the job runs (TAXR)",
+    "SHPINQO, the pre-CICS-TS version of SHPINQ (SHIP)"
+   ],
+   "asserts": "A program no CALL, LINK, XCTL, EXEC PGM or TRANSACTION in the estate resolves to is dead: nothing draws an invocation edge to it. Its own code is still keyed in full.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+     "section": "Making dynamic calls (p.548)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+     "quote": "The program-name in the PROGRAM-ID paragraph or ENTRY statement must be identical to the corresponding program object name or program object alias of the program object that contains the program."
+    },
+    {
+     "doc": "z/OS 3.1 MVS JCL Reference (SA23-1385-60)",
+     "section": "EXEC statement: PGM parameter (p.337-338)",
+     "url": "https://www.ibm.com/docs/en/zos/3.1.0?topic=statement-pgm-parameter",
+     "quote": "Use the PGM parameter to name the program that the system is to execute. The specified program must be a member of a partitioned data set (PDS) or partitioned data set extended (PDSE) used as a system library, a private library, or a temporary library."
+    }
+   ]
+  },
+  {
+   "id": "H-0052",
+   "title": "Copybook version drift: one member in three libraries with three layouts; SYSLIB order (per program) picks the layout",
+   "category": "copy",
+   "issue": 4265,
+   "collision": true,
+   "shapes": [
+    "ORDREC in ORDRCPY (41 bytes), SHRCPY (35 bytes) and the retired ORDROLD (36 bytes)",
+    "ORDR's SYSLIB is ORDRCPY, ORDRDCL, SHRCPY, ORDROLD; ORDVOLD's own is ORDROLD, ORDRCPY, SHRCPY",
+    "SHIP has no ORDREC of its own: its COPY ORDREC takes SHRCPY's",
+    "TAXR's ADDRREC shadows SHRCPY's ADDRREC (a longer postal code)"
+   ],
+   "asserts": "Each COPY resolves to the first library in its program's SYSLIB order that holds the member, and the record's layout is that member's. Every unqualified COPY whose member sits in more than one library of that order is a collision the scan should report, with the winner and the shadowed libraries (key channel copy_collisions; the libraries and orders are key/manifest.json copy_libraries).",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Copy member search order (p.697)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "If no library name is specified in the COPY statement, the concatenation of datasets allocated to the SYSLIB ddname is searched."
+    },
+    {
+     "doc": "z/OS V2R2 DFSMS Using Data Sets (SC23-6855-03)",
+     "section": "Concatenating PDSs",
+     "url": "https://publibz.boulder.ibm.com/epubs/pdf/dgt3d410.pdf",
+     "quote": "If two members of different data sets in the concatenation have the same name, the FIND macro determines the address of the first one in the concatenation."
+    }
+   ]
+  },
+  {
+   "id": "H-0053",
+   "title": "COPY of a member no library holds, while a program member of that name exists",
+   "category": "missing-members",
+   "issue": null,
+   "realism": "Linkage copybooks are often named after their program (ORDPRICE, SHPRATE) and are the first thing lost in an export. A resolver that falls back to any member of that name finds the program source.",
+   "shapes": [
+    "ORDMAIN: COPY ORDPRICE; ORDPRICE.cbl is a program, no copy library holds ORDPRICE",
+    "SHPINQ: COPY SHPRATE; SHPRATE.cbl is a program"
+   ],
+   "asserts": "The COPY is a fact with resolves_to null and a gap: the compiler searches the SYSLIB libraries only, and a program source member is in none of them. No import edge may point at the program member.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Copy member search order (p.697)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "If no library name is specified in the COPY statement, the concatenation of datasets allocated to the SYSLIB ddname is searched."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "COPY statement (p.688)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The effect of processing a COPY statement is that the library text associated with text-name is copied into the compilation unit, logically replacing the entire COPY statement, beginning with the word COPY and ending with the period, inclusive."
+    }
+   ]
+  },
+  {
+   "id": "H-0054",
+   "title": "References to programs the estate does not hold: EXEC PGM, CALL, LINK, XCTL, CSD PROGRAM and TRANSACTION",
+   "category": "missing-members",
+   "issue": null,
+   "realism": "An export is never complete: purged programs are still in JCL, vendor modules are called, CSD groups outlive their programs. The scan should record each reference and leave it unresolved.",
+   "shapes": [
+    "ORDNITE STEP020 EXEC PGM=ORDPURGE (deleted 2012)",
+    "SHPINQ: EXEC CICS XCTL PROGRAM('SHPMENU') and LINK PROGRAM('SHPAUDT'), neither in the estate",
+    "SHPGRP: DEFINE PROGRAM(SHPMENU), PROGRAM(SHPLEGA) and TRANSACTION(SHPL) PROGRAM(SHPLEGA)",
+    "DECO: a whole decommissioned job and CSD group",
+    "TAXCALC2: CALL 'TAXVEND' (a vendor module)"
+   ],
+   "asserts": "Each reference is a fact of its channel with resolves_to null and a gap (key channel gaps). No invocation edge may be drawn for it.",
+   "citations": [
+    {
+     "doc": "z/OS 3.1 MVS JCL Reference (SA23-1385-60)",
+     "section": "EXEC statement: PGM parameter (p.337-338)",
+     "url": "https://www.ibm.com/docs/en/zos/3.1.0?topic=statement-pgm-parameter",
+     "quote": "Use the PGM parameter to name the program that the system is to execute. The specified program must be a member of a partitioned data set (PDS) or partitioned data set extended (PDSE) used as a system library, a private library, or a temporary library."
+    },
+    {
+     "doc": "CICS Transaction Server for z/OS 6.x",
+     "section": "XCTL",
+     "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=summary-xctl",
+     "quote": "Specifies the identifier (1–8 alphanumeric characters) of the program to which control is to be passed unconditionally."
+    },
+    {
+     "doc": "CICS Transaction Server for z/OS 6.x",
+     "section": "PROGRAM resource definitions",
+     "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=attributes-program-resource-definitions",
+     "quote": "PROGRAM resources control information for a program that is stored in the program library and used to process a transaction, or part of a transaction."
+    }
+   ]
+  },
+  {
+   "id": "H-0055",
+   "title": "A paragraph nothing reaches: never PERFORMed, after a GOBACK, its PERFORM commented out",
+   "category": "dead-code",
+   "issue": null,
+   "realism": "Retired logic stays in place with its PERFORM commented out. A reader that takes the comment for a statement makes the paragraph live.",
+   "shapes": [
+    "ORDMAIN 9000-OLD-RECOVERY: its only PERFORM is a comment line; 0000-MAIN ends in GOBACK",
+    "TAXCALC2 8000-Y2K-WINDOW",
+    "LEGL GLRCON 9900-TAPE-RESTART"
+   ],
+   "asserts": "The paragraph is a unit with its full extent, and it is dead: no PERFORM or GO TO names it, and the paragraph before it is not entered by falling through. A commented PERFORM is no edge.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Procedure division structure > Procedures (p.266)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "Execution begins with the first statement in the PROCEDURE DIVISION, excluding declaratives. Statements are executed in the order in which they are presented for compilation, unless the statement rules dictate some other order of execution."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "GOBACK statement (p.345)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The GOBACK statement specifies the logical end of a called program or invoked method."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Comment lines (p.60)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A comment line is any line with an asterisk (*) or slash (/) in the indicator area (column 7) of the line, or with a floating comment indicator (*>) as the first character-string in the program text area (Area A plus Area B)."
+    }
+   ]
+  },
+  {
+   "id": "H-0056",
+   "title": "Orphan copybooks: members no COPY names",
+   "category": "dead-code",
+   "issue": null,
+   "realism": "Copy libraries accumulate members whose last user was deleted. A scan should still read them (they are source) and draw no import edge to them.",
+   "shapes": [
+    "ORDR ORDHIST",
+    "DECO DECOREC",
+    "TAXR TAXOLD in TAXROLD"
+   ],
+   "asserts": "The copybook's data items are facts of its own member, and nothing imports it.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "COPY statement (p.688)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The effect of processing a COPY statement is that the library text associated with text-name is copied into the compilation unit, logically replacing the entire COPY statement, beginning with the word COPY and ending with the period, inclusive."
+    }
+   ]
+  },
+  {
+   "id": "H-0057",
+   "title": "A card-era member: banner and change history in comment lines full of statement words, page ejects, deck identification in 73-80",
+   "category": "reference-format",
+   "issue": null,
+   "realism": "Legacy members open with a 20-40 line comment banner before IDENTIFICATION DIVISION, carry a change log that quotes the code it changed (CALL 'DTCONV', COPY OLDDATE, PERFORM 9000-ABEND), page ejects (/ in column 7), and the deck name in columns 73-80 of every line.",
+   "shapes": [
+    "LEGL GLRCON: banner before IDENTIFICATION DIVISION, change history after PROGRAM-ID, / lines, GLRCON in cols 73-80 of every line",
+    "LEGL GLRSUM: the same, numbered"
+   ],
+   "asserts": "Comment lines are not statements: no call site, edge or COPY comes from them; cols 73-80 are outside the program text.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Comment lines (p.60)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A comment line is any line with an asterisk (*) or slash (/) in the indicator area (column 7) of the line, or with a floating comment indicator (*>) as the first character-string in the program text area (Area A plus Area B)."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Reference format",
+     "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-reference-format",
+     "quote": "Reference format consists of the following areas in a 72-character line."
+    }
+   ]
+  },
+  {
+   "id": "H-0058",
+   "title": "A member edited on a PC: TAB characters between words and trailing white space",
+   "category": "reference-format",
+   "issue": null,
+   "realism": "Members that went through a PC editor (or a git-hosted estate) carry TABs and trailing blanks or TABs. Mainframe source has none; GnuCOBOL and modern toolchains accept them.",
+   "shapes": [
+    "PCED PCEDTAB: a TAB after the first word of every Area B line; ' <TAB> ' or two blanks at the end of every third line"
+   ],
+   "asserts": "A TAB between words is white space (a separator) and trailing white space is nothing: every fact is what the member says with the TABs read as blanks.",
+   "citations": [
+    {
+     "doc": "GnuCOBOL 3.x Programmer's Guide",
+     "section": "10.1.1 cobc - The GnuCOBOL Compiler (-ftab-width)",
+     "url": "https://gnucobol.sourceforge.io/HTML/gnucobpg.html",
+     "quote": "-ftab-width=1..12 Set number of spaces that are assumed for tabs"
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Separators (p.49)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "Anywhere a space is used as a separator or as part of a separator, more than one space can be used."
+    }
+   ],
+   "lower_confidence": "Enterprise COBOL documents no TAB in source; the assertion follows GnuCOBOL (which expands it to a tab stop, -ftab-width) and is labelled realism, not an IBM rule."
+  },
+  {
+   "id": "H-0059",
+   "title": "Source keyed in lower case: divisions, paragraph names, data names and PICTURE strings",
+   "category": "reference-format",
+   "issue": null,
+   "realism": "Programs written on PCs or by newer staff are often all lower case; IBM folds COBOL words, so they compile unchanged.",
+   "shapes": [
+    "PCED pcedlow: everything outside literals in lower case, CALL 'PCEDTAB' kept upper case"
+   ],
+   "asserts": "A lower-case COBOL word is the same word upper case: the units, edges, data items and calls are facts, with names as written (the scorer compares names without case).",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "COBOL words with single-byte characters (p.11)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "In COBOL words (but not in the content of alphanumeric, DBCS, national, and UTF-8 literals), each lowercase single-byte alphabetic letter is considered to be equivalent to its corresponding single-byte uppercase alphabetic letter."
+    }
+   ]
+  },
+  {
+   "id": "H-0060",
+   "title": "A nonnumeric VALUE literal continued onto the next line (column 72, then - in column 7)",
+   "category": "data-items",
+   "issue": 4391,
+   "shapes": [
+    "RPTS RPTHDR: two report-heading 01s whose VALUE literal runs to column 72 and continues after a quotation mark on a '-' line"
+   ],
+   "asserts": "The item's value is the joined literal: the first line's characters through column 72, then the continuation line's characters after its quotation mark.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "Continuation lines > Continuation of alphanumeric and national literals (p.58)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "If the continued line contains an alphanumeric or national literal without a closing quotation mark, all spaces at the end of the continued line (through column 72) are considered to be part of the literal. The continuation line must contain a hyphen in the indicator area, and the first nonblank character must be a quotation mark. The continuation of the literal begins with the character immediately following the quotation mark."
+    }
+   ]
   }
  ],
  "not_planted": [
@@ -1179,7 +1464,7 @@
     3420,
     3510
    ],
-   "why": "reachability (dead / live units): no reachability channel is keyed yet"
+   "why": "the forge's reachability calling live units dead: the dead channel (phase 3) keys only what nothing reaches, so a live unit read as dead has no fact to fail yet"
   },
   {
    "defects": [
