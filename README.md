@@ -44,6 +44,7 @@ estate/                          what a scanner is pointed at
   apps/<APPID>/cobol/            programs            MEMBER.cbl  (PDS member names: 1-8, uppercase)
   apps/<APPID>/copybook/         copybooks           MEMBER.cpy
   apps/<APPID>/dclgen/           DCLGEN output       MEMBER.dcl
+  apps/<APPID>/oldcopy/          a retired copy library (<APP>OLD), still in some SYSLIBs   MEMBER.cpy
   apps/<APPID>/jcl/              jobs                MEMBER.jcl
   apps/<APPID>/proclib/          cataloged procs     MEMBER.prc
   apps/<APPID>/bms/              BMS mapsets         MEMBER.bms
@@ -59,7 +60,7 @@ tools/check.py                   regenerate + diff, key consistency, compile
 tools/compile.py                 GnuCOBOL compile check; tools/stubs/ hold SQLCA / DFHAID / DFHEIBLK stand-ins
 ```
 
-## The estate (phase 2)
+## The estate (phase 3)
 
 | app | what it is | style |
 |---|---|---|
@@ -76,16 +77,25 @@ tools/compile.py                 GnuCOBOL compile check; tools/stubs/ hold SQLCA
 | `DEUT` | a German interest calculation in EBCDIC cp273 (NEL program, FB80 copybook) | `DECIMAL-POINT IS COMMA`, VALUE 1,50 in a copybook |
 | `KYUY` | Japanese payroll in four encodings: cp930 FB80, cp939 NEL, Shift-JIS, UTF-8 (+ a UTF-8 copybook with a BOM) | DBCS words and literals with SO/SI, unbalanced / nested shift codes in comments, full-width names and spaces |
 | `GULF` | an Arabic account inquiry: BMS in EBCDIC cp420 with visual-order text, program in cp037 | BiDi |
-| `shared` | `DATEWS` copybook (library `SHRCPY`), `AUDLOG` proc | |
+| `ORDR` | order entry: the edit routine ORDVAL and its forks ORDVALV2, ORDVOLD and ORDV#OLD (a member copy still saying `PROGRAM-ID. ORDVAL.`); ORDREC in three libraries with three layouts | per-program SYSLIB (ORDVOLD reads the retired ORDROLD first); a dead paragraph whose PERFORM is commented out; an orphan copybook; a job step for a deleted program |
+| `SHIP` | shipment inquiry (CICS), an incomplete export: XCTL / LINK / CSD PROGRAM / TRANSACTION of programs that were never exported; a linkage COPY named like its program | a dead pre-migration fork |
+| `TAXR` | tax withholding: TAXCALC2 replaced TAXCALC, which was never deleted; its own ADDRREC shadows the shared one; a vendor CALL | numbered; a Y2K paragraph nothing performs; a retired library holding an orphan |
+| `DECO` | a decommissioned app: no programs left, only its job, CSD group and record copybook | every reference a gap |
+| `LEGL` | general-ledger reconciliation from 1983 | comment banners before IDENTIFICATION DIVISION, change logs quoting old CALL / COPY / PERFORM text, `/` page ejects, sequence numbers and the deck name in cols 73-80 of every line |
+| `PCED` | a pricing tool edited on PCs | TABs and trailing white space; a member in lower case; a free-format member |
+| `RPTS` | management reports | report headings as VALUE literals continued past column 72 |
+| `shared` | `DATEWS`, `ORDREC` and `ADDRREC` copybooks (library `SHRCPY`), `AUDLOG` proc | |
 
-63 members. The key holds 903 facts and 37 phantoms over 20 channels
+98 members. The key holds 1,353 facts and 46 phantoms over 23 channels
 (`key/manifest.json`, `fact_totals`). Copy libraries are named the way `COPY ... IN
-library` names them: `<APP>CPY`, `<APP>DCL`, `SHRCPY`; a program's SYSLIB is its app's two
-libraries, then `SHRCPY`.
+library` names them: `<APP>CPY`, `<APP>DCL`, `SHRCPY` and a retired `<APP>OLD`; a program's
+SYSLIB is, by default, its app's libraries, then `SHRCPY`, then `<APP>OLD`.
+`key/manifest.json` `copy_libraries` declares every library and SYSLIB order, in the shape
+gitgalaxy's `--copy-libraries` reads ([SPEC.md](SPEC.md#14-copy-libraries-copy_libraries)).
 
 ## Horrors
 
-49 horrors, each in `horrors/H-NNNN.json`; `horrors/README.md` is the index.
+60 horrors, each in `horrors/H-NNNN.json`; `horrors/README.md` is the index.
 
 | ids | from | what |
 |---|---|---|
@@ -94,6 +104,7 @@ libraries, then `SHRCPY`.
 | H-0013..H-0032 | gitgalaxy's field-testing ledger (`tests/cobol_mainframe/field_testing.json`, D001-D044), each citing its issue | every plantable defect: cols 73-80, change markers, DCLGEN, COPY forms, one-line INCLUDE, data-only copybooks, PROGRAM-ID forms, paragraph-header forms, commented code, ENVIRONMENT paragraphs, CSD / job name clashes, SIGN SEPARATE, END-/mixed-case names, free format, implicit FILLER, multi-program members, ASSIGN continuation |
 | H-0033 | Enterprise COBOL 6.4 | `PERFORM UNTIL EXIT` |
 | H-0034 | [#4265](https://github.com/squid-protocol/gitgalaxy/issues/4265) | the same copybook name in two libraries |
+| H-0050..H-0060 | phase 3, estate realism (`realism`: why real estates hold it), [#4265](https://github.com/squid-protocol/gitgalaxy/issues/4265), [#4391](https://github.com/squid-protocol/gitgalaxy/issues/4391) | a stale member copy with its original's PROGRAM-ID, dead forks, copybook drift across three libraries with per-program SYSLIB and the collisions a scan should report, COPY of a missing member named like a program, references to programs the estate lacks, dead paragraphs and orphan copybooks, card-era comment banners, TABs and trailing white space, lower-case source, a continued VALUE literal |
 | H-0035..H-0049 | gitgalaxy [#3988](https://github.com/squid-protocol/gitgalaxy/issues/3988) and the ledger's national-language defects | raw EBCDIC (FB80 and NEL), stray NULs (D016), the full-width space (D030), Nordic names (D015), Japanese and full-width names (D029, D031), DBCS literals and shift codes, decimal comma (#3942), EBCDIC collation, BiDi BMS (cp420), Shift-JIS, and the data-move defects D013, D023, D039 |
 
 The ledger defects that cannot be planted yet are listed, with the reason, at the end of
@@ -145,7 +156,9 @@ make scale-smoke    # the medium preset (12 seeded filler apps), twice, byte-ide
 GNUCOBOL_IMAGE=gitgalaxy-gnucobol:3 python3 tools/compile.py
 ```
 
-Compile results at phase 2: 22 programs compile with `cobc -c -std=ibm`. Members with
+Compile results at phase 3: 39 programs compile with `cobc -c -std=ibm`, each with its own
+SYSLIB order. Three `incomplete` members COPY a member the estate lacks (a gap, H-0053); they
+compile with a one-byte FILLER standing in for it. Members with
 multi-byte characters are decoded to UTF-8 and compiled as free format. Some compile through
 a check variant: two have the PROGRAM-ID period restored, KYUYO01 has PIC G turned into
 PIC N (GnuCOBOL has no DBCS category), and KYUYJP has its full-width spaces turned into
@@ -171,18 +184,22 @@ epic grows this dial to 20k-100k members. The committed tree is `--size small --
 | H-0038, H-0040, H-0041 | The full-width space as a separator; mixed SBCS/DBCS names (X項目); a Japanese PROGRAM-ID; U+2212 as a hyphen. | Not Enterprise COBOL (DBCS words must be all double-byte, and words are separated by single-byte spaces): the opensourcecobol4j dialect, evidenced by its test suite (#3956, #3991). |
 | H-0042 | Unbalanced and nested shift codes. | Planted only in comment lines: IBM forbids them in literals and words. |
 | H-0045 | CCSID 420 host text is held in visual order. | IBM's emulator documentation (Lam-Alef stored as one character in visual CCSID 420), not the CICS BMS reference. |
+| H-0050 | `CALL 'ORDVAL'` reaches the member ORDVAL, not ORDV#OLD (which also says `PROGRAM-ID. ORDVAL.`). | IBM requires the PROGRAM-ID to equal the program object's name; that the object is linked under its source member's name is the standard compile-and-link convention, not a language rule. |
+| H-0058 | TABs between words are white space. | Enterprise COBOL documents no TAB in source; GnuCOBOL expands it to a tab stop (`-ftab-width`). |
 | H-0013, H-0032 | Cols 73-80 are ignored. | The 6.4 Language Reference defines a 72-character line and does not describe cols 73-80 for source. |
 
 ## Known gaps (phase 3 and later)
 
-* Channels not keyed yet: reachability (dead units), MOVE truncation (D038), COMMAREA
-  contracts, DL/I and MQ calls, PL/I structure mapping and PL/I CICS operations.
+* Channels not keyed yet: liveness (the `dead` channel keys only what nothing reaches),
+  MOVE truncation (D038), COMMAREA contracts, DL/I and MQ calls, PL/I structure mapping and
+  PL/I CICS operations.
 * The key states but no gitgalaxy column holds: PERFORM THRU's end, an EXEC SQL CALL's
   procedure name, SYSOUT DDs, REDEFINES overlays in a layout. The scorer reports these as
   `unscored`.
-* Not planted yet (phase 3, estate realism): forked and drifting program and copybook
-  versions, missing members, JCL symbolic parameters and INCLUDE groups, Assembler and REXX
-  members, mixed fixed and free format within an app.
+* Not planted yet (estate realism, next): compile JCL whose SYSLIB DD concatenation is the
+  evidence for a SYSLIB order, JCL symbolic parameters and INCLUDE groups, Assembler and
+  REXX members, a nested COPY inside a drifting copybook, a CICS fork that is still in the
+  CSD, PROCs overridden per step, more apps toward the epic's 30.
 
 ## Licence
 

@@ -41,6 +41,7 @@ change (with a "Cross-repo" PR note), not something to do unilaterally from this
 
 | Tag | Date | Contents |
 |---|---|---|
+| `v0.4.0` | 2026-10-05 | Phase 3 (estate realism): 7 apps (ORDR, SHIP, TAXR, DECO, LEGL, PCED, RPTS), 20 apps and 98 members; channels `copy_collisions`, `gaps`, `dead` (23 channels); `copy_libraries` in the manifest (retired `<APP>OLD` libraries, per-program SYSLIB orders); compile status `incomplete`; horrors H-0050..H-0060. Key correction: PL/I procedures end at their own `END name;` (SPEC 3.1; NULREST's `end_line` moves from its RETURN to its END). |
 | `v0.3.0` | 2026-10-04 | Phase 2 (multicultural, gitgalaxy#3988): members committed as raw exported bytes (EBCDIC cp037/273/277/420/930/939 as FB80 or NEL, Shift-JIS, UTF-8 with and without BOM) with `encoding` / `storage` / `code_pages` in the key; 4 apps (NORD, DEUT, KYUY, GULF), 63 members; a `data_moves` channel (20 channels); horrors H-0035..H-0049. |
 | `v0.2.0` | 2026-10-04 | Phase 1 of gitgalaxy#4317: 9 apps, 48 members, 19 channels (new: cics_resources, jcl_datasets, file_control, entry_points, file_edges), 34 horrors: H-0009..H-0012 (gitgalaxy#4329-#4332), H-0013..H-0032 from the field-testing ledger, PERFORM UNTIL EXIT, SYSLIB collisions (#4265); PL/I and free-format members; COPY ... IN library. |
 | `v0.1.0` | 2026-10-04 | Phase 0 of gitgalaxy#4317: format `estate-crucible-key/1`, the generator, 3 apps (ACCT, CUST, LOAN) + shared libraries, 27 members, 14 channels, the 8 seed horrors H-0001..H-0008 from gitgalaxy#4300-#4307. First pinned by gitgalaxy's scorer PR. |
