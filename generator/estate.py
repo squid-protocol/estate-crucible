@@ -60,6 +60,7 @@ class Estate:
         self.not_planted: list[dict[str, Any]] = []
         self._app_encodings: dict[Optional[str], dict[str, tuple[str, str]]] = {
             a["id"]: a.get("encodings", {}) for a in apps}
+        self._app_eras: dict[Optional[str], Optional[int]] = {a["id"]: a.get("era") for a in apps}
         self.seed = seed
         self.size = size
         self.members: dict[str, Member] = {}
@@ -132,7 +133,8 @@ class Estate:
         # code page and record format: the member's own, else its app's for that library, else UTF-8
         enc = (spec or {}).get("encoding") or self._app_encodings.get(app, {}).get(library) or ("utf-8", "lf")
         m = Member(path, LANG[library], app=app, library=library, numbered=numbered, free=free,
-                   encoding=enc[0], storage=enc[1])
+                   encoding=enc[0], storage=enc[1],
+                   era=(spec or {}).get("era", self._app_eras.get(app)))
         self.members[path] = m
         return m
 
@@ -381,6 +383,7 @@ class Estate:
                 "storage": m.storage,
                 "key": f"key/apps/{scope}.json",
                 "compile": m.compile,
+                **({"era": m.era} if m.era is not None else {}),
                 **({"generated_from": m.generated_from} if m.generated_from else {}),
                 **({"horrors": sorted(m.horrors)} if m.horrors else {}),
             }
@@ -444,15 +447,17 @@ class Estate:
                 "definition (from `spec/horrors.json`), the members it is planted in, and the expected",
                 "facts and phantoms the answer key carries for it. An issue of `realism` marks a horror",
                 "that imitates what real customer estates look like rather than a known defect; its",
-                "`realism` field says why it is there.", "",
-                "| id | issue (defect) | category | title | planted in |", "|---|---|---|---|---|"]
+                "`realism` field says why it is there. `era` is the horror's era (0-4, SPEC 5.1); `any` marks an",
+                "era-neutral syntax horror; blank is untagged.", "",
+                "| id | era | issue (defect) | category | title | planted in |", "|---|---|---|---|---|---|"]
         for hid, d in sorted(self.horror_defs.items()):
             where = ", ".join(f"`{p}`" for p, m in sorted(self.members.items()) if hid in m.horrors)
             issue = f"[#{d['issue']}](https://github.com/squid-protocol/gitgalaxy/issues/{d['issue']})" if d.get("issue") else ""
             src = f"{issue} ({d['defect']})" if d.get("defect") else issue
             if d.get("realism"):
                 src = "realism"
-            rows.append(f"| {hid} | {src} | {d['category']} | {d['title']} | {where} |")
+            era = "" if "era" not in d else "any" if d["era"] is None else str(d["era"])
+            rows.append(f"| {hid} | {era} | {src} | {d['category']} | {d['title']} | {where} |")
         if self.not_planted:
             rows += ["", "## Field-testing defects not planted", "",
                      "From gitgalaxy `tests/cobol_mainframe/field_testing.json`; each waits for what the reason names.", "",

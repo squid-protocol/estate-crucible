@@ -78,6 +78,27 @@ def regenerated_diff() -> list[str]:
     return problems
 
 
+def _bad_era(v: object) -> bool:
+    return v is not None and (type(v) is not int or not 0 <= v <= 4)
+
+
+def era_problems(manifest: dict, defined: dict) -> list[str]:
+    """Era schema (SPEC 1.1, 5.1): era is 0-4 or null (era-neutral); a horror from H-0061 on must
+    carry the key; release is a string."""
+    problems = []
+    for hid, h in defined.items():
+        if "era" in h and _bad_era(h["era"]):
+            problems.append(f"spec/horrors.json {hid}: era {h['era']!r} is not 0-4 or null")
+        if "era" not in h and int(hid.split("-")[1]) >= 61:
+            problems.append(f"spec/horrors.json {hid}: no era (required from H-0061; null for era-neutral)")
+        if "release" in h and not (isinstance(h["release"], str) and h["release"]):
+            problems.append(f"spec/horrors.json {hid}: release must be a non-empty string")
+    for path, meta in manifest["members"].items():
+        if "era" in meta and (meta["era"] is None or _bad_era(meta["era"])):
+            problems.append(f"{path}: era {meta['era']!r} is not 0-4")
+    return problems
+
+
 def key_consistency() -> list[str]:
     problems = []
     manifest = json.loads((ROOT / "key" / "manifest.json").read_text(encoding="utf-8"))
@@ -92,6 +113,7 @@ def key_consistency() -> list[str]:
         for c in h.get("citations", []):
             if not (c.get("url", "").startswith("https://") and c.get("section") and c.get("quote")):
                 problems.append(f"spec/horrors.json {hid}: a citation needs url, section and quote")
+    problems += era_problems(manifest, defined)
     binary_globs = [ln.split()[0] for ln in (ROOT / ".gitattributes").read_text(encoding="utf-8").splitlines()
                     if ln.strip() and not ln.startswith("#") and "binary" in ln.split()[1:]]
     for path, meta in manifest["members"].items():
