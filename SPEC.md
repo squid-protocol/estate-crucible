@@ -28,15 +28,15 @@ at. Line numbers are 1-based physical lines of the member.
 | `channels` | the channel names, in order (section 3) |
 | `fact_totals` | facts per channel, and `phantoms` |
 | `horrors` | the horror ids |
-| `members` | per member path: `app` (null for shared/), `library`, `language`, `sha256` of the member's bytes, `key` (the file holding its facts), `compile` (section 5), `generated_from`, `horrors` |
+| `members` | per member path: `app` (null for shared/), `library`, `language`, optional `era` (0-4, the era the member is written in: 0 CICS macro level, 1 CICS/VS 1.x + OS/VS COBOL, 2 CICS/ESA + COBOL II, 3 CICS TS 1-2, 4 CICS TS 3+ / Enterprise COBOL; absent = untagged), `sha256` of the member's bytes, `key` (the file holding its facts), `compile` (section 5), `generated_from`, `horrors` |
 | `code_pages` | every non-UTF-8 member's code page (section 1.3) |
 | `copy_libraries` | the estate's copy libraries and SYSLIB orders (section 1.4): what a scanner must be told about COPY |
 
 ### 1.2 `key/apps/<APPID>.json`
 
 `{"format", "app", "members": {path: entry}}`. An entry has `app`, `library`, `language`,
-`numbered` (cols 1-6 carry sequence numbers), `lines`, `compile`, optional
-`generated_from`, then one list per channel that has facts, then `phantoms` and `horrors`.
+`numbered` (cols 1-6 carry sequence numbers), `lines`, `compile`, optional `era` (as in 1.1),
+optional `generated_from`, then one list per channel that has facts, then `phantoms` and `horrors`.
 
 ### 1.3 Code pages and storage
 
@@ -174,7 +174,11 @@ own code page.
 
 `spec/horrors.json` entries carry `id`, `title`, `category`, `issue` (a gitgalaxy issue
 number, or null), `shapes`, `asserts`, `citations` (`doc`, `section`, `url`, `quote`) and
-optional `defect`, `notes`, `lower_confidence`. A phase-3 horror that imitates what real
+optional `defect`, `notes`, `lower_confidence`, `era` and `release`. `era` is 0-4 (section 1.1's
+table) for a horror that belongs to one era, or `null` for an era-neutral syntax horror (continuation,
+NATIONAL, encodings), which counts toward no single era; it is required from H-0061 on. `release`
+names the product release the citation documents (for example `CICS/VS 1.7`), and says so when only
+a later manual could be cited. A phase-3 horror that imitates what real
 customer estates look like, rather than a filed defect, has `realism`: why estates hold it.
 `collision: true` marks a horror that owns the COPYs of a member found in several libraries
 (the others are H-0034's cascade).
@@ -204,4 +208,4 @@ Guide, "Examples: numeric data and internal representation":
 ## 7. Versioning
 
 A change to what an existing field means bumps the major number (`estate-crucible-key/2`)
-and the scorer that reads it. Adding a channel, an optional field or a tag does not.
+and the scorer that reads it. Adding a channel, an optional field (`era`, `release`) or a tag does not.

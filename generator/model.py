@@ -84,6 +84,7 @@ class Member:
         free: bool = False,
         encoding: str = "utf-8",
         storage: str = "lf",
+        era: Optional[int] = None,
     ) -> None:
         self.path = path
         self.language = language
@@ -96,6 +97,8 @@ class Member:
         # the code page and record format the member is committed in (generator/codepages.py)
         self.encoding = encoding
         self.storage = storage
+        # the era the member is written in (SPEC 1.1), 0-4; None when untagged
+        self.era = era
         self.lines: list[str] = []
         self.facts: dict[str, list[dict[str, Any]]] = {}
         self.phantoms: list[dict[str, Any]] = []
@@ -235,6 +238,8 @@ class Member:
         }
         if (self.encoding, self.storage) != ("utf-8", "lf"):
             entry["encoding"], entry["storage"] = self.encoding, self.storage
+        if self.era is not None:
+            entry["era"] = self.era
         if self.generated_from:
             entry["generated_from"] = self.generated_from
         for ch in CHANNELS:

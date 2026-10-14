@@ -74,3 +74,10 @@ Add a module under `generator/apps/` that defines `APP` (see `acct.py`) and list
 gitgalaxy pins this repo to a **release tag** in `tests/_estate_crucible_pin.py`
 (`PINNED_REF`). Tagging is a deliberate, coordinated step: see [`RELEASING.md`](RELEASING.md).
 Never create tags or releases as a side effect of other work.
+
+## Eras
+
+`era` (0-4, SPEC 1.1) marks the period a member or horror belongs to; `null` on a horror means
+era-neutral syntax. A new horror (H-0061 on) must carry `era` (`tools/check.py`), and `release`
+when its citation documents a specific product release. Tags are data: set them in `spec/horrors.json`
+or on the app/member in `generator/apps/`, never in `key/` or `horrors/`.
