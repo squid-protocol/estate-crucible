@@ -38,6 +38,8 @@ JOBS = [
 CSD = [
     {
         "group": "DECOGRP",
+        "era": 2,
+        "era_evidence": "CSD DEFINE PROGRAM / TRANSACTION is RDO (CICS/MVS 2.x, #5117 era 2); the programs it names are gone",
         "title": "DEALER COMMISSION INQUIRY (RETIRED)",
         "defines": [
             ("PROGRAM", "DECOINQ", {"LANGUAGE": "COBOL", "_horror": H54}),
@@ -48,6 +50,8 @@ CSD = [
 
 APP = {
     "id": "DECO",
+    "era": 2,
+    "era_evidence": "no program left; CSD DEFINE PROGRAM / TRANSACTION in DECOGRP is RDO",
     "title": "Dealer commission (decommissioned)",
     "style": "no programs left: a job, a CSD group and a copybook that outlived them",
     "copybooks": COPYBOOKS,

@@ -11,6 +11,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-READ and SET WS-JRNL-EOF TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "programs": [
     {
      "program_id": "GLPOST",

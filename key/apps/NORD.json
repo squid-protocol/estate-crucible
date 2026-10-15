@@ -13,6 +13,8 @@
    },
    "encoding": "cp277",
    "storage": "fb80",
+   "era": 3,
+   "era_evidence": "FUNCTION CURRENT-DATE is an intrinsic function (COBOL/370, LE-based COBOL for MVS: #5117 era 3; earliest-era doubt)",
    "programs": [
     {
      "program_id": "KØBREG",
@@ -569,6 +571,8 @@
     "status": "ibm-only",
     "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"
    },
+   "era": 3,
+   "era_evidence": "KOBREG uses FUNCTION CURRENT-DATE (intrinsic function, LE-based COBOL); the PL/I members are untagged",
    "programs": [
     {
      "program_id": "NULREST",
@@ -639,6 +643,8 @@
     "status": "ibm-only",
     "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"
    },
+   "era": 3,
+   "era_evidence": "KOBREG uses FUNCTION CURRENT-DATE (intrinsic function, LE-based COBOL); the PL/I members are untagged",
    "programs": [
     {
      "program_id": "RENTEØ",

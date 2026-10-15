@@ -14,6 +14,8 @@
     "check_variant": "program-id-period",
     "check_note": "the PROGRAM-ID line is rewritten to `PROGRAM-ID. <name>.` for the check; everything else compiles as written"
    },
+   "era": 1,
+   "era_evidence": "no COBOL-85 construct (COMP-3, CALL, GOBACK): earliest era, OS/VS COBOL (#5117 era 1)",
    "programs": [
     {
      "program_id": "LNCALC",
@@ -203,6 +205,8 @@
     "status": "ibm-only",
     "reason": "CA IDMS DML: needs the IDMS DML precompiler (IDMS-CONTROL SECTION, SCHEMA SECTION, BIND / OBTAIN / FINISH); GnuCOBOL has no IDMS precompiler"
    },
+   "era": 2,
+   "era_evidence": "END-IF is COBOL-85 (#5117 era 2); the IDMS DML is not an era tell in #5117 and is not used to date it",
    "programs": [
     {
      "program_id": "LNIDMS01",
@@ -399,6 +403,8 @@
     "check_variant": "program-id-period",
     "check_note": "the PROGRAM-ID line is rewritten to `PROGRAM-ID. <name>.` for the check; everything else compiles as written"
    },
+   "era": 2,
+   "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "programs": [
     {
      "program_id": "LNRATE",

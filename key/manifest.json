@@ -10,102 +10,142 @@
   {
    "id": "ACCT",
    "title": "Account posting (batch)",
-   "style": "numbered fixed format, change tags, THRU-range paragraphs, main-line code"
+   "style": "numbered fixed format, change tags, THRU-range paragraphs, main-line code",
+   "era": 2,
+   "era_evidence": "ACCTPOST/ACCTRPT/ACCTUPD use COBOL-85 END-IF, END-READ, END-PERFORM; ACCTAUD alone is era 1"
   },
   {
    "id": "CUST",
    "title": "Customer inquiry (CICS, Db2)",
-   "style": "unnumbered fixed format, pseudo-conversational CICS, Db2 stored procedures"
+   "style": "unnumbered fixed format, pseudo-conversational CICS, Db2 stored procedures",
+   "era": 2,
+   "era_evidence": "CUSTINQ RESP(), CUSTDBIO EXEC SQL, CUSTGRP RDO CSD; CUSTMNU alone is command level (era 1)"
   },
   {
    "id": "LOAN",
    "title": "Loan servicing (IDMS, batch)",
-   "style": "mixed: numbered IDMS-DC member, unnumbered batch; PROGRAM-ID periods missing"
+   "style": "mixed: numbered IDMS-DC member, unnumbered batch; PROGRAM-ID periods missing",
+   "era": 2,
+   "era_evidence": "LNIDMS01 and LNRATE use COBOL-85 END-IF; LNCALC alone is era 1; IDMS DML is not dated"
   },
   {
    "id": "BILL",
    "title": "Monthly billing (batch)",
-   "style": "numbered, blank numbered lines, change markers in cols 1-6, GDG generations"
+   "style": "numbered, blank numbered lines, change markers in cols 1-6, GDG generations",
+   "era": 2,
+   "era_evidence": "BILLCALC uses COBOL-85 END-IF and END-READ"
   },
   {
    "id": "INVN",
    "title": "Inventory maintenance (CICS, VSAM, Db2)",
-   "style": "unnumbered, CICS file and TS queue commands, a job named after a program"
+   "style": "unnumbered, CICS file and TS queue commands, a job named after a program",
+   "era": 2,
+   "era_evidence": "INVUPD RESP(), INVDB EXEC SQL, INVGRP RDO CSD"
   },
   {
    "id": "PAYR",
    "title": "Payroll (batch, multi-program source)",
-   "style": "unnumbered; nested and sibling programs in one member; every COPY form"
+   "style": "unnumbered; nested and sibling programs in one member; every COPY form",
+   "era": 2,
+   "era_evidence": "PAYMAIN uses COBOL-85 inline PERFORM with END-PERFORM and END-IF"
   },
   {
    "id": "GLED",
    "title": "General ledger (batch, oldest code)",
-   "style": "numbered, cols 73-80 identification, every paragraph-header form"
+   "style": "numbered, cols 73-80 identification, every paragraph-header form",
+   "era": 2,
+   "era_evidence": "GLPOST uses COBOL-85 END-READ and SET ... TO TRUE"
   },
   {
    "id": "MODN",
    "title": "Modernised rate service (free format)",
-   "style": "free-format COBOL"
+   "style": "free-format COBOL",
+   "era": 4,
+   "era_evidence": "MODRATE is written in free-form source (>>SOURCE FORMAT FREE), Enterprise COBOL 6.x"
   },
   {
    "id": "CLMS",
    "title": "Claims (PL/I with a COBOL routine)",
-   "style": "PL/I external procedure with internal procedures"
+   "style": "PL/I external procedure with internal procedures",
+   "era": 2,
+   "era_evidence": "CLMEDIT uses COBOL-85 END-IF; the PL/I CLMPROC has no era tell in #5117 and is untagged"
   },
   {
    "id": "NORD",
    "title": "Danish interest run (EBCDIC cp277)",
-   "style": "raw EBCDIC cp277: programs FB80, copybooks NEL; UTF-8 job and PL/I; Æ Ø Å names"
+   "style": "raw EBCDIC cp277: programs FB80, copybooks NEL; UTF-8 job and PL/I; Æ Ø Å names",
+   "era": 3,
+   "era_evidence": "KOBREG uses FUNCTION CURRENT-DATE (intrinsic function, LE-based COBOL); the PL/I members are untagged"
   },
   {
    "id": "DEUT",
    "title": "German interest calculation (EBCDIC cp273, decimal comma)",
-   "style": "raw EBCDIC cp273: program NEL, copybook FB80; DECIMAL-POINT IS COMMA"
+   "style": "raw EBCDIC cp273: program NEL, copybook FB80; DECIMAL-POINT IS COMMA",
+   "era": 1,
+   "era_evidence": "ZINSBER has no construct later than OS/VS COBOL; earliest era"
   },
   {
    "id": "KYUY",
    "title": "Japanese payroll (cp930, cp939, Shift-JIS, UTF-8)",
-   "style": "DBCS: SO/SI in EBCDIC, Shift-JIS and UTF-8 members; Japanese and full-width names"
+   "style": "DBCS: SO/SI in EBCDIC, Shift-JIS and UTF-8 members; Japanese and full-width names",
+   "era": 2,
+   "era_evidence": "kanji (DBCS) data names and PIC G items; earliest IBM DBCS COBOL taken as VS COBOL II (doubt)"
   },
   {
    "id": "GULF",
    "title": "Arabic account inquiry (EBCDIC cp420 BMS)",
-   "style": "BMS in cp420 with visual-order Arabic; program and symbolic map in cp037 FB80"
+   "style": "BMS in cp420 with visual-order Arabic; program and symbolic map in cp037 FB80",
+   "era": 1,
+   "era_evidence": "GULFINQ is command-level CICS (SEND MAP, RETURN) with no later tell; earliest era"
   },
   {
    "id": "ORDR",
    "title": "Order entry (forked programs, drifting copybooks)",
-   "style": "forks of one edit routine; one record in three libraries; per-program SYSLIB; dead code"
+   "style": "forks of one edit routine; one record in three libraries; per-program SYSLIB; dead code",
+   "era": 2,
+   "era_evidence": "ORDMAIN/ORDVAL and the forks use COBOL-85 END-IF, END-READ, SET ... TO TRUE; ORDPRICE alone is era 1"
   },
   {
    "id": "SHIP",
    "title": "Shipment inquiry (CICS, an incomplete export)",
-   "style": "CICS; XCTL / LINK / CSD entries for programs the export lacks; a dead fork"
+   "style": "CICS; XCTL / LINK / CSD entries for programs the export lacks; a dead fork",
+   "era": 2,
+   "era_evidence": "SHPINQ/SHPRATE use COBOL-85 END-IF with command-level CICS XCTL/LINK; SHPGRP is an RDO CSD"
   },
   {
    "id": "TAXR",
    "title": "Tax withholding (V2 live, original dead)",
-   "style": "numbered; a replaced original kept beside its V2; an app copybook shadowing the shared one"
+   "style": "numbered; a replaced original kept beside its V2; an app copybook shadowing the shared one",
+   "era": 2,
+   "era_evidence": "TAXCALC and TAXCALC2 use COBOL-85 END-IF"
   },
   {
    "id": "DECO",
    "title": "Dealer commission (decommissioned)",
-   "style": "no programs left: a job, a CSD group and a copybook that outlived them"
+   "style": "no programs left: a job, a CSD group and a copybook that outlived them",
+   "era": 2,
+   "era_evidence": "no program left; CSD DEFINE PROGRAM / TRANSACTION in DECOGRP is RDO"
   },
   {
    "id": "LEGL",
    "title": "General-ledger reconciliation (card-era members)",
-   "style": "comment banners before IDENTIFICATION DIVISION, change logs quoting old code, / page ejects, cols 1-6 sequence numbers and the deck name in cols 73-80"
+   "style": "comment banners before IDENTIFICATION DIVISION, change logs quoting old code, / page ejects, cols 1-6 sequence numbers and the deck name in cols 73-80",
+   "era": 2,
+   "era_evidence": "GLRCON uses COBOL-85 END-IF despite 1983-era banners; GLRSUM alone is era 1"
   },
   {
    "id": "PCED",
    "title": "Pricing tool (PC-edited members)",
-   "style": "TABs and trailing white space, lower-case source, free format"
+   "style": "TABs and trailing white space, lower-case source, free format",
+   "era": 4,
+   "era_evidence": "PCEDFREE is free-form source (>>SOURCE FORMAT FREE); PCEDLOW is era 2 and PCEDTAB era 1"
   },
   {
    "id": "RPTS",
    "title": "Management reports (continued literals)",
-   "style": "report headings as VALUE literals continued past column 72"
+   "style": "report headings as VALUE literals continued past column 72",
+   "era": 1,
+   "era_evidence": "RPTHDR has no construct later than OS/VS COBOL; earliest era"
   }
  ],
  "channels": [
@@ -454,7 +494,9 @@
    "key": "key/apps/ACCT.json",
    "compile": {
     "status": "compiled"
-   }
+   },
+   "era": 1,
+   "era_evidence": "only SECTIONs, EXEC-free CALL and GOBACK: no COBOL-85 construct, so the earliest era, OS/VS COBOL (#5117 era 1)"
   },
   "apps/ACCT/cobol/ACCTPOST.cbl": {
    "app": "ACCT",
@@ -468,6 +510,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF, END-READ and SET WS-EOF TO TRUE are COBOL-85 constructs (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0003"
    ]
@@ -484,6 +528,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-PERFORM inline PERFORM and PERFORM WITH TEST are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0002",
     "H-0004",
@@ -502,6 +548,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0001",
     "H-0009"
@@ -626,6 +674,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ scope terminators are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0009",
     "H-0012",
@@ -676,7 +726,9 @@
    "key": "key/apps/CLMS.json",
    "compile": {
     "status": "compiled"
-   }
+   },
+   "era": 2,
+   "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)"
   },
   "apps/CLMS/pli/CLMPROC.pli": {
    "app": "CLMS",
@@ -691,6 +743,8 @@
     "status": "ibm-only",
     "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"
    },
+   "era": 2,
+   "era_evidence": "CLMEDIT uses COBOL-85 END-IF; the PL/I CLMPROC has no era tell in #5117 and is untagged",
    "horrors": [
     "H-0002"
    ]
@@ -720,6 +774,8 @@
    "compile": {
     "status": "compiled-stubbed"
    },
+   "era": 2,
+   "era_evidence": "EXEC SQL (Db2) is an era-2 tell in #5117; END-IF is COBOL-85",
    "horrors": [
     "H-0005",
     "H-0017"
@@ -737,6 +793,8 @@
    "compile": {
     "status": "compiled-stubbed"
    },
+   "era": 2,
+   "era_evidence": "EXEC CICS ... RESP() is CICS/ESA-level command syntax and END-PERFORM is COBOL-85 (#5117 era 2)",
    "horrors": [
     "H-0002",
     "H-0006",
@@ -755,7 +813,9 @@
    "key": "key/apps/CUST.json",
    "compile": {
     "status": "compiled-stubbed"
-   }
+   },
+   "era": 1,
+   "era_evidence": "command-level EXEC CICS SEND TEXT / RETURN with no RESP, HANDLE or COBOL-85 construct: earliest era is command level, #5117 era 1"
   },
   "apps/CUST/copybook/CUSTCOMM.cpy": {
    "app": "CUST",
@@ -795,7 +855,9 @@
    "key": "key/apps/CUST.json",
    "compile": {
     "status": "not-cobol"
-   }
+   },
+   "era": 2,
+   "era_evidence": "CUSTINQ RESP(), CUSTDBIO EXEC SQL, CUSTGRP RDO CSD; CUSTMNU alone is command level (era 1)"
   },
   "apps/CUST/dclgen/DCLCUST.dcl": {
    "app": "CUST",
@@ -841,6 +903,8 @@
    "compile": {
     "status": "not-cobol"
    },
+   "era": 2,
+   "era_evidence": "no program left; CSD DEFINE PROGRAM / TRANSACTION in DECOGRP is RDO",
    "horrors": [
     "H-0054"
    ]
@@ -873,6 +937,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 1,
+   "era_evidence": "no COBOL-85 construct (COMPUTE, MOVE, DISPLAY, GOBACK; DECIMAL-POINT IS COMMA is OS/VS COBOL too): earliest era, #5117 era 1",
    "horrors": [
     "H-0036",
     "H-0043"
@@ -906,6 +972,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-READ and SET WS-JRNL-EOF TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0013",
     "H-0019",
@@ -956,7 +1024,9 @@
    "key": "key/apps/GULF.json",
    "compile": {
     "status": "compiled-stubbed"
-   }
+   },
+   "era": 1,
+   "era_evidence": "command-level EXEC CICS SEND MAP / RETURN with no RESP, HANDLE or COBOL-85 construct: earliest era is command level, #5117 era 1"
   },
   "apps/GULF/copybook/GULFMS.cpy": {
    "app": "GULF",
@@ -984,6 +1054,8 @@
    "compile": {
     "status": "compiled-stubbed"
    },
+   "era": 2,
+   "era_evidence": "EXEC SQL (Db2) is an era-2 tell in #5117; END-IF is COBOL-85",
    "horrors": [
     "H-0017"
    ]
@@ -1000,6 +1072,8 @@
    "compile": {
     "status": "compiled-stubbed"
    },
+   "era": 2,
+   "era_evidence": "EXEC CICS ... RESP() and END-IF (COBOL-85) (#5117 era 2)",
    "horrors": [
     "H-0010",
     "H-0018",
@@ -1060,7 +1134,9 @@
    "key": "key/apps/INVN.json",
    "compile": {
     "status": "not-cobol"
-   }
+   },
+   "era": 2,
+   "era_evidence": "INVUPD RESP(), INVDB EXEC SQL, INVGRP RDO CSD"
   },
   "apps/INVN/dclgen/DCLINVT.dcl": {
    "app": "INVN",
@@ -1106,6 +1182,8 @@
     "check_variant": "u3000-to-space",
     "check_note": "every U+3000 is replaced by a space for the check; the rest compiles as written"
    },
+   "era": 2,
+   "era_evidence": "kanji / full-width data names and COPY name need an IBM DBCS-capable COBOL, taken as VS COBOL II (#5117 era 2; earliest-era doubt)",
    "horrors": [
     "H-0038",
     "H-0040",
@@ -1127,6 +1205,8 @@
     "check_variant": "pic-g-to-n",
     "check_note": "PIC G and G'...' become PIC N and N'...' for the check (same 2-byte width)"
    },
+   "era": 2,
+   "era_evidence": "PIC G / G'...' DBCS items and kanji data names need an IBM DBCS-capable COBOL, taken as VS COBOL II (#5117 era 2; earliest-era doubt)",
    "horrors": [
     "H-0042"
    ]
@@ -1143,6 +1223,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "kanji (DBCS) data names need an IBM DBCS-capable COBOL, taken as VS COBOL II (#5117 era 2; earliest-era doubt)",
    "horrors": [
     "H-0046"
    ]
@@ -1191,6 +1273,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF scope terminator is COBOL-85, although its banner and change log are dated 1983-2003 (the code needs era 2; #5117 era 2)",
    "horrors": [
     "H-0055",
     "H-0057"
@@ -1208,6 +1292,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 1,
+   "era_evidence": "no COBOL-85 construct (paragraphs, PERFORM, GOBACK only): earliest era, OS/VS COBOL (#5117 era 1)",
    "horrors": [
     "H-0057"
    ]
@@ -1227,6 +1313,8 @@
     "check_variant": "program-id-period",
     "check_note": "the PROGRAM-ID line is rewritten to `PROGRAM-ID. <name>.` for the check; everything else compiles as written"
    },
+   "era": 1,
+   "era_evidence": "no COBOL-85 construct (COMP-3, CALL, GOBACK): earliest era, OS/VS COBOL (#5117 era 1)",
    "horrors": [
     "H-0008"
    ]
@@ -1244,6 +1332,8 @@
     "status": "ibm-only",
     "reason": "CA IDMS DML: needs the IDMS DML precompiler (IDMS-CONTROL SECTION, SCHEMA SECTION, BIND / OBTAIN / FINISH); GnuCOBOL has no IDMS precompiler"
    },
+   "era": 2,
+   "era_evidence": "END-IF is COBOL-85 (#5117 era 2); the IDMS DML is not an era tell in #5117 and is not used to date it",
    "horrors": [
     "H-0007"
    ]
@@ -1263,6 +1353,8 @@
     "check_variant": "program-id-period",
     "check_note": "the PROGRAM-ID line is rewritten to `PROGRAM-ID. <name>.` for the check; everything else compiles as written"
    },
+   "era": 2,
+   "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0008"
    ]
@@ -1305,6 +1397,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 4,
+   "era_evidence": ">>SOURCE FORMAT FREE directive (free-form source) needs Enterprise COBOL 6.x (#5117 era 4)",
    "horrors": [
     "H-0028"
    ]
@@ -1321,6 +1415,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 3,
+   "era_evidence": "FUNCTION CURRENT-DATE is an intrinsic function (COBOL/370, LE-based COBOL for MVS: #5117 era 3; earliest-era doubt)",
    "horrors": [
     "H-0035",
     "H-0039",
@@ -1375,6 +1471,8 @@
     "status": "ibm-only",
     "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"
    },
+   "era": 3,
+   "era_evidence": "KOBREG uses FUNCTION CURRENT-DATE (intrinsic function, LE-based COBOL); the PL/I members are untagged",
    "horrors": [
     "H-0037"
    ]
@@ -1392,6 +1490,8 @@
     "status": "ibm-only",
     "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"
    },
+   "era": 3,
+   "era_evidence": "KOBREG uses FUNCTION CURRENT-DATE (intrinsic function, LE-based COBOL); the PL/I members are untagged",
    "horrors": [
     "H-0039"
    ]
@@ -1411,6 +1511,8 @@
     "check_variant": "missing-copy",
     "check_note": "a one-byte FILLER stands in for the missing COPY ORDPRICE"
    },
+   "era": 2,
+   "era_evidence": "END-READ and SET ... TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0050",
     "H-0052",
@@ -1430,6 +1532,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 1,
+   "era_evidence": "no COBOL-85 construct (COMPUTE, CALL USING, GOBACK): earliest era, OS/VS COBOL (#5117 era 1)",
    "horrors": [
     "H-0052"
    ]
@@ -1446,6 +1550,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF and SET ORD-REJECTED TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0050",
     "H-0052"
@@ -1463,6 +1569,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF and SET ORD-REJECTED TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0050",
     "H-0052"
@@ -1480,6 +1588,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF and SET ORD-REJECTED TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0051",
     "H-0052"
@@ -1497,6 +1607,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF and SET ORD-REJECTED TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0051",
     "H-0052"
@@ -1591,6 +1703,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-PERFORM inline PERFORM and END-IF are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0006",
     "H-0016",
@@ -1673,7 +1787,9 @@
    "key": "key/apps/PCED.json",
    "compile": {
     "status": "compiled"
-   }
+   },
+   "era": 4,
+   "era_evidence": ">>SOURCE FORMAT FREE directive (free-form source) needs Enterprise COBOL 6.x (#5117 era 4)"
   },
   "apps/PCED/cobol/PCEDLOW.cbl": {
    "app": "PCED",
@@ -1687,6 +1803,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF and SET WS-ROUNDED TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0059"
    ]
@@ -1703,6 +1821,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 1,
+   "era_evidence": "no COBOL-85 construct (PERFORM UNTIL, TABs and lower case only): earliest era, OS/VS COBOL (#5117 era 1)",
    "horrors": [
     "H-0058"
    ]
@@ -1732,6 +1852,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 1,
+   "era_evidence": "no COBOL-85 construct (VALUE literals continued past column 72, GOBACK): earliest era, OS/VS COBOL (#5117 era 1)",
    "horrors": [
     "H-0060"
    ]
@@ -1764,6 +1886,8 @@
     "check_variant": "missing-copy",
     "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
    },
+   "era": 2,
+   "era_evidence": "END-IF is COBOL-85 and the EXEC CICS XCTL / LINK commands are CICS/ESA-level DPL-capable command syntax (#5117 era 2; no RESP or HANDLE in the member)",
    "horrors": [
     "H-0052",
     "H-0053",
@@ -1785,6 +1909,8 @@
     "check_variant": "missing-copy",
     "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
    },
+   "era": 2,
+   "era_evidence": "END-IF is COBOL-85 and the EXEC CICS XCTL / LINK commands are CICS/ESA-level DPL-capable command syntax (#5117 era 2; no RESP or HANDLE in the member)",
    "horrors": [
     "H-0051",
     "H-0052",
@@ -1803,7 +1929,9 @@
    "key": "key/apps/SHIP.json",
    "compile": {
     "status": "compiled-stubbed"
-   }
+   },
+   "era": 2,
+   "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)"
   },
   "apps/SHIP/copybook/SHPCOMM.cpy": {
    "app": "SHIP",
@@ -1830,6 +1958,8 @@
    "compile": {
     "status": "not-cobol"
    },
+   "era": 2,
+   "era_evidence": "SHPINQ/SHPRATE use COBOL-85 END-IF with command-level CICS XCTL/LINK; SHPGRP is an RDO CSD",
    "horrors": [
     "H-0054"
    ]
@@ -1846,6 +1976,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0051",
     "H-0052"
@@ -1863,6 +1995,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "horrors": [
     "H-0052",
     "H-0054",

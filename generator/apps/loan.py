@@ -30,6 +30,8 @@ PERIOD_FIX = ("program-id-period", "the PROGRAM-ID line is rewritten to `PROGRAM
 
 LNIDMS01 = {
     "member": "LNIDMS01",
+    "era": 2,
+    "era_evidence": "END-IF is COBOL-85 (#5117 era 2); the IDMS DML is not an era tell in #5117 and is not used to date it",
     "program_id": "LNIDMS01",
     "numbered": True,
     "author": "LOAN SYSTEMS",
@@ -62,6 +64,8 @@ LNIDMS01 = {
 
 LNRATE = {
     "member": "LNRATE",
+    "era": 2,
+    "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
     "program_id": "LNRATE",
     "program_id_style": "padded-no-period",
     "program_id_horror": H8,
@@ -91,6 +95,8 @@ LNRATE = {
 
 LNCALC = {
     "member": "LNCALC",
+    "era": 1,
+    "era_evidence": "no COBOL-85 construct (COMP-3, CALL, GOBACK): earliest era, OS/VS COBOL (#5117 era 1)",
     "program_id": "LNCALC",
     "program_id_style": "keyword-no-period",
     "program_id_horror": H8,
@@ -129,6 +135,8 @@ JOBS = [
 
 APP = {
     "id": "LOAN",
+    "era": 2,
+    "era_evidence": "LNIDMS01 and LNRATE use COBOL-85 END-IF; LNCALC alone is era 1; IDMS DML is not dated",
     "title": "Loan servicing (IDMS, batch)",
     "style": "mixed: numbered IDMS-DC member, unnumbered batch; PROGRAM-ID periods missing",
     "copybooks": COPYBOOKS,

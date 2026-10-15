@@ -84,7 +84,7 @@ def _bad_era(v: object) -> bool:
 
 def era_problems(manifest: dict, defined: dict) -> list[str]:
     """Era schema (SPEC 1.1, 5.1): era is 0-4 or null (era-neutral); a horror from H-0061 on must
-    carry the key; release is a string."""
+    carry the key; release is a string; an app or member era comes with its era_evidence."""
     problems = []
     for hid, h in defined.items():
         if "era" in h and _bad_era(h["era"]):
@@ -96,6 +96,15 @@ def era_problems(manifest: dict, defined: dict) -> list[str]:
     for path, meta in manifest["members"].items():
         if "era" in meta and (meta["era"] is None or _bad_era(meta["era"])):
             problems.append(f"{path}: era {meta['era']!r} is not 0-4")
+        evidence = meta.get("era_evidence")
+        if ("era" in meta) != (evidence is not None) or (evidence is not None and not (isinstance(evidence, str) and evidence.strip())):
+            problems.append(f"{path}: era and era_evidence go together, and the evidence is a non-empty string")
+    for app in manifest["apps"]:
+        evidence = app.get("era_evidence")
+        if "era" in app and (_bad_era(app["era"]) or app["era"] is None):
+            problems.append(f"app {app['id']}: era {app['era']!r} is not 0-4")
+        if ("era" in app) != (evidence is not None) or (evidence is not None and not (isinstance(evidence, str) and evidence.strip())):
+            problems.append(f"app {app['id']}: era and era_evidence go together, and the evidence is a non-empty string")
     return problems
 
 

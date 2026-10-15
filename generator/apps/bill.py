@@ -42,6 +42,8 @@ COPYBOOKS = [
 
 BILLCALC = {
     "member": "BILLCALC",
+    "era": 2,
+    "era_evidence": "END-IF and END-READ scope terminators are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
     "program_id": "BILLCALC",
     "numbered": True,
     "author": "BILLING",
@@ -115,6 +117,8 @@ JOBS = [
 
 APP = {
     "id": "BILL",
+    "era": 2,
+    "era_evidence": "BILLCALC uses COBOL-85 END-IF and END-READ",
     "title": "Monthly billing (batch)",
     "style": "numbered, blank numbered lines, change markers in cols 1-6, GDG generations",
     "copybooks": COPYBOOKS,

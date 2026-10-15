@@ -94,6 +94,8 @@ COPYBOOKS = [
 
 ACCTPOST = {
     "member": "ACCTPOST",
+    "era": 2,
+    "era_evidence": "END-IF, END-READ and SET WS-EOF TO TRUE are COBOL-85 constructs (VS COBOL II / COBOL 85; #5117 era 2)",
     "program_id": "ACCTPOST",
     "numbered": True,
     "author": "R HALVORSEN",
@@ -169,6 +171,8 @@ ACCTPOST = {
 H1 = "H-0001"
 ACCTUPD = {
     "member": "ACCTUPD",
+    "era": 2,
+    "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
     "program_id": "ACCTUPD",
     "numbered": True,
     "author": "R HALVORSEN",
@@ -201,6 +205,8 @@ ACCTUPD = {
 
 ACCTAUD = {
     "member": "ACCTAUD",
+    "era": 1,
+    "era_evidence": "only SECTIONs, EXEC-free CALL and GOBACK: no COBOL-85 construct, so the earliest era, OS/VS COBOL (#5117 era 1)",
     "program_id": "ACCTAUD",
     "numbered": True,
     "author": "R HALVORSEN",
@@ -216,6 +222,8 @@ H4 = "H-0004"
 H6 = "H-0006"
 ACCTRPT = {
     "member": "ACCTRPT",
+    "era": 2,
+    "era_evidence": "END-PERFORM inline PERFORM and PERFORM WITH TEST are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
     "program_id": "ACCTRPT",
     "numbered": True,
     "author": "M OKONKWO",
@@ -310,6 +318,8 @@ PROCS = [
 
 APP = {
     "id": "ACCT",
+    "era": 2,
+    "era_evidence": "ACCTPOST/ACCTRPT/ACCTUPD use COBOL-85 END-IF, END-READ, END-PERFORM; ACCTAUD alone is era 1",
     "title": "Account posting (batch)",
     "style": "numbered fixed format, change tags, THRU-range paragraphs, main-line code",
     "copybooks": COPYBOOKS,

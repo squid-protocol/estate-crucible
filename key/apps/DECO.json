@@ -71,6 +71,8 @@
    "compile": {
     "status": "not-cobol"
    },
+   "era": 2,
+   "era_evidence": "no program left; CSD DEFINE PROGRAM / TRANSACTION in DECOGRP is RDO",
    "csd_resources": [
     {
      "type": "PROGRAM",

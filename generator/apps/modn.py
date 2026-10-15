@@ -10,6 +10,8 @@ H28 = "H-0028"
 
 MODRATE = {
     "member": "MODRATE",
+    "era": 4,
+    "era_evidence": ">>SOURCE FORMAT FREE directive (free-form source) needs Enterprise COBOL 6.x (#5117 era 4)",
     "program_id": "MODRATE",
     "free": True,
     "remarks": ["MODRATE - RATE LOOKUP, REWRITTEN IN FREE FORMAT."],
@@ -33,6 +35,8 @@ MODRATE = {
 
 APP = {
     "id": "MODN",
+    "era": 4,
+    "era_evidence": "MODRATE is written in free-form source (>>SOURCE FORMAT FREE), Enterprise COBOL 6.x",
     "title": "Modernised rate service (free format)",
     "style": "free-format COBOL",
     "programs": [MODRATE],

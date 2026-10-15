@@ -11,6 +11,8 @@
    "compile": {
     "status": "compiled-stubbed"
    },
+   "era": 2,
+   "era_evidence": "EXEC SQL (Db2) is an era-2 tell in #5117; END-IF is COBOL-85",
    "programs": [
     {
      "program_id": "INVDB",
@@ -209,6 +211,8 @@
    "compile": {
     "status": "compiled-stubbed"
    },
+   "era": 2,
+   "era_evidence": "EXEC CICS ... RESP() and END-IF (COBOL-85) (#5117 era 2)",
    "programs": [
     {
      "program_id": "INVUPD",
@@ -1882,6 +1886,8 @@
    "compile": {
     "status": "not-cobol"
    },
+   "era": 2,
+   "era_evidence": "INVUPD RESP(), INVDB EXEC SQL, INVGRP RDO CSD",
    "csd_resources": [
     {
      "type": "PROGRAM",

@@ -44,6 +44,10 @@ def syslib(app: Optional[str], has_old: bool = False) -> list[str]:
     return ([f"{app}CPY", f"{app}DCL"] if app else []) + [SHARED_COPYLIB] + ([f"{app}OLD"] if has_old else [])
 
 
+# libraries whose members inherit their app's era (program source and CSD: where era tells are read)
+ERA_LIBRARIES = ("cobol", "pli", "csd")
+
+
 def member_path(app: Optional[str], library: str, member: str) -> str:
     if len(member) > 8 or member != member.upper():
         raise ValueError(f"{member}: a PDS member name is 1-8 uppercase characters")
@@ -60,7 +64,8 @@ class Estate:
         self.not_planted: list[dict[str, Any]] = []
         self._app_encodings: dict[Optional[str], dict[str, tuple[str, str]]] = {
             a["id"]: a.get("encodings", {}) for a in apps}
-        self._app_eras: dict[Optional[str], Optional[int]] = {a["id"]: a.get("era") for a in apps}
+        self._app_eras: dict[Optional[str], tuple[Optional[int], Optional[str]]] = {
+            a["id"]: (a.get("era"), a.get("era_evidence")) for a in apps}
         self.seed = seed
         self.size = size
         self.members: dict[str, Member] = {}
@@ -132,9 +137,14 @@ class Estate:
             raise ValueError(f"{path} written twice")
         # code page and record format: the member's own, else its app's for that library, else UTF-8
         enc = (spec or {}).get("encoding") or self._app_encodings.get(app, {}).get(library) or ("utf-8", "lf")
+        # era (SPEC 1.1): the member's own tag, else its app's for program source and CSD (what an era
+        # tell is read from); JCL, copybooks and the rest carry one only when they say so
+        spec = spec or {}
+        app_era = self._app_eras.get(app, (None, None)) if library in ERA_LIBRARIES else (None, None)
+        era = spec["era"] if "era" in spec else app_era[0]
+        evidence = spec.get("era_evidence") if "era" in spec else app_era[1]
         m = Member(path, LANG[library], app=app, library=library, numbered=numbered, free=free,
-                   encoding=enc[0], storage=enc[1],
-                   era=(spec or {}).get("era", self._app_eras.get(app)))
+                   encoding=enc[0], storage=enc[1], era=era, era_evidence=evidence)
         self.members[path] = m
         return m
 
@@ -383,7 +393,7 @@ class Estate:
                 "storage": m.storage,
                 "key": f"key/apps/{scope}.json",
                 "compile": m.compile,
-                **({"era": m.era} if m.era is not None else {}),
+                **({"era": m.era, "era_evidence": m.era_evidence} if m.era is not None else {}),
                 **({"generated_from": m.generated_from} if m.generated_from else {}),
                 **({"horrors": sorted(m.horrors)} if m.horrors else {}),
             }
@@ -396,7 +406,9 @@ class Estate:
             "format": FORMAT,
             "generator": {"version": VERSION, "seed": self.seed, "size": self.size},
             "estate_root": "estate",
-            "apps": [{"id": a["id"], "title": a["title"], "style": a.get("style", "")} for a in self.apps],
+            "apps": [{"id": a["id"], "title": a["title"], "style": a.get("style", ""),
+                      **({"era": a["era"], "era_evidence": a["era_evidence"]} if a.get("era") is not None else {})}
+                     for a in self.apps],
             "channels": list(CHANNELS),
             "fact_totals": totals,
             # what a scanner must be told: every member not in UTF-8, by its estate-relative path

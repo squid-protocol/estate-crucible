@@ -10,6 +10,8 @@ H58, H59 = "H-0058", "H-0059"
 
 PCEDTAB = {
     "member": "PCEDTAB",
+    "era": 1,
+    "era_evidence": "no COBOL-85 construct (PERFORM UNTIL, TABs and lower case only): earliest era, OS/VS COBOL (#5117 era 1)",
     "program_id": "PCEDTAB",
     "tabs": True,
     "member_horror": H58,
@@ -35,6 +37,8 @@ PCEDTAB = {
 
 PCEDLOW = {
     "member": "PCEDLOW",
+    "era": 2,
+    "era_evidence": "END-IF and SET WS-ROUNDED TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
     "program_id": "pcedlow",
     "lower": True,
     "member_horror": H59,
@@ -57,6 +61,8 @@ PCEDLOW = {
 
 PCEDFREE = {
     "member": "PCEDFREE",
+    "era": 4,
+    "era_evidence": ">>SOURCE FORMAT FREE directive (free-form source) needs Enterprise COBOL 6.x (#5117 era 4)",
     "program_id": "PCEDFREE",
     "free": True,
     "remarks": ["PCEDFREE - PRICE BAND REPORT, FREE FORMAT."],
@@ -86,6 +92,8 @@ JOBS = [
 
 APP = {
     "id": "PCED",
+    "era": 4,
+    "era_evidence": "PCEDFREE is free-form source (>>SOURCE FORMAT FREE); PCEDLOW is era 2 and PCEDTAB era 1",
     "title": "Pricing tool (PC-edited members)",
     "style": "TABs and trailing white space, lower-case source, free format",
     "programs": [PCEDTAB, PCEDLOW, PCEDFREE],

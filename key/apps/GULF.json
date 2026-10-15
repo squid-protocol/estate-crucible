@@ -102,6 +102,8 @@
    },
    "encoding": "cp037",
    "storage": "fb80",
+   "era": 1,
+   "era_evidence": "command-level EXEC CICS SEND MAP / RETURN with no RESP, HANDLE or COBOL-85 construct: earliest era is command level, #5117 era 1",
    "programs": [
     {
      "program_id": "GULFINQ",

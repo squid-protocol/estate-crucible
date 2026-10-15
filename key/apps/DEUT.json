@@ -13,6 +13,8 @@
    },
    "encoding": "cp273",
    "storage": "nel",
+   "era": 1,
+   "era_evidence": "no COBOL-85 construct (COMPUTE, MOVE, DISPLAY, GOBACK; DECIMAL-POINT IS COMMA is OS/VS COBOL too): earliest era, #5117 era 1",
    "programs": [
     {
      "program_id": "ZINSBER",

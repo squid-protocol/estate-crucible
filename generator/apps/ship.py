@@ -22,6 +22,8 @@ COPYBOOKS = [
 
 SHPINQ = {
     "member": "SHPINQ",
+    "era": 2,
+    "era_evidence": "END-IF is COBOL-85 and the EXEC CICS XCTL / LINK commands are CICS/ESA-level DPL-capable command syntax (#5117 era 2; no RESP or HANDLE in the member)",
     "program_id": "SHPINQ",
     "author": "LOGISTICS IT",
     "remarks": ["SHPINQ - SHIPMENT INQUIRY (TRANSACTION SHPI)."],
@@ -77,6 +79,8 @@ SHPINQO["units"][0] = para(
 
 SHPRATE = {
     "member": "SHPRATE",
+    "era": 2,
+    "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
     "program_id": "SHPRATE",
     "author": "LOGISTICS IT",
     "remarks": ["SHPRATE - CARRIER RATE LOOKUP (LINKED FROM SHPINQ)."],
@@ -90,6 +94,8 @@ SHPRATE = {
 CSD = [
     {
         "group": "SHPGRP",
+        "era": 2,
+        "era_evidence": "CSD DEFINE PROGRAM / TRANSACTION is RDO (CICS/MVS 2.x, #5117 era 2)",
         "title": "SHIPMENT INQUIRY",
         "defines": [
             ("PROGRAM", "SHPINQ", {"LANGUAGE": "COBOL"}),
@@ -104,6 +110,8 @@ CSD = [
 
 APP = {
     "id": "SHIP",
+    "era": 2,
+    "era_evidence": "SHPINQ/SHPRATE use COBOL-85 END-IF with command-level CICS XCTL/LINK; SHPGRP is an RDO CSD",
     "title": "Shipment inquiry (CICS, an incomplete export)",
     "style": "CICS; XCTL / LINK / CSD entries for programs the export lacks; a dead fork",
     "copybooks": COPYBOOKS,

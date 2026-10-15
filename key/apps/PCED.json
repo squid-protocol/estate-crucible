@@ -11,6 +11,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 4,
+   "era_evidence": ">>SOURCE FORMAT FREE directive (free-form source) needs Enterprise COBOL 6.x (#5117 era 4)",
    "programs": [
     {
      "program_id": "PCEDFREE",
@@ -127,6 +129,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF and SET WS-ROUNDED TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "programs": [
     {
      "program_id": "pcedlow",
@@ -316,6 +320,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 1,
+   "era_evidence": "no COBOL-85 construct (PERFORM UNTIL, TABs and lower case only): earliest era, OS/VS COBOL (#5117 era 1)",
    "programs": [
     {
      "program_id": "PCEDTAB",

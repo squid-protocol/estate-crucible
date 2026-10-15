@@ -11,6 +11,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 4,
+   "era_evidence": ">>SOURCE FORMAT FREE directive (free-form source) needs Enterprise COBOL 6.x (#5117 era 4)",
    "programs": [
     {
      "program_id": "MODRATE",

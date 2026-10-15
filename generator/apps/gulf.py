@@ -30,6 +30,8 @@ BMS = [
 
 GULFINQ = {
     "member": "GULFINQ",
+    "era": 1,
+    "era_evidence": "command-level EXEC CICS SEND MAP / RETURN with no RESP, HANDLE or COBOL-85 construct: earliest era is command level, #5117 era 1",
     "program_id": "GULFINQ",
     "author": "GULF BRANCH SYSTEMS",
     "remarks": ["GULFINQ - ACCOUNT INQUIRY ON AN ARABIC 3270 SCREEN."],
@@ -47,6 +49,8 @@ GULFINQ = {
 
 APP = {
     "id": "GULF",
+    "era": 1,
+    "era_evidence": "GULFINQ is command-level CICS (SEND MAP, RETURN) with no later tell; earliest era",
     "title": "Arabic account inquiry (EBCDIC cp420 BMS)",
     "style": "BMS in cp420 with visual-order Arabic; program and symbolic map in cp037 FB80",
     "encodings": {"cobol": ("cp037", "fb80"), "copybook": ("cp037", "fb80")},

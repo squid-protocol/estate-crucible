@@ -14,6 +14,8 @@
     "check_variant": "missing-copy",
     "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
    },
+   "era": 2,
+   "era_evidence": "END-IF is COBOL-85 and the EXEC CICS XCTL / LINK commands are CICS/ESA-level DPL-capable command syntax (#5117 era 2; no RESP or HANDLE in the member)",
    "programs": [
     {
      "program_id": "SHPINQ",
@@ -442,6 +444,8 @@
     "check_variant": "missing-copy",
     "check_note": "EXEC blocks stubbed; a one-byte FILLER stands in for the missing COPY SHPRATE"
    },
+   "era": 2,
+   "era_evidence": "END-IF is COBOL-85 and the EXEC CICS XCTL / LINK commands are CICS/ESA-level DPL-capable command syntax (#5117 era 2; no RESP or HANDLE in the member)",
    "programs": [
     {
      "program_id": "SHPINQO",
@@ -849,6 +853,8 @@
    "compile": {
     "status": "compiled-stubbed"
    },
+   "era": 2,
+   "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "programs": [
     {
      "program_id": "SHPRATE",
@@ -1027,6 +1033,8 @@
    "compile": {
     "status": "not-cobol"
    },
+   "era": 2,
+   "era_evidence": "SHPINQ/SHPRATE use COBOL-85 END-IF with command-level CICS XCTL/LINK; SHPGRP is an RDO CSD",
    "csd_resources": [
     {
      "type": "PROGRAM",

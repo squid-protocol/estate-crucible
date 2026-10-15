@@ -59,6 +59,8 @@ DCLGEN = [
 
 CUSTINQ = {
     "member": "CUSTINQ",
+    "era": 2,
+    "era_evidence": "EXEC CICS ... RESP() is CICS/ESA-level command syntax and END-PERFORM is COBOL-85 (#5117 era 2)",
     "program_id": "CUSTINQ",
     "author": "CUSTOMER SYSTEMS",
     "remarks": [
@@ -126,6 +128,8 @@ CUSTINQ = {
 
 CUSTDBIO = {
     "member": "CUSTDBIO",
+    "era": 2,
+    "era_evidence": "EXEC SQL (Db2) is an era-2 tell in #5117; END-IF is COBOL-85",
     "program_id": "CUSTDBIO",
     "author": "CUSTOMER SYSTEMS",
     "remarks": [
@@ -166,6 +170,8 @@ CUSTDBIO = {
 
 CUSTMNU = {
     "member": "CUSTMNU",
+    "era": 1,
+    "era_evidence": "command-level EXEC CICS SEND TEXT / RETURN with no RESP, HANDLE or COBOL-85 construct: earliest era is command level, #5117 era 1",
     "program_id": "CUSTMNU",
     "author": "CUSTOMER SYSTEMS",
     "remarks": ["CUSTMNU - CUSTOMER SYSTEMS MENU (TRANSACTION CMNU)."],
@@ -181,6 +187,8 @@ CUSTMNU = {
 CSD = [
     {
         "group": "CUSTGRP",
+        "era": 2,
+        "era_evidence": "CSD DEFINE PROGRAM / TRANSACTION is RDO (CICS/MVS 2.x, #5117 era 2)",
         "title": "CUSTOMER INQUIRY",
         "defines": [
             ("PROGRAM", "CUSTINQ", {"LANGUAGE": "COBOL"}),
@@ -195,6 +203,8 @@ CSD = [
 
 APP = {
     "id": "CUST",
+    "era": 2,
+    "era_evidence": "CUSTINQ RESP(), CUSTDBIO EXEC SQL, CUSTGRP RDO CSD; CUSTMNU alone is command level (era 1)",
     "title": "Customer inquiry (CICS, Db2)",
     "style": "unnumbered fixed format, pseudo-conversational CICS, Db2 stored procedures",
     "copybooks": COPYBOOKS,

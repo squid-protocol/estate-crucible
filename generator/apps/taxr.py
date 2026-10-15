@@ -31,6 +31,8 @@ OLD_COPYBOOKS = [
 
 TAXCALC2 = {
     "member": "TAXCALC2",
+    "era": 2,
+    "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
     "program_id": "TAXCALC2",
     "numbered": True,
     "author": "J WEXLER",
@@ -85,6 +87,8 @@ JOBS = [
 
 APP = {
     "id": "TAXR",
+    "era": 2,
+    "era_evidence": "TAXCALC and TAXCALC2 use COBOL-85 END-IF",
     "title": "Tax withholding (V2 live, original dead)",
     "style": "numbered; a replaced original kept beside its V2; an app copybook shadowing the shared one",
     "copybooks": COPYBOOKS,
