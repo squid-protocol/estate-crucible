@@ -11,6 +11,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF scope terminator is COBOL-85, although its banner and change log are dated 1983-2003 (the code needs era 2; #5117 era 2)",
    "programs": [
     {
      "program_id": "GLRCON",
@@ -263,6 +265,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 1,
+   "era_evidence": "no COBOL-85 construct (paragraphs, PERFORM, GOBACK only): earliest era, OS/VS COBOL (#5117 era 1)",
    "programs": [
     {
      "program_id": "GLRSUM",

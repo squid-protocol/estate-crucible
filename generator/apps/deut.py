@@ -19,6 +19,8 @@ COPYBOOKS = [
 
 ZINSBER = {
     "member": "ZINSBER",
+    "era": 1,
+    "era_evidence": "no COBOL-85 construct (COMPUTE, MOVE, DISPLAY, GOBACK; DECIMAL-POINT IS COMMA is OS/VS COBOL too): earliest era, #5117 era 1",
     "program_id": "ZINSBER",
     "member_horror": H36,
     "author": "SPARKASSE",
@@ -46,6 +48,8 @@ ZINSBER = {
 
 APP = {
     "id": "DEUT",
+    "era": 1,
+    "era_evidence": "ZINSBER has no construct later than OS/VS COBOL; earliest era",
     "title": "German interest calculation (EBCDIC cp273, decimal comma)",
     "style": "raw EBCDIC cp273: program NEL, copybook FB80; DECIMAL-POINT IS COMMA",
     "encodings": {"cobol": ("cp273", "nel"), "copybook": ("cp273", "fb80")},

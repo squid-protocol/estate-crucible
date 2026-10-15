@@ -11,6 +11,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "programs": [
     {
      "program_id": "CLMEDIT",
@@ -149,6 +151,8 @@
     "status": "ibm-only",
     "reason": "PL/I: the check has no PL/I compiler (IBM Enterprise PL/I)"
    },
+   "era": 2,
+   "era_evidence": "CLMEDIT uses COBOL-85 END-IF; the PL/I CLMPROC has no era tell in #5117 and is untagged",
    "programs": [
     {
      "program_id": "CLMPROC",

@@ -40,6 +40,8 @@ CLMPROC = {
 
 CLMEDIT = {
     "member": "CLMEDIT",
+    "era": 2,
+    "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
     "program_id": "CLMEDIT",
     "author": "CLAIMS",
     "remarks": ["CLMEDIT - EDIT ONE CLAIM. CALLED FROM PL/I (CLMPROC)."],
@@ -55,6 +57,8 @@ CLMEDIT = {
 
 APP = {
     "id": "CLMS",
+    "era": 2,
+    "era_evidence": "CLMEDIT uses COBOL-85 END-IF; the PL/I CLMPROC has no era tell in #5117 and is untagged",
     "title": "Claims (PL/I with a COBOL routine)",
     "style": "PL/I external procedure with internal procedures",
     "pli": [CLMPROC],

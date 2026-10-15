@@ -26,6 +26,8 @@ COPYBOOKS = [
 
 KYUYO01 = {
     "member": "KYUYO01",
+    "era": 2,
+    "era_evidence": "PIC G / G'...' DBCS items and kanji data names need an IBM DBCS-capable COBOL, taken as VS COBOL II (#5117 era 2; earliest-era doubt)",
     "program_id": "KYUYO01",
     "member_horror": H42,
     "compile": "ibm-only",
@@ -49,6 +51,8 @@ KYUYO01 = {
 
 KYUYO02 = {
     "member": "KYUYO02",
+    "era": 2,
+    "era_evidence": "kanji (DBCS) data names need an IBM DBCS-capable COBOL, taken as VS COBOL II (#5117 era 2; earliest-era doubt)",
     "program_id": "KYUYO02",
     "member_horror": H46,
     "encoding": ("shift_jis", "lf"),
@@ -60,6 +64,8 @@ KYUYO02 = {
 
 KYUYJP = {
     "member": "KYUYJP",
+    "era": 2,
+    "era_evidence": "kanji / full-width data names and COPY name need an IBM DBCS-capable COBOL, taken as VS COBOL II (#5117 era 2; earliest-era doubt)",
     "program_id": "給与計算",
     "program_id_horror": H40,
     "member_horror": H40,
@@ -96,6 +102,8 @@ KYUYJP = {
 
 APP = {
     "id": "KYUY",
+    "era": 2,
+    "era_evidence": "kanji (DBCS) data names and PIC G items; earliest IBM DBCS COBOL taken as VS COBOL II (doubt)",
     "title": "Japanese payroll (cp930, cp939, Shift-JIS, UTF-8)",
     "style": "DBCS: SO/SI in EBCDIC, Shift-JIS and UTF-8 members; Japanese and full-width names",
     "encodings": {"cobol": ("cp930", "fb80")},

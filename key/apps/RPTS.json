@@ -11,6 +11,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 1,
+   "era_evidence": "no COBOL-85 construct (VALUE literals continued past column 72, GOBACK): earliest era, OS/VS COBOL (#5117 era 1)",
    "programs": [
     {
      "program_id": "RPTHDR",

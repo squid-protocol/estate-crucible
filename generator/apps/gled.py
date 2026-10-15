@@ -13,6 +13,8 @@ H13, H19, H20, H23, H26, H27, H32 = "H-0013", "H-0019", "H-0020", "H-0023", "H-0
 
 GLPOST = {
     "member": "GLPOST",
+    "era": 2,
+    "era_evidence": "END-READ and SET WS-JRNL-EOF TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
     "program_id": "GLPOST",
     "program_id_style": "next-line",
     "program_id_horror": H19,
@@ -66,6 +68,8 @@ JOBS = [
 
 APP = {
     "id": "GLED",
+    "era": 2,
+    "era_evidence": "GLPOST uses COBOL-85 END-READ and SET ... TO TRUE",
     "title": "General ledger (batch, oldest code)",
     "style": "numbered, cols 73-80 identification, every paragraph-header form",
     "programs": [GLPOST],

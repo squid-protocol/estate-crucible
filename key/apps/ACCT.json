@@ -11,6 +11,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 1,
+   "era_evidence": "only SECTIONs, EXEC-free CALL and GOBACK: no COBOL-85 construct, so the earliest era, OS/VS COBOL (#5117 era 1)",
    "programs": [
     {
      "program_id": "ACCTAUD",
@@ -112,6 +114,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF, END-READ and SET WS-EOF TO TRUE are COBOL-85 constructs (VS COBOL II / COBOL 85; #5117 era 2)",
    "programs": [
     {
      "program_id": "ACCTPOST",
@@ -1042,6 +1046,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-PERFORM inline PERFORM and PERFORM WITH TEST are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "programs": [
     {
      "program_id": "ACCTRPT",
@@ -1678,6 +1684,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF scope terminator is COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "programs": [
     {
      "program_id": "ACCTUPD",

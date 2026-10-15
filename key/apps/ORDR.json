@@ -14,6 +14,8 @@
     "check_variant": "missing-copy",
     "check_note": "a one-byte FILLER stands in for the missing COPY ORDPRICE"
    },
+   "era": 2,
+   "era_evidence": "END-READ and SET ... TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "programs": [
     {
      "program_id": "ORDMAIN",
@@ -500,6 +502,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 1,
+   "era_evidence": "no COBOL-85 construct (COMPUTE, CALL USING, GOBACK): earliest era, OS/VS COBOL (#5117 era 1)",
    "programs": [
     {
      "program_id": "ORDPRICE",
@@ -676,6 +680,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF and SET ORD-REJECTED TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "programs": [
     {
      "program_id": "ORDVAL",
@@ -972,6 +978,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF and SET ORD-REJECTED TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "programs": [
     {
      "program_id": "ORDVAL",
@@ -1284,6 +1292,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF and SET ORD-REJECTED TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "programs": [
     {
      "program_id": "ORDVALV2",
@@ -1630,6 +1640,8 @@
    "compile": {
     "status": "compiled"
    },
+   "era": 2,
+   "era_evidence": "END-IF and SET ORD-REJECTED TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
    "programs": [
     {
      "program_id": "ORDVOLD",

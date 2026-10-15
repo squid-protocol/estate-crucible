@@ -25,6 +25,8 @@ COPYBOOKS = [
 
 KOBREG = {
     "member": "KØBREG",
+    "era": 3,
+    "era_evidence": "FUNCTION CURRENT-DATE is an intrinsic function (COBOL/370, LE-based COBOL for MVS: #5117 era 3; earliest-era doubt)",
     "program_id": "KØBREG",
     "program_id_style": "quoted",
     "program_id_horror": H39,
@@ -104,6 +106,8 @@ JOBS = [
 
 APP = {
     "id": "NORD",
+    "era": 3,
+    "era_evidence": "KOBREG uses FUNCTION CURRENT-DATE (intrinsic function, LE-based COBOL); the PL/I members are untagged",
     "title": "Danish interest run (EBCDIC cp277)",
     "style": "raw EBCDIC cp277: programs FB80, copybooks NEL; UTF-8 job and PL/I; Æ Ø Å names",
     "encodings": {"cobol": ("cp277", "fb80"), "copybook": ("cp277", "nel")},

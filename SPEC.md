@@ -24,18 +24,18 @@ at. Line numbers are 1-based physical lines of the member.
 | `format` | `estate-crucible-key/1` |
 | `generator` | `version`, `seed`, `size`: the settings that reproduce the committed tree |
 | `estate_root` | `estate` |
-| `apps` | `id`, `title`, `style` per app |
+| `apps` | `id`, `title`, `style` per app, optional `era` (0-4) and `era_evidence` (the latest era any of the app's program source or CSD needs, with the construct that needs it) |
 | `channels` | the channel names, in order (section 3) |
 | `fact_totals` | facts per channel, and `phantoms` |
 | `horrors` | the horror ids |
-| `members` | per member path: `app` (null for shared/), `library`, `language`, optional `era` (0-4, the era the member is written in: 0 CICS macro level, 1 CICS/VS 1.x + OS/VS COBOL, 2 CICS/ESA + COBOL II, 3 CICS TS 1-2, 4 CICS TS 3+ / Enterprise COBOL; absent = untagged), `sha256` of the member's bytes, `key` (the file holding its facts), `compile` (section 5), `generated_from`, `horrors` |
+| `members` | per member path: `app` (null for shared/), `library`, `language`, optional `era` (0-4, the era the member is written in: 0 CICS macro level, 1 CICS/VS 1.x + OS/VS COBOL, 2 CICS/ESA + COBOL II, 3 CICS TS 1-2, 4 CICS TS 3+ / Enterprise COBOL; absent = untagged), `era_evidence` (required with `era`: one line naming the construct in that member that needs the era, cited to the #5117 table; the earliest era the code needs, not a date), `sha256` of the member's bytes, `key` (the file holding its facts), `compile` (section 5), `generated_from`, `horrors` |
 | `code_pages` | every non-UTF-8 member's code page (section 1.3) |
 | `copy_libraries` | the estate's copy libraries and SYSLIB orders (section 1.4): what a scanner must be told about COPY |
 
 ### 1.2 `key/apps/<APPID>.json`
 
 `{"format", "app", "members": {path: entry}}`. An entry has `app`, `library`, `language`,
-`numbered` (cols 1-6 carry sequence numbers), `lines`, `compile`, optional `era` (as in 1.1),
+`numbered` (cols 1-6 carry sequence numbers), `lines`, `compile`, optional `era` and `era_evidence` (as in 1.1; a program, PL/I and CSD member inherits its app's when it has none, JCL, copybooks, BMS and the rest carry one only when tagged),
 optional `generated_from`, then one list per channel that has facts, then `phantoms` and `horrors`.
 
 ### 1.3 Code pages and storage

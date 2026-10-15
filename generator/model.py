@@ -85,6 +85,7 @@ class Member:
         encoding: str = "utf-8",
         storage: str = "lf",
         era: Optional[int] = None,
+        era_evidence: Optional[str] = None,
     ) -> None:
         self.path = path
         self.language = language
@@ -99,6 +100,8 @@ class Member:
         self.storage = storage
         # the era the member is written in (SPEC 1.1), 0-4; None when untagged
         self.era = era
+        # the one-line evidence for it: the construct in this member that needs that era
+        self.era_evidence = era_evidence
         self.lines: list[str] = []
         self.facts: dict[str, list[dict[str, Any]]] = {}
         self.phantoms: list[dict[str, Any]] = []
@@ -240,6 +243,8 @@ class Member:
             entry["encoding"], entry["storage"] = self.encoding, self.storage
         if self.era is not None:
             entry["era"] = self.era
+            if self.era_evidence:
+                entry["era_evidence"] = self.era_evidence
         if self.generated_from:
             entry["generated_from"] = self.generated_from
         for ch in CHANNELS:

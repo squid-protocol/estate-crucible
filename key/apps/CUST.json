@@ -141,6 +141,8 @@
    "compile": {
     "status": "compiled-stubbed"
    },
+   "era": 2,
+   "era_evidence": "EXEC SQL (Db2) is an era-2 tell in #5117; END-IF is COBOL-85",
    "programs": [
     {
      "program_id": "CUSTDBIO",
@@ -442,6 +444,8 @@
    "compile": {
     "status": "compiled-stubbed"
    },
+   "era": 2,
+   "era_evidence": "EXEC CICS ... RESP() is CICS/ESA-level command syntax and END-PERFORM is COBOL-85 (#5117 era 2)",
    "programs": [
     {
      "program_id": "CUSTINQ",
@@ -1012,6 +1016,8 @@
    "compile": {
     "status": "compiled-stubbed"
    },
+   "era": 1,
+   "era_evidence": "command-level EXEC CICS SEND TEXT / RETURN with no RESP, HANDLE or COBOL-85 construct: earliest era is command level, #5117 era 1",
    "programs": [
     {
      "program_id": "CUSTMNU",
@@ -1502,6 +1508,8 @@
    "compile": {
     "status": "not-cobol"
    },
+   "era": 2,
+   "era_evidence": "CUSTINQ RESP(), CUSTDBIO EXEC SQL, CUSTGRP RDO CSD; CUSTMNU alone is command level (era 1)",
    "csd_resources": [
     {
      "type": "PROGRAM",

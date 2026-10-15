@@ -14,6 +14,8 @@
     "check_variant": "u3000-to-space",
     "check_note": "every U+3000 is replaced by a space for the check; the rest compiles as written"
    },
+   "era": 2,
+   "era_evidence": "kanji / full-width data names and COPY name need an IBM DBCS-capable COBOL, taken as VS COBOL II (#5117 era 2; earliest-era doubt)",
    "programs": [
     {
      "program_id": "給与計算",
@@ -433,6 +435,8 @@
    },
    "encoding": "cp930",
    "storage": "fb80",
+   "era": 2,
+   "era_evidence": "PIC G / G'...' DBCS items and kanji data names need an IBM DBCS-capable COBOL, taken as VS COBOL II (#5117 era 2; earliest-era doubt)",
    "programs": [
     {
      "program_id": "KYUYO01",
@@ -663,6 +667,8 @@
    },
    "encoding": "shift_jis",
    "storage": "lf",
+   "era": 2,
+   "era_evidence": "kanji (DBCS) data names need an IBM DBCS-capable COBOL, taken as VS COBOL II (#5117 era 2; earliest-era doubt)",
    "programs": [
     {
      "program_id": "KYUYO02",

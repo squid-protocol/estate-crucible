@@ -54,6 +54,8 @@ DCLGEN = [
 
 INVUPD = {
     "member": "INVUPD",
+    "era": 2,
+    "era_evidence": "EXEC CICS ... RESP() and END-IF (COBOL-85) (#5117 era 2)",
     "program_id": "INVUPD",
     "author": "INVENTORY",
     "remarks": ["INVUPD - ADJUST ON-HAND QUANTITY (TRANSACTION IUPD)."],
@@ -96,6 +98,8 @@ INVUPD = {
 
 INVDB = {
     "member": "INVDB",
+    "era": 2,
+    "era_evidence": "EXEC SQL (Db2) is an era-2 tell in #5117; END-IF is COBOL-85",
     "program_id": "INVDB",
     "author": "INVENTORY",
     "remarks": ["INVDB - INVENTORY DB2 ACCESS. LINKED FROM INVUPD."],
@@ -119,6 +123,8 @@ INVDB = {
 CSD = [
     {
         "group": "INVGRP",
+        "era": 2,
+        "era_evidence": "CSD DEFINE PROGRAM / TRANSACTION is RDO (CICS/MVS 2.x, #5117 era 2)",
         "title": "INVENTORY",
         "defines": [
             ("PROGRAM", "INVUPD", {"LANGUAGE": "COBOL"}),
@@ -145,6 +151,8 @@ JOBS = [
 
 APP = {
     "id": "INVN",
+    "era": 2,
+    "era_evidence": "INVUPD RESP(), INVDB EXEC SQL, INVGRP RDO CSD",
     "title": "Inventory maintenance (CICS, VSAM, Db2)",
     "style": "unnumbered, CICS file and TS queue commands, a job named after a program",
     "copybooks": COPYBOOKS,

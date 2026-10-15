@@ -13,6 +13,8 @@ HDR2 = "'REGION   PLANT    UNITS BUILT    UNITS SHIPPED    BACKLOG  STATUS'"
 
 RPTHDR = {
     "member": "RPTHDR",
+    "era": 1,
+    "era_evidence": "no COBOL-85 construct (VALUE literals continued past column 72, GOBACK): earliest era, OS/VS COBOL (#5117 era 1)",
     "program_id": "RPTHDR",
     "author": "MIS REPORTING",
     "date_written": "05/20/97",
@@ -54,6 +56,8 @@ JOBS = [
 
 APP = {
     "id": "RPTS",
+    "era": 1,
+    "era_evidence": "RPTHDR has no construct later than OS/VS COBOL; earliest era",
     "title": "Management reports (continued literals)",
     "style": "report headings as VALUE literals continued past column 72",
     "programs": [RPTHDR],

@@ -55,6 +55,8 @@ PAYCALC = {
 
 PAYMAIN = {
     "member": "PAYMAIN",
+    "era": 2,
+    "era_evidence": "END-PERFORM inline PERFORM and END-IF are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
     "program_id": "PAYMAIN",
     "author": "PAYROLL",
     "remarks": [
@@ -107,6 +109,8 @@ JOBS = [
 
 APP = {
     "id": "PAYR",
+    "era": 2,
+    "era_evidence": "PAYMAIN uses COBOL-85 inline PERFORM with END-PERFORM and END-IF",
     "title": "Payroll (batch, multi-program source)",
     "style": "unnumbered; nested and sibling programs in one member; every COPY form",
     "copybooks": COPYBOOKS,

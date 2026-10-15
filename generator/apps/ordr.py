@@ -57,6 +57,8 @@ OLD_COPYBOOKS = [
 # the live edit routine
 ORDVAL = {
     "member": "ORDVAL",
+    "era": 2,
+    "era_evidence": "END-IF and SET ORD-REJECTED TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
     "program_id": "ORDVAL",
     "program_id_horror": H50,
     "author": "M OKAFOR",
@@ -100,6 +102,8 @@ ORDVALV2["units"][0] = para("0000-MAIN",
 # the pre-1998 version, compiled with the OLD library first: the 36-byte layout
 ORDVOLD = {
     "member": "ORDVOLD",
+    "era": 2,
+    "era_evidence": "END-IF and SET ORD-REJECTED TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
     "program_id": "ORDVOLD",
     "program_id_horror": H51,
     "numbered": True,
@@ -136,6 +140,8 @@ ORDV_OLD["units"][0] = para("0000-MAIN", raw("MOVE ZERO TO PRM-RC"), perform("10
 
 ORDPRICE = {
     "member": "ORDPRICE",
+    "era": 1,
+    "era_evidence": "no COBOL-85 construct (COMPUTE, CALL USING, GOBACK): earliest era, OS/VS COBOL (#5117 era 1)",
     "program_id": "ORDPRICE",
     "author": "M OKAFOR",
     "remarks": ["ORDPRICE - PRICE ONE ORDER LINE. CALLED BY ORDMAIN."],
@@ -146,6 +152,8 @@ ORDPRICE = {
 
 ORDMAIN = {
     "member": "ORDMAIN",
+    "era": 2,
+    "era_evidence": "END-READ and SET ... TO TRUE are COBOL-85 (VS COBOL II / COBOL 85; #5117 era 2)",
     "program_id": "ORDMAIN",
     "numbered": True,
     "ident": "ORDMAIN",
@@ -209,6 +217,8 @@ JOBS = [
 
 APP = {
     "id": "ORDR",
+    "era": 2,
+    "era_evidence": "ORDMAIN/ORDVAL and the forks use COBOL-85 END-IF, END-READ, SET ... TO TRUE; ORDPRICE alone is era 1",
     "title": "Order entry (forked programs, drifting copybooks)",
     "style": "forks of one edit routine; one record in three libraries; per-program SYSLIB; dead code",
     "syslib": ["ORDRCPY", "ORDRDCL", "SHRCPY", "ORDROLD"],

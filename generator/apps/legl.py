@@ -50,6 +50,8 @@ PHANTOMS = [
 
 GLRCON = {
     "member": "GLRCON",
+    "era": 2,
+    "era_evidence": "END-IF scope terminator is COBOL-85, although its banner and change log are dated 1983-2003 (the code needs era 2; #5117 era 2)",
     "program_id": "GLRCON",
     "numbered": True,
     "ident": "GLRCON",
@@ -85,6 +87,8 @@ GLRCON = {
 
 GLRSUM = {
     "member": "GLRSUM",
+    "era": 1,
+    "era_evidence": "no COBOL-85 construct (paragraphs, PERFORM, GOBACK only): earliest era, OS/VS COBOL (#5117 era 1)",
     "program_id": "GLRSUM",
     "numbered": True,
     "ident": "GLRSUM",
@@ -112,6 +116,8 @@ GLRSUM = {
 
 APP = {
     "id": "LEGL",
+    "era": 2,
+    "era_evidence": "GLRCON uses COBOL-85 END-IF despite 1983-era banners; GLRSUM alone is era 1",
     "title": "General-ledger reconciliation (card-era members)",
     "style": "comment banners before IDENTIFICATION DIVISION, change logs quoting old code, / page "
              "ejects, cols 1-6 sequence numbers and the deck name in cols 73-80",
