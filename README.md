@@ -84,9 +84,10 @@ tools/compile.py                 GnuCOBOL compile check; tools/stubs/ hold SQLCA
 | `LEGL` | general-ledger reconciliation from 1983 | comment banners before IDENTIFICATION DIVISION, change logs quoting old CALL / COPY / PERFORM text, `/` page ejects, sequence numbers and the deck name in cols 73-80 of every line |
 | `PCED` | a pricing tool edited on PCs | TABs and trailing white space; a member in lower case; a free-format member |
 | `RPTS` | management reports | report headings as VALUE literals continued past column 72 |
+| `INVT` | inventory stock status from 1983 (era 1) | a card-deck batch program: sequence numbers and deck name, upper case, SECTIONs, IF closed by the period; no horrors yet |
 | `shared` | `DATEWS`, `ORDREC` and `ADDRREC` copybooks (library `SHRCPY`), `AUDLOG` proc | |
 
-98 members. The key holds 1,353 facts and 46 phantoms over 23 channels
+101 members. The key holds 1,397 facts and 46 phantoms over 23 channels
 (`key/manifest.json`, `fact_totals`). Copy libraries are named the way `COPY ... IN
 library` names them: `<APP>CPY`, `<APP>DCL`, `SHRCPY` and a retired `<APP>OLD`; a program's
 SYSLIB is, by default, its app's libraries, then `SHRCPY`, then `<APP>OLD`.

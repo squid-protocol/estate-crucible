@@ -1,0 +1,583 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "INVT",
+ "members": {
+  "apps/INVT/cobol/INVTBAT.cbl": {
+   "app": "INVT",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 55,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 1,
+   "era_evidence": "SECTIONs and period-terminated sentences only; no END-IF, END-READ or inline PERFORM, so OS/VS COBOL (#5117 era 1)",
+   "programs": [
+    {
+     "program_id": "INVTBAT",
+     "line": 7
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAINLINE",
+     "kind": "section",
+     "section": null,
+     "start_line": 39,
+     "end_line": 43,
+     "span_end": 43
+    },
+    {
+     "name": "1000-PROCESS-STOCK",
+     "kind": "section",
+     "section": null,
+     "start_line": 44,
+     "end_line": 47,
+     "span_end": 47
+    },
+    {
+     "name": "1100-READ-STOCK",
+     "kind": "section",
+     "section": null,
+     "start_line": 48,
+     "end_line": 49,
+     "span_end": 49
+    },
+    {
+     "name": "1200-CHECK-REORDER",
+     "kind": "section",
+     "section": null,
+     "start_line": 50,
+     "end_line": 55,
+     "span_end": 55
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAINLINE",
+     "target": "1000-PROCESS-STOCK",
+     "line": 41
+    },
+    {
+     "kind": "perform",
+     "from": "1000-PROCESS-STOCK",
+     "target": "1100-READ-STOCK",
+     "line": 45
+    },
+    {
+     "kind": "perform",
+     "from": "1000-PROCESS-STOCK",
+     "target": "1200-CHECK-REORDER",
+     "line": 47
+    }
+   ],
+   "copies": [
+    {
+     "member": "INVTREC",
+     "kind": "copy",
+     "line": 37,
+     "resolves_to": "apps/INVT/copybook/INVTREC.cpy"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "STOCK-IN",
+     "pic": "X(80)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 27
+    },
+    {
+     "level": 1,
+     "name": "LIST-LINE",
+     "pic": "X(133)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 30
+    },
+    {
+     "level": 1,
+     "name": "WS-STOCK-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 32
+    },
+    {
+     "level": 1,
+     "name": "WS-LIST-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 33
+    },
+    {
+     "level": 1,
+     "name": "WS-EOF",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'N'",
+     "section": "WORKING-STORAGE",
+     "line": 34
+    },
+    {
+     "level": 1,
+     "name": "WS-LOW-COUNT",
+     "pic": "9(5)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 35
+    },
+    {
+     "level": 1,
+     "name": "WS-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 36,
+     "copy_members": [
+      "INVTREC"
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "STOCK-IN",
+     "line": 27,
+     "bytes": 80,
+     "fields": [
+      {
+       "name": "STOCK-IN",
+       "level": 1,
+       "pic": "X(80)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 80,
+       "file": "apps/INVT/cobol/INVTBAT.cbl"
+      }
+     ]
+    },
+    {
+     "record": "LIST-LINE",
+     "line": 30,
+     "bytes": 133,
+     "fields": [
+      {
+       "name": "LIST-LINE",
+       "level": 1,
+       "pic": "X(133)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 133,
+       "file": "apps/INVT/cobol/INVTBAT.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-STOCK-STATUS",
+     "line": 32,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-STOCK-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/INVT/cobol/INVTBAT.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-LIST-STATUS",
+     "line": 33,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-LIST-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/INVT/cobol/INVTBAT.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-EOF",
+     "line": 34,
+     "bytes": 1,
+     "fields": [
+      {
+       "name": "WS-EOF",
+       "level": 1,
+       "pic": "X",
+       "usage": null,
+       "offset": 0,
+       "bytes": 1,
+       "file": "apps/INVT/cobol/INVTBAT.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-LOW-COUNT",
+     "line": 35,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-LOW-COUNT",
+       "level": 1,
+       "pic": "9(5)",
+       "usage": "COMP-3",
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/INVT/cobol/INVTBAT.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-REC",
+     "line": 36,
+     "bytes": 80,
+     "fields": [
+      {
+       "name": "STK-PART-NO",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "STK-DESC",
+       "level": 5,
+       "pic": "X(30)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 30,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "STK-ON-HAND",
+       "level": 5,
+       "pic": "S9(7)",
+       "usage": "COMP-3",
+       "offset": 40,
+       "bytes": 4,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "STK-REORDER-PT",
+       "level": 5,
+       "pic": "S9(7)",
+       "usage": "COMP-3",
+       "offset": 44,
+       "bytes": 4,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "STK-BIN",
+       "level": 5,
+       "pic": "X(6)",
+       "usage": null,
+       "offset": 48,
+       "bytes": 6,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(26)",
+       "usage": null,
+       "offset": 54,
+       "bytes": 26,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "STOCK-FILE",
+     "assign": "STOCKIN",
+     "organization": "SEQUENTIAL",
+     "access_mode": null,
+     "record_key": null,
+     "file_status": "WS-STOCK-STATUS",
+     "fd_copies": [],
+     "line": 17
+    },
+    {
+     "select": "LIST-FILE",
+     "assign": "STKLIST",
+     "organization": "SEQUENTIAL",
+     "access_mode": null,
+     "record_key": null,
+     "file_status": "WS-LIST-STATUS",
+     "fd_copies": [],
+     "line": 20
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "INVTBAT",
+     "params": [],
+     "line": 38
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-LOW-COUNT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 52
+    },
+    {
+     "verb": "MOVE",
+     "source": "SPACES",
+     "source_kind": "figurative",
+     "target": "LIST-LINE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 53
+    },
+    {
+     "verb": "MOVE",
+     "source": "STK-PART-NO",
+     "source_kind": "item",
+     "target": "LIST-LINE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 54
+    }
+   ]
+  },
+  "apps/INVT/copybook/INVTREC.cpy": {
+   "app": "INVT",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 7,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "STK-PART-NO",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 5,
+     "name": "STK-DESC",
+     "pic": "X(30)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 5,
+     "name": "STK-ON-HAND",
+     "pic": "S9(7)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4
+    },
+    {
+     "level": 5,
+     "name": "STK-REORDER-PT",
+     "pic": "S9(7)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5
+    },
+    {
+     "level": 5,
+     "name": "STK-BIN",
+     "pic": "X(6)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 6
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(26)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 7
+    }
+   ]
+  },
+  "apps/INVT/jcl/INVTDLY.jcl": {
+   "app": "INVT",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 9,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "INVTBAT",
+     "target": "INVTBAT",
+     "line": 5,
+     "resolves_to": "apps/INVT/cobol/INVTBAT.cbl"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "INVTDLY",
+     "proc": null,
+     "step": "STEP010",
+     "ordinal": 1,
+     "program": "INVTBAT",
+     "exec_proc": null,
+     "cond": null,
+     "line": 5
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "INVTDLY",
+     "proc": null,
+     "step": "STEP010",
+     "dd": "STEPLIB",
+     "dsn": "PROD.INVT.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 6
+    },
+    {
+     "job": "INVTDLY",
+     "proc": null,
+     "step": "STEP010",
+     "dd": "STOCKIN",
+     "dsn": "PROD.INVT.STOCK",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 7
+    },
+    {
+     "job": "INVTDLY",
+     "proc": null,
+     "step": "STEP010",
+     "dd": "STKLIST",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "A",
+     "line": 8
+    },
+    {
+     "job": "INVTDLY",
+     "proc": null,
+     "step": "STEP010",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 9
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.INVT.LOADLIB",
+     "generation": null,
+     "step": "STEP010",
+     "dd": "STEPLIB",
+     "line": 6
+    },
+    {
+     "dsn": "PROD.INVT.STOCK",
+     "generation": null,
+     "step": "STEP010",
+     "dd": "STOCKIN",
+     "line": 7
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/INVT/cobol/INVTBAT.cbl"
+    }
+   ]
+  }
+ }
+}

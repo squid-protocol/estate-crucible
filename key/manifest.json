@@ -146,6 +146,13 @@
    "style": "report headings as VALUE literals continued past column 72",
    "era": 1,
    "era_evidence": "RPTHDR has no construct later than OS/VS COBOL; earliest era"
+  },
+  {
+   "id": "INVT",
+   "title": "Inventory stock status (1983 batch deck)",
+   "style": "1980s card deck: numbered cols 1-6, deck name in cols 73-80, upper case, SECTIONs, period-terminated IF",
+   "era": 1,
+   "era_evidence": "INVTBAT, the app's only program, has no construct later than OS/VS COBOL; a 1983 card-deck batch system"
   }
  ],
  "channels": [
@@ -174,26 +181,26 @@
   "dead"
  ],
  "fact_totals": {
-  "programs": 45,
-  "units": 129,
-  "edges": 86,
-  "call_sites": 45,
-  "copies": 60,
-  "data_items": 449,
-  "layouts": 143,
+  "programs": 46,
+  "units": 133,
+  "edges": 89,
+  "call_sites": 46,
+  "copies": 61,
+  "data_items": 462,
+  "layouts": 150,
   "sql_statements": 5,
   "sql_tables": 2,
-  "jcl_steps": 22,
-  "jcl_dds": 44,
+  "jcl_steps": 23,
+  "jcl_dds": 48,
   "screen_fields": 16,
   "csd_resources": 18,
   "transactions": 6,
   "cics_resources": 7,
-  "jcl_datasets": 33,
-  "file_control": 9,
-  "entry_points": 45,
-  "file_edges": 24,
-  "data_moves": 128,
+  "jcl_datasets": 35,
+  "file_control": 11,
+  "entry_points": 46,
+  "file_edges": 25,
+  "data_moves": 131,
   "copy_collisions": 9,
   "gaps": 17,
   "dead": 11,
@@ -239,6 +246,9 @@
    ],
    "INVNDCL": [
     "apps/INVN/dclgen"
+   ],
+   "INVTCPY": [
+    "apps/INVT/copybook"
    ],
    "KYUYCPY": [
     "apps/KYUY/copybook"
@@ -340,6 +350,13 @@
     "order": [
      "INVNCPY",
      "INVNDCL",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/INVT/*",
+    "order": [
+     "INVTCPY",
      "SHRCPY"
     ]
    },
@@ -1163,6 +1180,47 @@
    "encoding": "utf-8",
    "storage": "lf",
    "key": "key/apps/INVN.json",
+   "compile": {
+    "status": "not-cobol"
+   }
+  },
+  "apps/INVT/cobol/INVTBAT.cbl": {
+   "app": "INVT",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "da0f493858d1ed097e985451a9a583adb6821e8d288d1cb4a8045bca72684241",
+   "bytes": 4400,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/INVT.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 1,
+   "era_evidence": "SECTIONs and period-terminated sentences only; no END-IF, END-READ or inline PERFORM, so OS/VS COBOL (#5117 era 1)"
+  },
+  "apps/INVT/copybook/INVTREC.cpy": {
+   "app": "INVT",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "750fb33a05d4d76d96f258cd0234569f6cb0ceae2d337137ff5e6bd18f545703",
+   "bytes": 360,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/INVT.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/INVT/jcl/INVTDLY.jcl": {
+   "app": "INVT",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "659e38e84cb1880be72d047bf9e42cba84c2c9adf29745933674a5276cacaa8d",
+   "bytes": 311,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/INVT.json",
    "compile": {
     "status": "not-cobol"
    }

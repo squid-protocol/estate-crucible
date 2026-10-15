@@ -1,0 +1,7 @@
+000100* INVTREC  - INVENTORY STOCK RECORD (80 BYTES)
+000200     05  STK-PART-NO            PIC X(10).
+000300     05  STK-DESC               PIC X(30).
+000400     05  STK-ON-HAND            PIC S9(7) COMP-3.
+000500     05  STK-REORDER-PT         PIC S9(7) COMP-3.
+000600     05  STK-BIN                PIC X(6).
+000700     05  FILLER                 PIC X(26).
