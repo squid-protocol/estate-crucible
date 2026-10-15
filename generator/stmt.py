@@ -40,8 +40,11 @@ def call(target: str, *, ident: Optional[str] = None, using: Optional[list[str]]
     return _s("call", horror, target=target, ident=ident, using=using or [], split=split)
 
 
-def if_(cond: str, then: list[Stmt], else_: Optional[list[Stmt]] = None, *, horror: Optional[str] = None) -> Stmt:
-    return _s("if", horror, cond=cond, then=then, else_=else_)
+def if_(cond: str, then: list[Stmt], else_: Optional[list[Stmt]] = None, *, horror: Optional[str] = None,
+        end_if: bool = True) -> Stmt:
+    """IF ... END-IF. `end_if=False` writes the pre-COBOL-85 form: no END-IF, the sentence's period
+    ends the IF (so it must be the last statement of its paragraph or section)."""
+    return _s("if", horror, cond=cond, then=then, else_=else_, end_if=end_if)
 
 
 def read(file: str, *, into: Optional[str] = None, at_end: list[Stmt], not_at_end: Optional[list[Stmt]] = None,

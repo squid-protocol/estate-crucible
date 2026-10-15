@@ -418,7 +418,8 @@ class ProgramWriter:
         if st["else_"]:
             self.line("ELSE", indent)
             self.stmts(st["else_"], indent + 3)
-        self.line("END-IF", indent)
+        if st.get("end_if", True):
+            self.line("END-IF", indent)
 
     def op_read(self, st: Stmt, indent: int) -> None:
         line = self.line(f"READ {st['file']}" + (f" INTO {st['into']}" if st["into"] else ""), indent)
