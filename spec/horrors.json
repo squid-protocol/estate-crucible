@@ -1531,13 +1531,13 @@
    "asserts": "Each BLL cell is a 4-byte binary data item (S9(8) COMP), and BLL-CELLS is a 12-byte layout; the cells are not parameters, so the PROCEDURE DIVISION entry point has no params. The 01s after the cells (STK-AREA, CWA-AREA) are separate layouts addressed through the cells, not subordinate to them.",
    "citations": [
     {
-     "doc": "CICS/VS 1.x Application Programmer's Reference (Command Level), BLL cells -- NOT OPENED: find exact cite",
-     "section": "BLL cells (find exact cite)",
-     "url": "https://www.ibm.com/docs/en/cics-ts",
-     "quote": "find exact cite: no CICS/VS manual was opened for this horror, so no rule is quoted"
+     "doc": "IBM APAR PI61993, NON-PARAMETER BLL CELLS ARE NO LONGER INITIALLY NULL (Enterprise COBOL for z/OS 5.2). Describes the BLL cell as the engine-side concept; it is not the CICS/VS 1.x manual",
+     "section": "APAR PI61993, description of a BLL (Base Locator for Linkage) cell",
+     "url": "https://www.ibm.com/support/pages/apar/PI61993",
+     "quote": "A BLL (Base Locator for Linkage) cell is an implicit usage pointer field that supplies the address for a linkage section ... 01- or 77-level item which can be set via SET ADDRESS OF {linkage-item} statement if the linkage-item is not a parameter, ... or retrieved via an ADDRESS OF {linkage-item} expression."
     }
    ],
-   "notes": "The citation is a placeholder: no CICS/VS 1.x APRM (Command Level) was opened, so nothing is quoted (AGENTS.md rule 4 is not met until the exact cite is found; the url is IBM's CICS documentation root, not a page). Also cross-reference the Enterprise COBOL Migration Guide (also not opened). The cell widths follow the member's own PICTUREs (S9(8) COMP = 4 bytes, the data-items size rule).",
+   "notes": "The only source opened is IBM APAR PI61993 (Enterprise COBOL 5.2), which defines a BLL cell as the implicit pointer behind a LINKAGE 01/77; it is quoted with ellipses where the page split the sentence. STILL TO FIND: the CICS/VS 1.x Application Programmer's Reference (Command Level) passage on explicit BLL cells (S9(8) COMP cells filled by ADDRESS / READ SET) and the Enterprise COBOL Migration Guide cross-reference on converting BLL cells. bitsavers.org/pdf/ibm/370/CICS/ was listed: it holds only the 1972 macro-level APRM (SH20-1047-4) and Lowe's non-IBM 1984-85 'CICS for the COBOL Programmer', no command-level APRM, and neither was read. So the release-specific (CICS/VS 1.x) rule is uncited; the cell widths follow the member's PICTUREs (S9(8) COMP = 4 bytes).",
    "era": 1,
    "release": "CICS/VS 1.x"
   }
