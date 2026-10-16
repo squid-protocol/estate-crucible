@@ -23,7 +23,8 @@
    "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
   }
  ],
- "notes": "IDMS is a Broadcom product, so its rule is cited from Broadcom's documentation. The member is IBM-only (not compiled): GnuCOBOL has no IDMS precompiler. The SCHEMA SECTION shape is reported on #4306.",
+ "notes": "IDMS is a Broadcom product, so its rule is cited from Broadcom's documentation. The member is IBM-only (not compiled): GnuCOBOL has no IDMS precompiler. The SCHEMA SECTION shape is reported on #4306. Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
+ "era": 2,
  "planted": [
   {
    "member": "apps/LOAN/cobol/LNIDMS01.cbl",

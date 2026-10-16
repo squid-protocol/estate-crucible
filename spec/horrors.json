@@ -34,7 +34,8 @@
      "quote": "A COPY statement can appear in the source text anywhere a character string or a separator can appear."
     }
    ],
-   "notes": "The sequence number area is outside the program text, so a statement may continue onto the next line at any separator. The phantoms name the exact sequence number the engine would read (the next line's cols 1-6)."
+   "notes": "The sequence number area is outside the program text, so a statement may continue onto the next line at any separator. The phantoms name the exact sequence number the engine would read (the next line's cols 1-6).",
+   "era": null
   },
   {
    "id": "H-0002",
@@ -74,7 +75,8 @@
      "quote": "The RETURN statement terminates execution of the subroutine or function procedure that contains the RETURN statement and returns control to the invoking procedure."
     }
    ],
-   "notes": "In a numbered member the engine's line-leading terminator test does not see EXIT behind the sequence number, so the numbered plant can pass for the wrong reason; the unnumbered plants exercise the cut."
+   "notes": "In a numbered member the engine's line-leading terminator test does not see EXIT behind the sequence number, so the numbered plant can pass for the wrong reason; the unnumbered plants exercise the cut.",
+   "era": null
   },
   {
    "id": "H-0003",
@@ -92,7 +94,8 @@
      "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-procedures",
      "quote": "If there are no declaratives (format 2), a paragraph-name is not required in the PROCEDURE DIVISION."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0004",
@@ -111,7 +114,8 @@
      "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-copy-statement",
      "quote": "A COPY statement can appear in the source text anywhere a character string or a separator can appear. ... Each COPY statement must be preceded by a space and ended with a separator period."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0005",
@@ -130,7 +134,9 @@
      "url": "https://www.ibm.com/docs/en/db2-for-zos/13?topic=statements-call",
      "quote": "The CALL statement invokes a stored procedure. ... This statement can be embedded in an application program."
     }
-   ]
+   ],
+   "era": 2,
+   "notes": "Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
   },
   {
    "id": "H-0006",
@@ -160,7 +166,8 @@
      "quote": "The EXIT statement ... provides a way to exit from a section, a paragraph, or an inline PERFORM statement."
     }
    ],
-   "notes": "PERFORM FOREVER (#4305's GnuCOBOL / Micro Focus form) is not planted: it is not Enterprise COBOL, and this estate is IBM dialect. Its IBM counterpart, PERFORM UNTIL EXIT, is a phase-1 candidate."
+   "notes": "PERFORM FOREVER (#4305's GnuCOBOL / Micro Focus form) is not planted: it is not Enterprise COBOL, and this estate is IBM dialect. Its IBM counterpart, PERFORM UNTIL EXIT, is a phase-1 candidate. Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
+   "era": 2
   },
   {
    "id": "H-0007",
@@ -186,7 +193,8 @@
      "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
     }
    ],
-   "notes": "IDMS is a Broadcom product, so its rule is cited from Broadcom's documentation. The member is IBM-only (not compiled): GnuCOBOL has no IDMS precompiler. The SCHEMA SECTION shape is reported on #4306."
+   "notes": "IDMS is a Broadcom product, so its rule is cited from Broadcom's documentation. The member is IBM-only (not compiled): GnuCOBOL has no IDMS precompiler. The SCHEMA SECTION shape is reported on #4306. Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
+   "era": 2
   },
   {
    "id": "H-0008",
@@ -207,7 +215,8 @@
     }
    ],
    "lower_confidence": "IBM's syntax diagram shows both periods as required. That Enterprise COBOL compiles the period-less forms with a diagnostic rests on #4307's evidence (cobol-programming-course CBLDB22 compiles in its own JCL), not on an IBM sentence. The fact the key asserts, the program-name, does not depend on it. Both members are IBM-only here; the check compiles a variant with the periods restored.",
-   "notes": "LNRATE has no AUTHOR paragraph, as #4307's CBLDB22 has none: when a period-terminated AUTHOR. line follows the period-less PROGRAM-ID, the engine records the name, which would hide shape 1."
+   "notes": "LNRATE has no AUTHOR paragraph, as #4307's CBLDB22 has none: when a period-terminated AUTHOR. line follows the period-less PROGRAM-ID, the engine records the name, which would hide shape 1.",
+   "era": null
   },
   {
    "id": "H-0009",
@@ -226,7 +235,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "A separator period is composed of a period followed by a space."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0010",
@@ -251,7 +261,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "A group item includes all group and elementary items that follow it until a level-number less than or equal to the level-number of that group is encountered."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0011",
@@ -277,7 +288,8 @@
      "url": "https://publibz.boulder.ibm.com/epubs/pdf/dgt3d410.pdf",
      "quote": "The relative name is a signed integer used to refer to the latest (0), the next to the latest (-1), and so forth, generation."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0012",
@@ -301,7 +313,8 @@
      "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-procedures",
      "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0013",
@@ -321,7 +334,8 @@
      "quote": "Reference format consists of the following areas in a 72-character line."
     }
    ],
-   "notes": "IBM's 6.4 Language Reference defines a 72-character line and does not describe cols 73-80 for source; the compiler ignores them."
+   "notes": "IBM's 6.4 Language Reference defines a 72-character line and does not describe cols 73-80 for source; the compiler ignores them.",
+   "era": null
   },
   {
    "id": "H-0014",
@@ -346,7 +360,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "A group item includes all group and elementary items that follow it until a level-number less than or equal to the level-number of that group is encountered."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0015",
@@ -365,7 +380,9 @@
      "url": "https://www.ibm.com/docs/en/db2-for-zos/13?topic=commands-dclgen-declarations-generator-dsn",
      "quote": "The declarations generator (DCLGEN) produces an SQL DECLARE TABLE statement and a COBOL, PL/I, or C data declaration for a table or a view named in the catalog."
     }
-   ]
+   ],
+   "era": 2,
+   "notes": "Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
   },
   {
    "id": "H-0016",
@@ -398,7 +415,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "literal-1, literal-2 Must be alphanumeric literals. literal-1 identifies the copy text. literal-2 identifies where the copy text exists."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0017",
@@ -417,7 +435,9 @@
      "url": "https://www.ibm.com/docs/en/db2-for-zos/13?topic=statements-include",
      "quote": "The INCLUDE statement inserts application code, including declarations and statements, into a source program."
     }
-   ]
+   ],
+   "era": 2,
+   "notes": "Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
   },
   {
    "id": "H-0018",
@@ -436,7 +456,8 @@
      "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=statements-copy-statement",
      "quote": "A COPY statement can appear in the source text anywhere a character string or a separator can appear."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0019",
@@ -461,7 +482,8 @@
      "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=format-sequence-number-area",
      "quote": "The content of this area can consist of any character in the character set of the computer."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0020",
@@ -487,7 +509,8 @@
      "quote": "If there is no hyphen (-) in the indicator area (column 7) of a line, the last character of the preceding line is assumed to be followed by a space."
     }
    ],
-   "lower_confidence": "No IBM sentence states outright that a paragraph-name's separator period may be on the next line; it follows from the separator and continuation rules (an end of line is a space; a space may precede a separator period). GnuCOBOL -std=ibm accepts it."
+   "lower_confidence": "No IBM sentence states outright that a paragraph-name's separator period may be on the next line; it follows from the separator and continuation rules (an end of line is a space; a space may precede a separator period). GnuCOBOL -std=ibm accepts it.",
+   "era": null
   },
   {
    "id": "H-0021",
@@ -506,7 +529,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "A comment line is any line with an asterisk (*) or slash (/) in the indicator area (column 7) of the line, or with a floating comment indicator (*>) as the first character-string in the program text area (Area A plus Area B)."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0022",
@@ -532,7 +556,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "Most user-defined words (all except section-names, paragraph-names, priority-numbers, and level-numbers) must contain at least one alphabetic character."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0023",
@@ -558,7 +583,8 @@
      "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-procedures",
      "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0024",
@@ -584,7 +610,9 @@
      "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=summary-link",
      "quote": "LINK passes control from an application program at one logical level to an application program at the next lower logical level."
     }
-   ]
+   ],
+   "era": 2,
+   "notes": "Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
   },
   {
    "id": "H-0025",
@@ -604,7 +632,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "The character S in the PICTURE character string is counted in determining the size of the data item (in terms of standard data format characters)."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0026",
@@ -623,7 +652,9 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "Most user-defined words (all except section-names, paragraph-names, priority-numbers, and level-numbers) must contain at least one alphabetic character."
     }
-   ]
+   ],
+   "era": 2,
+   "notes": "Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
   },
   {
    "id": "H-0027",
@@ -642,7 +673,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "Latin uppercase letters A through Z, Latin lowercase letters a through z, digits 0 through 9, - (hyphen), _ (underscore)"
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0028",
@@ -663,7 +695,8 @@
      "quote": "in this mode of operation, COBOL statements may each be up to 255 characters long, with no specific requirements as to what should appear in which columns."
     }
    ],
-   "notes": "Not IBM dialect: Enterprise COBOL for z/OS 6.4 has only the 72-column reference format, and IBM COBOL for Linux needs a conversion utility for free-format source. The member stands for code rehosted off z/OS and is compiled by GnuCOBOL (-std=ibm accepts the directive)."
+   "notes": "Not IBM dialect: Enterprise COBOL for z/OS 6.4 has only the 72-column reference format, and IBM COBOL for Linux needs a conversion utility for free-format source. The member stands for code rehosted off z/OS and is compiled by GnuCOBOL (-std=ibm accepts the directive). Era 4: the earliest era whose product has the construct (free-format reference format (Enterprise COBOL 6.x), era 4). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
+   "era": 4
   },
   {
    "id": "H-0029",
@@ -682,7 +715,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "A user-defined word or alphanumeric literal, but not a figurative constant, that identifies your program."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0030",
@@ -701,7 +735,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "If data-name-1 or the FILLER clause is omitted, the data item being described is treated as though FILLER had been specified."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0031",
@@ -727,7 +762,9 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "An end program marker separates each program in the sequence of programs."
     }
-   ]
+   ],
+   "era": 2,
+   "notes": "Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
   },
   {
    "id": "H-0032",
@@ -752,7 +789,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "Any sentence, entry, clause, or phrase that requires more than one line can be continued in Area B of the next line that is neither a comment line nor a blank line."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0033",
@@ -771,7 +809,8 @@
      "quote": "If the UNTIL phrase with the EXIT reserved word is specified, execution proceeds exactly as if the same PERFORM statement were coded with condition-1 specified, except that condition-1 never evaluates as true."
     }
    ],
-   "notes": "New in Enterprise COBOL 6.4 (Summary of changes: PERFORM ... UNTIL EXIT support); it does not compile on 6.3 or earlier. No gitgalaxy issue: an IBM dialect corner planted ahead of any defect."
+   "notes": "New in Enterprise COBOL 6.4 (Summary of changes: PERFORM ... UNTIL EXIT support); it does not compile on 6.3 or earlier. No gitgalaxy issue: an IBM dialect corner planted ahead of any defect. Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
+   "era": 2
   },
   {
    "id": "H-0034",
@@ -796,7 +835,8 @@
      "url": "https://publibz.boulder.ibm.com/epubs/pdf/dgt3d410.pdf",
      "quote": "If two members of different data sets in the concatenation have the same name, the FIND macro determines the address of the first one in the concatenation."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0035",
@@ -823,7 +863,8 @@
      "quote": "00277: Denmark, Norway"
     }
    ],
-   "notes": "The scanner is told each member's code page by path (the scorer passes --source-encoding with the manifest's code_pages). Nothing in the bytes says which EBCDIC page they are."
+   "notes": "The scanner is told each member's code page by path (the scorer passes --source-encoding with the manifest's code_pages). Nothing in the bytes says which EBCDIC page they are.",
+   "era": null
   },
   {
    "id": "H-0036",
@@ -848,7 +889,8 @@
      "url": "https://www.ibm.com/docs/en/i/7.5.0?topic=information-ccsid-values-defined-i",
      "quote": "00273: Austria, Germany"
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0037",
@@ -868,7 +910,8 @@
      "quote": "Comments are allowed wherever blanks are allowed"
     }
    ],
-   "lower_confidence": "The PL/I quote says where a comment may stand, not which bytes it may hold; that a compiler takes NULs inside a comment is the ledger's evidence (DSF's programs compile with them)."
+   "lower_confidence": "The PL/I quote says where a comment may stand, not which bytes it may hold; that a compiler takes NULs inside a comment is the ledger's evidence (DSF's programs compile with them).",
+   "era": null
   },
   {
    "id": "H-0038",
@@ -896,7 +939,8 @@
      "quote": "The EBCDIC DBCS space character has the value X'4040', the national space character has the value NX'0020', and the UTF-8 space character has the value UX'20'."
     }
    ],
-   "lower_confidence": "Not IBM: Enterprise COBOL separates words with single-byte spaces. The member stands for opensourcecobol4j code; the dialect's rule is evidenced by its own test suite (via #3956), not by a language reference."
+   "lower_confidence": "Not IBM: Enterprise COBOL separates words with single-byte spaces. The member stands for opensourcecobol4j code; the dialect's rule is evidenced by its own test suite (via #3956), not by a language reference.",
+   "era": null
   },
   {
    "id": "H-0039",
@@ -930,7 +974,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "The option to specify a literal as the program-name to be externalized was added for names that are not valid COBOL words or need to be case-sensitive."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0040",
@@ -952,7 +997,8 @@
      "quote": "DBCS user-defined words can contain only double-byte characters, and must contain at least one DBCS character that is not in the set A through Z, a through z, 0 through 9, hyphen, and underscore"
     }
    ],
-   "lower_confidence": "Enterprise COBOL allows DBCS words of DBCS characters only; X項目 (mixed) and a Japanese PROGRAM-ID belong to the rehosted (opensourcecobol4j / GnuCOBOL) dialect, which GnuCOBOL -std=ibm compiles."
+   "lower_confidence": "Enterprise COBOL allows DBCS words of DBCS characters only; X項目 (mixed) and a Japanese PROGRAM-ID belong to the rehosted (opensourcecobol4j / GnuCOBOL) dialect, which GnuCOBOL -std=ibm compiles.",
+   "era": null
   },
   {
    "id": "H-0041",
@@ -979,7 +1025,8 @@
      "quote": "DBCS characters that correspond to single-byte EBCDIC characters follow the normal rules for COBOL user-defined words; that is, the characters A - Z, a - z, 0 - 9, the hyphen (-), and the underscore (_) are allowed."
     }
    ],
-   "lower_confidence": "U+2212 (MINUS SIGN) is not the DBCS hyphen IBM means (U+FF0D); it is planted because opensourcecobol4j estates carry it (#3991)."
+   "lower_confidence": "U+2212 (MINUS SIGN) is not the DBCS hyphen IBM means (U+FF0D); it is planted because opensourcecobol4j estates carry it (#3991).",
+   "era": null
   },
   {
    "id": "H-0042",
@@ -1026,7 +1073,8 @@
      "quote": "The comment can be written anywhere in the program text area of that line, and can consist of any combination of characters from the character set of the computer."
     }
    ],
-   "notes": "#3988's 'mismatched / nested SO-SI' trap lives in comment lines: IBM forbids it in literals, and a comment may hold any characters."
+   "notes": "#3988's 'mismatched / nested SO-SI' trap lives in comment lines: IBM forbids it in literals, and a comment may hold any characters.",
+   "era": null
   },
   {
    "id": "H-0043",
@@ -1045,7 +1093,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "The DECIMAL-POINT IS COMMA clause exchanges the functions of the period and the comma in PICTURE character-strings and in numeric literals."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0044",
@@ -1064,7 +1113,8 @@
      "quote": "The EBCDIC collating sequence is the order in which characters are defined in EBCDIC."
     }
    ],
-   "notes": "#3988 trap 4. No scanner channel records a collating sequence: this horror's facts are structural, and the trap is for translators (a Java port comparing as Unicode). It is planted so the estate carries it."
+   "notes": "#3988 trap 4. No scanner channel records a collating sequence: this horror's facts are structural, and the trap is for translators (a Java port comparing as Unicode). It is planted so the estate carries it.",
+   "era": null
   },
   {
    "id": "H-0045",
@@ -1089,7 +1139,8 @@
      "quote": "The Lam-Alef character is traditionally stored as a single character in files tagged with visual CCSID 420."
     }
    ],
-   "lower_confidence": "That CCSID 420 host text is held in visual order is evidenced by IBM's emulator documentation, not by the CICS BMS reference."
+   "lower_confidence": "That CCSID 420 host text is held in visual order is evidenced by IBM's emulator documentation, not by the CICS BMS reference.",
+   "era": null
   },
   {
    "id": "H-0046",
@@ -1107,7 +1158,8 @@
      "url": "https://www.ibm.com/docs/en/i/7.5.0?topic=information-ccsid-values-defined-i",
      "quote": "00943: Japanese PC Data Mixed for Open environment (Multi-vendor code)"
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0047",
@@ -1127,7 +1179,8 @@
      "quote": "An explicit scope terminator marks the end of certain PROCEDURE DIVISION statements."
     }
    ],
-   "notes": "The ledger records D013 with no issue of its own (fixed by #3511)."
+   "notes": "The ledger records D013 with no issue of its own (fixed by #3511). Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
+   "era": 2
   },
   {
    "id": "H-0048",
@@ -1146,7 +1199,9 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "function-name-1 Must reference an alphanumeric or national function."
     }
-   ]
+   ],
+   "era": 3,
+   "notes": "Era 3: the earliest era whose product has the construct (intrinsic FUNCTION results (COBOL for MVS / OS/390 and later), era 3). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
   },
   {
    "id": "H-0049",
@@ -1165,7 +1220,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "When literal is not a figurative constant, ALL literal represents one or more occurrences of the string of characters that compose the literal."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0050",
@@ -1191,7 +1247,8 @@
      "quote": "literal-1 or the contents of identifier-1 must specify the program-name of the called subprogram."
     }
    ],
-   "lower_confidence": "IBM ties a dynamic call to the program object's name; that the object is linked under its source member's name is the standard compile-and-link procedure's convention, not a language rule. The key follows the convention every estate in the field ledger uses."
+   "lower_confidence": "IBM ties a dynamic call to the program object's name; that the object is linked under its source member's name is the standard compile-and-link procedure's convention, not a language rule. The key follows the convention every estate in the field ledger uses.",
+   "era": null
   },
   {
    "id": "H-0051",
@@ -1218,7 +1275,8 @@
      "url": "https://www.ibm.com/docs/en/zos/3.1.0?topic=statement-pgm-parameter",
      "quote": "Use the PGM parameter to name the program that the system is to execute. The specified program must be a member of a partitioned data set (PDS) or partitioned data set extended (PDSE) used as a system library, a private library, or a temporary library."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0052",
@@ -1246,7 +1304,8 @@
      "url": "https://publibz.boulder.ibm.com/epubs/pdf/dgt3d410.pdf",
      "quote": "If two members of different data sets in the concatenation have the same name, the FIND macro determines the address of the first one in the concatenation."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0053",
@@ -1272,7 +1331,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "The effect of processing a COPY statement is that the library text associated with text-name is copied into the compilation unit, logically replacing the entire COPY statement, beginning with the word COPY and ending with the period, inclusive."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0054",
@@ -1307,7 +1367,9 @@
      "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=attributes-program-resource-definitions",
      "quote": "PROGRAM resources control information for a program that is stored in the program library and used to process a transaction, or part of a transaction."
     }
-   ]
+   ],
+   "era": 1,
+   "notes": "Era 1: the earliest era whose product has the construct (EXEC CICS command level (LINK/XCTL), era 1 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
   },
   {
    "id": "H-0055",
@@ -1340,7 +1402,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "A comment line is any line with an asterisk (*) or slash (/) in the indicator area (column 7) of the line, or with a floating comment indicator (*>) as the first character-string in the program text area (Area A plus Area B)."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0056",
@@ -1361,7 +1424,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "The effect of processing a COPY statement is that the library text associated with text-name is copied into the compilation unit, logically replacing the entire COPY statement, beginning with the word COPY and ending with the period, inclusive."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0057",
@@ -1387,7 +1451,8 @@
      "url": "https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=structure-reference-format",
      "quote": "Reference format consists of the following areas in a 72-character line."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0058",
@@ -1413,7 +1478,8 @@
      "quote": "Anywhere a space is used as a separator or as part of a separator, more than one space can be used."
     }
    ],
-   "lower_confidence": "Enterprise COBOL documents no TAB in source; the assertion follows GnuCOBOL (which expands it to a tab stop, -ftab-width) and is labelled realism, not an IBM rule."
+   "lower_confidence": "Enterprise COBOL documents no TAB in source; the assertion follows GnuCOBOL (which expands it to a tab stop, -ftab-width) and is labelled realism, not an IBM rule.",
+   "era": null
   },
   {
    "id": "H-0059",
@@ -1432,7 +1498,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "In COBOL words (but not in the content of alphanumeric, DBCS, national, and UTF-8 literals), each lowercase single-byte alphabetic letter is considered to be equivalent to its corresponding single-byte uppercase alphabetic letter."
     }
-   ]
+   ],
+   "era": null
   },
   {
    "id": "H-0060",
@@ -1450,7 +1517,8 @@
      "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
      "quote": "If the continued line contains an alphanumeric or national literal without a closing quotation mark, all spaces at the end of the continued line (through column 72) are considered to be part of the literal. The continuation line must contain a hyphen in the indicator area, and the first nonblank character must be a quotation mark. The continuation of the literal begins with the character immediately following the quotation mark."
     }
-   ]
+   ],
+   "era": null
   }
  ],
  "not_planted": [

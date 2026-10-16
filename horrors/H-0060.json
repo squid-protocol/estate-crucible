@@ -16,6 +16,7 @@
    "quote": "If the continued line contains an alphanumeric or national literal without a closing quotation mark, all spaces at the end of the continued line (through column 72) are considered to be part of the literal. The continuation line must contain a hyphen in the indicator area, and the first nonblank character must be a quotation mark. The continuation of the literal begins with the character immediately following the quotation mark."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/RPTS/cobol/RPTHDR.cbl",

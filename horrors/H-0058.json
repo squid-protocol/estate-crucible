@@ -24,6 +24,7 @@
   }
  ],
  "lower_confidence": "Enterprise COBOL documents no TAB in source; the assertion follows GnuCOBOL (which expands it to a tab stop, -ftab-width) and is labelled realism, not an IBM rule.",
+ "era": null,
  "planted": [
   {
    "member": "apps/PCED/cobol/PCEDTAB.cbl",

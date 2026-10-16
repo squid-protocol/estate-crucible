@@ -17,6 +17,7 @@
    "quote": "In COBOL words (but not in the content of alphanumeric, DBCS, national, and UTF-8 literals), each lowercase single-byte alphabetic letter is considered to be equivalent to its corresponding single-byte uppercase alphabetic letter."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/PCED/cobol/PCEDLOW.cbl",

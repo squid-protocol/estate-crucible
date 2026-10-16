@@ -20,6 +20,7 @@
   }
  ],
  "lower_confidence": "Enterprise COBOL allows DBCS words of DBCS characters only; X項目 (mixed) and a Japanese PROGRAM-ID belong to the rehosted (opensourcecobol4j / GnuCOBOL) dialect, which GnuCOBOL -std=ibm compiles.",
+ "era": null,
  "planted": [
   {
    "member": "apps/KYUY/cobol/KYUYJP.cbl",

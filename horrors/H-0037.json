@@ -18,6 +18,7 @@
   }
  ],
  "lower_confidence": "The PL/I quote says where a comment may stand, not which bytes it may hold; that a compiler takes NULs inside a comment is the ledger's evidence (DSF's programs compile with them).",
+ "era": null,
  "planted": [
   {
    "member": "apps/NORD/pli/NULREST.pli",

@@ -24,6 +24,7 @@
    "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/GLED/cobol/GLPOST.cbl",

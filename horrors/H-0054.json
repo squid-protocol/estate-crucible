@@ -33,6 +33,8 @@
    "quote": "PROGRAM resources control information for a program that is stored in the program library and used to process a transaction, or part of a transaction."
   }
  ],
+ "era": 1,
+ "notes": "Era 1: the earliest era whose product has the construct (EXEC CICS command level (LINK/XCTL), era 1 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
  "planted": [
   {
    "member": "apps/DECO/csd/DECOGRP.csd",

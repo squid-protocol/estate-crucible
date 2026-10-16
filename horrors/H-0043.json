@@ -17,6 +17,7 @@
    "quote": "The DECIMAL-POINT IS COMMA clause exchanges the functions of the period and the comma in PICTURE character-strings and in numeric literals."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/DEUT/cobol/ZINSBER.cbl",

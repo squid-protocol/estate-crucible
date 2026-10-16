@@ -18,6 +18,7 @@
    "quote": "The character S in the PICTURE character string is counted in determining the size of the data item (in terms of standard data format characters)."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/BILL/cobol/BILLCALC.cbl",
