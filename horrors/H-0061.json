@@ -1,0 +1,200 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0061",
+ "title": "CICS BLL cells: LINKAGE S9(8) COMP cells that EXEC CICS ADDRESS and READ SET fill",
+ "category": "data-items",
+ "issue": 5118,
+ "shapes": [
+  "INVT INVTONL: a BLL-CELLS group (a FILLER self-cell and two S9(8) COMP cells) addressing the 01s after it; ADDRESS CWA(cell) and READ ... SET(cell) set the cells, and no PROCEDURE DIVISION USING names them"
+ ],
+ "asserts": "Each BLL cell is a 4-byte binary data item (S9(8) COMP), and BLL-CELLS is a 12-byte layout; the cells are not parameters, so the PROCEDURE DIVISION entry point has no params. The 01s after the cells (STK-AREA, CWA-AREA) are separate layouts addressed through the cells, not subordinate to them.",
+ "citations": [
+  {
+   "doc": "CICS/VS 1.x Application Programmer's Reference (Command Level), BLL cells -- NOT OPENED: find exact cite",
+   "section": "BLL cells (find exact cite)",
+   "url": "https://www.ibm.com/docs/en/cics-ts",
+   "quote": "find exact cite: no CICS/VS manual was opened for this horror, so no rule is quoted"
+  }
+ ],
+ "notes": "The citation is a placeholder: no CICS/VS 1.x APRM (Command Level) was opened, so nothing is quoted (AGENTS.md rule 4 is not met until the exact cite is found; the url is IBM's CICS documentation root, not a page). Also cross-reference the Enterprise COBOL Migration Guide (also not opened). The cell widths follow the member's own PICTUREs (S9(8) COMP = 4 bytes, the data-items size rule).",
+ "era": 1,
+ "release": "CICS/VS 1.x",
+ "planted": [
+  {
+   "member": "apps/INVT/cobol/INVTONL.cbl",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "expected": {
+    "data_items": [
+     {
+      "level": 1,
+      "name": "BLL-CELLS",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 18,
+      "horror": "H-0061"
+     },
+     {
+      "level": 2,
+      "name": "FILLER",
+      "pic": "S9(8)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 19,
+      "horror": "H-0061"
+     },
+     {
+      "level": 2,
+      "name": "STK-BLL",
+      "pic": "S9(8)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 20,
+      "horror": "H-0061"
+     },
+     {
+      "level": 2,
+      "name": "CWA-BLL",
+      "pic": "S9(8)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 21,
+      "horror": "H-0061"
+     },
+     {
+      "level": 1,
+      "name": "CWA-AREA",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 24,
+      "horror": "H-0061"
+     },
+     {
+      "level": 2,
+      "name": "CWA-PART-KEY",
+      "pic": "X(10)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 25,
+      "horror": "H-0061"
+     },
+     {
+      "level": 2,
+      "name": "FILLER",
+      "pic": "X(70)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 26,
+      "horror": "H-0061",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "layouts": [
+     {
+      "record": "BLL-CELLS",
+      "line": 18,
+      "bytes": 12,
+      "fields": [
+       {
+        "name": "FILLER",
+        "level": 2,
+        "pic": "S9(8)",
+        "usage": "COMP",
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/INVT/cobol/INVTONL.cbl"
+       },
+       {
+        "name": "STK-BLL",
+        "level": 2,
+        "pic": "S9(8)",
+        "usage": "COMP",
+        "offset": 4,
+        "bytes": 4,
+        "file": "apps/INVT/cobol/INVTONL.cbl"
+       },
+       {
+        "name": "CWA-BLL",
+        "level": 2,
+        "pic": "S9(8)",
+        "usage": "COMP",
+        "offset": 8,
+        "bytes": 4,
+        "file": "apps/INVT/cobol/INVTONL.cbl"
+       }
+      ],
+      "horror": "H-0061"
+     },
+     {
+      "record": "CWA-AREA",
+      "line": 24,
+      "bytes": 80,
+      "fields": [
+       {
+        "name": "CWA-PART-KEY",
+        "level": 2,
+        "pic": "X(10)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 10,
+        "file": "apps/INVT/cobol/INVTONL.cbl"
+       },
+       {
+        "name": "FILLER",
+        "level": 2,
+        "pic": "X(70)",
+        "usage": null,
+        "offset": 10,
+        "bytes": 70,
+        "file": "apps/INVT/cobol/INVTONL.cbl"
+       }
+      ],
+      "horror": "H-0061",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "cics_resources": [
+     {
+      "verb": "READ",
+      "kind": "FILE",
+      "name": "INVTMST",
+      "qualifier": null,
+      "record": "STK-AREA",
+      "access": "read",
+      "line": 32,
+      "horror": "H-0061"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

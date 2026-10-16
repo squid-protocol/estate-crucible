@@ -397,6 +397,336 @@
     }
    ]
   },
+  "apps/INVT/cobol/INVTONL.cbl": {
+   "app": "INVT",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 36,
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "era": 1,
+   "era_evidence": "command-level EXEC CICS with BLL cells (S9(8) COMP LINKAGE cells filled by ADDRESS and READ SET) and no RESP, HANDLE or ADDRESS OF: CICS/VS 1.x command level, #5117 era 1",
+   "programs": [
+    {
+     "program_id": "INVTONL",
+     "line": 7
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAINLINE",
+     "kind": "section",
+     "section": null,
+     "start_line": 28,
+     "end_line": 36,
+     "span_end": 36
+    }
+   ],
+   "copies": [
+    {
+     "member": "INVTREC",
+     "kind": "copy",
+     "line": 23,
+     "resolves_to": "apps/INVT/copybook/INVTREC.cpy"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-PART-KEY",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 16
+    },
+    {
+     "level": 1,
+     "name": "BLL-CELLS",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 18,
+     "horror": "H-0061"
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 19,
+     "horror": "H-0061"
+    },
+    {
+     "level": 2,
+     "name": "STK-BLL",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 20,
+     "horror": "H-0061"
+    },
+    {
+     "level": 2,
+     "name": "CWA-BLL",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 21,
+     "horror": "H-0061"
+    },
+    {
+     "level": 1,
+     "name": "STK-AREA",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 22,
+     "copy_members": [
+      "INVTREC"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "CWA-AREA",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 24,
+     "horror": "H-0061"
+    },
+    {
+     "level": 2,
+     "name": "CWA-PART-KEY",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 25,
+     "horror": "H-0061"
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": "X(70)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 26,
+     "horror": "H-0061",
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-PART-KEY",
+     "line": 16,
+     "bytes": 10,
+     "fields": [
+      {
+       "name": "WS-PART-KEY",
+       "level": 1,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/INVT/cobol/INVTONL.cbl"
+      }
+     ]
+    },
+    {
+     "record": "BLL-CELLS",
+     "line": 18,
+     "bytes": 12,
+     "fields": [
+      {
+       "name": "FILLER",
+       "level": 2,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/INVT/cobol/INVTONL.cbl"
+      },
+      {
+       "name": "STK-BLL",
+       "level": 2,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 4,
+       "bytes": 4,
+       "file": "apps/INVT/cobol/INVTONL.cbl"
+      },
+      {
+       "name": "CWA-BLL",
+       "level": 2,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 8,
+       "bytes": 4,
+       "file": "apps/INVT/cobol/INVTONL.cbl"
+      }
+     ],
+     "horror": "H-0061"
+    },
+    {
+     "record": "STK-AREA",
+     "line": 22,
+     "bytes": 80,
+     "fields": [
+      {
+       "name": "STK-PART-NO",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "STK-DESC",
+       "level": 5,
+       "pic": "X(30)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 30,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "STK-ON-HAND",
+       "level": 5,
+       "pic": "S9(7)",
+       "usage": "COMP-3",
+       "offset": 40,
+       "bytes": 4,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "STK-REORDER-PT",
+       "level": 5,
+       "pic": "S9(7)",
+       "usage": "COMP-3",
+       "offset": 44,
+       "bytes": 4,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "STK-BIN",
+       "level": 5,
+       "pic": "X(6)",
+       "usage": null,
+       "offset": 48,
+       "bytes": 6,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(26)",
+       "usage": null,
+       "offset": 54,
+       "bytes": 26,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      }
+     ]
+    },
+    {
+     "record": "CWA-AREA",
+     "line": 24,
+     "bytes": 80,
+     "fields": [
+      {
+       "name": "CWA-PART-KEY",
+       "level": 2,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/INVT/cobol/INVTONL.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 2,
+       "pic": "X(70)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 70,
+       "file": "apps/INVT/cobol/INVTONL.cbl"
+      }
+     ],
+     "horror": "H-0061",
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "cics_resources": [
+    {
+     "verb": "READ",
+     "kind": "FILE",
+     "name": "INVTMST",
+     "qualifier": null,
+     "record": "STK-AREA",
+     "access": "read",
+     "line": 32,
+     "horror": "H-0061"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "INVTONL",
+     "params": [],
+     "line": 27
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "CWA-PART-KEY",
+     "source_kind": "item",
+     "target": "WS-PART-KEY",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 31
+    }
+   ],
+   "horrors": [
+    "H-0061"
+   ]
+  },
   "apps/INVT/copybook/INVTREC.cpy": {
    "app": "INVT",
    "library": "copybook",
@@ -480,7 +810,7 @@
    "library": "jcl",
    "language": "jcl",
    "numbered": false,
-   "lines": 9,
+   "lines": 8,
    "compile": {
     "status": "not-cobol"
    },
@@ -490,7 +820,7 @@
      "form": "literal",
      "operand": "INVTBAT",
      "target": "INVTBAT",
-     "line": 5,
+     "line": 4,
      "resolves_to": "apps/INVT/cobol/INVTBAT.cbl"
     }
    ],
@@ -503,7 +833,7 @@
      "program": "INVTBAT",
      "exec_proc": null,
      "cond": null,
-     "line": 5
+     "line": 4
     }
    ],
    "jcl_dds": [
@@ -517,7 +847,7 @@
      "disp": "SHR",
      "disp_normal": null,
      "sysout": null,
-     "line": 6
+     "line": 5
     },
     {
      "job": "INVTDLY",
@@ -529,7 +859,7 @@
      "disp": "SHR",
      "disp_normal": null,
      "sysout": null,
-     "line": 7
+     "line": 6
     },
     {
      "job": "INVTDLY",
@@ -541,7 +871,7 @@
      "disp": null,
      "disp_normal": null,
      "sysout": "A",
-     "line": 8
+     "line": 7
     },
     {
      "job": "INVTDLY",
@@ -553,7 +883,7 @@
      "disp": null,
      "disp_normal": null,
      "sysout": "*",
-     "line": 9
+     "line": 8
     }
    ],
    "jcl_datasets": [
@@ -562,14 +892,14 @@
      "generation": null,
      "step": "STEP010",
      "dd": "STEPLIB",
-     "line": 6
+     "line": 5
     },
     {
      "dsn": "PROD.INVT.STOCK",
      "generation": null,
      "step": "STEP010",
      "dd": "STOCKIN",
-     "line": 7
+     "line": 6
     }
    ],
    "file_edges": [

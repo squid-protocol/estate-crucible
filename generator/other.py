@@ -43,7 +43,7 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
         _jcl_stmt(m, owner, "PROC", spec.get("symbolics", []) or [""])
     else:
         _jcl_stmt(m, owner, "JOB", [spec.get("accounting", "(ACCT)"), f"'{spec['title'][:20]}'", "CLASS=A",
-                                     "MSGCLASS=X", "NOTIFY=&SYSUID"])
+                                     "MSGCLASS=X", *(["NOTIFY=&SYSUID"] if spec.get("notify", True) else [])])
     for c in spec.get("comments", []):
         m.raw(f"//* {c}".rstrip())
     for ordinal, step in enumerate(spec["steps"], start=1):
