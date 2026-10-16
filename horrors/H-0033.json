@@ -16,8 +16,8 @@
    "quote": "If the UNTIL phrase with the EXIT reserved word is specified, execution proceeds exactly as if the same PERFORM statement were coded with condition-1 specified, except that condition-1 never evaluates as true."
   }
  ],
- "notes": "New in Enterprise COBOL 6.4 (Summary of changes: PERFORM ... UNTIL EXIT support); it does not compile on 6.3 or earlier. No gitgalaxy issue: an IBM dialect corner planted ahead of any defect. Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
- "era": 2,
+ "notes": "New in Enterprise COBOL 6.4 (Summary of changes: PERFORM ... UNTIL EXIT support); it does not compile on 6.3 or earlier. No gitgalaxy issue: an IBM dialect corner planted ahead of any defect. Era 4: PERFORM UNTIL EXIT leaves only by EXIT PERFORM, an ISO 2002 statement absent from COBOL 85 and COBOL II.",
+ "era": 4,
  "planted": [
   {
    "member": "apps/PAYR/cobol/PAYMAIN.cbl",

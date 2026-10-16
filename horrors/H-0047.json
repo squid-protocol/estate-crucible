@@ -17,7 +17,7 @@
    "quote": "An explicit scope terminator marks the end of certain PROCEDURE DIVISION statements."
   }
  ],
- "notes": "The ledger records D013 with no issue of its own (fixed by #3511). Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
+ "notes": "The ledger records D013 with no issue of its own (fixed by #3511). Era 2: an END- data name only collides with scope terminators, which arrive with COBOL 85.",
  "era": 2,
  "planted": [
   {

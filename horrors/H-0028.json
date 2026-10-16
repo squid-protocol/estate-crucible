@@ -18,7 +18,7 @@
    "quote": "in this mode of operation, COBOL statements may each be up to 255 characters long, with no specific requirements as to what should appear in which columns."
   }
  ],
- "notes": "Not IBM dialect: Enterprise COBOL for z/OS 6.4 has only the 72-column reference format, and IBM COBOL for Linux needs a conversion utility for free-format source. The member stands for code rehosted off z/OS and is compiled by GnuCOBOL (-std=ibm accepts the directive). Era 4: the earliest era whose product has the construct (free-format reference format (Enterprise COBOL 6.x), era 4). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
+ "notes": "Not IBM dialect: Enterprise COBOL for z/OS 6.4 has only the 72-column reference format, and IBM COBOL for Linux needs a conversion utility for free-format source. The member stands for code rehosted off z/OS and is compiled by GnuCOBOL (-std=ibm accepts the directive). Era 4 because the member stands for code rehosted off z/OS (post-2005 practice), not because IBM z/OS COBOL has free format.",
  "era": 4,
  "planted": [
   {

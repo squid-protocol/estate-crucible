@@ -17,8 +17,8 @@
    "quote": "function-name-1 Must reference an alphanumeric or national function."
   }
  ],
- "era": 3,
- "notes": "Era 3: the earliest era whose product has the construct (intrinsic FUNCTION results (COBOL for MVS / OS/390 and later), era 3). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
+ "era": 2,
+ "notes": "Era 2: intrinsic functions arrived with COBOL/370 (~1991), inside era 2's window in the #5118 table.",
  "planted": [
   {
    "member": "apps/NORD/cobol/KØBREG.cbl",

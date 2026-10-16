@@ -18,7 +18,7 @@
   }
  ],
  "era": 2,
- "notes": "Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
+ "notes": "Era 2: EXEC SQL INCLUDE is EXEC SQL, an era-2 tell in the #5118 table.",
  "planted": [
   {
    "member": "apps/CUST/cobol/CUSTDBIO.cbl",

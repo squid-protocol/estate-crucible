@@ -136,7 +136,7 @@
     }
    ],
    "era": 2,
-   "notes": "Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
+   "notes": "Era 2: EXEC SQL is an era-2 tell in the #5118 table (the CALL statement embeds in Db2 programs)."
   },
   {
    "id": "H-0006",
@@ -166,8 +166,8 @@
      "quote": "The EXIT statement ... provides a way to exit from a section, a paragraph, or an inline PERFORM statement."
     }
    ],
-   "notes": "PERFORM FOREVER (#4305's GnuCOBOL / Micro Focus form) is not planted: it is not Enterprise COBOL, and this estate is IBM dialect. Its IBM counterpart, PERFORM UNTIL EXIT, is a phase-1 candidate. Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
-   "era": 2
+   "notes": "PERFORM FOREVER (#4305's GnuCOBOL / Micro Focus form) is not planted: it is not Enterprise COBOL, and this estate is IBM dialect. Its IBM counterpart, PERFORM UNTIL EXIT, is a phase-1 candidate. Era 4: EXIT PERFORM (one of its shapes) is an ISO 2002 statement, absent from COBOL 85 and COBOL II, so it first appears in Enterprise COBOL; the inline PERFORM shapes alone would be era 2.",
+   "era": 4
   },
   {
    "id": "H-0007",
@@ -193,7 +193,7 @@
      "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
     }
    ],
-   "notes": "IDMS is a Broadcom product, so its rule is cited from Broadcom's documentation. The member is IBM-only (not compiled): GnuCOBOL has no IDMS precompiler. The SCHEMA SECTION shape is reported on #4306. Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
+   "notes": "IDMS is a Broadcom product, so its rule is cited from Broadcom's documentation. The member is IBM-only (not compiled): GnuCOBOL has no IDMS precompiler. The SCHEMA SECTION shape is reported on #4306. Era 2 from the planted member, not from IDMS: LNIDMS01 uses END-IF (COBOL 85). The IDMS-CONTROL and SCHEMA sections themselves date from IDMS's 1970s-80s releases and are not dated here; no IDMS release is cited.",
    "era": 2
   },
   {
@@ -382,7 +382,7 @@
     }
    ],
    "era": 2,
-   "notes": "Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
+   "notes": "Era 2: DCLGEN output feeds EXEC SQL, an era-2 tell in the #5118 table."
   },
   {
    "id": "H-0016",
@@ -437,7 +437,7 @@
     }
    ],
    "era": 2,
-   "notes": "Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
+   "notes": "Era 2: EXEC SQL INCLUDE is EXEC SQL, an era-2 tell in the #5118 table."
   },
   {
    "id": "H-0018",
@@ -612,7 +612,7 @@
     }
    ],
    "era": 2,
-   "notes": "Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
+   "notes": "Era 2: the CSD (RDO) group definitions are an era-2 tell in the #5118 table."
   },
   {
    "id": "H-0025",
@@ -654,7 +654,7 @@
     }
    ],
    "era": 2,
-   "notes": "Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
+   "notes": "Era 2: an END-xxx paragraph name only collides with scope terminators, which arrive with COBOL 85."
   },
   {
    "id": "H-0027",
@@ -695,7 +695,7 @@
      "quote": "in this mode of operation, COBOL statements may each be up to 255 characters long, with no specific requirements as to what should appear in which columns."
     }
    ],
-   "notes": "Not IBM dialect: Enterprise COBOL for z/OS 6.4 has only the 72-column reference format, and IBM COBOL for Linux needs a conversion utility for free-format source. The member stands for code rehosted off z/OS and is compiled by GnuCOBOL (-std=ibm accepts the directive). Era 4: the earliest era whose product has the construct (free-format reference format (Enterprise COBOL 6.x), era 4). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
+   "notes": "Not IBM dialect: Enterprise COBOL for z/OS 6.4 has only the 72-column reference format, and IBM COBOL for Linux needs a conversion utility for free-format source. The member stands for code rehosted off z/OS and is compiled by GnuCOBOL (-std=ibm accepts the directive). Era 4 because the member stands for code rehosted off z/OS (post-2005 practice), not because IBM z/OS COBOL has free format.",
    "era": 4
   },
   {
@@ -764,7 +764,7 @@
     }
    ],
    "era": 2,
-   "notes": "Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
+   "notes": "Era 2: nested programs and END PROGRAM markers are COBOL 85."
   },
   {
    "id": "H-0032",
@@ -809,8 +809,8 @@
      "quote": "If the UNTIL phrase with the EXIT reserved word is specified, execution proceeds exactly as if the same PERFORM statement were coded with condition-1 specified, except that condition-1 never evaluates as true."
     }
    ],
-   "notes": "New in Enterprise COBOL 6.4 (Summary of changes: PERFORM ... UNTIL EXIT support); it does not compile on 6.3 or earlier. No gitgalaxy issue: an IBM dialect corner planted ahead of any defect. Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
-   "era": 2
+   "notes": "New in Enterprise COBOL 6.4 (Summary of changes: PERFORM ... UNTIL EXIT support); it does not compile on 6.3 or earlier. No gitgalaxy issue: an IBM dialect corner planted ahead of any defect. Era 4: PERFORM UNTIL EXIT leaves only by EXIT PERFORM, an ISO 2002 statement absent from COBOL 85 and COBOL II.",
+   "era": 4
   },
   {
    "id": "H-0034",
@@ -1179,7 +1179,7 @@
      "quote": "An explicit scope terminator marks the end of certain PROCEDURE DIVISION statements."
     }
    ],
-   "notes": "The ledger records D013 with no issue of its own (fixed by #3511). Era 2: the earliest era whose product has the construct (COBOL 85 / COBOL II era or later (inline PERFORM, scope terminators, nested programs) or EXEC SQL / CSD (RDO), era 2 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set.",
+   "notes": "The ledger records D013 with no issue of its own (fixed by #3511). Era 2: an END- data name only collides with scope terminators, which arrive with COBOL 85.",
    "era": 2
   },
   {
@@ -1200,8 +1200,8 @@
      "quote": "function-name-1 Must reference an alphanumeric or national function."
     }
    ],
-   "era": 3,
-   "notes": "Era 3: the earliest era whose product has the construct (intrinsic FUNCTION results (COBOL for MVS / OS/390 and later), era 3). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
+   "era": 2,
+   "notes": "Era 2: intrinsic functions arrived with COBOL/370 (~1991), inside era 2's window in the #5118 table."
   },
   {
    "id": "H-0049",
@@ -1368,8 +1368,8 @@
      "quote": "PROGRAM resources control information for a program that is stored in the program library and used to process a transaction, or part of a transaction."
     }
    ],
-   "era": 1,
-   "notes": "Era 1: the earliest era whose product has the construct (EXEC CICS command level (LINK/XCTL), era 1 in the #5118 table). Cited to the 6.x manuals only; no release-specific manual is cited, so no release is set."
+   "era": 2,
+   "notes": "Era 2: one of its shapes is a CSD PROGRAM/TRANSACTION definition (RDO), an era-2 tell; the LINK/XCTL and JCL shapes alone would be era 1."
   },
   {
    "id": "H-0055",
