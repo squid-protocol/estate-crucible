@@ -25,6 +25,7 @@
   }
  ],
  "notes": "The scanner is told each member's code page by path (the scorer passes --source-encoding with the manifest's code_pages). Nothing in the bytes says which EBCDIC page they are.",
+ "era": null,
  "planted": [
   {
    "member": "apps/NORD/cobol/KØBREG.cbl",

@@ -17,6 +17,8 @@
    "quote": "The INCLUDE statement inserts application code, including declarations and statements, into a source program."
   }
  ],
+ "era": 2,
+ "notes": "Era 2: EXEC SQL INCLUDE is EXEC SQL, an era-2 tell in the #5118 table.",
  "planted": [
   {
    "member": "apps/CUST/cobol/CUSTDBIO.cbl",

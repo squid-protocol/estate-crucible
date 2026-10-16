@@ -23,6 +23,7 @@
   }
  ],
  "lower_confidence": "That CCSID 420 host text is held in visual order is evidenced by IBM's emulator documentation, not by the CICS BMS reference.",
+ "era": null,
  "planted": [
   {
    "member": "apps/GULF/bms/GULFMS.bms",

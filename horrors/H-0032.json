@@ -23,6 +23,7 @@
    "quote": "Any sentence, entry, clause, or phrase that requires more than one line can be continued in Area B of the next line that is neither a comment line nor a blank line."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/GLED/cobol/GLPOST.cbl",

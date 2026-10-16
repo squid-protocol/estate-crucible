@@ -32,6 +32,7 @@
    "quote": "The option to specify a literal as the program-name to be externalized was added for names that are not valid COBOL words or need to be case-sensitive."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/NORD/cobol/KØBREG.cbl",

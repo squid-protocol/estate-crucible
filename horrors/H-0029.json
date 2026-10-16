@@ -17,6 +17,7 @@
    "quote": "A user-defined word or alphanumeric literal, but not a figurative constant, that identifies your program."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/PAYR/cobol/PAYMAIN.cbl",

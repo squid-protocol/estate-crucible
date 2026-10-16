@@ -19,6 +19,7 @@
  ],
  "lower_confidence": "IBM's syntax diagram shows both periods as required. That Enterprise COBOL compiles the period-less forms with a diagnostic rests on #4307's evidence (cobol-programming-course CBLDB22 compiles in its own JCL), not on an IBM sentence. The fact the key asserts, the program-name, does not depend on it. Both members are IBM-only here; the check compiles a variant with the periods restored.",
  "notes": "LNRATE has no AUTHOR paragraph, as #4307's CBLDB22 has none: when a period-terminated AUTHOR. line follows the period-less PROGRAM-ID, the engine records the name, which would hide shape 1.",
+ "era": null,
  "planted": [
   {
    "member": "apps/LOAN/cobol/LNCALC.cbl",

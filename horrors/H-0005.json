@@ -17,6 +17,8 @@
    "quote": "The CALL statement invokes a stored procedure. ... This statement can be embedded in an application program."
   }
  ],
+ "era": 2,
+ "notes": "Era 2: EXEC SQL is an era-2 tell in the #5118 table (the CALL statement embeds in Db2 programs).",
  "planted": [
   {
    "member": "apps/CUST/cobol/CUSTDBIO.cbl",

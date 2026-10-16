@@ -17,6 +17,7 @@
    "quote": "A COPY statement can appear in the source text anywhere a character string or a separator can appear."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/INVN/cobol/INVUPD.cbl",

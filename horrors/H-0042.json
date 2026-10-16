@@ -45,6 +45,7 @@
   }
  ],
  "notes": "#3988's 'mismatched / nested SO-SI' trap lives in comment lines: IBM forbids it in literals, and a comment may hold any characters.",
+ "era": null,
  "planted": [
   {
    "member": "apps/KYUY/cobol/KYUYO01.cbl",

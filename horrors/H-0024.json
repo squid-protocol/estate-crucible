@@ -24,6 +24,8 @@
    "quote": "LINK passes control from an application program at one logical level to an application program at the next lower logical level."
   }
  ],
+ "era": 2,
+ "notes": "Era 2: the CSD (RDO) group definitions are an era-2 tell in the #5118 table.",
  "planted": [
   {
    "member": "apps/CUST/cobol/CUSTINQ.cbl",

@@ -26,6 +26,7 @@
   }
  ],
  "lower_confidence": "Not IBM: Enterprise COBOL separates words with single-byte spaces. The member stands for opensourcecobol4j code; the dialect's rule is evidenced by its own test suite (via #3956), not by a language reference.",
+ "era": null,
  "planted": [
   {
    "member": "apps/KYUY/cobol/KYUYJP.cbl",

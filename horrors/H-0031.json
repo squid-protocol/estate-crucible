@@ -24,6 +24,8 @@
    "quote": "An end program marker separates each program in the sequence of programs."
   }
  ],
+ "era": 2,
+ "notes": "Era 2: nested programs and END PROGRAM markers are COBOL 85.",
  "planted": [
   {
    "member": "apps/PAYR/cobol/PAYMAIN.cbl",

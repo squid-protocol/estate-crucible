@@ -17,6 +17,8 @@
    "quote": "The declarations generator (DCLGEN) produces an SQL DECLARE TABLE statement and a COBOL, PL/I, or C data declaration for a table or a view named in the catalog."
   }
  ],
+ "era": 2,
+ "notes": "Era 2: DCLGEN output feeds EXEC SQL, an era-2 tell in the #5118 table.",
  "planted": [
   {
    "member": "apps/CUST/dclgen/DCLCUST.dcl",

@@ -17,6 +17,7 @@
    "quote": "When literal is not a figurative constant, ALL literal represents one or more occurrences of the string of characters that compose the literal."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/NORD/cobol/KØBREG.cbl",

@@ -17,6 +17,8 @@
    "quote": "Most user-defined words (all except section-names, paragraph-names, priority-numbers, and level-numbers) must contain at least one alphabetic character."
   }
  ],
+ "era": 2,
+ "notes": "Era 2: an END-xxx paragraph name only collides with scope terminators, which arrive with COBOL 85.",
  "planted": [
   {
    "member": "apps/GLED/cobol/GLPOST.cbl",

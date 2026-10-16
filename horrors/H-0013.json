@@ -18,6 +18,7 @@
   }
  ],
  "notes": "IBM's 6.4 Language Reference defines a 72-character line and does not describe cols 73-80 for source; the compiler ignores them.",
+ "era": null,
  "planted": [
   {
    "member": "apps/GLED/cobol/GLPOST.cbl",

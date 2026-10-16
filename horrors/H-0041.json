@@ -25,6 +25,7 @@
   }
  ],
  "lower_confidence": "U+2212 (MINUS SIGN) is not the DBCS hyphen IBM means (U+FF0D); it is planted because opensourcecobol4j estates carry it (#3991).",
+ "era": null,
  "planted": [
   {
    "member": "apps/KYUY/cobol/KYUYJP.cbl",

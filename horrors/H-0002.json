@@ -38,6 +38,7 @@
   }
  ],
  "notes": "In a numbered member the engine's line-leading terminator test does not see EXIT behind the sequence number, so the numbered plant can pass for the wrong reason; the unnumbered plants exercise the cut.",
+ "era": null,
  "planted": [
   {
    "member": "apps/ACCT/cobol/ACCTRPT.cbl",

@@ -31,6 +31,7 @@
    "quote": "literal-1, literal-2 Must be alphanumeric literals. literal-1 identifies the copy text. literal-2 identifies where the copy text exists."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/PAYR/cobol/PAYMAIN.cbl",

@@ -24,6 +24,7 @@
   }
  ],
  "lower_confidence": "No IBM sentence states outright that a paragraph-name's separator period may be on the next line; it follows from the separator and continuation rules (an end of line is a space; a space may precede a separator period). GnuCOBOL -std=ibm accepts it.",
+ "era": null,
  "planted": [
   {
    "member": "apps/GLED/cobol/GLPOST.cbl",

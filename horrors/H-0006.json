@@ -27,7 +27,8 @@
    "quote": "The EXIT statement ... provides a way to exit from a section, a paragraph, or an inline PERFORM statement."
   }
  ],
- "notes": "PERFORM FOREVER (#4305's GnuCOBOL / Micro Focus form) is not planted: it is not Enterprise COBOL, and this estate is IBM dialect. Its IBM counterpart, PERFORM UNTIL EXIT, is a phase-1 candidate.",
+ "notes": "PERFORM FOREVER (#4305's GnuCOBOL / Micro Focus form) is not planted: it is not Enterprise COBOL, and this estate is IBM dialect. Its IBM counterpart, PERFORM UNTIL EXIT, is a phase-1 candidate. Era 4: EXIT PERFORM (one of its shapes) is an ISO 2002 statement, absent from COBOL 85 and COBOL II, so it first appears in Enterprise COBOL; the inline PERFORM shapes alone would be era 2.",
+ "era": 4,
  "planted": [
   {
    "member": "apps/ACCT/cobol/ACCTRPT.cbl",

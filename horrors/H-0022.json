@@ -24,6 +24,7 @@
    "quote": "Most user-defined words (all except section-names, paragraph-names, priority-numbers, and level-numbers) must contain at least one alphabetic character."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/PAYR/cobol/PAYMAIN.cbl",

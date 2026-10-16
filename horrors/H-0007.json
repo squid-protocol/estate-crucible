@@ -23,7 +23,8 @@
    "quote": "A paragraph ends immediately before the next paragraph-name or section header, or at the end of the PROCEDURE DIVISION."
   }
  ],
- "notes": "IDMS is a Broadcom product, so its rule is cited from Broadcom's documentation. The member is IBM-only (not compiled): GnuCOBOL has no IDMS precompiler. The SCHEMA SECTION shape is reported on #4306.",
+ "notes": "IDMS is a Broadcom product, so its rule is cited from Broadcom's documentation. The member is IBM-only (not compiled): GnuCOBOL has no IDMS precompiler. The SCHEMA SECTION shape is reported on #4306. Era 2 from the planted member, not from IDMS: LNIDMS01 uses END-IF (COBOL 85). The IDMS-CONTROL and SCHEMA sections themselves date from IDMS's 1970s-80s releases and are not dated here; no IDMS release is cited.",
+ "era": 2,
  "planted": [
   {
    "member": "apps/LOAN/cobol/LNIDMS01.cbl",

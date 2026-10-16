@@ -33,6 +33,7 @@
   }
  ],
  "notes": "The sequence number area is outside the program text, so a statement may continue onto the next line at any separator. The phantoms name the exact sequence number the engine would read (the next line's cols 1-6).",
+ "era": null,
  "planted": [
   {
    "member": "apps/ACCT/cobol/ACCTUPD.cbl",

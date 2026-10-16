@@ -17,7 +17,8 @@
    "quote": "An explicit scope terminator marks the end of certain PROCEDURE DIVISION statements."
   }
  ],
- "notes": "The ledger records D013 with no issue of its own (fixed by #3511).",
+ "notes": "The ledger records D013 with no issue of its own (fixed by #3511). Era 2: an END- data name only collides with scope terminators, which arrive with COBOL 85.",
+ "era": 2,
  "planted": [
   {
    "member": "apps/NORD/cobol/KØBREG.cbl",

@@ -24,6 +24,7 @@
    "quote": "Reference format consists of the following areas in a 72-character line."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/LEGL/cobol/GLRCON.cbl",

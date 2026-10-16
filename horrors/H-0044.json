@@ -17,6 +17,7 @@
   }
  ],
  "notes": "#3988 trap 4. No scanner channel records a collating sequence: this horror's facts are structural, and the trap is for translators (a Java port comparing as Unicode). It is planted so the estate carries it.",
+ "era": null,
  "planted": [
   {
    "member": "apps/NORD/cobol/KØBREG.cbl",

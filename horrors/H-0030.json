@@ -17,6 +17,7 @@
    "quote": "If data-name-1 or the FILLER clause is omitted, the data item being described is treated as though FILLER had been specified."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/BILL/cobol/BILLCALC.cbl",

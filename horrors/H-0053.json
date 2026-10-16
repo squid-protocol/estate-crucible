@@ -24,6 +24,7 @@
    "quote": "The effect of processing a COPY statement is that the library text associated with text-name is copied into the compilation unit, logically replacing the entire COPY statement, beginning with the word COPY and ending with the period, inclusive."
   }
  ],
+ "era": null,
  "planted": [
   {
    "member": "apps/ORDR/cobol/ORDMAIN.cbl",
