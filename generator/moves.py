@@ -26,7 +26,7 @@ from typing import Any, Optional
 FIGURATIVE = {"ZERO", "ZEROS", "ZEROES", "SPACE", "SPACES", "LOW-VALUE", "LOW-VALUES", "HIGH-VALUE",
               "HIGH-VALUES", "QUOTE", "QUOTES", "NULL", "NULLS"}
 NOT_MOVES = {"DISPLAY", "SET", "OPEN", "CLOSE", "GOBACK", "STOP", "EXIT", "CONTINUE", "BIND", "READY", "FINISH",
-             "OBTAIN", "DC", "PERFORM", "CALL", "IF", "ELSE", "END-IF", "READ", "PUT", "RETURN;", "RETURN", "CHECK"}
+             "OBTAIN", "DC", "PERFORM", "CALL", "IF", "ELSE", "END-IF", "READ", "PUT", "RETURN;", "RETURN", "CHECK", "SERVICE"}
 MOVING = {"MOVE", "ADD", "SUBTRACT", "COMPUTE", "INITIALIZE", "WRITE", "REWRITE", "MULTIPLY", "DIVIDE", "STRING",
           "UNSTRING", "ACCEPT"}
 

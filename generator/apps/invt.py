@@ -3,12 +3,13 @@ program (sequence numbers in cols 1-6, the deck name in 73-80, upper case throug
 SECTIONs, period-terminated sentences, with no COBOL-85 construct. One program, one
 record copybook, one job.
 
-Planted: H-0061 (CICS BLL cells in INVTONL, gitgalaxy#5118)."""
+Planted: H-0061 (CICS BLL cells in INVTONL), H-0062 (SERVICE RELOAD in INVTRLD), gitgalaxy#5118."""
 
 from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, section
 
 H61 = "H-0061"
+H62 = "H-0062"
 
 COPYBOOKS = [
     {"member": "INVTREC", "numbered": True, "header": [" INVTREC  - INVENTORY STOCK RECORD (80 BYTES)"],
@@ -113,6 +114,56 @@ INVTONL = {
     ],
 }
 
+INVTRLD = {
+    "member": "INVTRLD",
+    "era": 1,
+    "era_evidence": "SERVICE RELOAD after each BLL cell change, an OS/VS COBOL compiler control statement that later compilers ignore (CICS Application Programming Guide, Appendix B): OS/VS COBOL, #5117 era 1",
+    "program_id": "INVTRLD",
+    "numbered": True,
+    "ident": "INVTRLD",
+    "banner": [
+        "*****************************************************************",
+        "*   INVTRLD  -  ONLINE STOCK BROWSE, SERVICE RELOAD AFTER BLL   *",
+        "*   SYSTEM  :  INVT / INVENTORY CONTROL      DATE: 11/08/83     *",
+        "*****************************************************************",
+        "/",
+    ],
+    "author": "D KOWALCZYK",
+    "installation": "MATERIALS CONTROL",
+    "date_written": "11/08/83",
+    "remarks": ["INVTRLD - STOCK RECORD BY BLL CELL, RELOADED."],
+    "compile": "ibm-only",
+    "compile_reason": "SERVICE RELOAD is an OS/VS COBOL compiler control statement; GnuCOBOL -std=ibm rejects it",
+    "compile_check": ("service-reload", "every SERVICE RELOAD statement becomes CONTINUE (padded to the same width) for the check; the rest compiles as written"),
+    "phantoms": [
+        {"channel": "data_moves", "verb": "SERVICE", "target": t, "horror": H62,
+         "why": "SERVICE RELOAD is a compiler control statement that moves no data; its operand is a LINKAGE area, not a move target"}
+        for t in ("PARMLIST", "STK-AREA")],
+    "ws": [
+        I(1, "WS-PART-KEY", "X(10)"),
+        I(1, "WS-BUMP", "S9(8)", "COMP", value="4096"),
+    ],
+    "linkage": [
+        I(1, "PARMLIST", kids=[I(2, "PARM-BLL", "S9(8)", "COMP")]),
+        I(1, "BLL-CELLS", kids=[
+            I(2, "FILLER", "S9(8)", "COMP"),
+            I(2, "STK-BLL", "S9(8)", "COMP"),
+        ]),
+        I(1, "STK-AREA", copy=["INVTREC"]),
+    ],
+    "units": [
+        section("0000-MAINLINE",
+                raw("SERVICE RELOAD PARMLIST", horror=H62),
+                raw("MOVE SPACES TO WS-PART-KEY"),
+                cics("READ DATASET('INVTMST') SET(STK-BLL)", "RIDFLD(WS-PART-KEY)",
+                     resource={"verb": "READ", "kind": "FILE", "name": "INVTMST", "record": "STK-AREA",
+                               "access": "read"}),
+                raw("ADD WS-BUMP TO STK-BLL"),
+                raw("SERVICE RELOAD STK-AREA", horror=H62),
+                cics("RETURN")),
+    ],
+}
+
 JOBS = [
     {
         "name": "INVTDLY",
@@ -138,6 +189,6 @@ APP = {
     "title": "Inventory stock status (1983 batch deck)",
     "style": "1980s card deck: numbered cols 1-6, deck name in cols 73-80, upper case, SECTIONs, period-terminated IF",
     "copybooks": COPYBOOKS,
-    "programs": [INVTBAT, INVTONL],
+    "programs": [INVTBAT, INVTONL, INVTRLD],
     "jcl": JOBS,
 }

@@ -727,6 +727,344 @@
     "H-0061"
    ]
   },
+  "apps/INVT/cobol/INVTRLD.cbl": {
+   "app": "INVT",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 36,
+   "compile": {
+    "status": "ibm-only",
+    "reason": "SERVICE RELOAD is an OS/VS COBOL compiler control statement; GnuCOBOL -std=ibm rejects it",
+    "check_variant": "service-reload",
+    "check_note": "every SERVICE RELOAD statement becomes CONTINUE (padded to the same width) for the check; the rest compiles as written"
+   },
+   "era": 1,
+   "era_evidence": "SERVICE RELOAD after each BLL cell change, an OS/VS COBOL compiler control statement that later compilers ignore (CICS Application Programming Guide, Appendix B): OS/VS COBOL, #5117 era 1",
+   "programs": [
+    {
+     "program_id": "INVTRLD",
+     "line": 7
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAINLINE",
+     "kind": "section",
+     "section": null,
+     "start_line": 27,
+     "end_line": 36,
+     "span_end": 36
+    }
+   ],
+   "copies": [
+    {
+     "member": "INVTREC",
+     "kind": "copy",
+     "line": 25,
+     "resolves_to": "apps/INVT/copybook/INVTREC.cpy"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-PART-KEY",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 16
+    },
+    {
+     "level": 1,
+     "name": "WS-BUMP",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "4096",
+     "section": "WORKING-STORAGE",
+     "line": 17
+    },
+    {
+     "level": 1,
+     "name": "PARMLIST",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 19
+    },
+    {
+     "level": 2,
+     "name": "PARM-BLL",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 20
+    },
+    {
+     "level": 1,
+     "name": "BLL-CELLS",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 21
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 22
+    },
+    {
+     "level": 2,
+     "name": "STK-BLL",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 23
+    },
+    {
+     "level": 1,
+     "name": "STK-AREA",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 24,
+     "copy_members": [
+      "INVTREC"
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-PART-KEY",
+     "line": 16,
+     "bytes": 10,
+     "fields": [
+      {
+       "name": "WS-PART-KEY",
+       "level": 1,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/INVT/cobol/INVTRLD.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BUMP",
+     "line": 17,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-BUMP",
+       "level": 1,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/INVT/cobol/INVTRLD.cbl"
+      }
+     ]
+    },
+    {
+     "record": "PARMLIST",
+     "line": 19,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "PARM-BLL",
+       "level": 2,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/INVT/cobol/INVTRLD.cbl"
+      }
+     ]
+    },
+    {
+     "record": "BLL-CELLS",
+     "line": 21,
+     "bytes": 8,
+     "fields": [
+      {
+       "name": "FILLER",
+       "level": 2,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/INVT/cobol/INVTRLD.cbl"
+      },
+      {
+       "name": "STK-BLL",
+       "level": 2,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 4,
+       "bytes": 4,
+       "file": "apps/INVT/cobol/INVTRLD.cbl"
+      }
+     ]
+    },
+    {
+     "record": "STK-AREA",
+     "line": 24,
+     "bytes": 80,
+     "fields": [
+      {
+       "name": "STK-PART-NO",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "STK-DESC",
+       "level": 5,
+       "pic": "X(30)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 30,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "STK-ON-HAND",
+       "level": 5,
+       "pic": "S9(7)",
+       "usage": "COMP-3",
+       "offset": 40,
+       "bytes": 4,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "STK-REORDER-PT",
+       "level": 5,
+       "pic": "S9(7)",
+       "usage": "COMP-3",
+       "offset": 44,
+       "bytes": 4,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "STK-BIN",
+       "level": 5,
+       "pic": "X(6)",
+       "usage": null,
+       "offset": 48,
+       "bytes": 6,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(26)",
+       "usage": null,
+       "offset": 54,
+       "bytes": 26,
+       "file": "apps/INVT/copybook/INVTREC.cpy"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "cics_resources": [
+    {
+     "verb": "READ",
+     "kind": "FILE",
+     "name": "INVTMST",
+     "qualifier": null,
+     "record": "STK-AREA",
+     "access": "read",
+     "line": 30
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "INVTRLD",
+     "params": [],
+     "line": 26
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "SPACES",
+     "source_kind": "figurative",
+     "target": "WS-PART-KEY",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 29
+    },
+    {
+     "verb": "ADD",
+     "source": "WS-BUMP",
+     "source_kind": "item",
+     "target": "STK-BLL",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 33
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "data_moves",
+     "verb": "SERVICE",
+     "target": "PARMLIST",
+     "why": "SERVICE RELOAD is a compiler control statement that moves no data; its operand is a LINKAGE area, not a move target",
+     "horror": "H-0062"
+    },
+    {
+     "channel": "data_moves",
+     "verb": "SERVICE",
+     "target": "STK-AREA",
+     "why": "SERVICE RELOAD is a compiler control statement that moves no data; its operand is a LINKAGE area, not a move target",
+     "horror": "H-0062"
+    }
+   ],
+   "horrors": [
+    "H-0062"
+   ]
+  },
   "apps/INVT/copybook/INVTREC.cpy": {
    "app": "INVT",
    "library": "copybook",

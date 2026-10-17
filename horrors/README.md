@@ -70,6 +70,7 @@ era-neutral syntax horror; blank is untagged.
 | H-0059 | any | realism | reference-format | Source keyed in lower case: divisions, paragraph names, data names and PICTURE strings | `apps/PCED/cobol/PCEDLOW.cbl` |
 | H-0060 | any | [#4391](https://github.com/squid-protocol/gitgalaxy/issues/4391) | data-items | A nonnumeric VALUE literal continued onto the next line (column 72, then - in column 7) | `apps/RPTS/cobol/RPTHDR.cbl` |
 | H-0061 | 1 | [#5118](https://github.com/squid-protocol/gitgalaxy/issues/5118) | data-items | CICS BLL cells: LINKAGE S9(8) COMP cells that EXEC CICS ADDRESS and READ SET fill | `apps/INVT/cobol/INVTONL.cbl` |
+| H-0062 | 1 | [#5118](https://github.com/squid-protocol/gitgalaxy/issues/5118) | data-moves | SERVICE RELOAD: the OS/VS COBOL compiler-control statement that re-establishes LINKAGE addressability after a BLL cell changes | `apps/INVT/cobol/INVTRLD.cbl` |
 
 ## Field-testing defects not planted
 
