@@ -152,7 +152,7 @@
    "title": "Inventory stock status (1983 batch deck)",
    "style": "1980s card deck: numbered cols 1-6, deck name in cols 73-80, upper case, SECTIONs, period-terminated IF",
    "era": 1,
-   "era_evidence": "INVTBAT, the app's only program, has no construct later than OS/VS COBOL; a 1983 card-deck batch system"
+   "era_evidence": "INVTBAT and INVTONL have no construct later than OS/VS COBOL and CICS/VS command level; a 1983 card-deck system"
   }
  ],
  "channels": [
@@ -181,13 +181,13 @@
   "dead"
  ],
  "fact_totals": {
-  "programs": 46,
-  "units": 133,
+  "programs": 47,
+  "units": 134,
   "edges": 89,
   "call_sites": 46,
-  "copies": 61,
-  "data_items": 462,
-  "layouts": 150,
+  "copies": 62,
+  "data_items": 471,
+  "layouts": 154,
   "sql_statements": 5,
   "sql_tables": 2,
   "jcl_steps": 23,
@@ -195,12 +195,12 @@
   "screen_fields": 16,
   "csd_resources": 18,
   "transactions": 6,
-  "cics_resources": 7,
+  "cics_resources": 8,
   "jcl_datasets": 35,
   "file_control": 11,
-  "entry_points": 46,
+  "entry_points": 47,
   "file_edges": 25,
-  "data_moves": 131,
+  "data_moves": 132,
   "copy_collisions": 9,
   "gaps": 17,
   "dead": 11,
@@ -497,7 +497,8 @@
   "H-0057",
   "H-0058",
   "H-0059",
-  "H-0060"
+  "H-0060",
+  "H-0061"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -1199,6 +1200,24 @@
    "era": 1,
    "era_evidence": "SECTIONs and period-terminated sentences only; no END-IF, END-READ or inline PERFORM, so OS/VS COBOL (#5117 era 1)"
   },
+  "apps/INVT/cobol/INVTONL.cbl": {
+   "app": "INVT",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "6062e46a9074150015c5b18f2e7e8b3e3f85ec744fbc12c337c8c00cb88f1f80",
+   "bytes": 2880,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/INVT.json",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "era": 1,
+   "era_evidence": "command-level EXEC CICS with BLL cells (S9(8) COMP LINKAGE cells filled by ADDRESS and READ SET) and no RESP, HANDLE or ADDRESS OF: CICS/VS 1.x command level, #5117 era 1",
+   "horrors": [
+    "H-0061"
+   ]
+  },
   "apps/INVT/copybook/INVTREC.cpy": {
    "app": "INVT",
    "library": "copybook",
@@ -1216,8 +1235,8 @@
    "app": "INVT",
    "library": "jcl",
    "language": "jcl",
-   "sha256": "659e38e84cb1880be72d047bf9e42cba84c2c9adf29745933674a5276cacaa8d",
-   "bytes": 311,
+   "sha256": "7de1966df7f897c5570cd0a27fc3ae3e2a8bf5dfd924e04264c21a003e9654f0",
+   "bytes": 280,
    "encoding": "utf-8",
    "storage": "lf",
    "key": "key/apps/INVT.json",

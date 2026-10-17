@@ -1519,6 +1519,32 @@
     }
    ],
    "era": null
+  },
+  {
+   "id": "H-0061",
+   "title": "CICS BLL cells: LINKAGE S9(8) COMP cells that EXEC CICS ADDRESS and READ SET fill",
+   "category": "data-items",
+   "issue": 5118,
+   "shapes": [
+    "INVT INVTONL: a BLL-CELLS group (a FILLER self-cell and two S9(8) COMP cells) addressing the 01s after it; ADDRESS CWA(cell) and READ ... SET(cell) set the cells, and no PROCEDURE DIVISION USING names them"
+   ],
+   "asserts": "Each BLL cell is a 4-byte binary data item (S9(8) COMP), and BLL-CELLS is a 12-byte layout; the cells are not parameters, so the PROCEDURE DIVISION entry point has no params. The 01s after the cells (STK-AREA, CWA-AREA) are separate layouts addressed through the cells, not subordinate to them.",
+   "citations": [
+    {
+     "doc": "IBM CICS Transaction Server for OS/390 Release 3, CICS Application Programming Guide, SC33-1687-02 (March 1999), Appendix B. OS/VS COBOL: the OS/VS COBOL BLL mechanism that INVTONL is written in",
+     "section": "Appendix B. OS/VS COBOL, 'Base locator for linkage' (printed pp. 569-570, Figure 116)",
+     "url": "https://publibz.boulder.ibm.com/epubs/pdf/dfhp300.pdf",
+     "quote": "The base locator for linkage (BLL) mechanism is used to address storage outside the working-storage section of an application program. It operates by addressing the storage as if it were a parameter to the program. The storage must be defined by means of an 01-level data definition in the linkage section of the program. In the following example, the first 02-level data name (that is, FILLER) is set up by CICS to provide addressability to the other fields in the parameter list. The other data names are known as BLL cells, and address the remaining parameters of the program. There is a one-to-one correspondence between the 02-level data names of the parameter list definition and the 01-level data definitions in the linkage section: If a BLL cell is named in the SET option of a CICS command, subsequent reference to the corresponding data definition name address the storage supplied by CICS as a result of processing the command."
+    },
+    {
+     "doc": "IBM APAR PI61993, NON-PARAMETER BLL CELLS ARE NO LONGER INITIALLY NULL (Enterprise COBOL for z/OS 5.2). Describes the BLL cell as the engine-side concept (the implicit pointer behind a LINKAGE 01/77); it is the later compiler's view, not the OS/VS COBOL-era manual",
+     "section": "APAR PI61993, description of a BLL (Base Locator for Linkage) cell",
+     "url": "https://www.ibm.com/support/pages/apar/PI61993",
+     "quote": "A BLL (Base Locator for Linkage) cell is an implicit usage pointer field that supplies the address for a linkage section ... 01- or 77-level item which can be set via SET ADDRESS OF {linkage-item} statement if the linkage-item is not a parameter, ... or retrieved via an ADDRESS OF {linkage-item} expression."
+    }
+   ],
+   "notes": "Two IBM sources opened. (1) CICS TS for OS/390 R3 Application Programming Guide (SC33-1687-02), Appendix B OS/VS COBOL, 'Base locator for linkage': the FILLER first cell is set up by CICS, the other 02-level cells are the BLL cells (Figure 116 uses PIC S9(8) COMP), one-to-one with the later 01s, and a cell named in the SET option of a CICS command addresses the storage CICS supplies; the same appendix says BLL cells are removed when converting to VS COBOL II. (2) APAR PI61993 (Enterprise COBOL 5.2) for the BLL cell as implicit pointer; quoted with ellipses where the page split the sentence. The Enterprise COBOL 5.2 Migration Guide (igy5mg20, BLL conversion section) was also opened but is not quoted. Owner decision 2026-10-16 option C applied. No 'release': the quoted text names the OS/VS COBOL compiler and a 1999 CICS TS edition, not a specific CICS/VS release in which the 4-byte cell layout applied, so the earlier 'CICS/VS 1.x' value is dropped as unsupported; era 1 stays. Still uncited: the 4-byte cell width is from the member's PICTUREs (S9(8) COMP = 4 bytes) and Figure 116 shows the same PICTURE, not a stated byte count; ADDRESS CWA(cell) as a command form was not seen in an opened pre-1990 manual.",
+   "era": 1
   }
  ],
  "not_planted": [

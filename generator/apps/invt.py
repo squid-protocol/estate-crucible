@@ -3,10 +3,12 @@ program (sequence numbers in cols 1-6, the deck name in 73-80, upper case throug
 SECTIONs, period-terminated sentences, with no COBOL-85 construct. One program, one
 record copybook, one job.
 
-Planted: nothing (a skeleton for the era-1 horrors that follow, gitgalaxy#5118)."""
+Planted: H-0061 (CICS BLL cells in INVTONL, gitgalaxy#5118)."""
 
 from ..data import I
-from ..stmt import goback, if_, para, perform, raw, section
+from ..stmt import cics, goback, if_, para, perform, raw, section
+
+H61 = "H-0061"
 
 COPYBOOKS = [
     {"member": "INVTREC", "numbered": True, "header": [" INVTREC  - INVENTORY STOCK RECORD (80 BYTES)"],
@@ -67,11 +69,56 @@ INVTBAT = {
     ],
 }
 
+INVTONL = {
+    "member": "INVTONL",
+    "era": 1,
+    "era_evidence": "command-level EXEC CICS with BLL cells (S9(8) COMP LINKAGE cells filled by ADDRESS and READ SET) and no RESP, HANDLE or ADDRESS OF: CICS/VS 1.x command level, #5117 era 1",
+    "program_id": "INVTONL",
+    "numbered": True,
+    "ident": "INVTONL",
+    "banner": [
+        "*****************************************************************",
+        "*   INVTONL  -  ONLINE STOCK INQUIRY (TRANSACTION INVQ)         *",
+        "*   SYSTEM  :  INVT / INVENTORY CONTROL      DATE: 09/22/83     *",
+        "*****************************************************************",
+        "/",
+    ],
+    "author": "D KOWALCZYK",
+    "installation": "MATERIALS CONTROL",
+    "date_written": "09/22/83",
+    "remarks": ["INVTONL - STOCK INQUIRY, RECORD ADDRESSED BY BLL CELL."],
+    "compile": "compiled-stubbed",
+    "procedure_header_horror": H61,
+    "ws": [
+        I(1, "WS-PART-KEY", "X(10)"),
+    ],
+    "linkage": [
+        I(1, "BLL-CELLS", horror=H61, kids=[
+            I(2, "FILLER", "S9(8)", "COMP", horror=H61),
+            I(2, "STK-BLL", "S9(8)", "COMP", horror=H61),
+            I(2, "CWA-BLL", "S9(8)", "COMP", horror=H61),
+        ]),
+        I(1, "STK-AREA", copy=["INVTREC"]),
+        I(1, "CWA-AREA", kids=[I(2, "CWA-PART-KEY", "X(10)"), I(2, "FILLER", "X(70)")], horror=H61),
+    ],
+    "units": [
+        section("0000-MAINLINE",
+                cics("ADDRESS CWA(CWA-BLL)", horror=H61),
+                raw("MOVE CWA-PART-KEY TO WS-PART-KEY"),
+                cics("READ DATASET('INVTMST') SET(STK-BLL)", "RIDFLD(WS-PART-KEY)",
+                     resource={"verb": "READ", "kind": "FILE", "name": "INVTMST", "record": "STK-AREA",
+                               "access": "read"},
+                     horror=H61),
+                cics("RETURN")),
+    ],
+}
+
 JOBS = [
     {
         "name": "INVTDLY",
         "title": "INVT STOCK STATUS",
         "accounting": "(INVT,0683)",
+        "notify": False,
         "comments": ["NIGHTLY STOCK STATUS AND REORDER POINT LIST"],
         "steps": [
             {"name": "STEP010", "pgm": "INVTBAT", "dds": [
@@ -87,10 +134,10 @@ JOBS = [
 APP = {
     "id": "INVT",
     "era": 1,
-    "era_evidence": "INVTBAT, the app's only program, has no construct later than OS/VS COBOL; a 1983 card-deck batch system",
+    "era_evidence": "INVTBAT and INVTONL have no construct later than OS/VS COBOL and CICS/VS command level; a 1983 card-deck system",
     "title": "Inventory stock status (1983 batch deck)",
     "style": "1980s card deck: numbered cols 1-6, deck name in cols 73-80, upper case, SECTIONs, period-terminated IF",
     "copybooks": COPYBOOKS,
-    "programs": [INVTBAT],
+    "programs": [INVTBAT, INVTONL],
     "jcl": JOBS,
 }
