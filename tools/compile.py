@@ -129,6 +129,9 @@ def variant(text: str, kind: str) -> str:
     if kind == "program-id-period":
         return re.sub(r"^(.{7})PROGRAM-ID\.?\s+([A-Z0-9-]+)\.?[ \t]*$", r"\1PROGRAM-ID. \2.", text, count=1,
                       flags=re.M)
+    if kind == "service-reload":  # OS/VS COBOL compiler control statement; it moves no data
+        # padded to the statement's width, so the deck name in cols 73-80 stays where it is
+        return re.sub(r"\bSERVICE\s+RELOAD\s+[A-Z0-9-]+", lambda m: "CONTINUE".ljust(len(m.group(0))), text, flags=re.I)
     raise ValueError(kind)
 
 
@@ -199,6 +202,8 @@ def main(argv: list[str]) -> int:
             if status == "incomplete":
                 src = stand_in(src, d)
             if status in ("ibm-only", "other-dialect"):
+                if cics:  # the variant leaves EXEC CICS in place: stub it as for compiled-stubbed
+                    src = stub(src, cics=cics)
                 src = variant(src, check)
                 for cpy in [*d.glob("*.cpy"), *d.glob("*/*.cpy")]:
                     cpy.write_text(variant(cpy.read_text(encoding="utf-8"), check), encoding="utf-8")

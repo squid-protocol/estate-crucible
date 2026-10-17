@@ -1,0 +1,49 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0062",
+ "title": "SERVICE RELOAD: the OS/VS COBOL compiler-control statement that re-establishes LINKAGE addressability after a BLL cell changes",
+ "category": "data-moves",
+ "issue": 5118,
+ "shapes": [
+  "INVT INVTRLD: SERVICE RELOAD PARMLIST at the start of the PROCEDURE DIVISION and SERVICE RELOAD STK-AREA after a CICS READ SET and an ADD change a BLL cell"
+ ],
+ "asserts": "SERVICE RELOAD fieldname is a compiler control statement, not an executable data-moving statement: it names a 01-level LINKAGE area whose addressability is re-established after a BLL cell changed. It moves no data (no data_moves row from it), is not a CALL or PERFORM (no edge), and its operand is a data-name, not a paragraph or program.",
+ "citations": [
+  {
+   "doc": "IBM CICS Transaction Server for OS/390 Release 3, CICS Application Programming Guide, SC33-1687-02 (March 1999), Appendix B. OS/VS COBOL",
+   "section": "Appendix B. OS/VS COBOL, 'SERVICE RELOAD statement' (printed pp. 573-574, Figure 121)",
+   "url": "https://publibz.boulder.ibm.com/epubs/pdf/dfhp300.pdf",
+   "quote": "If an application program is to be compiled using the full OS COBOL Version 4 compiler, or the OS/VS COBOL compiler, a special compiler control statement must be inserted at appropriate places within the program to ensure addressability to a particular area defined in the linkage section. This control statement has the form: SERVICE RELOAD fieldname where “fieldname” is the symbolic name of a specific storage area that is also defined in an 01-level statement in the linkage section. The SERVICE RELOAD statement must be used following each statement that modifies addressability to an area defined in the linkage section, that is, whenever the contents of a BLL cell are changed in any way."
+  }
+ ],
+ "notes": "Source opened and read: CICS TS for OS/390 R3 Application Programming Guide (SC33-1687-02), Appendix B. The same manual says a later COBOL needs no SERVICE RELOAD ('If included, it is ignored'), so the statement is OS/VS COBOL-era; GnuCOBOL -std=ibm rejects it, hence ibm-only with a service-reload check_variant that turns the statement into CONTINUE. Still uncited: the OS/VS COBOL Language Reference / Programmer's Guide were not opened, so the statement's formal syntax there is 'find exact cite'. SERVICE LABEL (also OS/VS COBOL) is not planted: no opened manual describes it. No 'release': the manual names compilers, not a CICS release.",
+ "era": 1,
+ "planted": [
+  {
+   "member": "apps/INVT/cobol/INVTRLD.cbl",
+   "compile": {
+    "status": "ibm-only",
+    "reason": "SERVICE RELOAD is an OS/VS COBOL compiler control statement; GnuCOBOL -std=ibm rejects it",
+    "check_variant": "service-reload",
+    "check_note": "every SERVICE RELOAD statement becomes CONTINUE (padded to the same width) for the check; the rest compiles as written"
+   },
+   "expected": {},
+   "phantoms": [
+    {
+     "channel": "data_moves",
+     "verb": "SERVICE",
+     "target": "PARMLIST",
+     "why": "SERVICE RELOAD is a compiler control statement that moves no data; its operand is a LINKAGE area, not a move target",
+     "horror": "H-0062"
+    },
+    {
+     "channel": "data_moves",
+     "verb": "SERVICE",
+     "target": "STK-AREA",
+     "why": "SERVICE RELOAD is a compiler control statement that moves no data; its operand is a LINKAGE area, not a move target",
+     "horror": "H-0062"
+    }
+   ]
+  }
+ ]
+}
