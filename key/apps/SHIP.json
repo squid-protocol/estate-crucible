@@ -2,6 +2,235 @@
  "format": "estate-crucible-key/1",
  "app": "SHIP",
  "members": {
+  "apps/SHIP/asm/SHPTBL.asm": {
+   "app": "SHIP",
+   "library": "asm",
+   "language": "hlasm",
+   "numbered": true,
+   "lines": 58,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "era": 0,
+   "era_evidence": "HLASM CICS resource definition macro tables (DFHFCT, DFHPCT, DFHPPT, etc.) define resources prior to RDO (era 0)",
+   "csd_resources": [
+    {
+     "type": "FILE",
+     "name": "SHPDAM",
+     "group": "DFHFCT01",
+     "dsname": "PROD.SHIP.DAM",
+     "record_format": "F",
+     "line": 6,
+     "horror": "H-0063"
+    },
+    {
+     "type": "FILE",
+     "name": "SHPLOG",
+     "group": "DFHFCT01",
+     "dsname": "PROD.SHIP.LOG",
+     "record_format": "V",
+     "line": 13,
+     "horror": "H-0063"
+    },
+    {
+     "type": "TRANSACTION",
+     "name": "SHPM",
+     "group": "DFHPCT01",
+     "program": "SHPINQ",
+     "line": 16,
+     "horror": "H-0063"
+    },
+    {
+     "type": "MAPSET",
+     "name": "SHPMAP1",
+     "group": "DFHPPT01",
+     "line": 19,
+     "horror": "H-0063"
+    },
+    {
+     "type": "PARTITIONSET",
+     "name": "SHPPSET",
+     "group": "DFHPPT01",
+     "line": 20,
+     "horror": "H-0063"
+    },
+    {
+     "type": "TDQUEUE",
+     "name": "SHPA",
+     "group": "DFHDCT01",
+     "record_format": "V",
+     "line": 24,
+     "horror": "H-0063"
+    },
+    {
+     "type": "TDQUEUE",
+     "name": "SHPI",
+     "group": "DFHDCT01",
+     "transid": "SHPM",
+     "trigger_level": 1,
+     "line": 25,
+     "horror": "H-0063"
+    },
+    {
+     "type": "TSMODEL",
+     "name": "SHPT*",
+     "group": "DFHTST01",
+     "line": 28,
+     "horror": "H-0063"
+    },
+    {
+     "type": "TSMODEL",
+     "name": "SHPA*",
+     "group": "DFHTST01",
+     "line": 28,
+     "horror": "H-0063"
+    },
+    {
+     "type": "JOURNALMODEL",
+     "name": "DFHLOG",
+     "group": "DFHJCT01",
+     "dsname": "PROD.CICS.SYSTEM.LOG",
+     "line": 33,
+     "horror": "H-0063"
+    },
+    {
+     "type": "JOURNALMODEL",
+     "name": "DFHJ02",
+     "group": "DFHJCT01",
+     "dsname": "PROD.CICS.USER.LOG02",
+     "line": 34,
+     "horror": "H-0063"
+    },
+    {
+     "type": "CONNECTION",
+     "name": "TOR1",
+     "group": "DFHTCT01",
+     "line": 36,
+     "horror": "H-0063"
+    },
+    {
+     "type": "CONNECTION",
+     "name": "AOR1",
+     "group": "DFHTCT01",
+     "line": 37,
+     "horror": "H-0063"
+    },
+    {
+     "type": "TERMINAL",
+     "name": "T001",
+     "group": "DFHTCT01",
+     "line": 40,
+     "horror": "H-0063"
+    },
+    {
+     "type": "TERMINAL",
+     "name": "S001",
+     "group": "DFHTCT01",
+     "line": 41,
+     "horror": "H-0063"
+    },
+    {
+     "type": "TERMINAL",
+     "name": "S002",
+     "group": "DFHTCT01",
+     "line": 41,
+     "horror": "H-0063"
+    },
+    {
+     "type": "MONITORPOINT",
+     "name": "USER.203",
+     "group": "DFHMCT",
+     "line": 42,
+     "horror": "H-0063"
+    },
+    {
+     "type": "PLT",
+     "name": "SHPPLT1",
+     "group": "DFHPLTI1",
+     "program": "SHPPLT1",
+     "line": 45,
+     "horror": "H-0063"
+    },
+    {
+     "type": "PLT",
+     "name": "SHPPLT2",
+     "group": "DFHPLTI1",
+     "program": "SHPPLT2",
+     "line": 45,
+     "horror": "H-0063"
+    },
+    {
+     "type": "PLT",
+     "name": "SHPPLT3",
+     "group": "DFHPLTI1",
+     "program": "SHPPLT3",
+     "line": 47,
+     "horror": "H-0063"
+    },
+    {
+     "type": "DB2CONN",
+     "name": "DFHRCT01",
+     "group": "DFHRCT01",
+     "plan": "SHPDEFPL",
+     "line": 48,
+     "horror": "H-0063"
+    },
+    {
+     "type": "DB2ENTRY",
+     "name": "SHPI",
+     "group": "SHPDB2G",
+     "plan": "SHPINQPL",
+     "transid": "SHPI",
+     "line": 53,
+     "horror": "H-0063"
+    },
+    {
+     "type": "DB2ENTRY",
+     "name": "SHPM",
+     "group": "SHPDB2G",
+     "plan": "SHPDEFPL",
+     "transid": "SHPM",
+     "line": 55,
+     "horror": "H-0063"
+    },
+    {
+     "type": "SIT",
+     "name": "DFHSIT6$",
+     "group": "DFHSIT6$",
+     "line": 56,
+     "horror": "H-0063"
+    }
+   ],
+   "transactions": [
+    {
+     "transid": "SHPM",
+     "program": "SHPINQ",
+     "group": "DFHPCT01",
+     "line": 16,
+     "resolves_to": "apps/SHIP/cobol/SHPINQ.cbl",
+     "horror": "H-0063"
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "csd_resources",
+     "type": "TDQUEUE",
+     "name": "SHPOUT",
+     "why": "DFHDCT TYPE=SDSCI is the dataset control block for an EXTRA queue, not a queue itself",
+     "horror": "H-0063"
+    },
+    {
+     "channel": "csd_resources",
+     "type": "PLT",
+     "name": "DFHDELIM",
+     "why": "DFHPLT PROGRAM=DFHDELIM is a pass delimiter between PLTPI/PLTSD stages, not a program",
+     "horror": "H-0063"
+    }
+   ],
+   "horrors": [
+    "H-0063"
+   ]
+  },
   "apps/SHIP/cobol/SHPINQ.cbl": {
    "app": "SHIP",
    "library": "cobol",

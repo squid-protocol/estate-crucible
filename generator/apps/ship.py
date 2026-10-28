@@ -5,14 +5,14 @@ pre-CICS-TS version of the inquiry is still in the library.
 
 Planted: H-0051 (SHPINQO, a dead fork), H-0052 (COPY ORDREC takes SHRCPY's), H-0053 (COPY
 SHPRATE, a program name), H-0054 (XCTL / LINK / CSD PROGRAM / TRANSACTION of missing
-programs)."""
+programs), H-0063 (SHPTBL, CICS resource macro tables in HLASM)."""
 
 import copy
 
 from ..data import C, I
 from ..stmt import cics, goback, if_, para, perform, raw
 
-H51, H52, H53, H54 = "H-0051", "H-0052", "H-0053", "H-0054"
+H51, H52, H53, H54, H63 = "H-0051", "H-0052", "H-0053", "H-0054", "H-0063"
 
 COPYBOOKS = [
     {"member": "SHPCOMM", "header": [" SHPCOMM  - SHIPMENT INQUIRY COMMAREA (60 BYTES)"],
@@ -108,13 +108,325 @@ CSD = [
     },
 ]
 
+MACRO_TABLES = [
+    {
+        "member": "SHPTBL",
+        "csect": "SHPTBL",
+        "numbered": True,
+        "horror": H63,
+        "era": 0,
+        "era_evidence": "HLASM CICS resource definition macro tables (DFHFCT, DFHPCT, DFHPPT, etc.) define resources prior to RDO (era 0)",
+        "comments": [
+            "SHPTBL - PRE-RDO CICS RESOURCE MACRO TABLES FOR SHIPMENT INQUIRY",
+            "KEPT FOR BDAM FILE SHPDAM, EXTRAPARTITION QUEUE SHPA AND SEQUENTIAL",
+            "TERMINAL S002 THAT CANNOT MOVE TO RDO CSD.",
+        ],
+        "statements": [
+            # DFHFCT: alternative macro format with per-line remarks + a remark-only continuation line starting at col 17
+            {"op": "DFHFCT", "operands": ["TYPE=INITIAL", "SUFFIX=01"]},
+            {
+                "label": "SHP_DAM_FILE_01",
+                "op": "DFHFCT",
+                "lines": [
+                    ("TYPE=FILE,", "DEFINE SHIPMENT DAM FILE"),
+                    ("FILE=SHPDAM,", "8-CHARACTER FILE IDENTIFIER"),
+                    ("ACCMETH=BDAM,", "BASIC DIRECT ACCESS METHOD"),
+                    ("DSNAME=PROD.SHIP.DAM,", "MVS DATASET NAME"),
+                    ("RECFORM=(FIXED,BLOCKED),", "FIXED BLOCKED RECORDS"),
+                    ("KEYLEN=10,LRECL=120", "KEY AND RECORD LENGTH"),
+                    (" DSNAME=FAKE.REMARK.DSN", "COL 16 BLANK -> REMARK LINE"),
+                ],
+                "facts": [
+                    {
+                        "channel": "csd_resources",
+                        "type": "FILE",
+                        "name": "SHPDAM",
+                        "group": "DFHFCT01",
+                        "dsname": "PROD.SHIP.DAM",
+                        "record_format": "F",
+                    }
+                ],
+            },
+            {
+                "op": "DFHFCT",
+                "lines": [
+                    ("TYPE=DATASET,DATASET=SHPLOG,DSNAME=PROD.SHIP.LOG,", ""),
+                    ("RECFORM=(VARIABLE,BLOCKED)", ""),
+                ],
+                "facts": [
+                    {
+                        "channel": "csd_resources",
+                        "type": "FILE",
+                        "name": "SHPLOG",
+                        "group": "DFHFCT01",
+                        "dsname": "PROD.SHIP.LOG",
+                        "record_format": "V",
+                    }
+                ],
+            },
+            # DFHPCT: sequence symbol in name field, quoted operand with spaces, routes SHPM -> SHPINQ
+            {"op": "DFHPCT", "operands": ["TYPE=INITIAL", "SUFFIX=01"]},
+            {
+                "label": ".PCT01",
+                "op": "DFHPCT",
+                "lines": [
+                    ("TYPE=ENTRY,TRANSID=SHPM,DESC='SHIPMENT MACRO INQ',", ""),
+                    ("PROGRAM=SHPINQ,TWASIZE=64,TRNPRTY=100,DTB=(YES,WAIT)", ""),
+                ],
+                "facts": [
+                    {
+                        "channel": "csd_resources",
+                        "type": "TRANSACTION",
+                        "name": "SHPM",
+                        "group": "DFHPCT01",
+                        "program": "SHPINQ",
+                    },
+                    {"channel": "transactions", "transid": "SHPM", "program": "SHPINQ", "group": "DFHPCT01"},
+                ],
+            },
+            # DFHPPT: PROGRAM= with USAGE=MAP -> MAPSET; PARTSET= -> PARTITIONSET
+            {"op": "DFHPPT", "operands": ["TYPE=INITIAL", "SUFFIX=01"]},
+            {
+                "op": "DFHPPT",
+                "operands": ["TYPE=ENTRY", "PROGRAM=SHPMAP1", "USAGE=MAP"],
+                "facts": [{"channel": "csd_resources", "type": "MAPSET", "name": "SHPMAP1", "group": "DFHPPT01"}],
+            },
+            {
+                "op": "DFHPPT",
+                "operands": ["TYPE=ENTRY", "PARTSET=SHPPSET"],
+                "facts": [
+                    {"channel": "csd_resources", "type": "PARTITIONSET", "name": "SHPPSET", "group": "DFHPPT01"}
+                ],
+            },
+            # DFHDCT: SDSCI folded into EXTRA (with DESTID truncated to 4 chars: SHPAUD -> SHPA), plus INTRA
+            {"op": "DFHDCT", "operands": ["TYPE=INITIAL", "SUFFIX=01"]},
+            {
+                "op": "DFHDCT",
+                "operands": ["TYPE=SDSCI", "DSCNAME=SHPOUT", "RECFORM=VARBLKA", "BLKSIZE=1360", "RECSIZE=136"],
+                "phantoms": [
+                    {
+                        "channel": "csd_resources",
+                        "type": "TDQUEUE",
+                        "name": "SHPOUT",
+                        "why": "DFHDCT TYPE=SDSCI is the dataset control block for an EXTRA queue, not a queue itself",
+                    }
+                ],
+            },
+            {
+                "op": "DFHDCT",
+                "operands": ["TYPE=EXTRA", "DESTID=SHPAUD", "DSCNAME=SHPOUT"],
+                "facts": [
+                    {
+                        "channel": "csd_resources",
+                        "type": "TDQUEUE",
+                        "name": "SHPA",
+                        "group": "DFHDCT01",
+                        "record_format": "V",
+                    }
+                ],
+            },
+            {
+                "op": "DFHDCT",
+                "operands": ["TYPE=INTRA", "DESTID=SHPI", "TRANSID=SHPM", "TRIGLEV=1"],
+                "facts": [
+                    {
+                        "channel": "csd_resources",
+                        "type": "TDQUEUE",
+                        "name": "SHPI",
+                        "group": "DFHDCT01",
+                        "transid": "SHPM",
+                        "trigger_level": 1,
+                    }
+                ],
+            },
+            # DFHTST: refused empty DATAID=() vs retained 4-char prefix DATAID=SHPT,SHPA
+            {"op": "DFHTST", "operands": ["TYPE=INITIAL", "SUFFIX=01"]},
+            {"op": "DFHTST", "operands": ["TYPE=SHARED", "DATAID=()"]},
+            {
+                "op": "DFHTST",
+                "operands": ["TYPE=RECOVERY", "DATAID=(SHPT,SHPA)"],
+                "facts": [
+                    {"channel": "csd_resources", "type": "TSMODEL", "name": "SHPT*", "group": "DFHTST01"},
+                    {"channel": "csd_resources", "type": "TSMODEL", "name": "SHPA*", "group": "DFHTST01"},
+                ],
+            },
+            # DFHSRT: refused RECOVER=NO vs retained system abends
+            {"op": "DFHSRT", "operands": ["TYPE=INITIAL", "SUFFIX=01"]},
+            {"op": "DFHSRT", "operands": ["TYPE=SYSTEM", "ABCODE=(0C1,0C4,0C7)", "RECOVER=YES"]},
+            {"op": "DFHSRT", "operands": ["TYPE=USER", "ABCODE=(A001)", "RECOVER=NO"]},
+            # DFHJCT: JFILEID=SYSTEM -> DFHLOG, JFILEID=02 -> DFHJ02
+            {"op": "DFHJCT", "operands": ["TYPE=INITIAL", "SUFFIX=01"]},
+            {
+                "op": "DFHJCT",
+                "operands": ["TYPE=ENTRY", "JFILEID=SYSTEM", "DSNAME=PROD.CICS.SYSTEM.LOG"],
+                "facts": [
+                    {
+                        "channel": "csd_resources",
+                        "type": "JOURNALMODEL",
+                        "name": "DFHLOG",
+                        "group": "DFHJCT01",
+                        "dsname": "PROD.CICS.SYSTEM.LOG",
+                    }
+                ],
+            },
+            {
+                "op": "DFHJCT",
+                "operands": ["TYPE=ENTRY", "JFILEID=02", "DSNAME=PROD.CICS.USER.LOG02"],
+                "facts": [
+                    {
+                        "channel": "csd_resources",
+                        "type": "JOURNALMODEL",
+                        "name": "DFHJ02",
+                        "group": "DFHJCT01",
+                        "dsname": "PROD.CICS.USER.LOG02",
+                    }
+                ],
+            },
+            # DFHTCT: refused TYPE=SDSCI/LINE vs retained SYSTEM/REGION/TERMINAL/GPENTRY
+            {"op": "DFHTCT", "operands": ["TYPE=INITIAL", "SUFFIX=01", "ACCMETH=(VTAM,NONVTAM)"]},
+            {
+                "op": "DFHTCT",
+                "operands": ["TYPE=SYSTEM", "SYSIDNT=TOR1"],
+                "facts": [{"channel": "csd_resources", "type": "CONNECTION", "name": "TOR1", "group": "DFHTCT01"}],
+            },
+            {
+                "op": "DFHTCT",
+                "operands": ["TYPE=REGION", "SYSIDNT=AOR1"],
+                "facts": [{"channel": "csd_resources", "type": "CONNECTION", "name": "AOR1", "group": "DFHTCT01"}],
+            },
+            {"op": "DFHTCT", "operands": ["TYPE=SDSCI", "DSCNAME=LINE01"]},
+            {"op": "DFHTCT", "operands": ["TYPE=LINE", "ACCMETH=BTAM", "DSCNAME=LINE01"]},
+            {
+                "op": "DFHTCT",
+                "operands": ["TYPE=TERMINAL", "TRMIDNT=T001", "TRMTYPE=3270"],
+                "facts": [{"channel": "csd_resources", "type": "TERMINAL", "name": "T001", "group": "DFHTCT01"}],
+            },
+            {
+                "op": "DFHTCT",
+                "operands": ["TYPE=GPENTRY", "TRMLIST=(S001,S002)"],
+                "facts": [
+                    {"channel": "csd_resources", "type": "TERMINAL", "name": "S001", "group": "DFHTCT01"},
+                    {"channel": "csd_resources", "type": "TERMINAL", "name": "S002", "group": "DFHTCT01"},
+                ],
+            },
+            # DFHMCT: TYPE=EMP vs refused TYPE=RECORD
+            {
+                "op": "DFHMCT",
+                "operands": ["TYPE=EMP", "CLASS=PERFORM", "ID=(PP,4)"],
+                "facts": [{"channel": "csd_resources", "type": "MONITORPOINT", "name": "USER.203", "group": "DFHMCT"}],
+            },
+            {"op": "DFHMCT", "operands": ["TYPE=RECORD", "CLASS=PERFORM", "EXCLUDE=(DFHTASK)"]},
+            # DFHPLT: TYPE=ENTRY,PROGRAM=(...) + refused PROGRAM=DFHDELIM stage delimiter
+            {"op": "DFHPLT", "operands": ["TYPE=INITIAL", "SUFFIX=I1"]},
+            {
+                "op": "DFHPLT",
+                "operands": ["TYPE=ENTRY", "PROGRAM=(SHPPLT1,SHPPLT2)"],
+                "facts": [
+                    {
+                        "channel": "csd_resources",
+                        "type": "PLT",
+                        "name": "SHPPLT1",
+                        "group": "DFHPLTI1",
+                        "program": "SHPPLT1",
+                    },
+                    {
+                        "channel": "csd_resources",
+                        "type": "PLT",
+                        "name": "SHPPLT2",
+                        "group": "DFHPLTI1",
+                        "program": "SHPPLT2",
+                    },
+                ],
+            },
+            {
+                "op": "DFHPLT",
+                "operands": ["TYPE=ENTRY", "PROGRAM=DFHDELIM"],
+                "phantoms": [
+                    {
+                        "channel": "csd_resources",
+                        "type": "PLT",
+                        "name": "DFHDELIM",
+                        "why": "DFHPLT PROGRAM=DFHDELIM is a pass delimiter between PLTPI/PLTSD stages, not a program",
+                    }
+                ],
+            },
+            {
+                "op": "DFHPLT",
+                "operands": ["TYPE=ENTRY", "PROGRAM=SHPPLT3"],
+                "facts": [
+                    {
+                        "channel": "csd_resources",
+                        "type": "PLT",
+                        "name": "SHPPLT3",
+                        "group": "DFHPLTI1",
+                        "program": "SHPPLT3",
+                    }
+                ],
+            },
+            # DSNCRCT: TYPE=INIT -> DB2CONN, refused TYPE=COMD & TYPE=POOL, TYPE=GROUP + TYPE=ENTRY -> DB2ENTRY
+            {
+                "op": "DSNCRCT",
+                "operands": ["TYPE=INIT", "SUFFIX=01", "SUBID=DB2S", "PLANI=SHPDEFPL", "THRDMAX=12"],
+                "facts": [
+                    {
+                        "channel": "csd_resources",
+                        "type": "DB2CONN",
+                        "name": "DFHRCT01",
+                        "group": "DFHRCT01",
+                        "plan": "SHPDEFPL",
+                    }
+                ],
+            },
+            {"op": "DSNCRCT", "operands": ["TYPE=COMD", "AUTH=USERID", "THRDM=1", "THRDA=1"]},
+            {"op": "DSNCRCT", "operands": ["TYPE=POOL", "PLAN=SHPPOOLP", "THRDM=3", "THRDA=3"]},
+            {"op": "DSNCRCT", "operands": ["TYPE=GROUP", "GROUP=SHPDB2G"]},
+            {
+                "op": "DSNCRCT",
+                "operands": ["TYPE=ENTRY", "TXID=(SHPI)", "PLAN=SHPINQPL", "THRDA=4", "TWAIT=POOL"],
+                "facts": [
+                    {
+                        "channel": "csd_resources",
+                        "type": "DB2ENTRY",
+                        "name": "SHPI",
+                        "group": "SHPDB2G",
+                        "plan": "SHPINQPL",
+                        "transid": "SHPI",
+                    }
+                ],
+            },
+            {
+                "op": "DSNCRCT",
+                "operands": ["TYPE=ENTRY", "TXID=(SHPM)", "THRDA=2", "TWAIT=YES"],
+                "facts": [
+                    {
+                        "channel": "csd_resources",
+                        "type": "DB2ENTRY",
+                        "name": "SHPM",
+                        "group": "SHPDB2G",
+                        "plan": "SHPDEFPL",
+                        "transid": "SHPM",
+                    }
+                ],
+            },
+            # DFHSIT: TYPE=CSECT,SUFFIX=6$
+            {
+                "op": "DFHSIT",
+                "operands": ["TYPE=CSECT", "SUFFIX=6$", "FCT=01", "DCT=01", "PCT=01", "PPT=01"],
+                "facts": [{"channel": "csd_resources", "type": "SIT", "name": "DFHSIT6$", "group": "DFHSIT6$"}],
+            },
+            {"op": "DFHFCT", "operands": ["TYPE=FINAL"]},
+        ],
+    }
+]
+
 APP = {
     "id": "SHIP",
     "era": 2,
     "era_evidence": "SHPINQ/SHPRATE use COBOL-85 END-IF with command-level CICS XCTL/LINK; SHPGRP is an RDO CSD",
     "title": "Shipment inquiry (CICS, an incomplete export)",
-    "style": "CICS; XCTL / LINK / CSD entries for programs the export lacks; a dead fork",
+    "style": "CICS; XCTL / LINK / CSD entries for programs the export lacks; a dead fork; HLASM macro tables",
     "copybooks": COPYBOOKS,
     "programs": [SHPINQ, SHPINQO, SHPRATE],
     "csd": CSD,
+    "macro_tables": MACRO_TABLES,
 }

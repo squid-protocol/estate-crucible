@@ -176,6 +176,101 @@ def write_csd(m: Member, spec: dict[str, Any], program_paths: dict[str, str]) ->
     m.compile = {"status": "not-cobol"}
 
 
+# ------------------------------------------------------------------ CICS macro tables (HLASM)
+
+
+def _asm_card(text: str, cont: str = " ", seq: Optional[int] = None) -> str:
+    """One 80-column assembler card: cols 1-71 statement field, col 72 continuation indicator,
+    cols 73-80 sequence field (or trimmed when unnumbered and uncontinued)."""
+    if len(text) > 71:
+        raise ValueError(f"assembler statement field past column 71: {text!r}")
+    if seq is not None:
+        return text.ljust(71) + cont + f"{seq:08d}"
+    return text.ljust(71) + cont if cont != " " else text.rstrip()
+
+
+def _wrap_macro_operands(head_prefix: str, operands: list[str], remark: str = "") -> list[tuple[str, str]]:
+    """Wrap macro operands into <= 71-column assembler lines (col 16 continuation)."""
+    lines: list[tuple[str, str]] = []
+    cur: list[str] = []
+    for opnd in operands:
+        prefix_len = len(head_prefix) if not lines else 15
+        candidate = ",".join(cur + [opnd])
+        # Leave 1 char for trailing comma if another line follows
+        if cur and prefix_len + len(candidate) + 1 > 71:
+            lines.append((",".join(cur) + ",", ""))
+            cur = [opnd]
+        else:
+            cur.append(opnd)
+    lines.append((",".join(cur), remark))
+    return lines
+
+
+def write_macro_table(m: Member, spec: dict[str, Any], program_paths: dict[str, str]) -> None:
+    """An HLASM member holding CICS resource-definition macro tables (DFHFCT, DFHPCT, DFHPPT,
+    DFHDCT, DFHTST, DFHSRT, DFHJCT, DFHTCT, DFHMCT, DFHSIT)."""
+    with m.horror(spec.get("horror")):
+        _write_macro_table(m, spec, program_paths)
+    m.compile = {"status": "not-cobol"}
+
+
+def _write_macro_table(m: Member, spec: dict[str, Any], program_paths: dict[str, str]) -> None:
+    numbered = spec.get("numbered", False)
+
+    def emit(text: str, cont: str = " ") -> int:
+        seq = m.line_no * 100 if numbered else None
+        return m.raw(_asm_card(text, cont, seq))
+
+    for c in spec.get("comments", []):
+        emit(f"* {c}")
+    if spec.get("csect"):
+        emit(f"{spec['csect']:<8} CSECT")
+    suffix: dict[str, str] = {}
+    sdsci: dict[str, dict[str, str]] = {}
+    for st in spec["statements"]:
+        if st.get("comment"):
+            emit(f"* {st['comment']}")
+            continue
+        op = st["op"].upper()
+        label = st.get("label", "")
+        head_prefix = f"{label:<8} {op:<6} " if len(label) <= 8 else f"{label} {op} "
+        lines_spec: list[tuple[str, str]] = st.get("lines") or _wrap_macro_operands(
+            head_prefix, st["operands"], st.get("remark", "")
+        )
+        first = m.line_no
+        for idx, (ops_part, remark) in enumerate(lines_spec):
+            prefix = head_prefix if idx == 0 else " " * 15
+            body = prefix + ops_part + (f"  {remark}" if remark else "")
+            cont = "X" if idx < len(lines_spec) - 1 else " "
+            emit(body, cont)
+        # Key what the macro statement defines per IBM documentation:
+        with m.horror(st.get("horror")):
+            for ph in st.get("phantoms", []):
+                m.phantom(**ph)
+            kv = dict(st.get("kv") or {})
+            for ops_part, _remark in lines_spec:
+                if ops_part.startswith(" "):
+                    # HLASM rule (SC26-4940-05 p.15, p.296): a continuation line starting after col 16 is a remark
+                    break
+                for piece in ops_part.split(","):
+                    if "=" in piece and "(" not in piece and ")" not in piece:
+                        k, v = piece.split("=", 1)
+                        kv.setdefault(k.strip().upper(), v.strip().strip("'\""))
+            kind = kv.get("TYPE", "").upper()
+            if kind == "INITIAL" and kv.get("SUFFIX"):
+                suffix.setdefault(op, kv["SUFFIX"].upper())
+            if op == "DFHDCT" and kind == "SDSCI" and kv.get("DSCNAME"):
+                sdsci[kv["DSCNAME"].upper()] = kv
+            for fact in st.get("facts", []):
+                ch = fact["channel"]
+                vals = {k: v for k, v in fact.items() if k != "channel"}
+                vals["line"] = first
+                if ch == "transactions" and "resolves_to" not in vals:
+                    vals["resolves_to"] = program_paths.get(vals["program"])
+                m.fact(ch, **vals)
+    emit("         END")
+
+
 # ------------------------------------------------------------------ DCLGEN
 
 

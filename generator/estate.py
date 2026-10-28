@@ -16,14 +16,14 @@ from . import FORMAT, VERSION
 from .cobol import all_programs, write_copybook, write_program
 from .data import Item
 from .model import CHANNELS, Member
-from .other import symbolic_map, write_bms, write_csd, write_dclgen, write_jcl
+from .other import symbolic_map, write_bms, write_csd, write_dclgen, write_jcl, write_macro_table
 from .pli import write_pli
 
 # library -> file extension, as GitGalaxy (and most exporters) recognise members
 EXT = {"cobol": ".cbl", "copybook": ".cpy", "jcl": ".jcl", "proclib": ".prc", "bms": ".bms", "csd": ".csd",
-       "dclgen": ".dcl", "copylib": ".cpy", "pli": ".pli", "oldcopy": ".cpy"}
+       "dclgen": ".dcl", "copylib": ".cpy", "pli": ".pli", "oldcopy": ".cpy", "asm": ".asm"}
 LANG = {"cobol": "cobol", "copybook": "cobol", "copylib": "cobol", "dclgen": "cobol", "jcl": "jcl",
-        "proclib": "jcl", "bms": "bms", "csd": "csd", "pli": "pli", "oldcopy": "cobol"}
+        "proclib": "jcl", "bms": "bms", "csd": "csd", "pli": "pli", "oldcopy": "cobol", "asm": "hlasm"}
 SHARED_COPYLIB = "SHRCPY"
 # an app's copy libraries: directory under apps/<APP>/ -> library-name suffix (<APP>CPY, ...)
 APP_LIBRARIES = (("copybook", "CPY"), ("dclgen", "DCL"), ("oldcopy", "OLD"))
@@ -180,6 +180,9 @@ class Estate:
                 write_jcl(self._new(a, "proclib", pr["name"]), pr, self.program_paths, proc=True)
             for c in app.get("csd", []):
                 write_csd(self._new(a, "csd", c["group"]), c, self.program_paths)
+            for mt in app.get("macro_tables", []):
+                write_macro_table(self._new(a, "asm", mt["member"], mt.get("numbered", False), spec=mt), mt,
+                                  self.program_paths)
         resolve = self.resolver(None)
         for cb in self.shared.get("copylib", []):
             write_copybook(self._new(None, "copylib", cb["member"]), cb, resolve)

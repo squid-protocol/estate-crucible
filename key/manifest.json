@@ -108,7 +108,7 @@
   {
    "id": "SHIP",
    "title": "Shipment inquiry (CICS, an incomplete export)",
-   "style": "CICS; XCTL / LINK / CSD entries for programs the export lacks; a dead fork",
+   "style": "CICS; XCTL / LINK / CSD entries for programs the export lacks; a dead fork; HLASM macro tables",
    "era": 2,
    "era_evidence": "SHPINQ/SHPRATE use COBOL-85 END-IF with command-level CICS XCTL/LINK; SHPGRP is an RDO CSD"
   },
@@ -193,8 +193,8 @@
   "jcl_steps": 23,
   "jcl_dds": 48,
   "screen_fields": 16,
-  "csd_resources": 18,
-  "transactions": 6,
+  "csd_resources": 42,
+  "transactions": 7,
   "cics_resources": 9,
   "jcl_datasets": 35,
   "file_control": 11,
@@ -204,7 +204,7 @@
   "copy_collisions": 9,
   "gaps": 17,
   "dead": 11,
-  "phantoms": 48
+  "phantoms": 50
  },
  "code_pages": {
   "apps/DEUT/cobol/ZINSBER.cbl": "cp273",
@@ -499,7 +499,8 @@
   "H-0059",
   "H-0060",
   "H-0061",
-  "H-0062"
+  "H-0062",
+  "H-0063"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -1969,6 +1970,24 @@
    "compile": {
     "status": "not-cobol"
    }
+  },
+  "apps/SHIP/asm/SHPTBL.asm": {
+   "app": "SHIP",
+   "library": "asm",
+   "language": "hlasm",
+   "sha256": "c382d63fac706c971feeaf3f66d3bbaf95074986f423a8b7611a2236ff26d558",
+   "bytes": 4698,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/SHIP.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "era": 0,
+   "era_evidence": "HLASM CICS resource definition macro tables (DFHFCT, DFHPCT, DFHPPT, etc.) define resources prior to RDO (era 0)",
+   "horrors": [
+    "H-0063"
+   ]
   },
   "apps/SHIP/cobol/SHPINQ.cbl": {
    "app": "SHIP",
