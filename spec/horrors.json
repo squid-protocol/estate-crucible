@@ -1565,6 +1565,41 @@
    ],
    "notes": "Source opened and read: CICS TS for OS/390 R3 Application Programming Guide (SC33-1687-02), Appendix B. The same manual says a later COBOL needs no SERVICE RELOAD ('If included, it is ignored'), so the statement is OS/VS COBOL-era; GnuCOBOL -std=ibm rejects it, hence ibm-only with a service-reload check_variant that turns the statement into CONTINUE. Still uncited: the OS/VS COBOL Language Reference / Programmer's Guide were not opened, so the statement's formal syntax there is 'find exact cite'. SERVICE LABEL (also OS/VS COBOL) is not planted: no opened manual describes it. No 'release': the manual names compilers, not a CICS release.",
    "era": 1
+  },
+  {
+   "id": "H-0063",
+   "title": "Pre-RDO CICS resource macro tables in HLASM: alternative statement format with per-line remarks, remark continuations after column 16, SDSCI DCB folding, and refused non-resource macros",
+   "category": "cics",
+   "issue": 5154,
+   "shapes": [
+    "SHIP SHPTBL.asm: DFHFCT TYPE=FILE in HLASM alternative statement format (each continued line carries remarks after its trailing comma, followed by a continuation line starting in column 17 which HLASM treats as a remark) and retained TYPE=DATASET,DATASET=",
+    "SHIP SHPTBL.asm: DFHPCT TYPE=ENTRY with a sequence symbol (.PCT01) in the name field and a quoted operand containing spaces, routing transaction SHPM to SHPINQ",
+    "SHIP SHPTBL.asm: DFHPPT TYPE=ENTRY with PROGRAM=SHPMAP1,USAGE=MAP (a MAPSET) and PARTSET=SHPPSET (a PARTITIONSET)",
+    "SHIP SHPTBL.asm: DFHDCT TYPE=SDSCI folded into TYPE=EXTRA (with DESTID=SHPAUD truncated on the right to 4 characters: SHPA), DFHTST DATAID=(SHPT,SHPA), DFHJCT JFILEID=SYSTEM|02, DFHTCT TYPE=SYSTEM|REGION|TERMINAL|GPENTRY, DFHSRT RECOVER=YES, DFHMCT ID=(PP,4) (-> USER.203), DFHPLT PROGRAM=(SHPPLT1,SHPPLT2)|SHPPLT3 across DFHDELIM, DSNCRCT TYPE=INIT|GROUP|ENTRY (-> DB2CONN DFHRCT01 and DB2ENTRY SHPI/SHPM with PLANI inheritance), and DFHSIT SUFFIX=6$",
+    "SHIP SHPTBL.asm: non-resource statements that must produce no resource row (DFHDCT TYPE=SDSCI, DFHTST DATAID=() and TYPE=SHARED, DFHTCT TYPE=SDSCI and TYPE=LINE, DFHSRT RECOVER=NO, DFHMCT TYPE=RECORD, DFHPLT PROGRAM=DFHDELIM, DSNCRCT TYPE=COMD and TYPE=POOL)"
+   ],
+   "asserts": "Each resource-defining macro statement is a csd_resources fact with its assembled table name (macro + TYPE=INITIAL SUFFIX=, or DSNCRCT TYPE=GROUP) as group and the macro statement's first line as line; DFHPCT TYPE=ENTRY also records a transactions fact resolved to the estate's program. In HLASM alternative statement format, per-line remarks after a trailing comma and continuation lines starting after column 16 are ignored. Non-resource control macros (SDSCI, LINE, RECORD, SHARED, DATAID=(), RECOVER=NO, DFHDELIM, COMD, POOL) produce no resource fact.",
+   "citations": [
+    {
+     "doc": "High Level Assembler for z/OS & z/VM & z/VSE 1.6 Language Reference (SC26-4940-05)",
+     "section": "Chapter 2. Coding and structure > Continuation lines (p.15) & Chapter 8. Alternative formats for a macro instruction (p.296)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/asmr1020.pdf",
+     "quote": "Continue the statement on the next line, starting in the continue column (column 16). Columns to the left of the continue column must be spaces. If an operand is continued after column 16, it is taken to be a comment."
+    },
+    {
+     "doc": "CICS Transaction Server for OS/390 Release 3 Resource Definition Guide (SC33-1684-30)",
+     "section": "Chapter 13. Resource definition with macros: DFHDCT (p.368-385), DFHFCT (p.391-403), DFHPLT (p.415-418), DSNCRCT (p.419-432), DFHTCT (p.437-475), DFHTST (p.482-488)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/dfha400.pdf",
+     "quote": "If you specify a name of more than four characters, it is truncated on the right."
+    },
+    {
+     "doc": "CICS Transaction Server for VSE/ESA Release 1 Resource Definition Guide (SC33-1653-05)",
+     "section": "Chapter 29. JCT (p.270-272), Chapter 33. DFHTCT TYPE=GPENTRY (p.297), Appendix E. Migrating the PCT (p.365-368), Appendix F. Migrating the PPT (p.371-374)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/iesrde10.pdf",
+     "quote": "PROGRAM=name: This is mapped to a MAPSET with the same name if USAGE=MAP is also specified and PGMLANG is not specified as anything other than ASSEMBLER."
+    }
+   ],
+   "era": 0
   }
  ],
  "not_planted": [
