@@ -221,7 +221,7 @@ MACRO_TABLES = [
                         "type": "TDQUEUE",
                         "name": "SHPA",
                         "group": "DFHDCT01",
-                        "record_format": "V",
+                        "record_format": "VARIABLE",
                     }
                 ],
             },
@@ -246,15 +246,23 @@ MACRO_TABLES = [
                 "op": "DFHTST",
                 "operands": ["TYPE=RECOVERY", "DATAID=(SHPT,SHPA)"],
                 "facts": [
-                    {"channel": "csd_resources", "type": "TSMODEL", "name": "SHPT*", "group": "DFHTST01"},
-                    {"channel": "csd_resources", "type": "TSMODEL", "name": "SHPA*", "group": "DFHTST01"},
+                    {"channel": "csd_resources", "type": "TSMODEL", "name": "SHPT", "group": "DFHTST01"},
+                    {"channel": "csd_resources", "type": "TSMODEL", "name": "SHPA", "group": "DFHTST01"},
                 ],
             },
             # DFHSRT: refused RECOVER=NO vs retained system abends
             {"op": "DFHSRT", "operands": ["TYPE=INITIAL", "SUFFIX=01"]},
-            {"op": "DFHSRT", "operands": ["TYPE=SYSTEM", "ABCODE=(0C1,0C4,0C7)", "RECOVER=YES"]},
+            {
+                "op": "DFHSRT",
+                "operands": ["TYPE=SYSTEM", "ABCODE=(0C1,0C4,0C7)", "RECOVER=YES"],
+                "facts": [
+                    {"channel": "csd_resources", "type": "SRT", "name": "S0C1", "group": "DFHSRT01"},
+                    {"channel": "csd_resources", "type": "SRT", "name": "S0C4", "group": "DFHSRT01"},
+                    {"channel": "csd_resources", "type": "SRT", "name": "S0C7", "group": "DFHSRT01"},
+                ],
+            },
             {"op": "DFHSRT", "operands": ["TYPE=USER", "ABCODE=(A001)", "RECOVER=NO"]},
-            # DFHJCT: JFILEID=SYSTEM -> DFHLOG, JFILEID=02 -> DFHJ02
+            # DFHJCT: JFILEID=SYSTEM -> SYSTEM, JFILEID=02 -> 02
             {"op": "DFHJCT", "operands": ["TYPE=INITIAL", "SUFFIX=01"]},
             {
                 "op": "DFHJCT",
@@ -262,8 +270,8 @@ MACRO_TABLES = [
                 "facts": [
                     {
                         "channel": "csd_resources",
-                        "type": "JOURNALMODEL",
-                        "name": "DFHLOG",
+                        "type": "JOURNAL",
+                        "name": "SYSTEM",
                         "group": "DFHJCT01",
                         "dsname": "PROD.CICS.SYSTEM.LOG",
                     }
@@ -275,8 +283,8 @@ MACRO_TABLES = [
                 "facts": [
                     {
                         "channel": "csd_resources",
-                        "type": "JOURNALMODEL",
-                        "name": "DFHJ02",
+                        "type": "JOURNAL",
+                        "name": "02",
                         "group": "DFHJCT01",
                         "dsname": "PROD.CICS.USER.LOG02",
                     }
@@ -289,11 +297,7 @@ MACRO_TABLES = [
                 "operands": ["TYPE=SYSTEM", "SYSIDNT=TOR1"],
                 "facts": [{"channel": "csd_resources", "type": "CONNECTION", "name": "TOR1", "group": "DFHTCT01"}],
             },
-            {
-                "op": "DFHTCT",
-                "operands": ["TYPE=REGION", "SYSIDNT=AOR1"],
-                "facts": [{"channel": "csd_resources", "type": "CONNECTION", "name": "AOR1", "group": "DFHTCT01"}],
-            },
+            {"op": "DFHTCT", "operands": ["TYPE=REGION", "SYSIDNT=AOR1"]},
             {"op": "DFHTCT", "operands": ["TYPE=SDSCI", "DSCNAME=LINE01"]},
             {"op": "DFHTCT", "operands": ["TYPE=LINE", "ACCMETH=BTAM", "DSCNAME=LINE01"]},
             {
@@ -303,9 +307,15 @@ MACRO_TABLES = [
             },
             {
                 "op": "DFHTCT",
-                "operands": ["TYPE=GPENTRY", "TRMLIST=(S001,S002)"],
+                "operands": ["TYPE=GPENTRY", "TRMIDNT=S001"],
                 "facts": [
                     {"channel": "csd_resources", "type": "TERMINAL", "name": "S001", "group": "DFHTCT01"},
+                ],
+            },
+            {
+                "op": "DFHTCT",
+                "operands": ["TYPE=GPENTRY", "TRMIDNT=S002"],
+                "facts": [
                     {"channel": "csd_resources", "type": "TERMINAL", "name": "S002", "group": "DFHTCT01"},
                 ],
             },

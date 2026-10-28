@@ -7,7 +7,7 @@
    "library": "asm",
    "language": "hlasm",
    "numbered": true,
-   "lines": 58,
+   "lines": 59,
    "compile": {
     "status": "not-cobol"
    },
@@ -58,7 +58,7 @@
      "type": "TDQUEUE",
      "name": "SHPA",
      "group": "DFHDCT01",
-     "record_format": "V",
+     "record_format": "VARIABLE",
      "line": 24,
      "horror": "H-0063"
     },
@@ -73,29 +73,50 @@
     },
     {
      "type": "TSMODEL",
-     "name": "SHPT*",
+     "name": "SHPT",
      "group": "DFHTST01",
      "line": 28,
      "horror": "H-0063"
     },
     {
      "type": "TSMODEL",
-     "name": "SHPA*",
+     "name": "SHPA",
      "group": "DFHTST01",
      "line": 28,
      "horror": "H-0063"
     },
     {
-     "type": "JOURNALMODEL",
-     "name": "DFHLOG",
+     "type": "SRT",
+     "name": "S0C1",
+     "group": "DFHSRT01",
+     "line": 30,
+     "horror": "H-0063"
+    },
+    {
+     "type": "SRT",
+     "name": "S0C4",
+     "group": "DFHSRT01",
+     "line": 30,
+     "horror": "H-0063"
+    },
+    {
+     "type": "SRT",
+     "name": "S0C7",
+     "group": "DFHSRT01",
+     "line": 30,
+     "horror": "H-0063"
+    },
+    {
+     "type": "JOURNAL",
+     "name": "SYSTEM",
      "group": "DFHJCT01",
      "dsname": "PROD.CICS.SYSTEM.LOG",
      "line": 33,
      "horror": "H-0063"
     },
     {
-     "type": "JOURNALMODEL",
-     "name": "DFHJ02",
+     "type": "JOURNAL",
+     "name": "02",
      "group": "DFHJCT01",
      "dsname": "PROD.CICS.USER.LOG02",
      "line": 34,
@@ -106,13 +127,6 @@
      "name": "TOR1",
      "group": "DFHTCT01",
      "line": 36,
-     "horror": "H-0063"
-    },
-    {
-     "type": "CONNECTION",
-     "name": "AOR1",
-     "group": "DFHTCT01",
-     "line": 37,
      "horror": "H-0063"
     },
     {
@@ -133,14 +147,14 @@
      "type": "TERMINAL",
      "name": "S002",
      "group": "DFHTCT01",
-     "line": 41,
+     "line": 42,
      "horror": "H-0063"
     },
     {
      "type": "MONITORPOINT",
      "name": "USER.203",
      "group": "DFHMCT",
-     "line": 42,
+     "line": 43,
      "horror": "H-0063"
     },
     {
@@ -148,7 +162,7 @@
      "name": "SHPPLT1",
      "group": "DFHPLTI1",
      "program": "SHPPLT1",
-     "line": 45,
+     "line": 46,
      "horror": "H-0063"
     },
     {
@@ -156,7 +170,7 @@
      "name": "SHPPLT2",
      "group": "DFHPLTI1",
      "program": "SHPPLT2",
-     "line": 45,
+     "line": 46,
      "horror": "H-0063"
     },
     {
@@ -164,7 +178,7 @@
      "name": "SHPPLT3",
      "group": "DFHPLTI1",
      "program": "SHPPLT3",
-     "line": 47,
+     "line": 48,
      "horror": "H-0063"
     },
     {
@@ -172,7 +186,7 @@
      "name": "DFHRCT01",
      "group": "DFHRCT01",
      "plan": "SHPDEFPL",
-     "line": 48,
+     "line": 49,
      "horror": "H-0063"
     },
     {
@@ -181,7 +195,7 @@
      "group": "SHPDB2G",
      "plan": "SHPINQPL",
      "transid": "SHPI",
-     "line": 53,
+     "line": 54,
      "horror": "H-0063"
     },
     {
@@ -190,14 +204,14 @@
      "group": "SHPDB2G",
      "plan": "SHPDEFPL",
      "transid": "SHPM",
-     "line": 55,
+     "line": 56,
      "horror": "H-0063"
     },
     {
      "type": "SIT",
      "name": "DFHSIT6$",
      "group": "DFHSIT6$",
-     "line": 56,
+     "line": 57,
      "horror": "H-0063"
     }
    ],

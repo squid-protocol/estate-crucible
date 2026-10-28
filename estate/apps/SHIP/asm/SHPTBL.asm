@@ -38,21 +38,22 @@ SHP_DAM_FILE_01 DFHFCT TYPE=FILE,  DEFINE SHIPMENT DAM FILE            X00000600
          DFHTCT TYPE=SDSCI,DSCNAME=LINE01                               00003800
          DFHTCT TYPE=LINE,ACCMETH=BTAM,DSCNAME=LINE01                   00003900
          DFHTCT TYPE=TERMINAL,TRMIDNT=T001,TRMTYPE=3270                 00004000
-         DFHTCT TYPE=GPENTRY,TRMLIST=(S001,S002)                        00004100
-         DFHMCT TYPE=EMP,CLASS=PERFORM,ID=(PP,4)                        00004200
-         DFHMCT TYPE=RECORD,CLASS=PERFORM,EXCLUDE=(DFHTASK)             00004300
-         DFHPLT TYPE=INITIAL,SUFFIX=I1                                  00004400
-         DFHPLT TYPE=ENTRY,PROGRAM=(SHPPLT1,SHPPLT2)                    00004500
-         DFHPLT TYPE=ENTRY,PROGRAM=DFHDELIM                             00004600
-         DFHPLT TYPE=ENTRY,PROGRAM=SHPPLT3                              00004700
-         DSNCRCT TYPE=INIT,SUFFIX=01,SUBID=DB2S,PLANI=SHPDEFPL,        X00004800
-               THRDMAX=12                                               00004900
-         DSNCRCT TYPE=COMD,AUTH=USERID,THRDM=1,THRDA=1                  00005000
-         DSNCRCT TYPE=POOL,PLAN=SHPPOOLP,THRDM=3,THRDA=3                00005100
-         DSNCRCT TYPE=GROUP,GROUP=SHPDB2G                               00005200
-         DSNCRCT TYPE=ENTRY,TXID=(SHPI),PLAN=SHPINQPL,THRDA=4,         X00005300
-               TWAIT=POOL                                               00005400
-         DSNCRCT TYPE=ENTRY,TXID=(SHPM),THRDA=2,TWAIT=YES               00005500
-         DFHSIT TYPE=CSECT,SUFFIX=6$,FCT=01,DCT=01,PCT=01,PPT=01        00005600
-         DFHFCT TYPE=FINAL                                              00005700
-         END                                                            00005800
+         DFHTCT TYPE=GPENTRY,TRMIDNT=S001                               00004100
+         DFHTCT TYPE=GPENTRY,TRMIDNT=S002                               00004200
+         DFHMCT TYPE=EMP,CLASS=PERFORM,ID=(PP,4)                        00004300
+         DFHMCT TYPE=RECORD,CLASS=PERFORM,EXCLUDE=(DFHTASK)             00004400
+         DFHPLT TYPE=INITIAL,SUFFIX=I1                                  00004500
+         DFHPLT TYPE=ENTRY,PROGRAM=(SHPPLT1,SHPPLT2)                    00004600
+         DFHPLT TYPE=ENTRY,PROGRAM=DFHDELIM                             00004700
+         DFHPLT TYPE=ENTRY,PROGRAM=SHPPLT3                              00004800
+         DSNCRCT TYPE=INIT,SUFFIX=01,SUBID=DB2S,PLANI=SHPDEFPL,        X00004900
+               THRDMAX=12                                               00005000
+         DSNCRCT TYPE=COMD,AUTH=USERID,THRDM=1,THRDA=1                  00005100
+         DSNCRCT TYPE=POOL,PLAN=SHPPOOLP,THRDM=3,THRDA=3                00005200
+         DSNCRCT TYPE=GROUP,GROUP=SHPDB2G                               00005300
+         DSNCRCT TYPE=ENTRY,TXID=(SHPI),PLAN=SHPINQPL,THRDA=4,         X00005400
+               TWAIT=POOL                                               00005500
+         DSNCRCT TYPE=ENTRY,TXID=(SHPM),THRDA=2,TWAIT=YES               00005600
+         DFHSIT TYPE=CSECT,SUFFIX=6$,FCT=01,DCT=01,PCT=01,PPT=01        00005700
+         DFHFCT TYPE=FINAL                                              00005800
+         END                                                            00005900
