@@ -2050,7 +2050,8 @@
      "program": "DSNUTILB",
      "exec_proc": null,
      "cond": null,
-     "line": 4
+     "line": 4,
+     "parm": "DB2P,INVSTATS"
     }
    ],
    "jcl_dds": [

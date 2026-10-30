@@ -1,0 +1,101 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0066",
+ "title": "DD concatenation: unnamed DD statements continue the previous DD",
+ "category": "jcl",
+ "issue": 4891,
+ "shapes": [
+  "BDLD BDLDNITE.jcl: STEPLIB DD followed by an unnamed DD for PROD.BDLD.LOADLIB",
+  "BDLD BDLDGDG.jcl: SORTIN generation (0) concatenated with an unnamed DD for PROD.BDLD.DELTA"
+ ],
+ "asserts": "An unnamed DD is a jcl_dds fact with dd null and concat_of the ddname it continues; its dataset is read under that ddname.",
+ "citations": [
+  {
+   "doc": "z/OS MVS JCL User's Guide (z/OS 2.5.0)",
+   "section": "Identification of data set > Concatenating data sets",
+   "url": "https://www.ibm.com/docs/SSLTBW_2.5.0/com.ibm.zos.v2r5.ieab500/iea3b5_Concatenating_data_sets.htm",
+   "quote": "To concatenate data sets, omit the ddnames from all the DD statements except the first."
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDGDG.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "BDLDGDG",
+      "proc": null,
+      "step": "GEN010",
+      "dd": null,
+      "dsn": "PROD.BDLD.DELTA",
+      "generation": null,
+      "disp": "SHR",
+      "disp_normal": null,
+      "sysout": null,
+      "line": 6,
+      "concat_of": "SORTIN",
+      "horror": "H-0066"
+     }
+    ],
+    "jcl_datasets": [
+     {
+      "dsn": "PROD.BDLD.DELTA",
+      "generation": null,
+      "step": "GEN010",
+      "dd": "SORTIN",
+      "line": 6,
+      "horror": "H-0066"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/BDLD/jcl/BDLDNITE.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "BDLDNITE",
+      "proc": null,
+      "step": "LOAD020",
+      "dd": null,
+      "dsn": "PROD.BDLD.LOADLIB",
+      "generation": null,
+      "disp": "SHR",
+      "disp_normal": null,
+      "sysout": null,
+      "line": 17,
+      "concat_of": "STEPLIB",
+      "horror": "H-0066"
+     }
+    ],
+    "jcl_datasets": [
+     {
+      "dsn": "DSN.V13R1.SDSNLOAD",
+      "generation": null,
+      "step": "LOAD020",
+      "dd": "STEPLIB",
+      "line": 16,
+      "horror": "H-0066"
+     },
+     {
+      "dsn": "PROD.BDLD.LOADLIB",
+      "generation": null,
+      "step": "LOAD020",
+      "dd": "STEPLIB",
+      "line": 17,
+      "horror": "H-0066"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

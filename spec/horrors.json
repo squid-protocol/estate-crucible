@@ -1600,6 +1600,193 @@
     }
    ],
    "era": 0
+  },
+  {
+   "id": "H-0064",
+   "title": "JCL flow control: step COND= tests and an IF/THEN/ELSE/ENDIF construct whose branches hold the steps",
+   "category": "jcl",
+   "issue": 4891,
+   "shapes": [
+    "BDLD BDLDNITE.jcl: step LOAD020 with COND=(4,LT,SORT010), which bypasses the step when its test is true",
+    "BDLD BDLDNITE.jcl: IF (LOAD020.RC = 0) THEN with step RPT030 / ELSE with step ERR040 / ENDIF; the steps inside each branch carry branch=then|else and the construct's condition in if_cond"
+   ],
+   "asserts": "A step with COND= is a jcl_steps fact whose cond is the operand text; a step inside an IF/THEN/ELSE construct is a jcl_steps fact with if_cond (the relational expression) and branch (then or else). The IF, ELSE and ENDIF statements themselves are not steps.",
+   "citations": [
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+     "section": "EXEC statement > COND parameter",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/xexcond.htm",
+     "quote": "Use the COND parameter to test return codes from previous job steps and determine whether to bypass this job step."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+     "section": "IF/THEN/ELSE/ENDIF statement construct > THEN and ELSE clauses",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/iea3b6_THEN_and_ELSE_clauses.htm",
+     "quote": "the THEN clause or the ELSE clause must contain at least one EXEC statement to identify a job step"
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0065",
+   "title": "Temporary datasets (&&name) passed between steps with DISP=(NEW,PASS)",
+   "category": "jcl",
+   "issue": 4891,
+   "shapes": [
+    "BDLD BDLDNITE.jcl: SORT010 writes &&SORTED with DISP=(NEW,PASS); LOAD020 reads it with DISP=(OLD,DELETE)"
+   ],
+   "asserts": "A DD on a && name is a jcl_dds fact with temp true and no jcl_datasets row: a temporary dataset is not a catalogued dataset and must not appear as one (a phantom on jcl_datasets records it).",
+   "citations": [
+    {
+     "doc": "z/OS MVS JCL User's Guide (z/OS 2.4.0)",
+     "section": "Identification of data set > Temporary data sets",
+     "url": "https://www.ibm.com/docs/SSLTBW_2.4.0/com.ibm.zos.v2r4.ieab500/iea3b5_Temporary_data_sets.htm",
+     "quote": "A temporary data set is a data set that is created and deleted in the same job"
+    }
+   ],
+   "era": 0
+  },
+  {
+   "id": "H-0066",
+   "title": "DD concatenation: unnamed DD statements continue the previous DD",
+   "category": "jcl",
+   "issue": 4891,
+   "shapes": [
+    "BDLD BDLDNITE.jcl: STEPLIB DD followed by an unnamed DD for PROD.BDLD.LOADLIB",
+    "BDLD BDLDGDG.jcl: SORTIN generation (0) concatenated with an unnamed DD for PROD.BDLD.DELTA"
+   ],
+   "asserts": "An unnamed DD is a jcl_dds fact with dd null and concat_of the ddname it continues; its dataset is read under that ddname.",
+   "citations": [
+    {
+     "doc": "z/OS MVS JCL User's Guide (z/OS 2.5.0)",
+     "section": "Identification of data set > Concatenating data sets",
+     "url": "https://www.ibm.com/docs/SSLTBW_2.5.0/com.ibm.zos.v2r5.ieab500/iea3b5_Concatenating_data_sets.htm",
+     "quote": "To concatenate data sets, omit the ddnames from all the DD statements except the first."
+    }
+   ],
+   "era": 0
+  },
+  {
+   "id": "H-0067",
+   "title": "Utility control cards in the input stream: DFSORT, ICETOOL, IDCAMS and IEBGENER",
+   "category": "jcl",
+   "issue": 4890,
+   "shapes": [
+    "BDLD BDLDNITE.jcl / BDLDUTIL.jcl / BDLDGDG.jcl: DFSORT SORT FIELDS, INCLUDE COND, INREC, OUTREC, SUM FIELDS on SYSIN DD *",
+    "BDLD BDLDUTIL.jcl: ICETOOL COPY on TOOLIN with an OMIT card in the CTL1CNTL DD",
+    "BDLD BDLDUTIL.jcl: IDCAMS DELETE, SET MAXCC, DEFINE CLUSTER (continued with a trailing hyphen) and REPRO on SYSIN",
+    "BDLD BDLDUTIL.jcl: IEBGENER with SYSIN DD DUMMY (no cards)"
+   ],
+   "asserts": "Each control statement in an inline DD * stream is a jcl_utility_cards fact: step, utility (the step's PGM), dd, verb, operands and the line the statement starts on; a statement continued on following lines is one fact. DD DUMMY SYSIN has no cards.",
+   "citations": [
+    {
+     "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.1.0)",
+     "section": "INCLUDE Control Statement",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.icea100/inccst.htm",
+     "quote": "Use an INCLUDE statement if you want only certain records to appear in the output data set."
+    },
+    {
+     "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.1.0)",
+     "section": "OMIT Control Statement",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.icea100/omicst.htm",
+     "quote": "Use an OMIT statement if you do not want all of the input records to appear in the output data sets."
+    },
+    {
+     "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.1.0)",
+     "section": "INREC Control Statement",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.icea100/ice2ca_INREC_control_statement.htm",
+     "quote": "The INREC control statement allows you to reformat the input records before they are sorted, merged, or copied."
+    },
+    {
+     "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.1.0)",
+     "section": "OUTREC Control Statement",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.icea100/outcst.htm",
+     "quote": "The OUTREC control statement allows you to reformat the input records after they are sorted, merged or copied."
+    },
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.1.0)",
+     "section": "DELETE",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.idai200/delet.htm",
+     "quote": "The DELETE command deletes catalogs, VSAM data sets, non-VSAM data sets, and objects."
+    },
+    {
+     "doc": "z/OS DFSMSdfp Utilities (z/OS 2.1.0)",
+     "section": "Data set utility programs > IEBGENER",
+     "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.idau100/u1239.htm",
+     "quote": "Copy records from a sequential data set or convert a data set from sequential organization to partitioned organization"
+    }
+   ],
+   "era": 0
+  },
+  {
+   "id": "H-0068",
+   "title": "A Db2 program run in batch under IKJEFT01 with DSN SYSTEM and RUN PROGRAM commands in SYSTSIN",
+   "category": "jcl",
+   "issue": 4891,
+   "shapes": [
+    "BDLD BDLDNITE.jcl / BDLDRST.jcl: step LOAD020 EXEC PGM=IKJEFT01 whose SYSTSIN DD * holds DSN SYSTEM(DB2P), RUN PROGRAM(BDLDDB2) PLAN(BDLDPLN) LIB(...) and END"
+   ],
+   "asserts": "The program a RUN PROGRAM(...) command names is called by the IKJEFT01 step: the step's SYSTSIN commands (DSN, RUN, END) are jcl_utility_cards facts with the step's utility IKJEFT01, and a reader must not take IKJEFT01 for the program that runs the plan.",
+   "citations": [
+    {
+     "doc": "Db2 13 for z/OS Administration Guide",
+     "section": "Running batch application programs",
+     "url": "https://ibm.com/docs/en/SSEPEK_13.0.0/admin/src/tpc/db2z_runbatch.html",
+     "quote": "Batch Db2 work can run in the TSO background under the TSO terminal monitor program (TMP)."
+    },
+    {
+     "doc": "Db2 13 for z/OS Administration Guide",
+     "section": "Running batch application programs",
+     "url": "https://ibm.com/docs/en/SSEPEK_13.0.0/admin/src/tpc/db2z_runbatch.html",
+     "quote": "IKJEFT01 identifies an entry point for TSO TMP invocation."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0069",
+   "title": "EXEC PARM= and a JOB resubmitted with RESTART=stepname",
+   "category": "jcl",
+   "issue": 4891,
+   "shapes": [
+    "BDLD BDLDRST.jcl: JOB statement carries RESTART=LOAD020; SORT010 precedes the restart step and is not executed by the restart",
+    "BDLD BDLDRST.jcl: RPT030 EXEC PGM=BDLDRPT,PARM=MONTHLY"
+   ],
+   "asserts": "PARM= is the jcl_steps parm of its step (the text passed to the program). RESTART= on the JOB statement is the restart of every jcl_steps fact in that job: the named step is where execution resumes, the steps before it are not run.",
+   "citations": [
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+     "section": "EXEC statement > PARM parameter",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/xexparm.htm",
+     "quote": "Use the PARM parameter to pass variable information to the processing program executed by this job step."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+     "section": "JOB statement > RESTART parameter",
+     "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/xjbresta.htm",
+     "quote": "Use the RESTART parameter to indicate the step, procedure step, or checkpoint at which the system is to restart a job."
+    }
+   ],
+   "era": 0
+  },
+  {
+   "id": "H-0070",
+   "title": "One job reading generation (0) and creating generation (+1) of the same GDG",
+   "category": "jcl",
+   "issue": 4891,
+   "shapes": [
+    "BDLD BDLDGDG.jcl: SORTIN DSN=PROD.BDLD.MASTER(0) and SORTOUT DSN=PROD.BDLD.MASTER(+1), both on the one dataset base name"
+   ],
+   "asserts": "Both DDs are jcl_datasets facts on the base name PROD.BDLD.MASTER with their relative generation: (0) is read, (+1) is created, and within the job (0) is still the generation that existed before the job started.",
+   "citations": [
+    {
+     "doc": "z/OS MVS JCL User's Guide (z/OS 2.1.0)",
+     "section": "Identification of data set > Generation data sets",
+     "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab500/iea3b5_Generation_data_sets_.htm",
+     "quote": "if you create a generation data set with a relative generation number of (+1)"
+    }
+   ],
+   "era": 0
   }
  ],
  "not_planted": [

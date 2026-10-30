@@ -72,6 +72,13 @@ era-neutral syntax horror; blank is untagged.
 | H-0061 | 1 | [#5118](https://github.com/squid-protocol/gitgalaxy/issues/5118) | data-items | CICS BLL cells: LINKAGE S9(8) COMP cells that EXEC CICS ADDRESS and READ SET fill | `apps/INVT/cobol/INVTONL.cbl` |
 | H-0062 | 1 | [#5118](https://github.com/squid-protocol/gitgalaxy/issues/5118) | data-moves | SERVICE RELOAD: the OS/VS COBOL compiler-control statement that re-establishes LINKAGE addressability after a BLL cell changes | `apps/INVT/cobol/INVTRLD.cbl` |
 | H-0063 | 0 | [#5154](https://github.com/squid-protocol/gitgalaxy/issues/5154) | cics | Pre-RDO CICS resource macro tables in HLASM: alternative statement format with per-line remarks, remark continuations after column 16, SDSCI DCB folding, and refused non-resource macros | `apps/SHIP/asm/SHPTBL.asm` |
+| H-0064 | 2 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | JCL flow control: step COND= tests and an IF/THEN/ELSE/ENDIF construct whose branches hold the steps | `apps/BDLD/jcl/BDLDNITE.jcl` |
+| H-0065 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | Temporary datasets (&&name) passed between steps with DISP=(NEW,PASS) | `apps/BDLD/jcl/BDLDNITE.jcl` |
+| H-0066 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | DD concatenation: unnamed DD statements continue the previous DD | `apps/BDLD/jcl/BDLDGDG.jcl`, `apps/BDLD/jcl/BDLDNITE.jcl` |
+| H-0067 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | Utility control cards in the input stream: DFSORT, ICETOOL, IDCAMS and IEBGENER | `apps/BDLD/jcl/BDLDGDG.jcl`, `apps/BDLD/jcl/BDLDNITE.jcl`, `apps/BDLD/jcl/BDLDUTIL.jcl` |
+| H-0068 | 2 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | A Db2 program run in batch under IKJEFT01 with DSN SYSTEM and RUN PROGRAM commands in SYSTSIN | `apps/BDLD/jcl/BDLDNITE.jcl` |
+| H-0069 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | EXEC PARM= and a JOB resubmitted with RESTART=stepname | `apps/BDLD/jcl/BDLDRST.jcl` |
+| H-0070 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | One job reading generation (0) and creating generation (+1) of the same GDG | `apps/BDLD/jcl/BDLDGDG.jcl` |
 
 ## Field-testing defects not planted
 

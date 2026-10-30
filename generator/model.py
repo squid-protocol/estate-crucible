@@ -48,6 +48,8 @@ CHANNELS = (
     "copy_collisions",
     "gaps",
     "dead",
+    # estate-crucible 1.2: batch utility control cards (Open World, Batch Badlands, gitgalaxy#7065)
+    "jcl_utility_cards",
 )
 
 

@@ -1,0 +1,129 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0064",
+ "title": "JCL flow control: step COND= tests and an IF/THEN/ELSE/ENDIF construct whose branches hold the steps",
+ "category": "jcl",
+ "issue": 4891,
+ "shapes": [
+  "BDLD BDLDNITE.jcl: step LOAD020 with COND=(4,LT,SORT010), which bypasses the step when its test is true",
+  "BDLD BDLDNITE.jcl: IF (LOAD020.RC = 0) THEN with step RPT030 / ELSE with step ERR040 / ENDIF; the steps inside each branch carry branch=then|else and the construct's condition in if_cond"
+ ],
+ "asserts": "A step with COND= is a jcl_steps fact whose cond is the operand text; a step inside an IF/THEN/ELSE construct is a jcl_steps fact with if_cond (the relational expression) and branch (then or else). The IF, ELSE and ENDIF statements themselves are not steps.",
+ "citations": [
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+   "section": "EXEC statement > COND parameter",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/xexcond.htm",
+   "quote": "Use the COND parameter to test return codes from previous job steps and determine whether to bypass this job step."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+   "section": "IF/THEN/ELSE/ENDIF statement construct > THEN and ELSE clauses",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/iea3b6_THEN_and_ELSE_clauses.htm",
+   "quote": "the THEN clause or the ELSE clause must contain at least one EXEC statement to identify a job step"
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDNITE.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "IKJEFT01",
+      "target": "IKJEFT01",
+      "line": 15,
+      "resolves_to": null,
+      "horror": "H-0064"
+     },
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "BDLDRPT",
+      "target": "BDLDRPT",
+      "line": 28,
+      "resolves_to": "apps/BDLD/cobol/BDLDRPT.cbl",
+      "horror": "H-0064"
+     },
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "IEBGENER",
+      "target": "IEBGENER",
+      "line": 33,
+      "resolves_to": null,
+      "horror": "H-0064"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": "BDLDNITE",
+      "proc": null,
+      "step": "LOAD020",
+      "ordinal": 2,
+      "program": "IKJEFT01",
+      "exec_proc": null,
+      "cond": "(4,LT,SORT010)",
+      "line": 15,
+      "horror": "H-0064"
+     },
+     {
+      "job": "BDLDNITE",
+      "proc": null,
+      "step": "RPT030",
+      "ordinal": 3,
+      "program": "BDLDRPT",
+      "exec_proc": null,
+      "cond": null,
+      "line": 28,
+      "if_cond": "LOAD020.RC = 0",
+      "branch": "then",
+      "horror": "H-0064"
+     },
+     {
+      "job": "BDLDNITE",
+      "proc": null,
+      "step": "ERR040",
+      "ordinal": 4,
+      "program": "IEBGENER",
+      "exec_proc": null,
+      "cond": null,
+      "line": 33,
+      "if_cond": "LOAD020.RC = 0",
+      "branch": "else",
+      "horror": "H-0064"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": "BDLDNITE",
+      "proc": null,
+      "step": "ERR040",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 37,
+      "dummy": true,
+      "horror": "H-0064"
+     }
+    ],
+    "file_edges": [
+     {
+      "kind": "exec",
+      "target": "apps/BDLD/cobol/BDLDRPT.cbl",
+      "horror": "H-0064"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

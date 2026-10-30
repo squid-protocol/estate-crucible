@@ -1,0 +1,78 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0065",
+ "title": "Temporary datasets (&&name) passed between steps with DISP=(NEW,PASS)",
+ "category": "jcl",
+ "issue": 4891,
+ "shapes": [
+  "BDLD BDLDNITE.jcl: SORT010 writes &&SORTED with DISP=(NEW,PASS); LOAD020 reads it with DISP=(OLD,DELETE)"
+ ],
+ "asserts": "A DD on a && name is a jcl_dds fact with temp true and no jcl_datasets row: a temporary dataset is not a catalogued dataset and must not appear as one (a phantom on jcl_datasets records it).",
+ "citations": [
+  {
+   "doc": "z/OS MVS JCL User's Guide (z/OS 2.4.0)",
+   "section": "Identification of data set > Temporary data sets",
+   "url": "https://www.ibm.com/docs/SSLTBW_2.4.0/com.ibm.zos.v2r4.ieab500/iea3b5_Temporary_data_sets.htm",
+   "quote": "A temporary data set is a data set that is created and deleted in the same job"
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDNITE.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "BDLDNITE",
+      "proc": null,
+      "step": "SORT010",
+      "dd": "SORTOUT",
+      "dsn": "&&SORTED",
+      "generation": null,
+      "disp": "NEW",
+      "disp_normal": "PASS",
+      "sysout": null,
+      "line": 7,
+      "temp": true,
+      "horror": "H-0065"
+     },
+     {
+      "job": "BDLDNITE",
+      "proc": null,
+      "step": "LOAD020",
+      "dd": "SORTED",
+      "dsn": "&&SORTED",
+      "generation": null,
+      "disp": "OLD",
+      "disp_normal": "DELETE",
+      "sysout": null,
+      "line": 18,
+      "temp": true,
+      "horror": "H-0065"
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "jcl_datasets",
+     "dsn": "&&SORTED",
+     "step": "SORT010",
+     "line": 7,
+     "why": "a temporary data set (&&name) exists only for the job: it is not a dataset of the estate",
+     "horror": "H-0065"
+    },
+    {
+     "channel": "jcl_datasets",
+     "dsn": "&&SORTED",
+     "step": "LOAD020",
+     "line": 18,
+     "why": "a temporary data set (&&name) exists only for the job: it is not a dataset of the estate",
+     "horror": "H-0065"
+    }
+   ]
+  }
+ ]
+}

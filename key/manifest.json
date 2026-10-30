@@ -153,6 +153,13 @@
    "style": "1980s card deck: numbered cols 1-6, deck name in cols 73-80, upper case, SECTIONs, period-terminated IF",
    "era": 1,
    "era_evidence": "INVTBAT and INVTONL have no construct later than OS/VS COBOL and CICS/VS command level; a 1983 card-deck system"
+  },
+  {
+   "id": "BDLD",
+   "title": "Batch Badlands (JCL execution flow and utilities)",
+   "style": "multi-step batch jobs: COND, IF/THEN/ELSE, temp datasets, concatenation, utility control cards",
+   "era": 2,
+   "era_evidence": "BDLDDB2 EXEC SQL and END-IF (COBOL-85); the JCL uses IF/THEN/ELSE/ENDIF"
   }
  ],
  "channels": [
@@ -178,33 +185,35 @@
   "data_moves",
   "copy_collisions",
   "gaps",
-  "dead"
+  "dead",
+  "jcl_utility_cards"
  ],
  "fact_totals": {
-  "programs": 48,
-  "units": 135,
-  "edges": 89,
-  "call_sites": 46,
-  "copies": 63,
-  "data_items": 479,
-  "layouts": 159,
-  "sql_statements": 5,
-  "sql_tables": 2,
-  "jcl_steps": 23,
-  "jcl_dds": 48,
+  "programs": 50,
+  "units": 139,
+  "edges": 92,
+  "call_sites": 58,
+  "copies": 66,
+  "data_items": 498,
+  "layouts": 166,
+  "sql_statements": 6,
+  "sql_tables": 3,
+  "jcl_steps": 35,
+  "jcl_dds": 95,
   "screen_fields": 16,
   "csd_resources": 44,
   "transactions": 7,
   "cics_resources": 9,
-  "jcl_datasets": 35,
-  "file_control": 11,
-  "entry_points": 48,
-  "file_edges": 25,
-  "data_moves": 134,
+  "jcl_datasets": 55,
+  "file_control": 13,
+  "entry_points": 50,
+  "file_edges": 27,
+  "data_moves": 141,
   "copy_collisions": 9,
   "gaps": 17,
   "dead": 11,
-  "phantoms": 50
+  "jcl_utility_cards": 20,
+  "phantoms": 52
  },
  "code_pages": {
   "apps/DEUT/cobol/ZINSBER.cbl": "cp273",
@@ -222,6 +231,12 @@
   "libraries": {
    "ACCTCPY": [
     "apps/ACCT/copybook"
+   ],
+   "BDLDCPY": [
+    "apps/BDLD/copybook"
+   ],
+   "BDLDDCL": [
+    "apps/BDLD/dclgen"
    ],
    "BILLCPY": [
     "apps/BILL/copybook"
@@ -294,6 +309,14 @@
     "programs": "apps/ACCT/*",
     "order": [
      "ACCTCPY",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/BDLD/*",
+    "order": [
+     "BDLDCPY",
+     "BDLDDCL",
      "SHRCPY"
     ]
    },
@@ -500,7 +523,14 @@
   "H-0060",
   "H-0061",
   "H-0062",
-  "H-0063"
+  "H-0063",
+  "H-0064",
+  "H-0065",
+  "H-0066",
+  "H-0067",
+  "H-0068",
+  "H-0069",
+  "H-0070"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -680,6 +710,132 @@
    },
    "horrors": [
     "H-0011"
+   ]
+  },
+  "apps/BDLD/cobol/BDLDDB2.cbl": {
+   "app": "BDLD",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "9ceb44d0d939fc0dc875d00231257f68c73ac4c1738b7d819b528c6858201bd6",
+   "bytes": 1847,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/BDLD.json",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "era": 2,
+   "era_evidence": "EXEC SQL (Db2) is an era-2 tell in #5117; END-IF is COBOL-85"
+  },
+  "apps/BDLD/cobol/BDLDRPT.cbl": {
+   "app": "BDLD",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "c61454b523a4ef6647f50b7e5ef16e121ee6687491589582ec1e21d94cdb911e",
+   "bytes": 1263,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/BDLD.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85) and a PARM received through LINKAGE; no later construct"
+  },
+  "apps/BDLD/copybook/BDLREC.cpy": {
+   "app": "BDLD",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "8f88f9800a51f05c178c9ae7f0832a2876f846ec8aeab67c5fcfb00393ab27c7",
+   "bytes": 345,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/BDLD.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/BDLD/dclgen/DCLBDLD.dcl": {
+   "app": "BDLD",
+   "library": "dclgen",
+   "language": "cobol",
+   "sha256": "d3aab41ba6edf701c114a10f60e46e52080d67beadc0f305e5b624d3a8c58c29",
+   "bytes": 1125,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/BDLD.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/BDLD/jcl/BDLDGDG.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "88978c780a13942140ee6b0376001d6395d2a58915661052c985d28ce4fc5667",
+   "bytes": 411,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/BDLD.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0066",
+    "H-0067",
+    "H-0070"
+   ]
+  },
+  "apps/BDLD/jcl/BDLDNITE.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "e09b51cddd72789912ec3f675cee76b943f7983634afa510f0d49b009aab5c8b",
+   "bytes": 1084,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/BDLD.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0064",
+    "H-0065",
+    "H-0066",
+    "H-0067",
+    "H-0068"
+   ]
+  },
+  "apps/BDLD/jcl/BDLDRST.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "8c6bafedc2172b57512e5f7c87602dc473ceffef2a65086db24d1b15d01e3a22",
+   "bytes": 828,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/BDLD.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0069"
+   ]
+  },
+  "apps/BDLD/jcl/BDLDUTIL.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "06bda61668aa5b8c0075eb94dd53b7b2ee36406ca91ddaff388fe4a6ef4485fd",
+   "bytes": 1363,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/BDLD.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0067"
    ]
   },
   "apps/BILL/cobol/BILLCALC.cbl": {

@@ -1,0 +1,49 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0070",
+ "title": "One job reading generation (0) and creating generation (+1) of the same GDG",
+ "category": "jcl",
+ "issue": 4891,
+ "shapes": [
+  "BDLD BDLDGDG.jcl: SORTIN DSN=PROD.BDLD.MASTER(0) and SORTOUT DSN=PROD.BDLD.MASTER(+1), both on the one dataset base name"
+ ],
+ "asserts": "Both DDs are jcl_datasets facts on the base name PROD.BDLD.MASTER with their relative generation: (0) is read, (+1) is created, and within the job (0) is still the generation that existed before the job started.",
+ "citations": [
+  {
+   "doc": "z/OS MVS JCL User's Guide (z/OS 2.1.0)",
+   "section": "Identification of data set > Generation data sets",
+   "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab500/iea3b5_Generation_data_sets_.htm",
+   "quote": "if you create a generation data set with a relative generation number of (+1)"
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDGDG.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_datasets": [
+     {
+      "dsn": "PROD.BDLD.MASTER",
+      "generation": "0",
+      "step": "GEN010",
+      "dd": "SORTIN",
+      "line": 5,
+      "horror": "H-0070"
+     },
+     {
+      "dsn": "PROD.BDLD.MASTER",
+      "generation": "+1",
+      "step": "GEN010",
+      "dd": "SORTOUT",
+      "line": 7,
+      "horror": "H-0070"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
