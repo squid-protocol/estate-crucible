@@ -1,0 +1,2026 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "BDLD",
+ "members": {
+  "apps/BDLD/cobol/BDLDDB2.cbl": {
+   "app": "BDLD",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 53,
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "era": 2,
+   "era_evidence": "EXEC SQL (Db2) is an era-2 tell in #5117; END-IF is COBOL-85",
+   "programs": [
+    {
+     "program_id": "BDLDDB2",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 28,
+     "end_line": 34
+    },
+    {
+     "name": "1000-LOAD",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 35,
+     "end_line": 48
+    },
+    {
+     "name": "8000-READ",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 49,
+     "end_line": 53
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "8000-READ",
+     "line": 30
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-LOAD",
+     "line": 31
+    },
+    {
+     "kind": "perform",
+     "from": "1000-LOAD",
+     "target": "8000-READ",
+     "line": 48
+    }
+   ],
+   "copies": [
+    {
+     "member": "BDLREC",
+     "kind": "copy",
+     "line": 19,
+     "resolves_to": "apps/BDLD/copybook/BDLREC.cpy"
+    },
+    {
+     "member": "SQLCA",
+     "kind": "sql-include",
+     "line": 21,
+     "resolves_to": null
+    },
+    {
+     "member": "DCLBDLD",
+     "kind": "sql-include",
+     "line": 22,
+     "resolves_to": "apps/BDLD/dclgen/DCLBDLD.dcl"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "SORTED-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 18,
+     "copy_members": [
+      "BDLREC"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-SORTED-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 23
+    },
+    {
+     "level": 1,
+     "name": "WS-EOF-FLAG",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'N'",
+     "section": "WORKING-STORAGE",
+     "line": 24
+    },
+    {
+     "level": 88,
+     "name": "WS-EOF",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'Y'",
+     "section": "WORKING-STORAGE",
+     "line": 25
+    },
+    {
+     "level": 1,
+     "name": "WS-LOADED",
+     "pic": "9(7)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 26,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "SORTED-REC",
+     "line": 18,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "BDL-ACCT",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/BDLD/copybook/BDLREC.cpy"
+      },
+      {
+       "name": "BDL-NAME",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 10,
+       "file": "apps/BDLD/copybook/BDLREC.cpy"
+      },
+      {
+       "name": "BDL-AMT",
+       "level": 5,
+       "pic": "9(5)",
+       "usage": null,
+       "offset": 20,
+       "bytes": 5,
+       "file": "apps/BDLD/copybook/BDLREC.cpy"
+      },
+      {
+       "name": "BDL-PAD",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 25,
+       "bytes": 10,
+       "file": "apps/BDLD/copybook/BDLREC.cpy"
+      },
+      {
+       "name": "BDL-STATUS",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 35,
+       "bytes": 1,
+       "file": "apps/BDLD/copybook/BDLREC.cpy"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(4)",
+       "usage": null,
+       "offset": 36,
+       "bytes": 4,
+       "file": "apps/BDLD/copybook/BDLREC.cpy"
+      }
+     ]
+    },
+    {
+     "record": "WS-SORTED-STATUS",
+     "line": 23,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-SORTED-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/BDLD/cobol/BDLDDB2.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-EOF-FLAG",
+     "line": 24,
+     "bytes": 1,
+     "fields": [
+      {
+       "name": "WS-EOF-FLAG",
+       "level": 1,
+       "pic": "X",
+       "usage": null,
+       "offset": 0,
+       "bytes": 1,
+       "file": "apps/BDLD/cobol/BDLDDB2.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-LOADED",
+     "line": 26,
+     "bytes": 7,
+     "fields": [
+      {
+       "name": "WS-LOADED",
+       "level": 1,
+       "pic": "9(7)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 7,
+       "file": "apps/BDLD/cobol/BDLDDB2.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "sql_statements": [
+    {
+     "verb": "INSERT",
+     "table": "PROD.BDLD_SUMMARY",
+     "access": "update",
+     "line": 38
+    }
+   ],
+   "file_control": [
+    {
+     "select": "SORTED-FILE",
+     "assign": "SORTED",
+     "organization": "SEQUENTIAL",
+     "access_mode": null,
+     "record_key": null,
+     "file_status": "WS-SORTED-STATUS",
+     "fd_copies": [
+      "BDLREC"
+     ],
+     "line": 11
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "BDLDDB2",
+     "params": [],
+     "line": 27
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "BDL-ACCT",
+     "source_kind": "item",
+     "target": "ACCT-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 36
+    },
+    {
+     "verb": "MOVE",
+     "source": "BDL-AMT",
+     "source_kind": "item",
+     "target": "TOTAL-AMT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 37
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-LOADED",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 43
+    },
+    {
+     "verb": "MOVE",
+     "source": "8",
+     "source_kind": "literal",
+     "target": "RETURN-CODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 45
+    }
+   ]
+  },
+  "apps/BDLD/cobol/BDLDRPT.cbl": {
+   "app": "BDLD",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 36,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85) and a PARM received through LINKAGE; no later construct",
+   "programs": [
+    {
+     "program_id": "BDLDRPT",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 26,
+     "end_line": 36
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "RPT-LINE",
+     "pic": "X(80)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 18
+    },
+    {
+     "level": 1,
+     "name": "WS-RPT-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 20
+    },
+    {
+     "level": 1,
+     "name": "LS-PARM",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 22
+    },
+    {
+     "level": 5,
+     "name": "LS-PARM-LEN",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 23
+    },
+    {
+     "level": 5,
+     "name": "LS-PARM-TEXT",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 24,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "RPT-LINE",
+     "line": 18,
+     "bytes": 80,
+     "fields": [
+      {
+       "name": "RPT-LINE",
+       "level": 1,
+       "pic": "X(80)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 80,
+       "file": "apps/BDLD/cobol/BDLDRPT.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-RPT-STATUS",
+     "line": 20,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-RPT-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/BDLD/cobol/BDLDRPT.cbl"
+      }
+     ]
+    },
+    {
+     "record": "LS-PARM",
+     "line": 22,
+     "bytes": 10,
+     "fields": [
+      {
+       "name": "LS-PARM-LEN",
+       "level": 5,
+       "pic": "S9(4)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/BDLD/cobol/BDLDRPT.cbl"
+      },
+      {
+       "name": "LS-PARM-TEXT",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 2,
+       "bytes": 8,
+       "file": "apps/BDLD/cobol/BDLDRPT.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "RPT-FILE",
+     "assign": "RPTOUT",
+     "organization": "SEQUENTIAL",
+     "access_mode": null,
+     "record_key": null,
+     "file_status": "WS-RPT-STATUS",
+     "fd_copies": [],
+     "line": 11
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "BDLDRPT",
+     "params": [
+      "LS-PARM"
+     ],
+     "line": 25
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "SPACES",
+     "source_kind": "figurative",
+     "target": "RPT-LINE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 29
+    },
+    {
+     "verb": "MOVE",
+     "source": "LS-PARM-TEXT",
+     "source_kind": "item",
+     "target": "RPT-LINE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 30
+    },
+    {
+     "verb": "MOVE",
+     "source": "'REPORT DAILY'",
+     "source_kind": "literal",
+     "target": "RPT-LINE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 32
+    }
+   ]
+  },
+  "apps/BDLD/copybook/BDLREC.cpy": {
+   "app": "BDLD",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 7,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "BDL-ACCT",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 5,
+     "name": "BDL-NAME",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 5,
+     "name": "BDL-AMT",
+     "pic": "9(5)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4
+    },
+    {
+     "level": 5,
+     "name": "BDL-PAD",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 5
+    },
+    {
+     "level": 5,
+     "name": "BDL-STATUS",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 6
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 7
+    }
+   ]
+  },
+  "apps/BDLD/dclgen/DCLBDLD.dcl": {
+   "app": "BDLD",
+   "library": "dclgen",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 18,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 1,
+     "name": "DCLBDLD-SUMMARY",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 13
+    },
+    {
+     "level": 10,
+     "name": "ACCT-ID",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 14
+    },
+    {
+     "level": 10,
+     "name": "TOTAL-AMT",
+     "pic": "S9(9)",
+     "usage": "COMP-3",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 15
+    }
+   ],
+   "sql_tables": [
+    {
+     "table": "PROD.BDLD_SUMMARY",
+     "line": 6,
+     "columns": [
+      {
+       "name": "ACCT_ID",
+       "type": "CHAR",
+       "length": 10,
+       "scale": null,
+       "nullable": false,
+       "line": 7
+      },
+      {
+       "name": "TOTAL_AMT",
+       "type": "DECIMAL",
+       "length": 9,
+       "scale": 0,
+       "nullable": false,
+       "line": 8
+      }
+     ]
+    }
+   ]
+  },
+  "apps/BDLD/jcl/BDLDGDG.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 12,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "SORT",
+     "target": "SORT",
+     "line": 4,
+     "resolves_to": null
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "BDLDGDG",
+     "proc": null,
+     "step": "GEN010",
+     "ordinal": 1,
+     "program": "SORT",
+     "exec_proc": null,
+     "cond": null,
+     "line": 4
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "BDLDGDG",
+     "proc": null,
+     "step": "GEN010",
+     "dd": "SORTIN",
+     "dsn": "PROD.BDLD.MASTER",
+     "generation": "0",
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 5
+    },
+    {
+     "job": "BDLDGDG",
+     "proc": null,
+     "step": "GEN010",
+     "dd": null,
+     "dsn": "PROD.BDLD.DELTA",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 6,
+     "concat_of": "SORTIN",
+     "horror": "H-0066"
+    },
+    {
+     "job": "BDLDGDG",
+     "proc": null,
+     "step": "GEN010",
+     "dd": "SORTOUT",
+     "dsn": "PROD.BDLD.MASTER",
+     "generation": "+1",
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 7
+    },
+    {
+     "job": "BDLDGDG",
+     "proc": null,
+     "step": "GEN010",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 9
+    },
+    {
+     "job": "BDLDGDG",
+     "proc": null,
+     "step": "GEN010",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 10,
+     "inline_lines": 1,
+     "horror": "H-0067"
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.BDLD.MASTER",
+     "generation": "0",
+     "step": "GEN010",
+     "dd": "SORTIN",
+     "line": 5,
+     "horror": "H-0070"
+    },
+    {
+     "dsn": "PROD.BDLD.DELTA",
+     "generation": null,
+     "step": "GEN010",
+     "dd": "SORTIN",
+     "line": 6,
+     "horror": "H-0066"
+    },
+    {
+     "dsn": "PROD.BDLD.MASTER",
+     "generation": "+1",
+     "step": "GEN010",
+     "dd": "SORTOUT",
+     "line": 7,
+     "horror": "H-0070"
+    }
+   ],
+   "jcl_utility_cards": [
+    {
+     "job": "BDLDGDG",
+     "proc": null,
+     "step": "GEN010",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "SORT",
+     "operands": "FIELDS=(1,10,CH,A)",
+     "line": 11,
+     "horror": "H-0067"
+    }
+   ],
+   "horrors": [
+    "H-0066",
+    "H-0067",
+    "H-0070"
+   ]
+  },
+  "apps/BDLD/jcl/BDLDNITE.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 38,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "SORT",
+     "target": "SORT",
+     "line": 5,
+     "resolves_to": null
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IKJEFT01",
+     "target": "IKJEFT01",
+     "line": 15,
+     "resolves_to": null,
+     "horror": "H-0064"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "BDLDRPT",
+     "target": "BDLDRPT",
+     "line": 28,
+     "resolves_to": "apps/BDLD/cobol/BDLDRPT.cbl",
+     "horror": "H-0064"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IEBGENER",
+     "target": "IEBGENER",
+     "line": 33,
+     "resolves_to": null,
+     "horror": "H-0064"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "SORT010",
+     "ordinal": 1,
+     "program": "SORT",
+     "exec_proc": null,
+     "cond": null,
+     "line": 5
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "LOAD020",
+     "ordinal": 2,
+     "program": "IKJEFT01",
+     "exec_proc": null,
+     "cond": "(4,LT,SORT010)",
+     "line": 15,
+     "horror": "H-0064"
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "RPT030",
+     "ordinal": 3,
+     "program": "BDLDRPT",
+     "exec_proc": null,
+     "cond": null,
+     "line": 28,
+     "if_cond": "LOAD020.RC = 0",
+     "branch": "then",
+     "horror": "H-0064"
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "ERR040",
+     "ordinal": 4,
+     "program": "IEBGENER",
+     "exec_proc": null,
+     "cond": null,
+     "line": 33,
+     "if_cond": "LOAD020.RC = 0",
+     "branch": "else",
+     "horror": "H-0064"
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "SORT010",
+     "dd": "SORTIN",
+     "dsn": "PROD.BDLD.TRANS",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 6
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "SORT010",
+     "dd": "SORTOUT",
+     "dsn": "&&SORTED",
+     "generation": null,
+     "disp": "NEW",
+     "disp_normal": "PASS",
+     "sysout": null,
+     "line": 7,
+     "temp": true,
+     "horror": "H-0065"
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "SORT010",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 9
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "SORT010",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 10,
+     "inline_lines": 2,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "LOAD020",
+     "dd": "STEPLIB",
+     "dsn": "DSN.V13R1.SDSNLOAD",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 16
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "LOAD020",
+     "dd": null,
+     "dsn": "PROD.BDLD.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 17,
+     "concat_of": "STEPLIB",
+     "horror": "H-0066"
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "LOAD020",
+     "dd": "SORTED",
+     "dsn": "&&SORTED",
+     "generation": null,
+     "disp": "OLD",
+     "disp_normal": "DELETE",
+     "sysout": null,
+     "line": 18,
+     "temp": true,
+     "horror": "H-0065"
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "LOAD020",
+     "dd": "SYSTSPRT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 19
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "LOAD020",
+     "dd": "SYSTSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 20,
+     "inline_lines": 3,
+     "horror": "H-0068"
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "RPT030",
+     "dd": "STEPLIB",
+     "dsn": "PROD.BDLD.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 29
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "RPT030",
+     "dd": "RPTOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "A",
+     "line": 30
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "ERR040",
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 34
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "ERR040",
+     "dd": "SYSUT1",
+     "dsn": "PROD.BDLD.ERRMSG",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 35
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "ERR040",
+     "dd": "SYSUT2",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "A",
+     "line": 36
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "ERR040",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 37,
+     "dummy": true,
+     "horror": "H-0064"
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.BDLD.TRANS",
+     "generation": null,
+     "step": "SORT010",
+     "dd": "SORTIN",
+     "line": 6
+    },
+    {
+     "dsn": "DSN.V13R1.SDSNLOAD",
+     "generation": null,
+     "step": "LOAD020",
+     "dd": "STEPLIB",
+     "line": 16,
+     "horror": "H-0066"
+    },
+    {
+     "dsn": "PROD.BDLD.LOADLIB",
+     "generation": null,
+     "step": "LOAD020",
+     "dd": "STEPLIB",
+     "line": 17,
+     "horror": "H-0066"
+    },
+    {
+     "dsn": "PROD.BDLD.LOADLIB",
+     "generation": null,
+     "step": "RPT030",
+     "dd": "STEPLIB",
+     "line": 29
+    },
+    {
+     "dsn": "PROD.BDLD.ERRMSG",
+     "generation": null,
+     "step": "ERR040",
+     "dd": "SYSUT1",
+     "line": 35
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/BDLD/cobol/BDLDRPT.cbl",
+     "horror": "H-0064"
+    }
+   ],
+   "jcl_utility_cards": [
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "SORT010",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "SORT",
+     "operands": "FIELDS=(1,10,CH,A)",
+     "line": 11,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "SORT010",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "INCLUDE",
+     "operands": "COND=(35,1,CH,EQ,C'A')",
+     "line": 12,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "LOAD020",
+     "utility": "IKJEFT01",
+     "dd": "SYSTSIN",
+     "verb": "DSN",
+     "operands": "SYSTEM(DB2P)",
+     "line": 21,
+     "horror": "H-0068"
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "LOAD020",
+     "utility": "IKJEFT01",
+     "dd": "SYSTSIN",
+     "verb": "RUN",
+     "operands": "PROGRAM(BDLDDB2) PLAN(BDLDPLN) LIB('PROD.BDLD.LOADLIB')",
+     "line": 22,
+     "horror": "H-0068"
+    },
+    {
+     "job": "BDLDNITE",
+     "proc": null,
+     "step": "LOAD020",
+     "utility": "IKJEFT01",
+     "dd": "SYSTSIN",
+     "verb": "END",
+     "operands": "",
+     "line": 23,
+     "horror": "H-0068"
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "jcl_datasets",
+     "dsn": "&&SORTED",
+     "step": "SORT010",
+     "line": 7,
+     "why": "a temporary data set (&&name) exists only for the job: it is not a dataset of the estate",
+     "horror": "H-0065"
+    },
+    {
+     "channel": "jcl_datasets",
+     "dsn": "&&SORTED",
+     "step": "LOAD020",
+     "line": 18,
+     "why": "a temporary data set (&&name) exists only for the job: it is not a dataset of the estate",
+     "horror": "H-0065"
+    }
+   ],
+   "horrors": [
+    "H-0064",
+    "H-0065",
+    "H-0066",
+    "H-0067",
+    "H-0068"
+   ]
+  },
+  "apps/BDLD/jcl/BDLDRST.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 26,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "SORT",
+     "target": "SORT",
+     "line": 5,
+     "resolves_to": null,
+     "horror": "H-0069"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IKJEFT01",
+     "target": "IKJEFT01",
+     "line": 14,
+     "resolves_to": null,
+     "horror": "H-0069"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "BDLDRPT",
+     "target": "BDLDRPT",
+     "line": 24,
+     "resolves_to": "apps/BDLD/cobol/BDLDRPT.cbl",
+     "horror": "H-0069"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "SORT010",
+     "ordinal": 1,
+     "program": "SORT",
+     "exec_proc": null,
+     "cond": null,
+     "line": 5,
+     "restart": "LOAD020",
+     "horror": "H-0069"
+    },
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "LOAD020",
+     "ordinal": 2,
+     "program": "IKJEFT01",
+     "exec_proc": null,
+     "cond": null,
+     "line": 14,
+     "restart": "LOAD020",
+     "horror": "H-0069"
+    },
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "RPT030",
+     "ordinal": 3,
+     "program": "BDLDRPT",
+     "exec_proc": null,
+     "cond": null,
+     "line": 24,
+     "parm": "MONTHLY",
+     "restart": "LOAD020",
+     "horror": "H-0069"
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "SORT010",
+     "dd": "SORTIN",
+     "dsn": "PROD.BDLD.TRANS",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 6
+    },
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "SORT010",
+     "dd": "SORTOUT",
+     "dsn": "PROD.BDLD.SORTED",
+     "generation": null,
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 7
+    },
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "SORT010",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 9
+    },
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "SORT010",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 10,
+     "inline_lines": 1,
+     "horror": "H-0069"
+    },
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "LOAD020",
+     "dd": "STEPLIB",
+     "dsn": "DSN.V13R1.SDSNLOAD",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 15
+    },
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "LOAD020",
+     "dd": "SORTED",
+     "dsn": "PROD.BDLD.SORTED",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 16
+    },
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "LOAD020",
+     "dd": "SYSTSPRT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 17
+    },
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "LOAD020",
+     "dd": "SYSTSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 18,
+     "inline_lines": 3,
+     "horror": "H-0069"
+    },
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "RPT030",
+     "dd": "STEPLIB",
+     "dsn": "PROD.BDLD.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 25
+    },
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "RPT030",
+     "dd": "RPTOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "A",
+     "line": 26
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.BDLD.TRANS",
+     "generation": null,
+     "step": "SORT010",
+     "dd": "SORTIN",
+     "line": 6
+    },
+    {
+     "dsn": "PROD.BDLD.SORTED",
+     "generation": null,
+     "step": "SORT010",
+     "dd": "SORTOUT",
+     "line": 7
+    },
+    {
+     "dsn": "DSN.V13R1.SDSNLOAD",
+     "generation": null,
+     "step": "LOAD020",
+     "dd": "STEPLIB",
+     "line": 15
+    },
+    {
+     "dsn": "PROD.BDLD.SORTED",
+     "generation": null,
+     "step": "LOAD020",
+     "dd": "SORTED",
+     "line": 16
+    },
+    {
+     "dsn": "PROD.BDLD.LOADLIB",
+     "generation": null,
+     "step": "RPT030",
+     "dd": "STEPLIB",
+     "line": 25
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/BDLD/cobol/BDLDRPT.cbl",
+     "horror": "H-0069"
+    }
+   ],
+   "jcl_utility_cards": [
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "SORT010",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "SORT",
+     "operands": "FIELDS=(1,10,CH,A)",
+     "line": 11,
+     "horror": "H-0069"
+    },
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "LOAD020",
+     "utility": "IKJEFT01",
+     "dd": "SYSTSIN",
+     "verb": "DSN",
+     "operands": "SYSTEM(DB2P)",
+     "line": 19,
+     "horror": "H-0069"
+    },
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "LOAD020",
+     "utility": "IKJEFT01",
+     "dd": "SYSTSIN",
+     "verb": "RUN",
+     "operands": "PROGRAM(BDLDDB2) PLAN(BDLDPLN) LIB('PROD.BDLD.LOADLIB')",
+     "line": 20,
+     "horror": "H-0069"
+    },
+    {
+     "job": "BDLDRST",
+     "proc": null,
+     "step": "LOAD020",
+     "utility": "IKJEFT01",
+     "dd": "SYSTSIN",
+     "verb": "END",
+     "operands": "",
+     "line": 21,
+     "horror": "H-0069"
+    }
+   ],
+   "horrors": [
+    "H-0069"
+   ]
+  },
+  "apps/BDLD/jcl/BDLDUTIL.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 46,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IDCAMS",
+     "target": "IDCAMS",
+     "line": 4,
+     "resolves_to": null
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IEBGENER",
+     "target": "IEBGENER",
+     "line": 16,
+     "resolves_to": null
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "ICETOOL",
+     "target": "ICETOOL",
+     "line": 23,
+     "resolves_to": null
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "SORT",
+     "target": "SORT",
+     "line": 36,
+     "resolves_to": null
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "IDC010",
+     "ordinal": 1,
+     "program": "IDCAMS",
+     "exec_proc": null,
+     "cond": null,
+     "line": 4
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "GEN020",
+     "ordinal": 2,
+     "program": "IEBGENER",
+     "exec_proc": null,
+     "cond": null,
+     "line": 16
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "ICE030",
+     "ordinal": 3,
+     "program": "ICETOOL",
+     "exec_proc": null,
+     "cond": null,
+     "line": 23
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "SRT040",
+     "ordinal": 4,
+     "program": "SORT",
+     "exec_proc": null,
+     "cond": null,
+     "line": 36
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "IDC010",
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 5
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "IDC010",
+     "dd": "INDD",
+     "dsn": "PROD.BDLD.XREFIN",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 6
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "IDC010",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 7,
+     "inline_lines": 6,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "GEN020",
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 17
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "GEN020",
+     "dd": "SYSUT1",
+     "dsn": "PROD.BDLD.XREFIN",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 18
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "GEN020",
+     "dd": "SYSUT2",
+     "dsn": "PROD.BDLD.XREFBAK",
+     "generation": null,
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 19
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "GEN020",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 21,
+     "dummy": true,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "ICE030",
+     "dd": "TOOLMSG",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 24
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "ICE030",
+     "dd": "DFSMSG",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 25
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "ICE030",
+     "dd": "INDD",
+     "dsn": "PROD.BDLD.XREFIN",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 26
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "ICE030",
+     "dd": "OUTDD",
+     "dsn": "PROD.BDLD.XREFOUT",
+     "generation": null,
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 27
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "ICE030",
+     "dd": "TOOLIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 29,
+     "inline_lines": 1,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "ICE030",
+     "dd": "CTL1CNTL",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 32,
+     "inline_lines": 1,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "SRT040",
+     "dd": "SORTIN",
+     "dsn": "PROD.BDLD.XREFIN",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 37
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "SRT040",
+     "dd": "SORTOUT",
+     "dsn": "PROD.BDLD.XREFSUM",
+     "generation": null,
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 38
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "SRT040",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 40
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "SRT040",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 41,
+     "inline_lines": 4,
+     "horror": "H-0067"
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.BDLD.XREFIN",
+     "generation": null,
+     "step": "IDC010",
+     "dd": "INDD",
+     "line": 6
+    },
+    {
+     "dsn": "PROD.BDLD.XREFIN",
+     "generation": null,
+     "step": "GEN020",
+     "dd": "SYSUT1",
+     "line": 18
+    },
+    {
+     "dsn": "PROD.BDLD.XREFBAK",
+     "generation": null,
+     "step": "GEN020",
+     "dd": "SYSUT2",
+     "line": 19,
+     "horror": "H-0067"
+    },
+    {
+     "dsn": "PROD.BDLD.XREFIN",
+     "generation": null,
+     "step": "ICE030",
+     "dd": "INDD",
+     "line": 26
+    },
+    {
+     "dsn": "PROD.BDLD.XREFOUT",
+     "generation": null,
+     "step": "ICE030",
+     "dd": "OUTDD",
+     "line": 27
+    },
+    {
+     "dsn": "PROD.BDLD.XREFIN",
+     "generation": null,
+     "step": "SRT040",
+     "dd": "SORTIN",
+     "line": 37
+    },
+    {
+     "dsn": "PROD.BDLD.XREFSUM",
+     "generation": null,
+     "step": "SRT040",
+     "dd": "SORTOUT",
+     "line": 38
+    }
+   ],
+   "jcl_utility_cards": [
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "IDC010",
+     "utility": "IDCAMS",
+     "dd": "SYSIN",
+     "verb": "DELETE",
+     "operands": "PROD.BDLD.XREF CLUSTER PURGE",
+     "line": 8,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "IDC010",
+     "utility": "IDCAMS",
+     "dd": "SYSIN",
+     "verb": "SET",
+     "operands": "MAXCC=0",
+     "line": 9,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "IDC010",
+     "utility": "IDCAMS",
+     "dd": "SYSIN",
+     "verb": "DEFINE",
+     "operands": "CLUSTER (NAME(PROD.BDLD.XREF) INDEXED KEYS(10 0) RECORDSIZE(40 40) CYLINDERS(1 1))",
+     "line": 10,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "IDC010",
+     "utility": "IDCAMS",
+     "dd": "SYSIN",
+     "verb": "REPRO",
+     "operands": "INFILE(INDD) OUTDATASET(PROD.BDLD.XREF)",
+     "line": 13,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "ICE030",
+     "utility": "ICETOOL",
+     "dd": "TOOLIN",
+     "verb": "COPY",
+     "operands": "FROM(INDD) TO(OUTDD) USING(CTL1)",
+     "line": 30,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "ICE030",
+     "utility": "ICETOOL",
+     "dd": "CTL1CNTL",
+     "verb": "OMIT",
+     "operands": "COND=(35,1,CH,EQ,C'X')",
+     "line": 33,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "SRT040",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "SORT",
+     "operands": "FIELDS=(1,10,CH,A)",
+     "line": 42,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "SRT040",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "INREC",
+     "operands": "FIELDS=(1,40)",
+     "line": 43,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "SRT040",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "SUM",
+     "operands": "FIELDS=(21,5,ZD)",
+     "line": 44,
+     "horror": "H-0067"
+    },
+    {
+     "job": "BDLDUTIL",
+     "proc": null,
+     "step": "SRT040",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "OUTREC",
+     "operands": "FIELDS=(1,25,15X)",
+     "line": 45,
+     "horror": "H-0067"
+    }
+   ],
+   "horrors": [
+    "H-0067"
+   ]
+  }
+ }
+}

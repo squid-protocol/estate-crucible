@@ -1,0 +1,345 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0067",
+ "title": "Utility control cards in the input stream: DFSORT, ICETOOL, IDCAMS and IEBGENER",
+ "category": "jcl",
+ "issue": 4890,
+ "shapes": [
+  "BDLD BDLDNITE.jcl / BDLDUTIL.jcl / BDLDGDG.jcl: DFSORT SORT FIELDS, INCLUDE COND, INREC, OUTREC, SUM FIELDS on SYSIN DD *",
+  "BDLD BDLDUTIL.jcl: ICETOOL COPY on TOOLIN with an OMIT card in the CTL1CNTL DD",
+  "BDLD BDLDUTIL.jcl: IDCAMS DELETE, SET MAXCC, DEFINE CLUSTER (continued with a trailing hyphen) and REPRO on SYSIN",
+  "BDLD BDLDUTIL.jcl: IEBGENER with SYSIN DD DUMMY (no cards)"
+ ],
+ "asserts": "Each control statement in an inline DD * stream is a jcl_utility_cards fact: step, utility (the step's PGM), dd, verb, operands and the line the statement starts on; a statement continued on following lines is one fact. DD DUMMY SYSIN has no cards.",
+ "citations": [
+  {
+   "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.1.0)",
+   "section": "INCLUDE Control Statement",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.icea100/inccst.htm",
+   "quote": "Use an INCLUDE statement if you want only certain records to appear in the output data set."
+  },
+  {
+   "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.1.0)",
+   "section": "OMIT Control Statement",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.icea100/omicst.htm",
+   "quote": "Use an OMIT statement if you do not want all of the input records to appear in the output data sets."
+  },
+  {
+   "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.1.0)",
+   "section": "INREC Control Statement",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.icea100/ice2ca_INREC_control_statement.htm",
+   "quote": "The INREC control statement allows you to reformat the input records before they are sorted, merged, or copied."
+  },
+  {
+   "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.1.0)",
+   "section": "OUTREC Control Statement",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.icea100/outcst.htm",
+   "quote": "The OUTREC control statement allows you to reformat the input records after they are sorted, merged or copied."
+  },
+  {
+   "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.1.0)",
+   "section": "DELETE",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.idai200/delet.htm",
+   "quote": "The DELETE command deletes catalogs, VSAM data sets, non-VSAM data sets, and objects."
+  },
+  {
+   "doc": "z/OS DFSMSdfp Utilities (z/OS 2.1.0)",
+   "section": "Data set utility programs > IEBGENER",
+   "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.idau100/u1239.htm",
+   "quote": "Copy records from a sequential data set or convert a data set from sequential organization to partitioned organization"
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDGDG.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "BDLDGDG",
+      "proc": null,
+      "step": "GEN010",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 10,
+      "inline_lines": 1,
+      "horror": "H-0067"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDGDG",
+      "proc": null,
+      "step": "GEN010",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "SORT",
+      "operands": "FIELDS=(1,10,CH,A)",
+      "line": 11,
+      "horror": "H-0067"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/BDLD/jcl/BDLDNITE.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "BDLDNITE",
+      "proc": null,
+      "step": "SORT010",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 10,
+      "inline_lines": 2,
+      "horror": "H-0067"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDNITE",
+      "proc": null,
+      "step": "SORT010",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "SORT",
+      "operands": "FIELDS=(1,10,CH,A)",
+      "line": 11,
+      "horror": "H-0067"
+     },
+     {
+      "job": "BDLDNITE",
+      "proc": null,
+      "step": "SORT010",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "INCLUDE",
+      "operands": "COND=(35,1,CH,EQ,C'A')",
+      "line": 12,
+      "horror": "H-0067"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/BDLD/jcl/BDLDUTIL.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "IDC010",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 7,
+      "inline_lines": 6,
+      "horror": "H-0067"
+     },
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "GEN020",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 21,
+      "dummy": true,
+      "horror": "H-0067"
+     },
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "ICE030",
+      "dd": "TOOLIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 29,
+      "inline_lines": 1,
+      "horror": "H-0067"
+     },
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "ICE030",
+      "dd": "CTL1CNTL",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 32,
+      "inline_lines": 1,
+      "horror": "H-0067"
+     },
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "SRT040",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 41,
+      "inline_lines": 4,
+      "horror": "H-0067"
+     }
+    ],
+    "jcl_datasets": [
+     {
+      "dsn": "PROD.BDLD.XREFBAK",
+      "generation": null,
+      "step": "GEN020",
+      "dd": "SYSUT2",
+      "line": 19,
+      "horror": "H-0067"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DELETE",
+      "operands": "PROD.BDLD.XREF CLUSTER PURGE",
+      "line": 8,
+      "horror": "H-0067"
+     },
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "SET",
+      "operands": "MAXCC=0",
+      "line": 9,
+      "horror": "H-0067"
+     },
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "CLUSTER (NAME(PROD.BDLD.XREF) INDEXED KEYS(10 0) RECORDSIZE(40 40) CYLINDERS(1 1))",
+      "line": 10,
+      "horror": "H-0067"
+     },
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "REPRO",
+      "operands": "INFILE(INDD) OUTDATASET(PROD.BDLD.XREF)",
+      "line": 13,
+      "horror": "H-0067"
+     },
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "ICE030",
+      "utility": "ICETOOL",
+      "dd": "TOOLIN",
+      "verb": "COPY",
+      "operands": "FROM(INDD) TO(OUTDD) USING(CTL1)",
+      "line": 30,
+      "horror": "H-0067"
+     },
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "ICE030",
+      "utility": "ICETOOL",
+      "dd": "CTL1CNTL",
+      "verb": "OMIT",
+      "operands": "COND=(35,1,CH,EQ,C'X')",
+      "line": 33,
+      "horror": "H-0067"
+     },
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "SRT040",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "SORT",
+      "operands": "FIELDS=(1,10,CH,A)",
+      "line": 42,
+      "horror": "H-0067"
+     },
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "SRT040",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "INREC",
+      "operands": "FIELDS=(1,40)",
+      "line": 43,
+      "horror": "H-0067"
+     },
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "SRT040",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "SUM",
+      "operands": "FIELDS=(21,5,ZD)",
+      "line": 44,
+      "horror": "H-0067"
+     },
+     {
+      "job": "BDLDUTIL",
+      "proc": null,
+      "step": "SRT040",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "OUTREC",
+      "operands": "FIELDS=(1,25,15X)",
+      "line": 45,
+      "horror": "H-0067"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

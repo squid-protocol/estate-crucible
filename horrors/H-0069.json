@@ -1,0 +1,189 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0069",
+ "title": "EXEC PARM= and a JOB resubmitted with RESTART=stepname",
+ "category": "jcl",
+ "issue": 4891,
+ "shapes": [
+  "BDLD BDLDRST.jcl: JOB statement carries RESTART=LOAD020; SORT010 precedes the restart step and is not executed by the restart",
+  "BDLD BDLDRST.jcl: RPT030 EXEC PGM=BDLDRPT,PARM=MONTHLY"
+ ],
+ "asserts": "PARM= is the jcl_steps parm of its step (the text passed to the program). RESTART= on the JOB statement is the restart of every jcl_steps fact in that job: the named step is where execution resumes, the steps before it are not run.",
+ "citations": [
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+   "section": "EXEC statement > PARM parameter",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/xexparm.htm",
+   "quote": "Use the PARM parameter to pass variable information to the processing program executed by this job step."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+   "section": "JOB statement > RESTART parameter",
+   "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/xjbresta.htm",
+   "quote": "Use the RESTART parameter to indicate the step, procedure step, or checkpoint at which the system is to restart a job."
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDRST.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "SORT",
+      "target": "SORT",
+      "line": 5,
+      "resolves_to": null,
+      "horror": "H-0069"
+     },
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "IKJEFT01",
+      "target": "IKJEFT01",
+      "line": 14,
+      "resolves_to": null,
+      "horror": "H-0069"
+     },
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "BDLDRPT",
+      "target": "BDLDRPT",
+      "line": 24,
+      "resolves_to": "apps/BDLD/cobol/BDLDRPT.cbl",
+      "horror": "H-0069"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": "BDLDRST",
+      "proc": null,
+      "step": "SORT010",
+      "ordinal": 1,
+      "program": "SORT",
+      "exec_proc": null,
+      "cond": null,
+      "line": 5,
+      "restart": "LOAD020",
+      "horror": "H-0069"
+     },
+     {
+      "job": "BDLDRST",
+      "proc": null,
+      "step": "LOAD020",
+      "ordinal": 2,
+      "program": "IKJEFT01",
+      "exec_proc": null,
+      "cond": null,
+      "line": 14,
+      "restart": "LOAD020",
+      "horror": "H-0069"
+     },
+     {
+      "job": "BDLDRST",
+      "proc": null,
+      "step": "RPT030",
+      "ordinal": 3,
+      "program": "BDLDRPT",
+      "exec_proc": null,
+      "cond": null,
+      "line": 24,
+      "parm": "MONTHLY",
+      "restart": "LOAD020",
+      "horror": "H-0069"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": "BDLDRST",
+      "proc": null,
+      "step": "SORT010",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 10,
+      "inline_lines": 1,
+      "horror": "H-0069"
+     },
+     {
+      "job": "BDLDRST",
+      "proc": null,
+      "step": "LOAD020",
+      "dd": "SYSTSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 18,
+      "inline_lines": 3,
+      "horror": "H-0069"
+     }
+    ],
+    "file_edges": [
+     {
+      "kind": "exec",
+      "target": "apps/BDLD/cobol/BDLDRPT.cbl",
+      "horror": "H-0069"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDRST",
+      "proc": null,
+      "step": "SORT010",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "SORT",
+      "operands": "FIELDS=(1,10,CH,A)",
+      "line": 11,
+      "horror": "H-0069"
+     },
+     {
+      "job": "BDLDRST",
+      "proc": null,
+      "step": "LOAD020",
+      "utility": "IKJEFT01",
+      "dd": "SYSTSIN",
+      "verb": "DSN",
+      "operands": "SYSTEM(DB2P)",
+      "line": 19,
+      "horror": "H-0069"
+     },
+     {
+      "job": "BDLDRST",
+      "proc": null,
+      "step": "LOAD020",
+      "utility": "IKJEFT01",
+      "dd": "SYSTSIN",
+      "verb": "RUN",
+      "operands": "PROGRAM(BDLDDB2) PLAN(BDLDPLN) LIB('PROD.BDLD.LOADLIB')",
+      "line": 20,
+      "horror": "H-0069"
+     },
+     {
+      "job": "BDLDRST",
+      "proc": null,
+      "step": "LOAD020",
+      "utility": "IKJEFT01",
+      "dd": "SYSTSIN",
+      "verb": "END",
+      "operands": "",
+      "line": 21,
+      "horror": "H-0069"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

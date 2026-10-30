@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Iterator, Optional
 
 from .data import DataWriter, I, Item
 from .model import Member
@@ -37,49 +37,149 @@ def write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], *,
         _write_jcl(m, spec, program_paths, proc)
 
 
+UTILITIES = {"IDCAMS", "SORT", "ICETOOL", "IKJEFT01", "IKJEFT1B", "IEBGENER", "ICEGENER"}
+
+
+def _flatten(steps: list[dict[str, Any]], ctx: Optional[dict[str, Any]] = None) -> Iterator[tuple[dict[str, Any], Any]]:
+    """The job's statements in order: ("if" / "else" / "endif", the IF block) markers around the
+    steps they hold, and ("step", step) for each EXEC."""
+    for st in steps:
+        if "if" in st:
+            yield "if", st
+            for sub in _flatten(st["then"]):
+                yield sub
+            if st.get("else"):
+                yield "else", st
+                for sub in _flatten(st["else"]):
+                    yield sub
+            yield "endif", st
+        else:
+            yield "step", st
+
+
+def _operands_of(lines: list[str]) -> str:
+    """A control statement's operands: its lines joined, continuation marks dropped, verb removed."""
+    text = " ".join(ln.strip().rstrip("-").strip() for ln in lines)
+    return text.split(None, 1)[1] if len(text.split(None, 1)) > 1 else ""
+
+
 def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], proc: bool) -> None:
     owner = spec["name"]
+    jp: dict[str, Any] = {"job": None, "proc": owner} if proc else {"job": owner, "proc": None}
     if proc:
         _jcl_stmt(m, owner, "PROC", spec.get("symbolics", []) or [""])
     else:
         _jcl_stmt(m, owner, "JOB", [spec.get("accounting", "(ACCT)"), f"'{spec['title'][:20]}'", "CLASS=A",
-                                     "MSGCLASS=X", *(["NOTIFY=&SYSUID"] if spec.get("notify", True) else [])])
+                                     "MSGCLASS=X", *spec.get("job_extra", []),
+                                     *(["NOTIFY=&SYSUID"] if spec.get("notify", True) else [])])
     for c in spec.get("comments", []):
         m.raw(f"//* {c}".rstrip())
-    for ordinal, step in enumerate(spec["steps"], start=1):
+    ordinal = 0
+    blocks: list[dict[str, Any]] = []  # the IF blocks open at this point, innermost last
+    branch = "then"
+    for kind, st in _flatten(spec["steps"]):
+        if kind == "if":
+            m.raw("//*")
+            with m.horror(st.get("horror")):
+                _jcl_stmt(m, st.get("name", ""), "IF", [f"({st['if']}) THEN"])
+            blocks.append(st)
+            branch = "then"
+            continue
+        if kind == "else":
+            with m.horror(st.get("horror")):
+                _jcl_stmt(m, "", "ELSE", [])
+            branch = "else"
+            continue
+        if kind == "endif":
+            with m.horror(st.get("horror")):
+                _jcl_stmt(m, "", "ENDIF", [])
+            blocks.pop()
+            continue
+        step = st
+        ordinal += 1
         m.raw("//*")
         operands = [f"PGM={step['pgm']}"] if step.get("pgm") else [step["proc"]]
         if step.get("cond"):
             operands.append(f"COND={step['cond']}")
         if step.get("parm"):
             operands.append(f"PARM='{step['parm']}'")
-        with m.horror(step.get("horror")):
+        with m.horror(blocks[-1].get("horror") if blocks else None), m.horror(step.get("horror")):
             line = _jcl_stmt(m, step["name"], "EXEC", operands)
-            m.fact("jcl_steps", job=None if proc else owner, proc=owner if proc else None, step=step["name"],
+            extra: dict[str, Any] = {}
+            if step.get("parm"):
+                extra["parm"] = step["parm"]
+            if blocks:
+                extra["if_cond"] = blocks[-1]["if"]
+                extra["branch"] = branch
+            if spec.get("restart") and not proc:
+                extra["restart"] = spec["restart"]
+            m.fact("jcl_steps", **jp, step=step["name"],
                    ordinal=ordinal, program=step.get("pgm"), exec_proc=step.get("proc"), cond=step.get("cond"),
-                   line=line)
+                   line=line, **extra)
             if step.get("pgm"):
                 m.fact("call_sites", verb="EXEC PGM", form="literal", operand=step["pgm"], target=step["pgm"],
                        line=line, resolves_to=program_paths.get(step["pgm"]))
+        prev_dd: Optional[str] = None
         for dd in step.get("dds", []):
+            concat = dd.get("concat", False)
             if dd.get("sysout"):
                 ops = [f"SYSOUT={dd['sysout']}"]
+            elif dd.get("inline") is not None:
+                ops = ["*"]
+            elif dd.get("dummy"):
+                ops = ["DUMMY"]
             else:
                 dsn = dd["dsn"] + (f"({dd['gen']})" if dd.get("gen") else "")
                 ops = [f"DSN={dsn}", f"DISP={_disp(dd['disp'])}"] + dd.get("extra", [])
-            with m.horror(dd.get("horror")):
-                dline = _jcl_stmt(m, dd["name"], "DD", ops)
-            if dd.get("dsn"):
+            temp = (dd.get("dsn") or "").startswith("&&")
+            with m.horror(blocks[-1].get("horror") if blocks else None), m.horror(step.get("horror")), \
+                    m.horror(dd.get("horror")):
+                dline = _jcl_stmt(m, "" if concat else dd["name"], "DD", ops)
+                cards: list[tuple[int, str, str]] = []
+                if dd.get("inline") is not None:
+                    for card in dd["inline"]:
+                        verb, lines = card if isinstance(card, tuple) else (None, card)
+                        lines = [lines] if isinstance(lines, str) else lines
+                        for i, ln in enumerate(lines):
+                            at = m.raw(ln)
+                            if verb and i == 0:
+                                cards.append((at, verb, _operands_of(lines)))
+                    m.raw("/*")
+            if dd.get("dsn") and not temp:
                 with m.horror(dd.get("horror")):
                     row = m.fact("jcl_datasets", dsn=dd["dsn"], generation=dd.get("gen"), step=step["name"],
-                                 dd=dd["name"], line=dline)
+                                 dd=prev_dd if concat else dd["name"], line=dline)
                     if (dd.get("gen") or "")[:1] in "+-" and dd.get("gen") and not row.get("horror"):
                         row["depends_on"] = ["H-0011"]  # #4331: a signed relative generation
+            elif temp:
+                with m.horror(dd.get("horror")):
+                    m.phantom("jcl_datasets", "a temporary data set (&&name) exists only for the job: it is "
+                              "not a dataset of the estate", dsn=dd["dsn"], step=step["name"], line=dline)
             disp: tuple[str, ...] = dd.get("disp") or ()
-            m.fact("jcl_dds", job=None if proc else owner, proc=owner if proc else None, step=step["name"],
-                   dd=dd["name"], dsn=dd.get("dsn"), generation=dd.get("gen"),
-                   disp=disp[0] if disp else None, disp_normal=disp[1] if len(disp) > 1 else None,
-                   sysout=dd.get("sysout"), line=dline)
+            extra = {}
+            if temp:
+                extra["temp"] = True
+            if concat:
+                extra["concat_of"] = prev_dd
+            if dd.get("dummy"):
+                extra["dummy"] = True
+            if dd.get("inline") is not None:
+                extra["inline_lines"] = len(dd["inline"]) and sum(
+                    1 if isinstance(c, str) else (1 if isinstance(c[1], str) else len(c[1])) for c in dd["inline"])
+            # a DD that is a plain dataset reference tags only its jcl_datasets row (H-0011 and the
+            # older horrors); a DD of a new form (temp, concatenated, inline, dummy) tags its jcl_dds fact
+            new_form = temp or concat or dd.get("dummy") or dd.get("inline") is not None
+            with m.horror((blocks[-1].get("horror") if blocks else None) if new_form else None), \
+                    m.horror(step.get("horror") if new_form else None), m.horror(dd.get("horror") if new_form else None):
+                m.fact("jcl_dds", **jp, step=step["name"],
+                       dd=None if concat else dd["name"], dsn=dd.get("dsn"), generation=dd.get("gen"),
+                       disp=disp[0] if disp else None, disp_normal=disp[1] if len(disp) > 1 else None,
+                       sysout=dd.get("sysout"), line=dline, **extra)
+                for at, verb, operands in cards:
+                    m.fact("jcl_utility_cards", **jp, step=step["name"], utility=step.get("pgm"), dd=dd["name"],
+                           verb=verb, operands=operands, line=at)
+            if not concat:
+                prev_dd = dd["name"]
     if proc:
         m.raw("//         PEND")
     m.compile = {"status": "not-cobol"}

@@ -1,0 +1,88 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0068",
+ "title": "A Db2 program run in batch under IKJEFT01 with DSN SYSTEM and RUN PROGRAM commands in SYSTSIN",
+ "category": "jcl",
+ "issue": 4891,
+ "shapes": [
+  "BDLD BDLDNITE.jcl / BDLDRST.jcl: step LOAD020 EXEC PGM=IKJEFT01 whose SYSTSIN DD * holds DSN SYSTEM(DB2P), RUN PROGRAM(BDLDDB2) PLAN(BDLDPLN) LIB(...) and END"
+ ],
+ "asserts": "The program a RUN PROGRAM(...) command names is called by the IKJEFT01 step: the step's SYSTSIN commands (DSN, RUN, END) are jcl_utility_cards facts with the step's utility IKJEFT01, and a reader must not take IKJEFT01 for the program that runs the plan.",
+ "citations": [
+  {
+   "doc": "Db2 13 for z/OS Administration Guide",
+   "section": "Running batch application programs",
+   "url": "https://ibm.com/docs/en/SSEPEK_13.0.0/admin/src/tpc/db2z_runbatch.html",
+   "quote": "Batch Db2 work can run in the TSO background under the TSO terminal monitor program (TMP)."
+  },
+  {
+   "doc": "Db2 13 for z/OS Administration Guide",
+   "section": "Running batch application programs",
+   "url": "https://ibm.com/docs/en/SSEPEK_13.0.0/admin/src/tpc/db2z_runbatch.html",
+   "quote": "IKJEFT01 identifies an entry point for TSO TMP invocation."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDNITE.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "BDLDNITE",
+      "proc": null,
+      "step": "LOAD020",
+      "dd": "SYSTSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 20,
+      "inline_lines": 3,
+      "horror": "H-0068"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDNITE",
+      "proc": null,
+      "step": "LOAD020",
+      "utility": "IKJEFT01",
+      "dd": "SYSTSIN",
+      "verb": "DSN",
+      "operands": "SYSTEM(DB2P)",
+      "line": 21,
+      "horror": "H-0068"
+     },
+     {
+      "job": "BDLDNITE",
+      "proc": null,
+      "step": "LOAD020",
+      "utility": "IKJEFT01",
+      "dd": "SYSTSIN",
+      "verb": "RUN",
+      "operands": "PROGRAM(BDLDDB2) PLAN(BDLDPLN) LIB('PROD.BDLD.LOADLIB')",
+      "line": 22,
+      "horror": "H-0068"
+     },
+     {
+      "job": "BDLDNITE",
+      "proc": null,
+      "step": "LOAD020",
+      "utility": "IKJEFT01",
+      "dd": "SYSTSIN",
+      "verb": "END",
+      "operands": "",
+      "line": 23,
+      "horror": "H-0068"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

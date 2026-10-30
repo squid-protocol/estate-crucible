@@ -52,6 +52,7 @@ REQUIRED = {
     "copy_collisions": ("member", "line", "library", "resolves_to", "shadowed"),
     "gaps": ("kind", "name", "line", "why"),
     "dead": ("kind", "name", "line", "why"),
+    "jcl_utility_cards": ("step", "utility", "verb", "line"),
 }
 
 
