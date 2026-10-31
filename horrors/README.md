@@ -81,6 +81,9 @@ era-neutral syntax horror; blank is untagged.
 | H-0070 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | One job reading generation (0) and creating generation (+1) of the same GDG | `apps/BDLD/jcl/BDLDGDG.jcl` |
 | H-0071 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | A cataloged procedure with symbolic parameters (&HLQ, &RPT) run from a JCLLIB private library | `apps/BDLD/jcl/BDLDPRCJ.jcl`, `apps/BDLD/proclib/BDLDPRC.prc` |
 | H-0072 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | Utility control cards beyond the first level: IDCAMS LISTCAT / ALTER / PRINT, IEBCOPY COPY + SELECT, DFSORT JOINKEYS / REFORMAT / OUTFIL | `apps/BDLD/jcl/BDLDUT2.jcl` |
+| H-0073 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | Deferred checkpoint restart: JOB RESTART=(stepname,checkid) with a SYSCHK DD before the first EXEC, RD=R and SYSCKEOV on the checkpointed step | `apps/BDLD/jcl/BDLDCHK.jcl` |
+| H-0074 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | SYSOUT forms (class, (class,,form), DEST), DD DUMMY and COND=EVEN / COND=ONLY on a step | `apps/BDLD/jcl/BDLDSYS.jcl` |
+| H-0075 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | A job step that calls a cataloged procedure and overrides its PARM, COND and a DD by procedure step name | `apps/BDLD/jcl/BDLDOVR.jcl` |
 
 ## Field-testing defects not planted
 
