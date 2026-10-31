@@ -11,16 +11,22 @@
  "asserts": "The calling EXEC is one jcl_steps fact (step QTR, exec_proc BDLDPRC) carrying parm_overrides [{step RPT020, parm QUARTERLY}] and cond_overrides [{step RPT020, cond (4,LT,SRT010)}]; its own parm and cond are null. The overriding DD is a jcl_dds fact of step QTR with dd RPTOUT, override_of RPT020 and sysout B; the procedure's own RPTOUT (sysout A, in BDLDPRC) is unchanged. The PARM actually passed to BDLDRPT at run time is QUARTERLY, not the symbolic default.",
  "citations": [
   {
-   "doc": "z/OS MVS JCL User's Guide (z/OS 2.2.0)",
-   "section": "Coding an overriding OUTPUT JCL or DD statement",
-   "url": "https://www.ibm.com/docs/en/zos/2.2.0?topic=statements-coding-overriding-output-jcl-dd-statement",
-   "quote": "code the procedure step name followed by a period and the ddname in the name field of the overriding statement"
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "Modifying Procedures > Coding an overriding OUTPUT JCL or DD statement",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "the name of the procedure step containing the overridden statement, followed by a period, followed by the name of the procedure OUTPUT JCL statement or the ddname of the procedure DD statement."
   },
   {
-   "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
-   "section": "EXEC statement > PARM parameter",
-   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/xexparm.htm",
-   "quote": "Use the PARM parameter to pass variable information to the processing program executed by this job step."
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "EXEC statement > PARM parameter > On an EXEC statement that calls a procedure",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "The EXEC statement can have as many PARM.procstepname parameters as the procedure has steps; each PARM parameter must specify a unique procstepname."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "EXEC statement > COND parameter > On an EXEC statement that calls a procedure",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "The EXEC statement can have as many COND.procstepname parameters as the procedure has steps; each COND parameter must specify a unique procstepname."
   }
  ],
  "era": 0,
