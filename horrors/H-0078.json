@@ -1,0 +1,44 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0078",
+ "title": "A SELECT over an ESDS: ORGANIZATION IS SEQUENTIAL, the data set a NONINDEXED cluster",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXAESD: SELECT LOG-FILE ASSIGN TO LOGESD ORGANIZATION IS SEQUENTIAL; AIXADEF defines PROD.AIXA.LOG NONINDEXED"
+ ],
+ "asserts": "The SELECT is one file_control fact (select LOG-FILE, assign LOGESD, organization SEQUENTIAL, access_mode SEQUENTIAL, record_key null) with no alternate_keys and no relative_key. The COBOL source alone does not say the file is an ESDS rather than a QSAM data set: only the DEFINE CLUSTER NONINDEXED card for PROD.AIXA.LOG (H-0082) does.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "ORGANIZATION clause",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A predecessor-successor relationship among the records in the file is established by the order in which records are placed in the file when it is created or extended."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXAESD.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "file_control": [
+     {
+      "select": "LOG-FILE",
+      "assign": "LOGESD",
+      "organization": "SEQUENTIAL",
+      "access_mode": "SEQUENTIAL",
+      "record_key": null,
+      "file_status": "WS-LOG-STATUS",
+      "fd_copies": [],
+      "line": 10,
+      "horror": "H-0078"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

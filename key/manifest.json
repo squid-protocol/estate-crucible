@@ -160,6 +160,13 @@
    "style": "multi-step batch jobs: COND, IF/THEN/ELSE, temp datasets, concatenation, utility control cards",
    "era": 2,
    "era_evidence": "BDLDDB2 EXEC SQL and END-IF (COBOL-85); the JCL uses IF/THEN/ELSE/ENDIF"
+  },
+  {
+   "id": "AIXA",
+   "title": "Alternate Index Archipelago (VSAM organizations and access paths)",
+   "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); the JCL is IDCAMS and plain EXEC steps"
   }
  ],
  "channels": [
@@ -189,30 +196,30 @@
   "jcl_utility_cards"
  ],
  "fact_totals": {
-  "programs": 50,
-  "units": 139,
-  "edges": 92,
-  "call_sites": 70,
+  "programs": 53,
+  "units": 151,
+  "edges": 105,
+  "call_sites": 75,
   "copies": 66,
-  "data_items": 498,
-  "layouts": 166,
+  "data_items": 521,
+  "layouts": 177,
   "sql_statements": 6,
   "sql_tables": 3,
-  "jcl_steps": 47,
-  "jcl_dds": 137,
+  "jcl_steps": 52,
+  "jcl_dds": 151,
   "screen_fields": 16,
   "csd_resources": 44,
   "transactions": 7,
   "cics_resources": 9,
-  "jcl_datasets": 72,
-  "file_control": 13,
-  "entry_points": 50,
-  "file_edges": 29,
-  "data_moves": 141,
+  "jcl_datasets": 79,
+  "file_control": 16,
+  "entry_points": 53,
+  "file_edges": 32,
+  "data_moves": 158,
   "copy_collisions": 9,
   "gaps": 18,
   "dead": 11,
-  "jcl_utility_cards": 34,
+  "jcl_utility_cards": 40,
   "phantoms": 53
  },
  "code_pages": {
@@ -309,6 +316,12 @@
     "programs": "apps/ACCT/*",
     "order": [
      "ACCTCPY",
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/AIXA/*",
+    "order": [
      "SHRCPY"
     ]
    },
@@ -535,7 +548,14 @@
   "H-0072",
   "H-0073",
   "H-0074",
-  "H-0075"
+  "H-0075",
+  "H-0076",
+  "H-0077",
+  "H-0078",
+  "H-0079",
+  "H-0080",
+  "H-0081",
+  "H-0082"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -715,6 +735,94 @@
    },
    "horrors": [
     "H-0011"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAESD.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "bddaa82843fff98f82677e9a914684641266dfecc7027c68290090ca5249dfb1",
+   "bytes": 1689,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-READ (COBOL-85); no later construct",
+   "horrors": [
+    "H-0078"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAKSD.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "96b1c948c8251d92604d10562bc804d812d87d06c789b25b644ceb02a2f38cb7",
+   "bytes": 3201,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+   "horrors": [
+    "H-0076",
+    "H-0081"
+   ]
+  },
+  "apps/AIXA/cobol/AIXARRD.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "c5dc6125b442ca5d4b390d23b2d9e8be351b3e7f6d2f3146952bbe01ed7e2ced",
+   "bytes": 1557,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); no later construct",
+   "horrors": [
+    "H-0077"
+   ]
+  },
+  "apps/AIXA/jcl/AIXADEF.jcl": {
+   "app": "AIXA",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "36ee6c989b54262f9036728fd07d461ba53d4c5605d5ad8201127c3f6b538e93",
+   "bytes": 955,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0079",
+    "H-0082"
+   ]
+  },
+  "apps/AIXA/jcl/AIXARUN.jcl": {
+   "app": "AIXA",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "b08ceffe35b277924b6aadbcbd42e863002fe773d4190b153d9fca098c24f981",
+   "bytes": 569,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0080"
    ]
   },
   "apps/BDLD/cobol/BDLDDB2.cbl": {

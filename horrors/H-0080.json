@@ -1,0 +1,41 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0080",
+ "title": "A DD statement that names the PATH over an alternate index, next to the DD for the base cluster",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA jcl/AIXARUN.jcl KSD010: //ORDKSD DD DSN=PROD.AIXA.ORDER,DISP=OLD and //ORDKSD1 DD DSN=PROD.AIXA.ORDER.PATH,DISP=OLD"
+ ],
+ "asserts": "Step KSD010 has two jcl_dds facts: ORDKSD on the base cluster PROD.AIXA.ORDER and ORDKSD1 on PROD.AIXA.ORDER.PATH, the path defined by H-0079. The path is a data set name in the catalog, not a data set of its own on a volume: the DD does not name the alternate index PROD.AIXA.ORDER.AIX. The COBOL program names only ORDKSD in its SELECT; the alternate index is identified in the program solely by the ALTERNATE RECORD KEY clause.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+   "section": "Defining alternate indexes",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+   "quote": "In your COBOL program, the alternate index is identified solely by the ALTERNATE RECORD KEY clause in the FILE-CONTROL paragraph."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/AIXA/jcl/AIXARUN.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_datasets": [
+     {
+      "dsn": "PROD.AIXA.ORDER.PATH",
+      "generation": null,
+      "step": "KSD010",
+      "dd": "ORDKSD1",
+      "line": 7,
+      "horror": "H-0080"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

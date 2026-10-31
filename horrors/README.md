@@ -84,6 +84,13 @@ era-neutral syntax horror; blank is untagged.
 | H-0073 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | Deferred checkpoint restart: JOB RESTART=(stepname,checkid) with a SYSCHK DD before the first EXEC, RD=R and SYSCKEOV on the checkpointed step | `apps/BDLD/jcl/BDLDCHK.jcl` |
 | H-0074 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | SYSOUT forms (class, (class,,form), DEST), DD DUMMY and COND=EVEN / COND=ONLY on a step | `apps/BDLD/jcl/BDLDSYS.jcl` |
 | H-0075 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | A job step that calls a cataloged procedure and overrides its PARM, COND and a DD by procedure step name | `apps/BDLD/jcl/BDLDOVR.jcl` |
+| H-0076 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | An indexed file with an ALTERNATE RECORD KEY that allows duplicates | `apps/AIXA/cobol/AIXAKSD.cbl` |
+| H-0077 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | A relative file addressed by a RELATIVE KEY that is not part of the record | `apps/AIXA/cobol/AIXARRD.cbl` |
+| H-0078 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | A SELECT over an ESDS: ORGANIZATION IS SEQUENTIAL, the data set a NONINDEXED cluster | `apps/AIXA/cobol/AIXAESD.cbl` |
+| H-0079 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | IDCAMS DEFINE ALTERNATEINDEX, DEFINE PATH and BLDINDEX cards that build an alternate index over a base cluster | `apps/AIXA/jcl/AIXADEF.jcl` |
+| H-0080 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | A DD statement that names the PATH over an alternate index, next to the DD for the base cluster | `apps/AIXA/jcl/AIXARUN.jcl` |
+| H-0081 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | A paragraph that tells file status 02, 22 and 23 apart after each access to an indexed file | `apps/AIXA/cobol/AIXAKSD.cbl` |
+| H-0082 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | IDCAMS DEFINE CLUSTER in its three kinds: INDEXED, NUMBERED and NONINDEXED | `apps/AIXA/jcl/AIXADEF.jcl` |
 
 ## Field-testing defects not planted
 

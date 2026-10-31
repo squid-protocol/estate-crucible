@@ -4,10 +4,10 @@ listing it in HAND_APPS."""
 
 from typing import Any
 
-from . import (acct, bdld, bill, clms, cust, deco, deut, gled, gulf, invn, invt, kyuy, legl, loan, modn, nord, ordr, payr, pced,
+from . import (acct, aixa, bdld, bill, clms, cust, deco, deut, gled, gulf, invn, invt, kyuy, legl, loan, modn, nord, ordr, payr, pced,
                rpts, ship, taxr)
 
 HAND_APPS: list[dict[str, Any]] = [acct.APP, cust.APP, loan.APP, bill.APP, invn.APP, payr.APP, gled.APP,
                                    modn.APP, clms.APP, nord.APP, deut.APP, kyuy.APP, gulf.APP,
                                    ordr.APP, ship.APP, taxr.APP, deco.APP, legl.APP, pced.APP, rpts.APP,
-                                   invt.APP, bdld.APP]
+                                   invt.APP, bdld.APP, aixa.APP]
