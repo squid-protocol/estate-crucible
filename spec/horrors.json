@@ -2296,6 +2296,56 @@
     }
    ],
    "era": 2
+  },
+  {
+   "id": "H-0092",
+   "title": "MQCONNX: the connect call that takes a connect options structure, which arrives by COPY",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQSA MQSACNX: CALL 'MQCONNX' USING WS-QMGR WS-CNO WS-HCONN WS-COMPCODE WS-REASON, 01 WS-CNO from COPY MQSCNO"
+   ],
+   "asserts": "MQSACNX's MQCONNX CALL is one call_sites fact (form literal, resolves_to null) with a call edge from 0000-MAIN and a gaps entry because no estate member holds the MQ stub; the 01 group WS-CNO carries copy_members MQSCNO, which resolves to the estate's stand-in copybook under apps/MQSA/copybook. MQCONNX is a different verb from MQCONN: the key does not fold it into MQCONN.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQCONNX (Connect queue manager (extended))",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqconnx-connect-queue-manager-extended",
+     "quote": "The MQCONNX call is like the MQCONN call, except that MQCONNX allows options to be specified to control the way that the call works."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQCONNX (Connect queue manager (extended))",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqconnx-connect-queue-manager-extended",
+     "quote": "MQCONNX (QMgrName, ConnectOpts, Hconn, CompCode, Reason)"
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0093",
+   "title": "MQSET: an attribute update whose selector and integer attribute are one-word blocks, on a queue opened for set",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQSA MQSASET: CALL 'MQSET' USING WS-HCONN WS-HOBJ WS-SEL-COUNT WS-SEL-BLOCK WS-INT-COUNT WS-INT-BLOCK WS-CHAR-LEN WS-CHAR-ATTRS WS-COMPCODE WS-REASON"
+   ],
+   "asserts": "MQSASET's MQSET CALL is one call_sites fact (resolves_to null) with a call edge and a gaps entry; the selector word WS-SEL-INHIBIT and the integer attribute WS-INHIBIT-PUT are data_items (S9(9) COMP with VALUE 6 and 1). MQSET is a different verb from MQINQ, which shares its USING shape.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQSET (Set object attributes)",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqset-set-object-attributes",
+     "quote": "Use the MQSET call to change the attributes of an object represented by a handle. The object must be a queue."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQSET (Set object attributes)",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqset-set-object-attributes",
+     "quote": "MQSET (Hconn, Hobj, SelectorCount, Selectors, IntAttrCount, IntAttrs, CharAttrLength, CharAttrs, Compcode, Reason)"
+    }
+   ],
+   "era": 2
   }
  ],
  "not_planted": [
