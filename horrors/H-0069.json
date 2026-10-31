@@ -113,20 +113,6 @@
       "line": 10,
       "inline_lines": 1,
       "horror": "H-0069"
-     },
-     {
-      "job": "BDLDRST",
-      "proc": null,
-      "step": "LOAD020",
-      "dd": "SYSTSIN",
-      "dsn": null,
-      "generation": null,
-      "disp": null,
-      "disp_normal": null,
-      "sysout": null,
-      "line": 18,
-      "inline_lines": 3,
-      "horror": "H-0069"
      }
     ],
     "file_edges": [
@@ -146,39 +132,6 @@
       "verb": "SORT",
       "operands": "FIELDS=(1,10,CH,A)",
       "line": 11,
-      "horror": "H-0069"
-     },
-     {
-      "job": "BDLDRST",
-      "proc": null,
-      "step": "LOAD020",
-      "utility": "IKJEFT01",
-      "dd": "SYSTSIN",
-      "verb": "DSN",
-      "operands": "SYSTEM(DB2P)",
-      "line": 19,
-      "horror": "H-0069"
-     },
-     {
-      "job": "BDLDRST",
-      "proc": null,
-      "step": "LOAD020",
-      "utility": "IKJEFT01",
-      "dd": "SYSTSIN",
-      "verb": "RUN",
-      "operands": "PROGRAM(BDLDDB2) PLAN(BDLDPLN) LIB('PROD.BDLD.LOADLIB')",
-      "line": 20,
-      "horror": "H-0069"
-     },
-     {
-      "job": "BDLDRST",
-      "proc": null,
-      "step": "LOAD020",
-      "utility": "IKJEFT01",
-      "dd": "SYSTSIN",
-      "verb": "END",
-      "operands": "",
-      "line": 21,
       "horror": "H-0069"
      }
     ]

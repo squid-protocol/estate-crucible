@@ -1,0 +1,230 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0072",
+ "title": "Utility control cards beyond the first level: IDCAMS LISTCAT / ALTER / PRINT, IEBCOPY COPY + SELECT, DFSORT JOINKEYS / REFORMAT / OUTFIL",
+ "category": "jcl",
+ "issue": 4890,
+ "shapes": [
+  "BDLD jcl/BDLDUT2.jcl IDC010: LISTCAT ENTRIES(...) ALL; ALTER ... - / NEWNAME(...) continued with a trailing hyphen; PRINT INDATASET(...) COUNT(10)",
+  "BDLD jcl/BDLDUT2.jcl CPY020: IEBCOPY COPY OUTDD=,INDD= followed by SELECT MEMBER=(...)",
+  "BDLD jcl/BDLDUT2.jcl JNK030: two JOINKEYS cards (F1=, F2=), REFORMAT, SORT FIELDS=COPY, two OUTFIL cards"
+ ],
+ "asserts": "Each control statement in the inline SYSIN stream is one jcl_utility_cards fact with the step's PGM as utility (IDCAMS, IEBCOPY, SORT), its verb, operands (continuation joined, hyphen dropped) and start line. Two statements with the same verb (JOINKEYS F1 / F2, OUTFIL x2) are two facts. SELECT is its own statement, not an operand of COPY.",
+ "citations": [
+  {
+   "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.1.0)",
+   "section": "LISTCAT",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.idai200/da6i2cat.htm",
+   "quote": "The LISTCAT command lists catalog entries."
+  },
+  {
+   "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.1.0)",
+   "section": "ALTER",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.idai200/da6i2052.htm",
+   "quote": "The ALTER command modifies the attributes of defined data sets and catalogs."
+  },
+  {
+   "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.1.0)",
+   "section": "PRINT",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.idai200/print.htm",
+   "quote": "The PRINT command prints VSAM data sets, non-VSAM data sets, and catalogs."
+  },
+  {
+   "doc": "z/OS DFSMSdfp Utilities",
+   "section": "The IEBCOPY utility: Copy libraries (partitioned data sets)",
+   "url": "https://www.ibm.com/docs/zosbasics/com.ibm.zos.zdatamgmt/zsysprogc_utilities_IEBCOPY.htm",
+   "quote": "The SELECT statement specifies the member names to be processed,"
+  },
+  {
+   "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.1.0)",
+   "section": "JOINKEYS control statement",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.icea100/ice2ca_JOINKEYS_control_statement.htm",
+   "quote": "Used only for a JOINKEYS application."
+  },
+  {
+   "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.1.0)",
+   "section": "OUTFIL control statements",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.icea100/oufcst.htm",
+   "quote": "OUTFIL control statements allow you to create one or more output data sets for a sort, copy, or merge application"
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDUT2.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "BDLDUT2",
+      "proc": null,
+      "step": "IDC010",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 6,
+      "inline_lines": 4,
+      "horror": "H-0072"
+     },
+     {
+      "job": "BDLDUT2",
+      "proc": null,
+      "step": "CPY020",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 17,
+      "inline_lines": 2,
+      "horror": "H-0072"
+     },
+     {
+      "job": "BDLDUT2",
+      "proc": null,
+      "step": "JNK030",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 30,
+      "inline_lines": 6,
+      "horror": "H-0072"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDUT2",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "LISTCAT",
+      "operands": "ENTRIES(PROD.BDLD.XREF) ALL",
+      "line": 7,
+      "horror": "H-0072"
+     },
+     {
+      "job": "BDLDUT2",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "ALTER",
+      "operands": "PROD.BDLD.XREF NEWNAME(PROD.BDLD.XREF2)",
+      "line": 8,
+      "horror": "H-0072"
+     },
+     {
+      "job": "BDLDUT2",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "PRINT",
+      "operands": "INDATASET(PROD.BDLD.XREF2) COUNT(10)",
+      "line": 10,
+      "horror": "H-0072"
+     },
+     {
+      "job": "BDLDUT2",
+      "proc": null,
+      "step": "CPY020",
+      "utility": "IEBCOPY",
+      "dd": "SYSIN",
+      "verb": "COPY",
+      "operands": "OUTDD=SYSUT2,INDD=SYSUT1",
+      "line": 18,
+      "horror": "H-0072"
+     },
+     {
+      "job": "BDLDUT2",
+      "proc": null,
+      "step": "CPY020",
+      "utility": "IEBCOPY",
+      "dd": "SYSIN",
+      "verb": "SELECT",
+      "operands": "MEMBER=(BDLDRPT,BDLDDB2)",
+      "line": 19,
+      "horror": "H-0072"
+     },
+     {
+      "job": "BDLDUT2",
+      "proc": null,
+      "step": "JNK030",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "JOINKEYS",
+      "operands": "F1=SORTJNF1,FIELDS=(1,10,A)",
+      "line": 31,
+      "horror": "H-0072"
+     },
+     {
+      "job": "BDLDUT2",
+      "proc": null,
+      "step": "JNK030",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "JOINKEYS",
+      "operands": "F2=SORTJNF2,FIELDS=(1,10,A)",
+      "line": 32,
+      "horror": "H-0072"
+     },
+     {
+      "job": "BDLDUT2",
+      "proc": null,
+      "step": "JNK030",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "REFORMAT",
+      "operands": "FIELDS=(F1:1,40,F2:11,10)",
+      "line": 33,
+      "horror": "H-0072"
+     },
+     {
+      "job": "BDLDUT2",
+      "proc": null,
+      "step": "JNK030",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "SORT",
+      "operands": "FIELDS=COPY",
+      "line": 34,
+      "horror": "H-0072"
+     },
+     {
+      "job": "BDLDUT2",
+      "proc": null,
+      "step": "JNK030",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "OUTFIL",
+      "operands": "FNAMES=OUT1,INCLUDE=(35,1,CH,EQ,C'A')",
+      "line": 35,
+      "horror": "H-0072"
+     },
+     {
+      "job": "BDLDUT2",
+      "proc": null,
+      "step": "JNK030",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "OUTFIL",
+      "operands": "FNAMES=OUT2,SAVE",
+      "line": 36,
+      "horror": "H-0072"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
