@@ -12,9 +12,12 @@ stand-in copybooks (IBM's are never shipped), and the STEPLIB concatenation of a
 | `MQSAINQ` | MQINQ with selector words held as data items | H-0089 |
 | `MQSAGET` | `COPY MQSMD` / `MQSOD` / `MQSGMO` under 01 groups | H-0090 |
 | `MQSARUN` step `PUT010` | `//STEPLIB` followed by `MQM.SCSQAUTH` and `MQM.SCSQLOAD` concatenations | H-0091 |
+| `MQSACNX` | MQCONNX with a connect options structure from `COPY MQSCNO` | H-0092 |
+| `MQSASET` | MQSET (opened with the set option) over one-word selector and integer blocks | H-0093 |
 | `MQSAPUT` | MQOPEN / MQPUT / MQCLOSE (no dedicated horror) | |
 
-All four programs compile under `cobc -std=ibm` (`make check`, `make scale-smoke` pass).
+Slice 2 adds `MQSACNX`, `MQSASET`, the stand-in copybook `MQSCNO` and `MQSARUN` steps `CNX050`, `SET060`.
+All six programs compile under `cobc -std=ibm` (`make check`, `make scale-smoke` pass).
 
 Generator change: `op_call` in `generator/cobol.py` now wraps a long `USING` list onto continuation rows
 (a one-line `CALL ... USING` went past column 72 for MQOPEN and MQGET). The call_sites fact line is the CALL line.
@@ -30,5 +33,5 @@ MQ stub). The gitgalaxy scorer has no MQ-specific channel, so no new scoring fie
 
 The first run needs the owner's estate-crucible release and pin bump.
 
-Remaining slices: MQCONNX and MQSET; MQPUT with distribution lists; RRS stubs (CSQBRSTB, CSQBSTUB link-edit);
+Remaining slices: MQPUT with distribution lists; RRS stubs (CSQBRSTB, CSQBSTUB link-edit);
 MQ triggers; IMS and CICS-MQ bridge programs; an MQ-only back-out fixture; dynamic CALLs to MQ verbs.

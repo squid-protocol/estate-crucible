@@ -97,6 +97,8 @@ era-neutral syntax horror; blank is untagged.
 | H-0089 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQINQ: an attribute inquiry whose selectors and integer attributes are two small blocks of binary words | `apps/MQSA/cobol/MQSAINQ.cbl` |
 | H-0090 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQI structures as COPY members: descriptor, object descriptor and get options under 01 levels | `apps/MQSA/cobol/MQSAGET.cbl` |
 | H-0091 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | A batch MQ step: the STEPLIB concatenation carries the MQ authorized and load libraries | `apps/MQSA/jcl/MQSARUN.jcl` |
+| H-0092 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQCONNX: the connect call that takes a connect options structure, which arrives by COPY | `apps/MQSA/cobol/MQSACNX.cbl` |
+| H-0093 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQSET: an attribute update whose selector and integer attribute are one-word blocks, on a queue opened for set | `apps/MQSA/cobol/MQSASET.cbl` |
 
 ## Field-testing defects not planted
 
