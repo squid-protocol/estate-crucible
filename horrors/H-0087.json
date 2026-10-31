@@ -1,0 +1,119 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0087",
+ "title": "MQGET with a wait interval in a PERFORM UNTIL loop that ends on reason 2033, no message available",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQSA MQSAGET: CALL 'MQGET' in paragraph 1000-GET, PERFORM 1000-GET UNTIL WS-DONE, IF WS-REASON = 2033 SET WS-DONE"
+ ],
+ "asserts": "MQSAGET's MQGET CALL inside 1000-GET is one call_sites fact with resolves_to null and a gaps entry; the paragraph unit and its perform edges to 2000-HANDLE and 9000-BACKOUT are keyed, and the two MOVEs to the MQGMO fields are data_moves.",
+ "citations": [
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQGET (Get message)",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqget-get-message",
+   "quote": "The MQGET call retrieves a message from a local queue that has been opened using the MQOPEN call."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQGET (Get message)",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqget-get-message",
+   "quote": "MQRC_NO_MSG_AVAILABLE (2033, X'7F1') No message available."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/MQSA/cobol/MQSAGET.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "1000-GET",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 50,
+      "end_line": 64,
+      "horror": "H-0087"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "call",
+      "from": "1000-GET",
+      "target": "MQGET",
+      "line": 53,
+      "form": "literal",
+      "horror": "H-0087"
+     },
+     {
+      "kind": "perform",
+      "from": "1000-GET",
+      "target": "2000-HANDLE",
+      "line": 57,
+      "horror": "H-0087"
+     },
+     {
+      "kind": "perform",
+      "from": "1000-GET",
+      "target": "9000-BACKOUT",
+      "line": 62,
+      "horror": "H-0087"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQGET",
+      "target": "MQGET",
+      "line": 53,
+      "resolves_to": null,
+      "horror": "H-0087"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "3",
+      "source_kind": "literal",
+      "target": "MQS-GMO-OPTIONS",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 51,
+      "horror": "H-0087"
+     },
+     {
+      "verb": "MOVE",
+      "source": "5000",
+      "source_kind": "literal",
+      "target": "MQS-GMO-WAITINT",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 52,
+      "horror": "H-0087"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "MQGET",
+      "line": 53,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0087"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

@@ -1,0 +1,235 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0090",
+ "title": "MQI structures as COPY members: descriptor, object descriptor and get options under 01 levels",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQSA MQSAGET: 01 WS-MD, 01 WS-OD, 01 WS-GMO each from COPY MQSMD / MQSOD / MQSGMO"
+ ],
+ "asserts": "MQSAGET's three COPY statements (MQSMD, MQSOD, MQSGMO) each resolve to the estate's stand-in copybooks under apps/MQSA/copybook; the 01 groups WS-MD, WS-OD, WS-GMO carry copy_members and their layouts are keyed. The copybooks are estate-written stand-ins, not IBM's.",
+ "citations": [
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQMD - Message descriptor",
+   "url": "https://www.ibm.com/docs/en/SSFKSJ_9.3.0/refdev/q097390_.html",
+   "quote": "The structure is an input/output parameter on the MQGET, MQPUT, and MQPUT1 calls."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/MQSA/cobol/MQSAGET.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "copies": [
+     {
+      "member": "MQSMD",
+      "kind": "copy",
+      "line": 21,
+      "resolves_to": "apps/MQSA/copybook/MQSMD.cpy",
+      "horror": "H-0090"
+     },
+     {
+      "member": "MQSOD",
+      "kind": "copy",
+      "line": 23,
+      "resolves_to": "apps/MQSA/copybook/MQSOD.cpy",
+      "horror": "H-0090"
+     },
+     {
+      "member": "MQSGMO",
+      "kind": "copy",
+      "line": 25,
+      "resolves_to": "apps/MQSA/copybook/MQSGMO.cpy",
+      "horror": "H-0090"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-MD",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 20,
+      "copy_members": [
+       "MQSMD"
+      ],
+      "horror": "H-0090"
+     },
+     {
+      "level": 1,
+      "name": "WS-OD",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 22,
+      "copy_members": [
+       "MQSOD"
+      ],
+      "horror": "H-0090"
+     },
+     {
+      "level": 1,
+      "name": "WS-GMO",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 24,
+      "copy_members": [
+       "MQSGMO"
+      ],
+      "horror": "H-0090"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-MD",
+      "line": 20,
+      "bytes": 112,
+      "fields": [
+       {
+        "name": "MQS-MSGTYPE",
+        "level": 5,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSMD.cpy"
+       },
+       {
+        "name": "MQS-FORMAT",
+        "level": 5,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 4,
+        "bytes": 8,
+        "file": "apps/MQSA/copybook/MQSMD.cpy"
+       },
+       {
+        "name": "MQS-PERSIST",
+        "level": 5,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 12,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSMD.cpy"
+       },
+       {
+        "name": "MQS-MSGID",
+        "level": 5,
+        "pic": "X(24)",
+        "usage": null,
+        "offset": 16,
+        "bytes": 24,
+        "file": "apps/MQSA/copybook/MQSMD.cpy"
+       },
+       {
+        "name": "MQS-CORRELID",
+        "level": 5,
+        "pic": "X(24)",
+        "usage": null,
+        "offset": 40,
+        "bytes": 24,
+        "file": "apps/MQSA/copybook/MQSMD.cpy"
+       },
+       {
+        "name": "MQS-REPLYQ",
+        "level": 5,
+        "pic": "X(48)",
+        "usage": null,
+        "offset": 64,
+        "bytes": 48,
+        "file": "apps/MQSA/copybook/MQSMD.cpy"
+       }
+      ],
+      "horror": "H-0090"
+     },
+     {
+      "record": "WS-OD",
+      "line": 22,
+      "bytes": 100,
+      "fields": [
+       {
+        "name": "MQS-OBJTYPE",
+        "level": 5,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSOD.cpy"
+       },
+       {
+        "name": "MQS-OBJNAME",
+        "level": 5,
+        "pic": "X(48)",
+        "usage": null,
+        "offset": 4,
+        "bytes": 48,
+        "file": "apps/MQSA/copybook/MQSOD.cpy"
+       },
+       {
+        "name": "MQS-OBJQMGR",
+        "level": 5,
+        "pic": "X(48)",
+        "usage": null,
+        "offset": 52,
+        "bytes": 48,
+        "file": "apps/MQSA/copybook/MQSOD.cpy"
+       }
+      ],
+      "horror": "H-0090"
+     },
+     {
+      "record": "WS-GMO",
+      "line": 24,
+      "bytes": 12,
+      "fields": [
+       {
+        "name": "MQS-GMO-OPTIONS",
+        "level": 5,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSGMO.cpy"
+       },
+       {
+        "name": "MQS-GMO-WAITINT",
+        "level": 5,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 4,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSGMO.cpy"
+       },
+       {
+        "name": "MQS-GMO-MATCH",
+        "level": 5,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 8,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSGMO.cpy"
+       }
+      ],
+      "horror": "H-0090"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
