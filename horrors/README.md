@@ -91,6 +91,9 @@ era-neutral syntax horror; blank is untagged.
 | H-0080 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | A DD statement that names the PATH over an alternate index, next to the DD for the base cluster | `apps/AIXA/jcl/AIXARUN.jcl` |
 | H-0081 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | A paragraph that tells file status 02, 22 and 23 apart after each access to an indexed file | `apps/AIXA/cobol/AIXAKSD.cbl` |
 | H-0082 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | IDCAMS DEFINE CLUSTER in its three kinds: INDEXED, NUMBERED and NONINDEXED | `apps/AIXA/jcl/AIXADEF.jcl` |
+| H-0083 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | An INCLUDE statement imbeds a group of DD statements held in a member of a JCLLIB library | `apps/BDLD/jcl/BDLDINC.jcl`, `apps/BDLD/proclib/BDLDDDS.prc` |
+| H-0084 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | A SET statement assigns a symbolic parameter used in a DSN, and a DD names DSN=NULLFILE | `apps/BDLD/jcl/BDLDSET.jcl` |
+| H-0085 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | A DD added to a procedure step by naming the step and a ddname absent from the procedure | `apps/BDLD/jcl/BDLDADD.jcl` |
 
 ## Field-testing defects not planted
 

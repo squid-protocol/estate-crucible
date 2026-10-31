@@ -1,0 +1,61 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0085",
+ "title": "A DD added to a procedure step by naming the step and a ddname absent from the procedure",
+ "category": "jcl",
+ "issue": 4891,
+ "shapes": [
+  "BDLD jcl/BDLDADD.jcl ADDQ: EXEC BDLDPRC,RPT=DAILY followed by //RPT020.AUDIT DD SYSOUT=B (AUDIT is not a DD of BDLDPRC)"
+ ],
+ "asserts": "The added DD is a jcl_dds fact of step ADDQ with dd AUDIT, override_of RPT020 (the procedure step it joins), added true and sysout B. Unlike H-0075 it replaces nothing: the procedure's own DDs for RPT020 (STEPLIB, RPTOUT) are unchanged.",
+ "citations": [
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "Modifying Procedures > Adding an OUTPUT JCL or DD statement",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "To add OUTPUT JCL or DD statements to a procedure step, code in the name field of the added OUTPUT JCL or DD statement the name of the procedure step, followed by a period, followed by a name or ddname. The name must not appear on any procedure statement."
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDADD.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_steps": [
+     {
+      "job": "BDLDADD",
+      "proc": null,
+      "step": "ADDQ",
+      "ordinal": 1,
+      "program": null,
+      "exec_proc": "BDLDPRC",
+      "cond": null,
+      "line": 5,
+      "horror": "H-0085"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": "BDLDADD",
+      "proc": null,
+      "step": "ADDQ",
+      "dd": "AUDIT",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": "B",
+      "line": 6,
+      "override_of": "RPT020",
+      "added": true,
+      "horror": "H-0085"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

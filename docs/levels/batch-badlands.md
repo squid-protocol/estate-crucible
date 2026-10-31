@@ -13,6 +13,9 @@ gitgalaxy#7065, JCL execution (#4891) and utilities (#4890). App `BDLD`
 | `BDLDCHK` | deferred checkpoint restart: `RESTART=(CHK020,C0000012)`, `SYSCHK` DD before the first EXEC, `RD=R`, `SYSCKEOV` | H-0073 |
 | `BDLDSYS` | `SYSOUT=(A,,STD1)` / `Z,DEST=` / `*`, `DD DUMMY`, `COND=EVEN`, `COND=((4,LT,SYS010),ONLY)` | H-0074 |
 | `BDLDOVR` | `EXEC BDLDPRC` with `PARM.RPT020=`, `COND.RPT020=` and an `//RPT020.RPTOUT DD` override | H-0075 |
+| `BDLDINC` + `proclib/BDLDDDS` | `INCLUDE MEMBER=` after the EXEC, `JCLLIB`; the INCLUDE group is a member of bare DD statements, not a procedure | H-0083 |
+| `BDLDSET` | `SET HLQ=PROD` before the EXEC, `&HLQ..` in a DSN, `DSN=NULLFILE` | H-0084 |
+| `BDLDADD` | `//RPT020.AUDIT DD` adds a DD to a procedure step (it replaces nothing) | H-0085 |
 | `BDLDGDG` | GDG `(0)` read and `(+1)` written in one job, GDG concatenated with an unnamed DD | H-0066, H-0070 |
 
 Programs `BDLDDB2` (Db2, compiled with EXEC blocks stubbed) and `BDLDRPT` (PARM through LINKAGE)
@@ -24,7 +27,9 @@ Known key question, not changed: `BDLDDB2` keys the SQL `INSERT` with `access` `
 
 Slice 3 (gitgalaxy#7065): H-0073 (checkpoint restart), H-0074 (SYSOUT forms, DUMMY, COND EVEN/ONLY), H-0075 (proc overrides). New optional fields on `jcl_steps`: `restart_checkid`, `rd`, `parm_overrides`, `cond_overrides`; on `jcl_dds`: `override_of`, and a job-level DD (SYSCHK) has `step` null (SPEC section 3). The gitgalaxy scorer does not read these yet, so they score as unscored until it does.
 
-Remaining slices: INCLUDE members (JCL `INCLUDE MEMBER=`), SET statements, OUTPUT statements, a program that issues CHKPT, overrides that add a DD to a procedure step; the other three levels (#4894, #4892, #4893).
+Slice 4 (gitgalaxy#7065): H-0083 (INCLUDE group), H-0084 (SET, DSN=NULLFILE), H-0085 (a DD added to a procedure step). New optional fields: `set_symbols`, `includes` on `jcl_steps`; `added`, `include` on `jcl_dds` (SPEC section 3). The gitgalaxy scorer reports them unscored until it reads them. Every quote was read in the z/OS 2.2.0 MVS JCL Reference PDF text.
+
+Remaining slices: OUTPUT JCL statements, a program that issues CHKPT; the other three levels (#4892, #4893; #4894 is the AIXA app).
 
 Key additions (SPEC section 3): the `jcl_utility_cards` channel and the optional fields `parm`,
 `if_cond`, `branch`, `restart` on `jcl_steps` and `temp`, `concat_of`, `dummy`, `inline_lines` on

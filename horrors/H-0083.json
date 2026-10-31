@@ -1,0 +1,155 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0083",
+ "title": "An INCLUDE statement imbeds a group of DD statements held in a member of a JCLLIB library",
+ "category": "jcl",
+ "issue": 4891,
+ "shapes": [
+  "BDLD jcl/BDLDINC.jcl INC010: //INC1 INCLUDE MEMBER=BDLDDDS after the EXEC, JCLLIB ORDER=(PROD.BDLD.PROCLIB)",
+  "BDLD proclib/BDLDDDS.prc: the INCLUDE group, bare DD statements (SYSPRINT, SYSUT2), no PROC or PEND"
+ ],
+ "asserts": "The EXEC of INC010 is one jcl_steps fact carrying includes ['BDLDDDS']. The DDs of the INCLUDE group are jcl_dds facts of the member BDLDDDS (job null, proc null, include BDLDDDS, step null): the group is a member of its own, not a procedure, and has no jcl_steps fact. At run time the group replaces the INCLUDE statement, so SYSPRINT and SYSUT2 are DDs of step INC010.",
+ "citations": [
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "Chapter 19. INCLUDE statement > Purpose",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "Identify the name of the member of a partitioned data set (PDS) or partitioned data set extended (PDSE) that contains a set of JCL statements (such as DD and OUTPUT JCL statements) called an INCLUDE group."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "Chapter 19. INCLUDE statement > Purpose",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "The INCLUDE group replaces the INCLUDE statement, and the system processes the imbedded JCL statements as part of the JCL stream."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "Chapter 19. INCLUDE statement > Location in the JCL",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "if there is a JCLLIB statement, the INCLUDE statement must follow the JCLLIB statement."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "Chapter 19. INCLUDE statement > Considerations for using INCLUDE groups",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "Do not define procedures in an INCLUDE group."
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDINC.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "IEBGENER",
+      "target": "IEBGENER",
+      "line": 5,
+      "resolves_to": null,
+      "horror": "H-0083"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": "BDLDINC",
+      "proc": null,
+      "step": "INC010",
+      "ordinal": 1,
+      "program": "IEBGENER",
+      "exec_proc": null,
+      "cond": null,
+      "line": 5,
+      "includes": [
+       "BDLDDDS"
+      ],
+      "horror": "H-0083"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": "BDLDINC",
+      "proc": null,
+      "step": "INC010",
+      "dd": "SYSUT1",
+      "dsn": "PROD.BDLD.ERRMSG",
+      "generation": null,
+      "disp": "SHR",
+      "disp_normal": null,
+      "sysout": null,
+      "line": 7,
+      "horror": "H-0083"
+     },
+     {
+      "job": "BDLDINC",
+      "proc": null,
+      "step": "INC010",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 8,
+      "dummy": true,
+      "horror": "H-0083"
+     }
+    ],
+    "jcl_datasets": [
+     {
+      "dsn": "PROD.BDLD.ERRMSG",
+      "generation": null,
+      "step": "INC010",
+      "dd": "SYSUT1",
+      "line": 7,
+      "horror": "H-0083"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/BDLD/proclib/BDLDDDS.prc",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": null,
+      "proc": null,
+      "include": "BDLDDDS",
+      "step": null,
+      "dd": "SYSPRINT",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": "*",
+      "line": 1,
+      "horror": "H-0083"
+     },
+     {
+      "job": null,
+      "proc": null,
+      "include": "BDLDDDS",
+      "step": null,
+      "dd": "SYSUT2",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": "A",
+      "line": 2,
+      "horror": "H-0083"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
