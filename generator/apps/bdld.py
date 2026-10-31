@@ -7,13 +7,15 @@ Planted: H-0064 (COND, IF/THEN/ELSE/ENDIF), H-0065 (temporary datasets), H-0066 
 H-0067 (utility control cards), H-0068 (IKJEFT01 running a Db2 program), H-0069 (PARM, RESTART),
 H-0070 (GDG (0) / (+1) in one job), H-0071 (a cataloged procedure with symbolic parameters, run through
 JCLLIB), H-0072 (further utility control cards: IDCAMS LISTCAT / ALTER / PRINT, IEBCOPY, DFSORT JOINKEYS /
-OUTFIL)."""
+OUTFIL), H-0073 (checkpoint restart: RD=R, SYSCKEOV, RESTART=(step,checkid) with SYSCHK), H-0074 (SYSOUT forms,
+DD DUMMY, COND=EVEN / ONLY), H-0075 (overrides of a cataloged procedure's PARM, COND and DD)."""
 
 from ..data import I
 from ..stmt import goback, if_, para, perform, raw, read, sql
 
-H64, H65, H66, H67, H68, H69, H70, H71, H72 = (
-    "H-0064", "H-0065", "H-0066", "H-0067", "H-0068", "H-0069", "H-0070", "H-0071", "H-0072")
+H64, H65, H66, H67, H68, H69, H70, H71, H72, H73, H74, H75 = (
+    "H-0064", "H-0065", "H-0066", "H-0067", "H-0068", "H-0069", "H-0070", "H-0071", "H-0072", "H-0073", "H-0074",
+    "H-0075")
 
 COPYBOOKS = [
     {"member": "BDLREC", "header": [" BDLREC   - SORTED TRANSACTION EXTRACT (40 BYTES)"],
@@ -292,6 +294,74 @@ JOBS = [
                     ("OUTFIL", " OUTFIL FNAMES=OUT2,SAVE"),
                 ]},
             ]},
+        ],
+    },
+    {
+        # deferred checkpoint restart: the JOB names a checkid, SYSCHK precedes the first EXEC, RD=R on the step
+        "name": "BDLDCHK",
+        "title": "BDLD CHECKPOINT RUN",
+        "accounting": "(BDLD,0100)",
+        "job_extra": ["RESTART=(CHK020,C0000012)"],
+        "restart": "CHK020",
+        "restart_checkid": "C0000012",
+        "comments": ["RESUBMITTED FROM CHECKPOINT C0000012 TAKEN IN CHK020"],
+        "job_dds": [_dd("SYSCHK", "PROD.BDLD.CHKPT", ("OLD", "KEEP"), horror=H73)],
+        "steps": [
+            {"name": "CHK010", "pgm": "SORT", "horror": H73, "dds": [
+                _dd("SORTIN", "PROD.BDLD.TRANS"),
+                _dd("SORTOUT", "PROD.BDLD.CHKSORT", ("NEW", "CATLG", "DELETE"),
+                    extra=["UNIT=SYSDA", "SPACE=(CYL,(5,1))", "DCB=(RECFM=FB,LRECL=40)"]),
+                {"name": "SYSOUT", "sysout": "*"},
+                {"name": "SYSIN", "inline": [("SORT", " SORT FIELDS=(1,10,CH,A)")]},
+            ]},
+            {"name": "CHK020", "pgm": "SORT", "rd": "R", "horror": H73, "dds": [
+                _dd("SORTIN", "PROD.BDLD.CHKSORT"),
+                _dd("SORTOUT", "PROD.BDLD.CHKOUT", ("NEW", "CATLG", "DELETE"),
+                    extra=["UNIT=SYSDA", "SPACE=(CYL,(5,1))", "DCB=(RECFM=FB,LRECL=40)"]),
+                _dd("SYSCKEOV", "PROD.BDLD.CHKEOV", ("MOD", "KEEP")),
+                {"name": "SYSOUT", "sysout": "*"},
+                {"name": "SYSIN", "inline": [("SORT", " SORT FIELDS=(1,10,CH,D)")]},
+            ]},
+        ],
+    },
+    {
+        # SYSOUT forms and a DUMMY DD; COND=EVEN / ONLY run a step after an abend / only after one
+        "name": "BDLDSYS",
+        "title": "BDLD SYSOUT AND COND",
+        "accounting": "(BDLD,0100)",
+        "steps": [
+            {"name": "SYS010", "pgm": "BDLDRPT", "horror": H74, "dds": [
+                _dd("STEPLIB", LOADLIB),
+                {"name": "RPTOUT", "sysout": "(A,,STD1)"},
+                {"name": "AUDIT", "sysout": "Z", "extra": ["DEST=NYC01"]},
+                {"name": "SYSUDUMP", "sysout": "*"},
+                {"name": "TRACE", "dummy": True},
+            ]},
+            {"name": "SYS020", "pgm": "IEBGENER", "cond": "EVEN", "horror": H74, "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                _dd("SYSUT1", "PROD.BDLD.ERRMSG"),
+                {"name": "SYSUT2", "sysout": "A"},
+                {"name": "SYSIN", "dummy": True},
+            ]},
+            {"name": "SYS030", "pgm": "IEBGENER", "cond": "((4,LT,SYS010),ONLY)", "horror": H74, "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                _dd("SYSUT1", "PROD.BDLD.ERRMSG"),
+                {"name": "SYSUT2", "sysout": "(B,,ERR1)"},
+                {"name": "SYSIN", "dummy": True},
+            ]},
+        ],
+    },
+    {
+        # a job step that overrides a cataloged procedure's PARM, COND and one DD by procedure step name
+        "name": "BDLDOVR",
+        "title": "BDLD PROC OVERRIDES",
+        "accounting": "(BDLD,0100)",
+        "jcllib": ["PROD.BDLD.PROCLIB"],
+        "horror": H75,
+        "steps": [
+            {"name": "QTR", "proc": "BDLDPRC", "proc_parms": ["RPT=DAILY"],
+             "parm_overrides": [("RPT020", "QUARTERLY")], "cond_overrides": [("RPT020", "(4,LT,SRT010)")],
+             "dds": [{"name": "RPTOUT", "sysout": "B", "proc_step": "RPT020"}]},
         ],
     },
 ]

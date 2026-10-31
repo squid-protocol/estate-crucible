@@ -80,7 +80,8 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
     ordinal = 0
     blocks: list[dict[str, Any]] = []  # the IF blocks open at this point, innermost last
     branch = "then"
-    for kind, st in _flatten(spec["steps"]):
+    job_level = [("step", {"name": None, "dds_only": True, "dds": spec["job_dds"]})] if spec.get("job_dds") else []
+    for kind, st in [*job_level, *_flatten(spec["steps"])]:
         if kind == "if":
             m.raw("//*")
             with m.horror(st.get("horror")):
@@ -99,34 +100,49 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
             blocks.pop()
             continue
         step = st
-        ordinal += 1
-        m.raw("//*")
-        operands = [f"PGM={step['pgm']}"] if step.get("pgm") else [step["proc"], *step.get("proc_parms", [])]
-        if step.get("cond"):
-            operands.append(f"COND={step['cond']}")
-        if step.get("parm"):
-            operands.append(f"PARM='{step['parm']}'")
-        with m.horror(blocks[-1].get("horror") if blocks else None), m.horror(step.get("horror")):
-            line = _jcl_stmt(m, step["name"], "EXEC", operands)
-            extra: dict[str, Any] = {}
+        if not step.get("dds_only"):
+            ordinal += 1
+            m.raw("//*")
+            operands = [f"PGM={step['pgm']}"] if step.get("pgm") else [step["proc"], *step.get("proc_parms", [])]
+            if step.get("cond"):
+                operands.append(f"COND={step['cond']}")
             if step.get("parm"):
-                extra["parm"] = step["parm"]
-            if blocks:
-                extra["if_cond"] = blocks[-1]["if"]
-                extra["branch"] = branch
-            if spec.get("restart") and not proc:
-                extra["restart"] = spec["restart"]
-            m.fact("jcl_steps", **jp, step=step["name"],
-                   ordinal=ordinal, program=step.get("pgm"), exec_proc=step.get("proc"), cond=step.get("cond"),
-                   line=line, **extra)
-            if step.get("pgm"):
-                m.fact("call_sites", verb="EXEC PGM", form="literal", operand=step["pgm"], target=step["pgm"],
-                       line=line, resolves_to=program_paths.get(step["pgm"]))
+                operands.append(f"PARM='{step['parm']}'")
+            if step.get("rd"):
+                operands.append(f"RD={step['rd']}")
+            for pstep, value in step.get("parm_overrides", []):
+                operands.append(f"PARM.{pstep}='{value}'")
+            for pstep, value in step.get("cond_overrides", []):
+                operands.append(f"COND.{pstep}={value}")
+            with m.horror(blocks[-1].get("horror") if blocks else None), m.horror(step.get("horror")):
+                line = _jcl_stmt(m, step["name"], "EXEC", operands)
+                extra: dict[str, Any] = {}
+                if step.get("parm"):
+                    extra["parm"] = step["parm"]
+                if blocks:
+                    extra["if_cond"] = blocks[-1]["if"]
+                    extra["branch"] = branch
+                if spec.get("restart") and not proc:
+                    extra["restart"] = spec["restart"]
+                    if spec.get("restart_checkid"):
+                        extra["restart_checkid"] = spec["restart_checkid"]
+                if step.get("rd"):
+                    extra["rd"] = step["rd"]
+                if step.get("parm_overrides"):
+                    extra["parm_overrides"] = [{"step": a, "parm": b} for a, b in step["parm_overrides"]]
+                if step.get("cond_overrides"):
+                    extra["cond_overrides"] = [{"step": a, "cond": b} for a, b in step["cond_overrides"]]
+                m.fact("jcl_steps", **jp, step=step["name"],
+                       ordinal=ordinal, program=step.get("pgm"), exec_proc=step.get("proc"), cond=step.get("cond"),
+                       line=line, **extra)
+                if step.get("pgm"):
+                    m.fact("call_sites", verb="EXEC PGM", form="literal", operand=step["pgm"], target=step["pgm"],
+                           line=line, resolves_to=program_paths.get(step["pgm"]))
         prev_dd: Optional[str] = None
         for dd in step.get("dds", []):
             concat = dd.get("concat", False)
             if dd.get("sysout"):
-                ops = [f"SYSOUT={dd['sysout']}"]
+                ops = [f"SYSOUT={dd['sysout']}", *dd.get("extra", [])]
             elif dd.get("inline") is not None:
                 ops = ["*"]
             elif dd.get("dummy"):
@@ -137,7 +153,8 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
             temp = (dd.get("dsn") or "").startswith("&&")
             with m.horror(blocks[-1].get("horror") if blocks else None), m.horror(step.get("horror")), \
                     m.horror(dd.get("horror")):
-                dline = _jcl_stmt(m, "" if concat else dd["name"], "DD", ops)
+                label = f"{dd['proc_step']}.{dd['name']}" if dd.get("proc_step") else dd["name"]
+                dline = _jcl_stmt(m, "" if concat else label, "DD", ops)
                 cards: list[tuple[int, str, str]] = []
                 if dd.get("inline") is not None:
                     for card in dd["inline"]:
@@ -166,6 +183,8 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                 extra["concat_of"] = prev_dd
             if dd.get("dummy"):
                 extra["dummy"] = True
+            if dd.get("proc_step"):
+                extra["override_of"] = dd["proc_step"]
             symbolic = (dd.get("dsn") or "").startswith("&") and not temp
             if symbolic:
                 extra["symbolic"] = True
@@ -174,7 +193,7 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                     1 if isinstance(c, str) else (1 if isinstance(c[1], str) else len(c[1])) for c in dd["inline"])
             # a DD that is a plain dataset reference tags only its jcl_datasets row (H-0011 and the
             # older horrors); a DD of a new form (temp, concatenated, inline, dummy) tags its jcl_dds fact
-            new_form = temp or symbolic or concat or dd.get("dummy") or dd.get("inline") is not None
+            new_form = temp or symbolic or concat or step.get("dds_only") or dd.get("proc_step") or dd.get("dummy") or dd.get("inline") is not None
             with m.horror((blocks[-1].get("horror") if blocks else None) if new_form else None), \
                     m.horror(step.get("horror") if new_form else None), m.horror(dd.get("horror") if new_form else None):
                 m.fact("jcl_dds", **jp, step=step["name"],

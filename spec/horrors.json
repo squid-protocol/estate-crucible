@@ -1871,6 +1871,96 @@
     }
    ],
    "era": 0
+  },
+  {
+   "id": "H-0073",
+   "title": "Deferred checkpoint restart: JOB RESTART=(stepname,checkid) with a SYSCHK DD before the first EXEC, RD=R and SYSCKEOV on the checkpointed step",
+   "category": "jcl",
+   "issue": 4891,
+   "shapes": [
+    "BDLD jcl/BDLDCHK.jcl: JOB statement carries RESTART=(CHK020,C0000012); //SYSCHK DD DSN=PROD.BDLD.CHKPT,DISP=(OLD,KEEP) sits between the JOB statement and the first EXEC",
+    "BDLD jcl/BDLDCHK.jcl CHK020: EXEC PGM=SORT,RD=R with a //SYSCKEOV DD (end-of-volume checkpoint data set)"
+   ],
+   "asserts": "RESTART=(step,checkid) on the JOB statement is the restart of every jcl_steps fact in that job (the step name) and restart_checkid names the checkpoint inside that step. SYSCHK is a job-level DD: a jcl_dds fact with step null, dd SYSCHK, dsn PROD.BDLD.CHKPT, disp OLD, disp_normal KEEP. RD=R is the rd of the jcl_steps fact of the EXEC that codes it. SYSCKEOV is an ordinary DD of CHK020. The steps before the restart step are not run.",
+   "citations": [
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+     "section": "JOB statement > RESTART parameter",
+     "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/xjbresta.htm",
+     "quote": "Use the RESTART parameter to indicate the step, procedure step, or checkpoint at which the system is to restart a job."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+     "section": "EXEC statement > RD parameter",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/xexrd.htm",
+     "quote": "RD=R or RD=RNC on either the JOB statement or any one EXEC statement in the job."
+    },
+    {
+     "doc": "z/OS DFSMSdfp Checkpoint/Restart (z/OS 2.3.0)",
+     "section": "SYSCHK DD statement (deferred checkpoint restart)",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.3.0/pdf/idac400_v2r3.pdf",
+     "quote": "The statement must precede the first EXEC statement in the job that performs a deferred restart at checkpoint."
+    }
+   ],
+   "era": 0
+  },
+  {
+   "id": "H-0074",
+   "title": "SYSOUT forms (class, (class,,form), DEST), DD DUMMY and COND=EVEN / COND=ONLY on a step",
+   "category": "jcl",
+   "issue": 4891,
+   "shapes": [
+    "BDLD jcl/BDLDSYS.jcl SYS010: DD SYSOUT=(A,,STD1), SYSOUT=Z,DEST=NYC01, SYSOUT=*, and a DD DUMMY",
+    "BDLD jcl/BDLDSYS.jcl SYS020: EXEC COND=EVEN; SYS030: COND=((4,LT,SYS010),ONLY)"
+   ],
+   "asserts": "Each DD with a SYSOUT parameter is a jcl_dds fact whose sysout is the operand as coded, parentheses and omitted subparameters kept ((A,,STD1), Z, *); DEST and other keywords are not part of it. A DD DUMMY is dummy true with no dsn. The cond of a step is the COND operand as coded: EVEN, or ((4,LT,SYS010),ONLY); EVEN / ONLY are interpreted before the return-code tests and decide whether the step runs after an earlier abend.",
+   "citations": [
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+     "section": "DD statement > SYSOUT parameter",
+     "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/xddsysot.htm",
+     "quote": "Use the SYSOUT parameter to identify this data set as a system output data set, usually called a sysout data set."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+     "section": "EXEC statement > COND parameter",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/xexcond.htm",
+     "quote": "The EVEN or ONLY subparameters are interpreted first."
+    }
+   ],
+   "era": 0
+  },
+  {
+   "id": "H-0075",
+   "title": "A job step that calls a cataloged procedure and overrides its PARM, COND and a DD by procedure step name",
+   "category": "jcl",
+   "issue": 4891,
+   "shapes": [
+    "BDLD jcl/BDLDOVR.jcl QTR: EXEC BDLDPRC,RPT=DAILY,PARM.RPT020='QUARTERLY',COND.RPT020=(4,LT,SRT010)",
+    "BDLD jcl/BDLDOVR.jcl: //RPT020.RPTOUT DD SYSOUT=B after the EXEC, replacing the procedure's RPTOUT"
+   ],
+   "asserts": "The calling EXEC is one jcl_steps fact (step QTR, exec_proc BDLDPRC) carrying parm_overrides [{step RPT020, parm QUARTERLY}] and cond_overrides [{step RPT020, cond (4,LT,SRT010)}]; its own parm and cond are null. The overriding DD is a jcl_dds fact of step QTR with dd RPTOUT, override_of RPT020 and sysout B; the procedure's own RPTOUT (sysout A, in BDLDPRC) is unchanged. The PARM actually passed to BDLDRPT at run time is QUARTERLY, not the symbolic default.",
+   "citations": [
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "Modifying Procedures > Coding an overriding OUTPUT JCL or DD statement",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "the name of the procedure step containing the overridden statement, followed by a period, followed by the name of the procedure OUTPUT JCL statement or the ddname of the procedure DD statement."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "EXEC statement > PARM parameter > On an EXEC statement that calls a procedure",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "The EXEC statement can have as many PARM.procstepname parameters as the procedure has steps; each PARM parameter must specify a unique procstepname."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "EXEC statement > COND parameter > On an EXEC statement that calls a procedure",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "The EXEC statement can have as many COND.procstepname parameters as the procedure has steps; each COND parameter must specify a unique procstepname."
+    }
+   ],
+   "era": 0
   }
  ],
  "not_planted": [

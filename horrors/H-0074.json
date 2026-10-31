@@ -1,0 +1,153 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0074",
+ "title": "SYSOUT forms (class, (class,,form), DEST), DD DUMMY and COND=EVEN / COND=ONLY on a step",
+ "category": "jcl",
+ "issue": 4891,
+ "shapes": [
+  "BDLD jcl/BDLDSYS.jcl SYS010: DD SYSOUT=(A,,STD1), SYSOUT=Z,DEST=NYC01, SYSOUT=*, and a DD DUMMY",
+  "BDLD jcl/BDLDSYS.jcl SYS020: EXEC COND=EVEN; SYS030: COND=((4,LT,SYS010),ONLY)"
+ ],
+ "asserts": "Each DD with a SYSOUT parameter is a jcl_dds fact whose sysout is the operand as coded, parentheses and omitted subparameters kept ((A,,STD1), Z, *); DEST and other keywords are not part of it. A DD DUMMY is dummy true with no dsn. The cond of a step is the COND operand as coded: EVEN, or ((4,LT,SYS010),ONLY); EVEN / ONLY are interpreted before the return-code tests and decide whether the step runs after an earlier abend.",
+ "citations": [
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+   "section": "DD statement > SYSOUT parameter",
+   "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/xddsysot.htm",
+   "quote": "Use the SYSOUT parameter to identify this data set as a system output data set, usually called a sysout data set."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+   "section": "EXEC statement > COND parameter",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/xexcond.htm",
+   "quote": "The EVEN or ONLY subparameters are interpreted first."
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDSYS.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "BDLDRPT",
+      "target": "BDLDRPT",
+      "line": 4,
+      "resolves_to": "apps/BDLD/cobol/BDLDRPT.cbl",
+      "horror": "H-0074"
+     },
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "IEBGENER",
+      "target": "IEBGENER",
+      "line": 11,
+      "resolves_to": null,
+      "horror": "H-0074"
+     },
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "IEBGENER",
+      "target": "IEBGENER",
+      "line": 17,
+      "resolves_to": null,
+      "horror": "H-0074"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": "BDLDSYS",
+      "proc": null,
+      "step": "SYS010",
+      "ordinal": 1,
+      "program": "BDLDRPT",
+      "exec_proc": null,
+      "cond": null,
+      "line": 4,
+      "horror": "H-0074"
+     },
+     {
+      "job": "BDLDSYS",
+      "proc": null,
+      "step": "SYS020",
+      "ordinal": 2,
+      "program": "IEBGENER",
+      "exec_proc": null,
+      "cond": "EVEN",
+      "line": 11,
+      "horror": "H-0074"
+     },
+     {
+      "job": "BDLDSYS",
+      "proc": null,
+      "step": "SYS030",
+      "ordinal": 3,
+      "program": "IEBGENER",
+      "exec_proc": null,
+      "cond": "((4,LT,SYS010),ONLY)",
+      "line": 17,
+      "horror": "H-0074"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": "BDLDSYS",
+      "proc": null,
+      "step": "SYS010",
+      "dd": "TRACE",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 9,
+      "dummy": true,
+      "horror": "H-0074"
+     },
+     {
+      "job": "BDLDSYS",
+      "proc": null,
+      "step": "SYS020",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 15,
+      "dummy": true,
+      "horror": "H-0074"
+     },
+     {
+      "job": "BDLDSYS",
+      "proc": null,
+      "step": "SYS030",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 21,
+      "dummy": true,
+      "horror": "H-0074"
+     }
+    ],
+    "file_edges": [
+     {
+      "kind": "exec",
+      "target": "apps/BDLD/cobol/BDLDRPT.cbl",
+      "horror": "H-0074"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
