@@ -7,7 +7,7 @@
  "shapes": [
   "BDLD BDLDNITE.jcl / BDLDRST.jcl: step LOAD020 EXEC PGM=IKJEFT01 whose SYSTSIN DD * holds DSN SYSTEM(DB2P), RUN PROGRAM(BDLDDB2) PLAN(BDLDPLN) LIB(...) and END"
  ],
- "asserts": "The program a RUN PROGRAM(...) command names is called by the IKJEFT01 step: the step's SYSTSIN commands (DSN, RUN, END) are jcl_utility_cards facts with the step's utility IKJEFT01, and a reader must not take IKJEFT01 for the program that runs the plan.",
+ "asserts": "The program a RUN PROGRAM(...) command names is called by the IKJEFT01 step: the key records a call_sites fact (verb RUN PROGRAM, target the named program, resolves_to its member) on the RUN card's line, and the step's SYSTSIN commands (DSN, RUN, END) are jcl_utility_cards facts with the step's utility IKJEFT01. A reader must not take IKJEFT01 for the program that runs the plan.",
  "citations": [
   {
    "doc": "Db2 13 for z/OS Administration Guide",
@@ -30,6 +30,17 @@
     "status": "not-cobol"
    },
    "expected": {
+    "call_sites": [
+     {
+      "verb": "RUN PROGRAM",
+      "form": "literal",
+      "operand": "BDLDDB2",
+      "target": "BDLDDB2",
+      "line": 22,
+      "resolves_to": "apps/BDLD/cobol/BDLDDB2.cbl",
+      "horror": "H-0068"
+     }
+    ],
     "jcl_dds": [
      {
       "job": "BDLDNITE",
@@ -78,6 +89,77 @@
       "verb": "END",
       "operands": "",
       "line": 23,
+      "horror": "H-0068"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/BDLD/jcl/BDLDRST.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "RUN PROGRAM",
+      "form": "literal",
+      "operand": "BDLDDB2",
+      "target": "BDLDDB2",
+      "line": 20,
+      "resolves_to": "apps/BDLD/cobol/BDLDDB2.cbl",
+      "horror": "H-0068"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": "BDLDRST",
+      "proc": null,
+      "step": "LOAD020",
+      "dd": "SYSTSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 18,
+      "inline_lines": 3,
+      "horror": "H-0068"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDRST",
+      "proc": null,
+      "step": "LOAD020",
+      "utility": "IKJEFT01",
+      "dd": "SYSTSIN",
+      "verb": "DSN",
+      "operands": "SYSTEM(DB2P)",
+      "line": 19,
+      "horror": "H-0068"
+     },
+     {
+      "job": "BDLDRST",
+      "proc": null,
+      "step": "LOAD020",
+      "utility": "IKJEFT01",
+      "dd": "SYSTSIN",
+      "verb": "RUN",
+      "operands": "PROGRAM(BDLDDB2) PLAN(BDLDPLN) LIB('PROD.BDLD.LOADLIB')",
+      "line": 20,
+      "horror": "H-0068"
+     },
+     {
+      "job": "BDLDRST",
+      "proc": null,
+      "step": "LOAD020",
+      "utility": "IKJEFT01",
+      "dd": "SYSTSIN",
+      "verb": "END",
+      "operands": "",
+      "line": 21,
       "horror": "H-0068"
      }
     ]

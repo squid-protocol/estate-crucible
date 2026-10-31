@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any, Iterator, Optional
 
 from .data import DataWriter, I, Item
@@ -37,7 +38,7 @@ def write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], *,
         _write_jcl(m, spec, program_paths, proc)
 
 
-UTILITIES = {"IDCAMS", "SORT", "ICETOOL", "IKJEFT01", "IKJEFT1B", "IEBGENER", "ICEGENER"}
+UTILITIES = {"IDCAMS", "SORT", "ICETOOL", "IKJEFT01", "IKJEFT1B", "IEBGENER", "ICEGENER", "IEBCOPY"}
 
 
 def _flatten(steps: list[dict[str, Any]], ctx: Optional[dict[str, Any]] = None) -> Iterator[tuple[dict[str, Any], Any]]:
@@ -72,6 +73,8 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
         _jcl_stmt(m, owner, "JOB", [spec.get("accounting", "(ACCT)"), f"'{spec['title'][:20]}'", "CLASS=A",
                                      "MSGCLASS=X", *spec.get("job_extra", []),
                                      *(["NOTIFY=&SYSUID"] if spec.get("notify", True) else [])])
+        if spec.get("jcllib"):
+            _jcl_stmt(m, "", "JCLLIB", [f"ORDER=({','.join(spec['jcllib'])})"])
     for c in spec.get("comments", []):
         m.raw(f"//* {c}".rstrip())
     ordinal = 0
@@ -98,7 +101,7 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
         step = st
         ordinal += 1
         m.raw("//*")
-        operands = [f"PGM={step['pgm']}"] if step.get("pgm") else [step["proc"]]
+        operands = [f"PGM={step['pgm']}"] if step.get("pgm") else [step["proc"], *step.get("proc_parms", [])]
         if step.get("cond"):
             operands.append(f"COND={step['cond']}")
         if step.get("parm"):
@@ -163,12 +166,15 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                 extra["concat_of"] = prev_dd
             if dd.get("dummy"):
                 extra["dummy"] = True
+            symbolic = (dd.get("dsn") or "").startswith("&") and not temp
+            if symbolic:
+                extra["symbolic"] = True
             if dd.get("inline") is not None:
                 extra["inline_lines"] = len(dd["inline"]) and sum(
                     1 if isinstance(c, str) else (1 if isinstance(c[1], str) else len(c[1])) for c in dd["inline"])
             # a DD that is a plain dataset reference tags only its jcl_datasets row (H-0011 and the
             # older horrors); a DD of a new form (temp, concatenated, inline, dummy) tags its jcl_dds fact
-            new_form = temp or concat or dd.get("dummy") or dd.get("inline") is not None
+            new_form = temp or symbolic or concat or dd.get("dummy") or dd.get("inline") is not None
             with m.horror((blocks[-1].get("horror") if blocks else None) if new_form else None), \
                     m.horror(step.get("horror") if new_form else None), m.horror(dd.get("horror") if new_form else None):
                 m.fact("jcl_dds", **jp, step=step["name"],
@@ -178,6 +184,10 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                 for at, verb, operands in cards:
                     m.fact("jcl_utility_cards", **jp, step=step["name"], utility=step.get("pgm"), dd=dd["name"],
                            verb=verb, operands=operands, line=at)
+                    run = re.search(r"PROGRAM\((\w+)\)", operands) if verb == "RUN" else None
+                    if run and step.get("pgm") == "IKJEFT01":
+                        m.fact("call_sites", verb="RUN PROGRAM", form="literal", operand=run.group(1),
+                               target=run.group(1), line=at, resolves_to=program_paths.get(run.group(1)))
             if not concat:
                 prev_dd = dd["name"]
     if proc:

@@ -1,0 +1,243 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0071",
+ "title": "A cataloged procedure with symbolic parameters (&HLQ, &RPT) run from a JCLLIB private library",
+ "category": "jcl",
+ "issue": 4891,
+ "shapes": [
+  "BDLD proclib/BDLDPRC.prc: PROC HLQ=PROD,RPT=DAILY; DSN=&HLQ..BDLD.TRANS and DSN=&HLQ..BDLD.LOADLIB, EXEC PGM=BDLDRPT,PARM='&RPT'",
+  "BDLD proclib/BDLDPRC.prc: the same member also holds DSN=&&WORK, a real temporary dataset",
+  "BDLD jcl/BDLDPRCJ.jcl: JCLLIB ORDER=(PROD.BDLD.PROCLIB) and EXEC BDLDPRC,RPT=MONTHLY"
+ ],
+ "asserts": "A single ampersand starts a symbolic parameter, not a temporary dataset: DSN=&HLQ..BDLD.TRANS is a dataset reference recorded as written (jcl_dds dsn, symbolic true, no temp; a jcl_datasets row with the dsn as written), while only DSN=&&WORK is temp. The proc's steps and DDs belong to the proc (jcl_steps / jcl_dds proc field); the job's EXEC BDLDPRC is a jcl_steps row with exec_proc BDLDPRC and no program. The PARM text is recorded as written (&RPT). JCLLIB is not a step and not a DD. Resolving the symbolics to PROD / MONTHLY is not asserted.",
+ "citations": [
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+   "section": "PROC statement > Parameter field",
+   "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/iea3b6_Parameter_field10.htm",
+   "quote": "The parameters on a PROC statement assign default values to symbolic parameters on procedure statements."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+   "section": "JCLLIB statement > Parameter field",
+   "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/iea3b6_Parameter_field7.htm",
+   "quote": "Specifies the names of the libraries to be searched."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+   "section": "Using symbols in JCL > Rules for coding symbols in JCL",
+   "url": "https://ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/iea3b6_Rules_for_coding_symbols_in_JCL.htm",
+   "quote": "You can also use double ampersand notation in your JCL code."
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDPRCJ.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_steps": [
+     {
+      "job": "BDLDPRCJ",
+      "proc": null,
+      "step": "MONTH",
+      "ordinal": 1,
+      "program": null,
+      "exec_proc": "BDLDPRC",
+      "cond": null,
+      "line": 6,
+      "horror": "H-0071"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/BDLD/proclib/BDLDPRC.prc",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "SORT",
+      "target": "SORT",
+      "line": 3,
+      "resolves_to": null,
+      "horror": "H-0071"
+     },
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "BDLDRPT",
+      "target": "BDLDRPT",
+      "line": 12,
+      "resolves_to": "apps/BDLD/cobol/BDLDRPT.cbl",
+      "horror": "H-0071"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": null,
+      "proc": "BDLDPRC",
+      "step": "SRT010",
+      "ordinal": 1,
+      "program": "SORT",
+      "exec_proc": null,
+      "cond": null,
+      "line": 3,
+      "horror": "H-0071"
+     },
+     {
+      "job": null,
+      "proc": "BDLDPRC",
+      "step": "RPT020",
+      "ordinal": 2,
+      "program": "BDLDRPT",
+      "exec_proc": null,
+      "cond": null,
+      "line": 12,
+      "parm": "&RPT",
+      "horror": "H-0071"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": null,
+      "proc": "BDLDPRC",
+      "step": "SRT010",
+      "dd": "SORTIN",
+      "dsn": "&HLQ..BDLD.TRANS",
+      "generation": null,
+      "disp": "SHR",
+      "disp_normal": null,
+      "sysout": null,
+      "line": 4,
+      "symbolic": true,
+      "horror": "H-0071"
+     },
+     {
+      "job": null,
+      "proc": "BDLDPRC",
+      "step": "SRT010",
+      "dd": "SORTOUT",
+      "dsn": "&&WORK",
+      "generation": null,
+      "disp": "NEW",
+      "disp_normal": "PASS",
+      "sysout": null,
+      "line": 5,
+      "temp": true,
+      "horror": "H-0071"
+     },
+     {
+      "job": null,
+      "proc": "BDLDPRC",
+      "step": "SRT010",
+      "dd": "SYSOUT",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": "*",
+      "line": 7,
+      "horror": "H-0071"
+     },
+     {
+      "job": null,
+      "proc": "BDLDPRC",
+      "step": "SRT010",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 8,
+      "inline_lines": 1,
+      "horror": "H-0071"
+     },
+     {
+      "job": null,
+      "proc": "BDLDPRC",
+      "step": "RPT020",
+      "dd": "STEPLIB",
+      "dsn": "&HLQ..BDLD.LOADLIB",
+      "generation": null,
+      "disp": "SHR",
+      "disp_normal": null,
+      "sysout": null,
+      "line": 13,
+      "symbolic": true,
+      "horror": "H-0071"
+     },
+     {
+      "job": null,
+      "proc": "BDLDPRC",
+      "step": "RPT020",
+      "dd": "RPTOUT",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": "A",
+      "line": 14,
+      "horror": "H-0071"
+     }
+    ],
+    "jcl_datasets": [
+     {
+      "dsn": "&HLQ..BDLD.TRANS",
+      "generation": null,
+      "step": "SRT010",
+      "dd": "SORTIN",
+      "line": 4,
+      "horror": "H-0071"
+     },
+     {
+      "dsn": "&HLQ..BDLD.LOADLIB",
+      "generation": null,
+      "step": "RPT020",
+      "dd": "STEPLIB",
+      "line": 13,
+      "horror": "H-0071"
+     }
+    ],
+    "file_edges": [
+     {
+      "kind": "exec",
+      "target": "apps/BDLD/cobol/BDLDRPT.cbl",
+      "horror": "H-0071"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": null,
+      "proc": "BDLDPRC",
+      "step": "SRT010",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "SORT",
+      "operands": "FIELDS=(1,10,CH,A)",
+      "line": 9,
+      "horror": "H-0071"
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "jcl_datasets",
+     "dsn": "&&WORK",
+     "step": "SRT010",
+     "line": 5,
+     "why": "a temporary data set (&&name) exists only for the job: it is not a dataset of the estate",
+     "horror": "H-0071"
+    }
+   ]
+  }
+ ]
+}

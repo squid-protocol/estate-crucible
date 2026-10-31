@@ -76,9 +76,11 @@ era-neutral syntax horror; blank is untagged.
 | H-0065 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | Temporary datasets (&&name) passed between steps with DISP=(NEW,PASS) | `apps/BDLD/jcl/BDLDNITE.jcl` |
 | H-0066 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | DD concatenation: unnamed DD statements continue the previous DD | `apps/BDLD/jcl/BDLDGDG.jcl`, `apps/BDLD/jcl/BDLDNITE.jcl` |
 | H-0067 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | Utility control cards in the input stream: DFSORT, ICETOOL, IDCAMS and IEBGENER | `apps/BDLD/jcl/BDLDGDG.jcl`, `apps/BDLD/jcl/BDLDNITE.jcl`, `apps/BDLD/jcl/BDLDUTIL.jcl` |
-| H-0068 | 2 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | A Db2 program run in batch under IKJEFT01 with DSN SYSTEM and RUN PROGRAM commands in SYSTSIN | `apps/BDLD/jcl/BDLDNITE.jcl` |
+| H-0068 | 2 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | A Db2 program run in batch under IKJEFT01 with DSN SYSTEM and RUN PROGRAM commands in SYSTSIN | `apps/BDLD/jcl/BDLDNITE.jcl`, `apps/BDLD/jcl/BDLDRST.jcl` |
 | H-0069 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | EXEC PARM= and a JOB resubmitted with RESTART=stepname | `apps/BDLD/jcl/BDLDRST.jcl` |
 | H-0070 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | One job reading generation (0) and creating generation (+1) of the same GDG | `apps/BDLD/jcl/BDLDGDG.jcl` |
+| H-0071 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | A cataloged procedure with symbolic parameters (&HLQ, &RPT) run from a JCLLIB private library | `apps/BDLD/jcl/BDLDPRCJ.jcl`, `apps/BDLD/proclib/BDLDPRC.prc` |
+| H-0072 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | Utility control cards beyond the first level: IDCAMS LISTCAT / ALTER / PRINT, IEBCOPY COPY + SELECT, DFSORT JOINKEYS / REFORMAT / OUTFIL | `apps/BDLD/jcl/BDLDUT2.jcl` |
 
 ## Field-testing defects not planted
 

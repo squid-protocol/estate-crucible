@@ -1726,7 +1726,7 @@
    "shapes": [
     "BDLD BDLDNITE.jcl / BDLDRST.jcl: step LOAD020 EXEC PGM=IKJEFT01 whose SYSTSIN DD * holds DSN SYSTEM(DB2P), RUN PROGRAM(BDLDDB2) PLAN(BDLDPLN) LIB(...) and END"
    ],
-   "asserts": "The program a RUN PROGRAM(...) command names is called by the IKJEFT01 step: the step's SYSTSIN commands (DSN, RUN, END) are jcl_utility_cards facts with the step's utility IKJEFT01, and a reader must not take IKJEFT01 for the program that runs the plan.",
+   "asserts": "The program a RUN PROGRAM(...) command names is called by the IKJEFT01 step: the key records a call_sites fact (verb RUN PROGRAM, target the named program, resolves_to its member) on the RUN card's line, and the step's SYSTSIN commands (DSN, RUN, END) are jcl_utility_cards facts with the step's utility IKJEFT01. A reader must not take IKJEFT01 for the program that runs the plan.",
    "citations": [
     {
      "doc": "Db2 13 for z/OS Administration Guide",
@@ -1784,6 +1784,90 @@
      "section": "Identification of data set > Generation data sets",
      "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab500/iea3b5_Generation_data_sets_.htm",
      "quote": "if you create a generation data set with a relative generation number of (+1)"
+    }
+   ],
+   "era": 0
+  },
+  {
+   "id": "H-0071",
+   "title": "A cataloged procedure with symbolic parameters (&HLQ, &RPT) run from a JCLLIB private library",
+   "category": "jcl",
+   "issue": 4891,
+   "shapes": [
+    "BDLD proclib/BDLDPRC.prc: PROC HLQ=PROD,RPT=DAILY; DSN=&HLQ..BDLD.TRANS and DSN=&HLQ..BDLD.LOADLIB, EXEC PGM=BDLDRPT,PARM='&RPT'",
+    "BDLD proclib/BDLDPRC.prc: the same member also holds DSN=&&WORK, a real temporary dataset",
+    "BDLD jcl/BDLDPRCJ.jcl: JCLLIB ORDER=(PROD.BDLD.PROCLIB) and EXEC BDLDPRC,RPT=MONTHLY"
+   ],
+   "asserts": "A single ampersand starts a symbolic parameter, not a temporary dataset: DSN=&HLQ..BDLD.TRANS is a dataset reference recorded as written (jcl_dds dsn, symbolic true, no temp; a jcl_datasets row with the dsn as written), while only DSN=&&WORK is temp. The proc's steps and DDs belong to the proc (jcl_steps / jcl_dds proc field); the job's EXEC BDLDPRC is a jcl_steps row with exec_proc BDLDPRC and no program. The PARM text is recorded as written (&RPT). JCLLIB is not a step and not a DD. Resolving the symbolics to PROD / MONTHLY is not asserted.",
+   "citations": [
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+     "section": "PROC statement > Parameter field",
+     "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/iea3b6_Parameter_field10.htm",
+     "quote": "The parameters on a PROC statement assign default values to symbolic parameters on procedure statements."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+     "section": "JCLLIB statement > Parameter field",
+     "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/iea3b6_Parameter_field7.htm",
+     "quote": "Specifies the names of the libraries to be searched."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+     "section": "Using symbols in JCL > Rules for coding symbols in JCL",
+     "url": "https://ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/iea3b6_Rules_for_coding_symbols_in_JCL.htm",
+     "quote": "You can also use double ampersand notation in your JCL code."
+    }
+   ],
+   "era": 0
+  },
+  {
+   "id": "H-0072",
+   "title": "Utility control cards beyond the first level: IDCAMS LISTCAT / ALTER / PRINT, IEBCOPY COPY + SELECT, DFSORT JOINKEYS / REFORMAT / OUTFIL",
+   "category": "jcl",
+   "issue": 4890,
+   "shapes": [
+    "BDLD jcl/BDLDUT2.jcl IDC010: LISTCAT ENTRIES(...) ALL; ALTER ... - / NEWNAME(...) continued with a trailing hyphen; PRINT INDATASET(...) COUNT(10)",
+    "BDLD jcl/BDLDUT2.jcl CPY020: IEBCOPY COPY OUTDD=,INDD= followed by SELECT MEMBER=(...)",
+    "BDLD jcl/BDLDUT2.jcl JNK030: two JOINKEYS cards (F1=, F2=), REFORMAT, SORT FIELDS=COPY, two OUTFIL cards"
+   ],
+   "asserts": "Each control statement in the inline SYSIN stream is one jcl_utility_cards fact with the step's PGM as utility (IDCAMS, IEBCOPY, SORT), its verb, operands (continuation joined, hyphen dropped) and start line. Two statements with the same verb (JOINKEYS F1 / F2, OUTFIL x2) are two facts. SELECT is its own statement, not an operand of COPY.",
+   "citations": [
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.1.0)",
+     "section": "LISTCAT",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.idai200/da6i2cat.htm",
+     "quote": "The LISTCAT command lists catalog entries."
+    },
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.1.0)",
+     "section": "ALTER",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.idai200/da6i2052.htm",
+     "quote": "The ALTER command modifies the attributes of defined data sets and catalogs."
+    },
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.1.0)",
+     "section": "PRINT",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.idai200/print.htm",
+     "quote": "The PRINT command prints VSAM data sets, non-VSAM data sets, and catalogs."
+    },
+    {
+     "doc": "z/OS DFSMSdfp Utilities",
+     "section": "The IEBCOPY utility: Copy libraries (partitioned data sets)",
+     "url": "https://www.ibm.com/docs/zosbasics/com.ibm.zos.zdatamgmt/zsysprogc_utilities_IEBCOPY.htm",
+     "quote": "The SELECT statement specifies the member names to be processed,"
+    },
+    {
+     "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.1.0)",
+     "section": "JOINKEYS control statement",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.icea100/ice2ca_JOINKEYS_control_statement.htm",
+     "quote": "Used only for a JOINKEYS application."
+    },
+    {
+     "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.1.0)",
+     "section": "OUTFIL control statements",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.icea100/oufcst.htm",
+     "quote": "OUTFIL control statements allow you to create one or more output data sets for a sort, copy, or merge application"
     }
    ],
    "era": 0

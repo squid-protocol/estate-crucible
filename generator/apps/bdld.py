@@ -5,12 +5,15 @@ IEBGENER, ICETOOL, DFSORT) and a GDG job. The COBOL is deliberately small; the J
 
 Planted: H-0064 (COND, IF/THEN/ELSE/ENDIF), H-0065 (temporary datasets), H-0066 (DD concatenation),
 H-0067 (utility control cards), H-0068 (IKJEFT01 running a Db2 program), H-0069 (PARM, RESTART),
-H-0070 (GDG (0) / (+1) in one job)."""
+H-0070 (GDG (0) / (+1) in one job), H-0071 (a cataloged procedure with symbolic parameters, run through
+JCLLIB), H-0072 (further utility control cards: IDCAMS LISTCAT / ALTER / PRINT, IEBCOPY, DFSORT JOINKEYS /
+OUTFIL)."""
 
 from ..data import I
 from ..stmt import goback, if_, para, perform, raw, read, sql
 
-H64, H65, H66, H67, H68, H69, H70 = ("H-0064", "H-0065", "H-0066", "H-0067", "H-0068", "H-0069", "H-0070")
+H64, H65, H66, H67, H68, H69, H70, H71, H72 = (
+    "H-0064", "H-0065", "H-0066", "H-0067", "H-0068", "H-0069", "H-0070", "H-0071", "H-0072")
 
 COPYBOOKS = [
     {"member": "BDLREC", "header": [" BDLREC   - SORTED TRANSACTION EXTRACT (40 BYTES)"],
@@ -159,7 +162,7 @@ JOBS = [
                 _dd("STEPLIB", "DSN.V13R1.SDSNLOAD"),
                 _dd("SORTED", "PROD.BDLD.SORTED"),
                 {"name": "SYSTSPRT", "sysout": "*"},
-                {"name": "SYSTSIN", "inline": [
+                {"name": "SYSTSIN", "horror": H68, "inline": [
                     ("DSN", " DSN SYSTEM(DB2P)"),
                     ("RUN", " RUN PROGRAM(BDLDDB2) PLAN(BDLDPLN) LIB('PROD.BDLD.LOADLIB')"),
                     ("END", " END"),
@@ -237,7 +240,84 @@ JOBS = [
             ]},
         ],
     },
+    {
+        # a job that runs the cataloged procedure, overriding one symbolic, from a private library
+        "name": "BDLDPRCJ",
+        "title": "BDLD PROC RUN",
+        "accounting": "(BDLD,0100)",
+        "jcllib": ["PROD.BDLD.PROCLIB"],
+        "horror": H71,
+        "comments": ["RUN THE CATALOGED PROCEDURE BDLDPRC WITH RPT=MONTHLY"],
+        "steps": [
+            {"name": "MONTH", "proc": "BDLDPRC", "proc_parms": ["RPT=MONTHLY"]},
+        ],
+    },
+    {
+        # further utilities: IDCAMS LISTCAT / ALTER / PRINT, IEBCOPY, DFSORT JOINKEYS with OUTFIL
+        "name": "BDLDUT2",
+        "title": "BDLD UTILITIES 2",
+        "accounting": "(BDLD,0100)",
+        "steps": [
+            {"name": "IDC010", "pgm": "IDCAMS", "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                {"name": "SYSIN", "horror": H72, "inline": [
+                    ("LISTCAT", " LISTCAT ENTRIES(PROD.BDLD.XREF) ALL"),
+                    ("ALTER", [" ALTER PROD.BDLD.XREF -", "       NEWNAME(PROD.BDLD.XREF2)"]),
+                    ("PRINT", " PRINT INDATASET(PROD.BDLD.XREF2) COUNT(10)"),
+                ]},
+            ]},
+            {"name": "CPY020", "pgm": "IEBCOPY", "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                _dd("SYSUT1", "PROD.BDLD.LOADLIB"),
+                _dd("SYSUT2", "PROD.BDLD.LOADBAK"),
+                {"name": "SYSIN", "horror": H72, "inline": [
+                    ("COPY", " COPY OUTDD=SYSUT2,INDD=SYSUT1"),
+                    ("SELECT", " SELECT MEMBER=(BDLDRPT,BDLDDB2)"),
+                ]},
+            ]},
+            {"name": "JNK030", "pgm": "SORT", "dds": [
+                _dd("SORTJNF1", "PROD.BDLD.XREFIN"),
+                _dd("SORTJNF2", "PROD.BDLD.XREFOUT"),
+                {"name": "SYSOUT", "sysout": "*"},
+                _dd("OUT1", "PROD.BDLD.JOINED", ("NEW", "CATLG", "DELETE"),
+                    extra=["UNIT=SYSDA", "SPACE=(CYL,(1,1))", "DCB=(RECFM=FB,LRECL=50)"]),
+                _dd("OUT2", "PROD.BDLD.JOINREST", ("NEW", "CATLG", "DELETE"),
+                    extra=["UNIT=SYSDA", "SPACE=(CYL,(1,1))", "DCB=(RECFM=FB,LRECL=50)"]),
+                {"name": "SYSIN", "horror": H72, "inline": [
+                    ("JOINKEYS", " JOINKEYS F1=SORTJNF1,FIELDS=(1,10,A)"),
+                    ("JOINKEYS", " JOINKEYS F2=SORTJNF2,FIELDS=(1,10,A)"),
+                    ("REFORMAT", " REFORMAT FIELDS=(F1:1,40,F2:11,10)"),
+                    ("SORT", " SORT FIELDS=COPY"),
+                    ("OUTFIL", " OUTFIL FNAMES=OUT1,INCLUDE=(35,1,CH,EQ,C'A')"),
+                    ("OUTFIL", " OUTFIL FNAMES=OUT2,SAVE"),
+                ]},
+            ]},
+        ],
+    },
 ]
+
+PROCS = [
+    {
+        # symbolic parameters (&HLQ, &RPT) in a DSN, in PARM; && (a temporary dataset) in the same member
+        "name": "BDLDPRC",
+        "symbolics": ["HLQ=PROD", "RPT=DAILY"],
+        "horror": H71,
+        "steps": [
+            {"name": "SRT010", "pgm": "SORT", "dds": [
+                _dd("SORTIN", "&HLQ..BDLD.TRANS"),
+                _dd("SORTOUT", "&&WORK", ("NEW", "PASS"),
+                    extra=["UNIT=SYSDA", "SPACE=(CYL,(1,1))", "DCB=(RECFM=FB,LRECL=40)"]),
+                {"name": "SYSOUT", "sysout": "*"},
+                {"name": "SYSIN", "inline": [("SORT", " SORT FIELDS=(1,10,CH,A)")]},
+            ]},
+            {"name": "RPT020", "pgm": "BDLDRPT", "parm": "&RPT", "dds": [
+                _dd("STEPLIB", "&HLQ..BDLD.LOADLIB"),
+                {"name": "RPTOUT", "sysout": "A"},
+            ]},
+        ],
+    },
+]
+
 
 APP = {
     "id": "BDLD",
@@ -249,4 +329,5 @@ APP = {
     "dclgen": DCLGEN,
     "programs": [BDLDDB2, BDLDRPT],
     "jcl": JOBS,
+    "procs": PROCS,
 }
