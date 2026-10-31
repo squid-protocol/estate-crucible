@@ -1,0 +1,102 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0079",
+ "title": "IDCAMS DEFINE ALTERNATEINDEX, DEFINE PATH and BLDINDEX cards that build an alternate index over a base cluster",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA jcl/AIXADEF.jcl IDC020: DEFINE ALTERNATEINDEX (NAME(PROD.AIXA.ORDER.AIX) RELATE(PROD.AIXA.ORDER) KEYS(8 8) NONUNIQUEKEY UPGRADE ...)",
+  "AIXA jcl/AIXADEF.jcl IDC020: DEFINE PATH (NAME(PROD.AIXA.ORDER.PATH) PATHENTRY(PROD.AIXA.ORDER.AIX) UPDATE)",
+  "AIXA jcl/AIXADEF.jcl IDC020: BLDINDEX INDATASET(PROD.AIXA.ORDER) OUTDATASET(PROD.AIXA.ORDER.AIX)"
+ ],
+ "asserts": "Each card is one jcl_utility_cards fact of step IDC020, utility IDCAMS: verb DEFINE (one for the ALTERNATEINDEX, one for the PATH) and verb BLDINDEX. Continuation lines (a trailing hyphen) belong to the card they continue. The alternate index, the path and the BLDINDEX are three separate steps of one dependency chain, in this order: the index is defined and related to the base cluster, a path is defined over it, and the index is built from the loaded base cluster.",
+ "citations": [
+  {
+   "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+   "section": "DEFINE ALTERNATEINDEX",
+   "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-alternateindex",
+   "quote": "The DEFINE ALTERNATEINDEX command defines an alternate index."
+  },
+  {
+   "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+   "section": "DEFINE PATH",
+   "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-path",
+   "quote": "The DEFINE PATH command defines a path directly over a base cluster or over an alternate index and its related base cluster."
+  },
+  {
+   "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+   "section": "BLDINDEX",
+   "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-bldindex",
+   "quote": "The BLDINDEX command builds alternate indexes for existing data sets."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+   "section": "Defining alternate indexes",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+   "quote": "Build the alternate index by using (typically) the BLDINDEX command."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/AIXA/jcl/AIXADEF.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "AIXADEF",
+      "proc": null,
+      "step": "IDC020",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 21,
+      "inline_lines": 7,
+      "horror": "H-0079"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "AIXADEF",
+      "proc": null,
+      "step": "IDC020",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "ALTERNATEINDEX (NAME(PROD.AIXA.ORDER.AIX) RELATE(PROD.AIXA.ORDER) KEYS(8 8) NONUNIQUEKEY UPGRADE CYLINDERS(1 1))",
+      "line": 22,
+      "horror": "H-0079"
+     },
+     {
+      "job": "AIXADEF",
+      "proc": null,
+      "step": "IDC020",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "PATH (NAME(PROD.AIXA.ORDER.PATH) PATHENTRY(PROD.AIXA.ORDER.AIX) UPDATE)",
+      "line": 25,
+      "horror": "H-0079"
+     },
+     {
+      "job": "AIXADEF",
+      "proc": null,
+      "step": "IDC020",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "BLDINDEX",
+      "operands": "INDATASET(PROD.AIXA.ORDER) OUTDATASET(PROD.AIXA.ORDER.AIX)",
+      "line": 27,
+      "horror": "H-0079"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

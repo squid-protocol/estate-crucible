@@ -1,0 +1,63 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0077",
+ "title": "A relative file addressed by a RELATIVE KEY that is not part of the record",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXARRD: SELECT SLOT-FILE ... ORGANIZATION IS RELATIVE / ACCESS MODE IS DYNAMIC / RELATIVE KEY IS WS-SLOT-NO"
+ ],
+ "asserts": "The SELECT is one file_control fact (select SLOT-FILE, assign SLOTS, organization RELATIVE, access_mode DYNAMIC, record_key null) carrying relative_key WS-SLOT-NO. The RELATIVE KEY is a working-storage item, not a field of SLOT-REC, and it is not a record_key: a RELATIVE file has no RECORD KEY.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "RELATIVE KEY clause",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The RELATIVE KEY clause (format 3) identifies a data-name that specifies the relative record number for a specific logical record within a relative file."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "RELATIVE KEY clause",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "That is, the RELATIVE KEY is not part of the record."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "ORGANIZATION clause",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The position of each logical record in the file is determined by its relative record number."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+   "section": "Alternate indexes",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+   "quote": "Alternate indexes are not supported for VSAM RRDS."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXARRD.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "file_control": [
+     {
+      "select": "SLOT-FILE",
+      "assign": "SLOTS",
+      "organization": "RELATIVE",
+      "access_mode": "DYNAMIC",
+      "record_key": null,
+      "file_status": "WS-SLOT-STATUS",
+      "fd_copies": [],
+      "line": 10,
+      "relative_key": "WS-SLOT-NO",
+      "horror": "H-0077"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

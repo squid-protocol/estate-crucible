@@ -1,0 +1,90 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0082",
+ "title": "IDCAMS DEFINE CLUSTER in its three kinds: INDEXED, NUMBERED and NONINDEXED",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA jcl/AIXADEF.jcl IDC010: DEFINE CLUSTER (NAME(PROD.AIXA.ORDER) INDEXED KEYS(8 0) ...)",
+  "AIXA jcl/AIXADEF.jcl IDC010: DEFINE CLUSTER (NAME(PROD.AIXA.SLOTS) NUMBERED ...)",
+  "AIXA jcl/AIXADEF.jcl IDC010: DEFINE CLUSTER (NAME(PROD.AIXA.LOG) NONINDEXED ...)"
+ ],
+ "asserts": "Three jcl_utility_cards facts with verb DEFINE of step IDC010 (step IDC020 holds the alternate index cards, H-0079), one per kind. INDEXED is a KSDS (read by AIXAKSD, ORGANIZATION IS INDEXED), NUMBERED an RRDS (AIXARRD, ORGANIZATION IS RELATIVE), NONINDEXED an ESDS (AIXAESD, ORGANIZATION IS SEQUENTIAL). The kind a card names is the organization the program that reads the data set declares in its SELECT.",
+ "citations": [
+  {
+   "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+   "section": "DEFINE CLUSTER",
+   "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-cluster",
+   "quote": "[INDEXED|LINEAR|NONINDEXED|NUMBERED|ZFS]"
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+   "section": "Defining VSAM files",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+   "quote": "Identify VSAM RRDS files in a COBOL program by using the ORGANIZATION IS RELATIVE clause. Use the RELATIVE KEY IS clause to associate each logical record with its relative record number."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/AIXA/jcl/AIXADEF.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "AIXADEF",
+      "proc": null,
+      "step": "IDC010",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 7,
+      "inline_lines": 9,
+      "horror": "H-0082"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "AIXADEF",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "CLUSTER (NAME(PROD.AIXA.ORDER) INDEXED KEYS(8 0) RECORDSIZE(40 40) CYLINDERS(1 1))",
+      "line": 8,
+      "horror": "H-0082"
+     },
+     {
+      "job": "AIXADEF",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "CLUSTER (NAME(PROD.AIXA.SLOTS) NUMBERED RECORDSIZE(40 40) CYLINDERS(1 1))",
+      "line": 11,
+      "horror": "H-0082"
+     },
+     {
+      "job": "AIXADEF",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "CLUSTER (NAME(PROD.AIXA.LOG) NONINDEXED RECORDSIZE(60 60) CYLINDERS(1 1))",
+      "line": 14,
+      "horror": "H-0082"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

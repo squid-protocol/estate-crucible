@@ -1961,6 +1961,209 @@
     }
    ],
    "era": 0
+  },
+  {
+   "id": "H-0076",
+   "title": "An indexed file with an ALTERNATE RECORD KEY that allows duplicates",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAKSD: SELECT ORD-FILE ... RECORD KEY IS ORD-ID / ALTERNATE RECORD KEY IS ORD-CUST WITH DUPLICATES"
+   ],
+   "asserts": "The SELECT is one file_control fact (select ORD-FILE, assign ORDKSD, organization INDEXED, access_mode DYNAMIC, record_key ORD-ID) carrying alternate_keys [{name ORD-CUST, duplicates true}]. ORD-CUST is not the record_key: the prime key stays ORD-ID. Without the DUPLICATES phrase the alternate key values would have to be unique, so the flag is part of the fact, not decoration.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "ALTERNATE RECORD KEY clause",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "If the DUPLICATES phrase is not specified, the values contained in the ALTERNATE RECORD KEY data item must be unique among records in the file."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "ALTERNATE RECORD KEY clause",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "If the DUPLICATES phrase is specified, the values contained in the ALTERNATE RECORD KEY data item can be duplicated within any records in the file."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "ALTERNATE RECORD KEY clause",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "In sequential access, the records with duplicate keys are retrieved in the order in which they were placed in the file. In random access, only the first record written in a series of records with duplicate keys can be retrieved."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0077",
+   "title": "A relative file addressed by a RELATIVE KEY that is not part of the record",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXARRD: SELECT SLOT-FILE ... ORGANIZATION IS RELATIVE / ACCESS MODE IS DYNAMIC / RELATIVE KEY IS WS-SLOT-NO"
+   ],
+   "asserts": "The SELECT is one file_control fact (select SLOT-FILE, assign SLOTS, organization RELATIVE, access_mode DYNAMIC, record_key null) carrying relative_key WS-SLOT-NO. The RELATIVE KEY is a working-storage item, not a field of SLOT-REC, and it is not a record_key: a RELATIVE file has no RECORD KEY.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "RELATIVE KEY clause",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The RELATIVE KEY clause (format 3) identifies a data-name that specifies the relative record number for a specific logical record within a relative file."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "RELATIVE KEY clause",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "That is, the RELATIVE KEY is not part of the record."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "ORGANIZATION clause",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The position of each logical record in the file is determined by its relative record number."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+     "section": "Alternate indexes",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+     "quote": "Alternate indexes are not supported for VSAM RRDS."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0078",
+   "title": "A SELECT over an ESDS: ORGANIZATION IS SEQUENTIAL, the data set a NONINDEXED cluster",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAESD: SELECT LOG-FILE ASSIGN TO LOGESD ORGANIZATION IS SEQUENTIAL; AIXADEF defines PROD.AIXA.LOG NONINDEXED"
+   ],
+   "asserts": "The SELECT is one file_control fact (select LOG-FILE, assign LOGESD, organization SEQUENTIAL, access_mode SEQUENTIAL, record_key null) with no alternate_keys and no relative_key. The COBOL source alone does not say the file is an ESDS rather than a QSAM data set: only the DEFINE CLUSTER NONINDEXED card for PROD.AIXA.LOG (H-0082) does.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "ORGANIZATION clause",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A predecessor-successor relationship among the records in the file is established by the order in which records are placed in the file when it is created or extended."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0079",
+   "title": "IDCAMS DEFINE ALTERNATEINDEX, DEFINE PATH and BLDINDEX cards that build an alternate index over a base cluster",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA jcl/AIXADEF.jcl IDC020: DEFINE ALTERNATEINDEX (NAME(PROD.AIXA.ORDER.AIX) RELATE(PROD.AIXA.ORDER) KEYS(8 8) NONUNIQUEKEY UPGRADE ...)",
+    "AIXA jcl/AIXADEF.jcl IDC020: DEFINE PATH (NAME(PROD.AIXA.ORDER.PATH) PATHENTRY(PROD.AIXA.ORDER.AIX) UPDATE)",
+    "AIXA jcl/AIXADEF.jcl IDC020: BLDINDEX INDATASET(PROD.AIXA.ORDER) OUTDATASET(PROD.AIXA.ORDER.AIX)"
+   ],
+   "asserts": "Each card is one jcl_utility_cards fact of step IDC020, utility IDCAMS: verb DEFINE (one for the ALTERNATEINDEX, one for the PATH) and verb BLDINDEX. Continuation lines (a trailing hyphen) belong to the card they continue. The alternate index, the path and the BLDINDEX are three separate steps of one dependency chain, in this order: the index is defined and related to the base cluster, a path is defined over it, and the index is built from the loaded base cluster.",
+   "citations": [
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+     "section": "DEFINE ALTERNATEINDEX",
+     "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-alternateindex",
+     "quote": "The DEFINE ALTERNATEINDEX command defines an alternate index."
+    },
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+     "section": "DEFINE PATH",
+     "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-path",
+     "quote": "The DEFINE PATH command defines a path directly over a base cluster or over an alternate index and its related base cluster."
+    },
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+     "section": "BLDINDEX",
+     "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-bldindex",
+     "quote": "The BLDINDEX command builds alternate indexes for existing data sets."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+     "section": "Defining alternate indexes",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+     "quote": "Build the alternate index by using (typically) the BLDINDEX command."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0080",
+   "title": "A DD statement that names the PATH over an alternate index, next to the DD for the base cluster",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA jcl/AIXARUN.jcl KSD010: //ORDKSD DD DSN=PROD.AIXA.ORDER,DISP=OLD and //ORDKSD1 DD DSN=PROD.AIXA.ORDER.PATH,DISP=OLD"
+   ],
+   "asserts": "Step KSD010 has two jcl_dds facts: ORDKSD on the base cluster PROD.AIXA.ORDER and ORDKSD1 on PROD.AIXA.ORDER.PATH, the path defined by H-0079. The path is a data set name in the catalog, not a data set of its own on a volume: the DD does not name the alternate index PROD.AIXA.ORDER.AIX. The COBOL program names only ORDKSD in its SELECT; the alternate index is identified in the program solely by the ALTERNATE RECORD KEY clause.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+     "section": "Defining alternate indexes",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+     "quote": "In your COBOL program, the alternate index is identified solely by the ALTERNATE RECORD KEY clause in the FILE-CONTROL paragraph."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0081",
+   "title": "A paragraph that tells file status 02, 22 and 23 apart after each access to an indexed file",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAKSD 9000-STATUS: IF WS-ORD-STATUS = '23' ... IF WS-ORD-STATUS = '02' ... IF WS-ORD-STATUS = '22', PERFORMed after each WRITE and after the random READ"
+   ],
+   "asserts": "9000-STATUS is one units fact, PERFORMed from 1000-ADD (three times) and 3000-PROBE (plain edges facts). The comparisons are tests of the FILE STATUS item named in the SELECT (WS-ORD-STATUS, file_status of ORD-FILE). At run time the second WRITE (a new prime key, a customer already present) ends in status 02, the third WRITE (an existing prime key) in 22 and the random READ of a missing key in 23: 02 is a success, 22 and 23 are not.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "This file status value applies only to indexed files with alternate keys that allow duplicates."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "An attempt was made to randomly access a record that does not exist in the file."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "or a duplicate alternate record key without the DUPLICATES phrase in an indexed file."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0082",
+   "title": "IDCAMS DEFINE CLUSTER in its three kinds: INDEXED, NUMBERED and NONINDEXED",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA jcl/AIXADEF.jcl IDC010: DEFINE CLUSTER (NAME(PROD.AIXA.ORDER) INDEXED KEYS(8 0) ...)",
+    "AIXA jcl/AIXADEF.jcl IDC010: DEFINE CLUSTER (NAME(PROD.AIXA.SLOTS) NUMBERED ...)",
+    "AIXA jcl/AIXADEF.jcl IDC010: DEFINE CLUSTER (NAME(PROD.AIXA.LOG) NONINDEXED ...)"
+   ],
+   "asserts": "Three jcl_utility_cards facts with verb DEFINE of step IDC010 (step IDC020 holds the alternate index cards, H-0079), one per kind. INDEXED is a KSDS (read by AIXAKSD, ORGANIZATION IS INDEXED), NUMBERED an RRDS (AIXARRD, ORGANIZATION IS RELATIVE), NONINDEXED an ESDS (AIXAESD, ORGANIZATION IS SEQUENTIAL). The kind a card names is the organization the program that reads the data set declares in its SELECT.",
+   "citations": [
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+     "section": "DEFINE CLUSTER",
+     "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-cluster",
+     "quote": "[INDEXED|LINEAR|NONINDEXED|NUMBERED|ZFS]"
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+     "section": "Defining VSAM files",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+     "quote": "Identify VSAM RRDS files in a COBOL program by using the ORGANIZATION IS RELATIVE clause. Use the RELATIVE KEY IS clause to associate each logical record with its relative record number."
+    }
+   ],
+   "era": 2
   }
  ],
  "not_planted": [

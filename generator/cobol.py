@@ -157,13 +157,24 @@ class ProgramWriter:
                 m.cobol(f"ACCESS MODE IS {sel['access']}", indent=4)
             if sel.get("record_key"):
                 m.cobol(f"RECORD KEY IS {sel['record_key']}", indent=4)
+            for alt in sel.get("alternate_keys", []):
+                m.cobol(f"ALTERNATE RECORD KEY IS {alt['name']}" + (" WITH DUPLICATES" if alt.get("duplicates") else ""),
+                        indent=4)
+            if sel.get("relative_key"):
+                m.cobol(f"RELATIVE KEY IS {sel['relative_key']}", indent=4)
             m.cobol(f"FILE STATUS IS {sel['status']}.", indent=4)
             fd = next((f for f in self.spec.get("fds", []) if f["fd"] == sel["name"]), None)
             rec = fd["record"] if fd else {}
             fd_copies = [rec["copy_only"]["member"]] if "copy_only" in rec else [c["member"] for c in rec.get("copy", [])]
+            extra: dict[str, Any] = {}
+            if sel.get("alternate_keys"):
+                extra["alternate_keys"] = [{"name": a["name"], "duplicates": bool(a.get("duplicates"))}
+                                           for a in sel["alternate_keys"]]
+            if sel.get("relative_key"):
+                extra["relative_key"] = sel["relative_key"]
             m.fact("file_control", select=sel["name"], assign=sel["assign"], organization=org,
                    access_mode=sel.get("access"), record_key=sel.get("record_key"), file_status=sel["status"],
-                   fd_copies=fd_copies, line=line, **self.prog())
+                   fd_copies=fd_copies, line=line, **extra, **self.prog())
 
     def data(self) -> None:
         s = self.spec

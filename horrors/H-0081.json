@@ -1,0 +1,53 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0081",
+ "title": "A paragraph that tells file status 02, 22 and 23 apart after each access to an indexed file",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXAKSD 9000-STATUS: IF WS-ORD-STATUS = '23' ... IF WS-ORD-STATUS = '02' ... IF WS-ORD-STATUS = '22', PERFORMed after each WRITE and after the random READ"
+ ],
+ "asserts": "9000-STATUS is one units fact, PERFORMed from 1000-ADD (three times) and 3000-PROBE (plain edges facts). The comparisons are tests of the FILE STATUS item named in the SELECT (WS-ORD-STATUS, file_status of ORD-FILE). At run time the second WRITE (a new prime key, a customer already present) ends in status 02, the third WRITE (an existing prime key) in 22 and the random READ of a missing key in 23: 02 is a success, 22 and 23 are not.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "This file status value applies only to indexed files with alternate keys that allow duplicates."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "An attempt was made to randomly access a record that does not exist in the file."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "or a duplicate alternate record key without the DUPLICATES phrase in an indexed file."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXAKSD.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "9000-STATUS",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 83,
+      "end_line": 94,
+      "horror": "H-0081"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

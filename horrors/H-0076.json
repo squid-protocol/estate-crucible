@@ -1,0 +1,62 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0076",
+ "title": "An indexed file with an ALTERNATE RECORD KEY that allows duplicates",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXAKSD: SELECT ORD-FILE ... RECORD KEY IS ORD-ID / ALTERNATE RECORD KEY IS ORD-CUST WITH DUPLICATES"
+ ],
+ "asserts": "The SELECT is one file_control fact (select ORD-FILE, assign ORDKSD, organization INDEXED, access_mode DYNAMIC, record_key ORD-ID) carrying alternate_keys [{name ORD-CUST, duplicates true}]. ORD-CUST is not the record_key: the prime key stays ORD-ID. Without the DUPLICATES phrase the alternate key values would have to be unique, so the flag is part of the fact, not decoration.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "ALTERNATE RECORD KEY clause",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "If the DUPLICATES phrase is not specified, the values contained in the ALTERNATE RECORD KEY data item must be unique among records in the file."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "ALTERNATE RECORD KEY clause",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "If the DUPLICATES phrase is specified, the values contained in the ALTERNATE RECORD KEY data item can be duplicated within any records in the file."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "ALTERNATE RECORD KEY clause",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "In sequential access, the records with duplicate keys are retrieved in the order in which they were placed in the file. In random access, only the first record written in a series of records with duplicate keys can be retrieved."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXAKSD.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "file_control": [
+     {
+      "select": "ORD-FILE",
+      "assign": "ORDKSD",
+      "organization": "INDEXED",
+      "access_mode": "DYNAMIC",
+      "record_key": "ORD-ID",
+      "file_status": "WS-ORD-STATUS",
+      "fd_copies": [],
+      "line": 11,
+      "alternate_keys": [
+       {
+        "name": "ORD-CUST",
+        "duplicates": true
+       }
+      ],
+      "horror": "H-0076"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
