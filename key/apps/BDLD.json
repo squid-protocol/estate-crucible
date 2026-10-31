@@ -696,6 +696,49 @@
     }
    ]
   },
+  "apps/BDLD/jcl/BDLDADD.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 6,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "jcl_steps": [
+    {
+     "job": "BDLDADD",
+     "proc": null,
+     "step": "ADDQ",
+     "ordinal": 1,
+     "program": null,
+     "exec_proc": "BDLDPRC",
+     "cond": null,
+     "line": 5,
+     "horror": "H-0085"
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "BDLDADD",
+     "proc": null,
+     "step": "ADDQ",
+     "dd": "AUDIT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "B",
+     "line": 6,
+     "override_of": "RPT020",
+     "added": true,
+     "horror": "H-0085"
+    }
+   ],
+   "horrors": [
+    "H-0085"
+   ]
+  },
   "apps/BDLD/jcl/BDLDCHK.jcl": {
    "app": "BDLD",
    "library": "jcl",
@@ -1094,6 +1137,85 @@
     "H-0066",
     "H-0067",
     "H-0070"
+   ]
+  },
+  "apps/BDLD/jcl/BDLDINC.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 8,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IEBGENER",
+     "target": "IEBGENER",
+     "line": 5,
+     "resolves_to": null,
+     "horror": "H-0083"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "BDLDINC",
+     "proc": null,
+     "step": "INC010",
+     "ordinal": 1,
+     "program": "IEBGENER",
+     "exec_proc": null,
+     "cond": null,
+     "line": 5,
+     "includes": [
+      "BDLDDDS"
+     ],
+     "horror": "H-0083"
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "BDLDINC",
+     "proc": null,
+     "step": "INC010",
+     "dd": "SYSUT1",
+     "dsn": "PROD.BDLD.ERRMSG",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 7,
+     "horror": "H-0083"
+    },
+    {
+     "job": "BDLDINC",
+     "proc": null,
+     "step": "INC010",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 8,
+     "dummy": true,
+     "horror": "H-0083"
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.BDLD.ERRMSG",
+     "generation": null,
+     "step": "INC010",
+     "dd": "SYSUT1",
+     "line": 7,
+     "horror": "H-0083"
+    }
+   ],
+   "horrors": [
+    "H-0083"
    ]
   },
   "apps/BDLD/jcl/BDLDNITE.jcl": {
@@ -1908,6 +2030,157 @@
    "horrors": [
     "H-0068",
     "H-0069"
+   ]
+  },
+  "apps/BDLD/jcl/BDLDSET.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 13,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "SORT",
+     "target": "SORT",
+     "line": 5,
+     "resolves_to": null,
+     "horror": "H-0084"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "BDLDSET",
+     "proc": null,
+     "step": "SET010",
+     "ordinal": 1,
+     "program": "SORT",
+     "exec_proc": null,
+     "cond": null,
+     "line": 5,
+     "set_symbols": [
+      {
+       "name": "HLQ",
+       "value": "PROD"
+      }
+     ],
+     "horror": "H-0084"
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "BDLDSET",
+     "proc": null,
+     "step": "SET010",
+     "dd": "SORTIN",
+     "dsn": "&HLQ..BDLD.TRANS",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 6,
+     "symbolic": true,
+     "horror": "H-0084"
+    },
+    {
+     "job": "BDLDSET",
+     "proc": null,
+     "step": "SET010",
+     "dd": "SORTOUT",
+     "dsn": "PROD.BDLD.SETOUT",
+     "generation": null,
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 7
+    },
+    {
+     "job": "BDLDSET",
+     "proc": null,
+     "step": "SET010",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 9
+    },
+    {
+     "job": "BDLDSET",
+     "proc": null,
+     "step": "SET010",
+     "dd": "SORTWK01",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 10,
+     "dummy": true,
+     "horror": "H-0084"
+    },
+    {
+     "job": "BDLDSET",
+     "proc": null,
+     "step": "SET010",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 11,
+     "inline_lines": 1,
+     "horror": "H-0084"
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "&HLQ..BDLD.TRANS",
+     "generation": null,
+     "step": "SET010",
+     "dd": "SORTIN",
+     "line": 6,
+     "horror": "H-0084"
+    },
+    {
+     "dsn": "PROD.BDLD.SETOUT",
+     "generation": null,
+     "step": "SET010",
+     "dd": "SORTOUT",
+     "line": 7
+    }
+   ],
+   "jcl_utility_cards": [
+    {
+     "job": "BDLDSET",
+     "proc": null,
+     "step": "SET010",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "SORT",
+     "operands": "FIELDS=(1,10,CH,A)",
+     "line": 12,
+     "horror": "H-0084"
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "jcl_datasets",
+     "dsn": "NULLFILE",
+     "step": "SET010",
+     "line": 10,
+     "why": "DSN=NULLFILE is a dummy data set, not a dataset of the estate",
+     "horror": "H-0084"
+    }
+   ],
+   "horrors": [
+    "H-0084"
    ]
   },
   "apps/BDLD/jcl/BDLDSYS.jcl": {
@@ -3046,6 +3319,49 @@
    ],
    "horrors": [
     "H-0067"
+   ]
+  },
+  "apps/BDLD/proclib/BDLDDDS.prc": {
+   "app": "BDLD",
+   "library": "proclib",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 2,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "jcl_dds": [
+    {
+     "job": null,
+     "proc": null,
+     "include": "BDLDDDS",
+     "step": null,
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 1,
+     "horror": "H-0083"
+    },
+    {
+     "job": null,
+     "proc": null,
+     "include": "BDLDDDS",
+     "step": null,
+     "dd": "SYSUT2",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "A",
+     "line": 2,
+     "horror": "H-0083"
+    }
+   ],
+   "horrors": [
+    "H-0083"
    ]
   },
   "apps/BDLD/proclib/BDLDPRC.prc": {

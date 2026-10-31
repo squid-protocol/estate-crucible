@@ -67,7 +67,10 @@ def _operands_of(lines: list[str]) -> str:
 def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], proc: bool) -> None:
     owner = spec["name"]
     jp: dict[str, Any] = {"job": None, "proc": owner} if proc else {"job": owner, "proc": None}
-    if proc:
+    group = bool(spec.get("include_group"))  # an INCLUDE group: bare JCL statements, no PROC / PEND
+    if group:
+        jp = {"job": None, "proc": None, "include": owner}
+    elif proc:
         _jcl_stmt(m, owner, "PROC", spec.get("symbolics", []) or [""])
     else:
         _jcl_stmt(m, owner, "JOB", [spec.get("accounting", "(ACCT)"), f"'{spec['title'][:20]}'", "CLASS=A",
@@ -103,6 +106,9 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
         if not step.get("dds_only"):
             ordinal += 1
             m.raw("//*")
+            if step.get("set"):
+                with m.horror(step.get("horror")):
+                    _jcl_stmt(m, "SETV", "SET", [f"{k}={v}" for k, v in step["set"]])
             operands = [f"PGM={step['pgm']}"] if step.get("pgm") else [step["proc"], *step.get("proc_parms", [])]
             if step.get("cond"):
                 operands.append(f"COND={step['cond']}")
@@ -132,9 +138,15 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                     extra["parm_overrides"] = [{"step": a, "parm": b} for a, b in step["parm_overrides"]]
                 if step.get("cond_overrides"):
                     extra["cond_overrides"] = [{"step": a, "cond": b} for a, b in step["cond_overrides"]]
+                if step.get("set"):
+                    extra["set_symbols"] = [{"name": a, "value": b} for a, b in step["set"]]
+                if step.get("include"):
+                    extra["includes"] = list(step["include"])
                 m.fact("jcl_steps", **jp, step=step["name"],
                        ordinal=ordinal, program=step.get("pgm"), exec_proc=step.get("proc"), cond=step.get("cond"),
                        line=line, **extra)
+                for member in step.get("include", []):
+                    _jcl_stmt(m, "INC1", "INCLUDE", [f"MEMBER={member}"])
                 if step.get("pgm"):
                     m.fact("call_sites", verb="EXEC PGM", form="literal", operand=step["pgm"], target=step["pgm"],
                            line=line, resolves_to=program_paths.get(step["pgm"]))
@@ -145,6 +157,8 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                 ops = [f"SYSOUT={dd['sysout']}", *dd.get("extra", [])]
             elif dd.get("inline") is not None:
                 ops = ["*"]
+            elif dd.get("nullfile"):
+                ops = ["DSN=NULLFILE"]
             elif dd.get("dummy"):
                 ops = ["DUMMY"]
             else:
@@ -171,6 +185,10 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                                  dd=prev_dd if concat else dd["name"], line=dline)
                     if (dd.get("gen") or "")[:1] in "+-" and dd.get("gen") and not row.get("horror"):
                         row["depends_on"] = ["H-0011"]  # #4331: a signed relative generation
+            elif dd.get("nullfile"):
+                with m.horror(dd.get("horror")):
+                    m.phantom("jcl_datasets", "DSN=NULLFILE is a dummy data set, not a dataset of the estate",
+                              dsn="NULLFILE", step=step["name"], line=dline)
             elif temp:
                 with m.horror(dd.get("horror")):
                     m.phantom("jcl_datasets", "a temporary data set (&&name) exists only for the job: it is "
@@ -185,6 +203,8 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                 extra["dummy"] = True
             if dd.get("proc_step"):
                 extra["override_of"] = dd["proc_step"]
+            if dd.get("added"):
+                extra["added"] = True
             symbolic = (dd.get("dsn") or "").startswith("&") and not temp
             if symbolic:
                 extra["symbolic"] = True
@@ -209,7 +229,7 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                                target=run.group(1), line=at, resolves_to=program_paths.get(run.group(1)))
             if not concat:
                 prev_dd = dd["name"]
-    if proc:
+    if proc and not group:
         m.raw("//         PEND")
     m.compile = {"status": "not-cobol"}
 
