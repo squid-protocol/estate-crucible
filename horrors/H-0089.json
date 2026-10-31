@@ -1,0 +1,87 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0089",
+ "title": "MQINQ: an attribute inquiry whose selectors and integer attributes are two small blocks of binary words",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQSA MQSAINQ: CALL 'MQINQ' USING WS-HCONN WS-HOBJ WS-SEL-COUNT WS-SEL-BLOCK WS-INT-COUNT WS-INT-BLOCK WS-CHAR-LEN WS-CHAR-ATTRS WS-COMPCODE WS-REASON"
+ ],
+ "asserts": "MQSAINQ's MQINQ CALL is one call_sites fact (resolves_to null) with a call edge and a gaps entry; the two selector words WS-SEL-DEPTH and WS-SEL-MAX are data_items (S9(9) COMP with VALUE 3 and 15).",
+ "citations": [
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQINQ (Inquire object attributes)",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqinq-inquire-object-attributes",
+   "quote": "The MQINQ call returns an array of integers and a set of character strings containing the attributes of an object."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/MQSA/cobol/MQSAINQ.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "edges": [
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQINQ",
+      "line": 49,
+      "form": "literal",
+      "horror": "H-0089"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQINQ",
+      "target": "MQINQ",
+      "line": 49,
+      "resolves_to": null,
+      "horror": "H-0089"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 5,
+      "name": "WS-SEL-DEPTH",
+      "pic": "S9(9)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": "3",
+      "section": "WORKING-STORAGE",
+      "line": 23,
+      "horror": "H-0089"
+     },
+     {
+      "level": 5,
+      "name": "WS-SEL-MAX",
+      "pic": "S9(9)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": "15",
+      "section": "WORKING-STORAGE",
+      "line": 24,
+      "horror": "H-0089"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "MQINQ",
+      "line": 49,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0089"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

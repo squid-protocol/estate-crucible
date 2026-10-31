@@ -1,0 +1,87 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0091",
+ "title": "A batch MQ step: the STEPLIB concatenation carries the MQ authorized and load libraries",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQSA jcl/MQSARUN.jcl PUT010: //STEPLIB DD with MQM.SCSQAUTH and MQM.SCSQLOAD concatenated"
+ ],
+ "asserts": "MQSARUN step PUT010's STEPLIB DD is followed by two unnamed concatenation DDs, MQM.SCSQAUTH and MQM.SCSQLOAD (DISP=SHR); each is a jcl_dds fact with concat_of STEPLIB and a jcl_datasets entry.",
+ "citations": [
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "Dynamically calling the IBM MQ stub",
+   "url": "https://www.ibm.com/docs/SSFKSJ_9.3.0/develop/q028780_.html",
+   "quote": "For batch and IMS, in the STEPLIB concatenation of the JCL."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/MQSA/jcl/MQSARUN.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "MQSARUN",
+      "proc": null,
+      "step": "PUT010",
+      "dd": null,
+      "dsn": "MQM.SCSQAUTH",
+      "generation": null,
+      "disp": "SHR",
+      "disp_normal": null,
+      "sysout": null,
+      "line": 7,
+      "concat_of": "STEPLIB",
+      "horror": "H-0091"
+     },
+     {
+      "job": "MQSARUN",
+      "proc": null,
+      "step": "PUT010",
+      "dd": null,
+      "dsn": "MQM.SCSQLOAD",
+      "generation": null,
+      "disp": "SHR",
+      "disp_normal": null,
+      "sysout": null,
+      "line": 8,
+      "concat_of": "STEPLIB",
+      "horror": "H-0091"
+     }
+    ],
+    "jcl_datasets": [
+     {
+      "dsn": "PROD.MQSA.LOADLIB",
+      "generation": null,
+      "step": "PUT010",
+      "dd": "STEPLIB",
+      "line": 6,
+      "horror": "H-0091"
+     },
+     {
+      "dsn": "MQM.SCSQAUTH",
+      "generation": null,
+      "step": "PUT010",
+      "dd": "STEPLIB",
+      "line": 7,
+      "horror": "H-0091"
+     },
+     {
+      "dsn": "MQM.SCSQLOAD",
+      "generation": null,
+      "step": "PUT010",
+      "dd": "STEPLIB",
+      "line": 8,
+      "horror": "H-0091"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

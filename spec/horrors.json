@@ -2164,6 +2164,138 @@
     }
    ],
    "era": 2
+  },
+  {
+   "id": "H-0086",
+   "title": "MQPUT1: one call that puts a message with no MQOPEN and no MQCLOSE in the member",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQSA MQSAREP: CALL 'MQPUT1' USING WS-HCONN WS-OD WS-MD WS-PMO WS-BUFLEN WS-BUF WS-COMPCODE WS-REASON"
+   ],
+   "asserts": "MQSAREP's three static CALLs (the MQ verbs) are keyed as call_sites with form literal, resolves_to null, and as call edges from the owning paragraph; each has a gaps entry because no estate member holds the MQ stub. The wrapped USING rows add no extra call_site.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQPUT1 (Put one message)",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqput1-put-one-message",
+     "quote": "This call encapsulates the MQOPEN, MQPUT, and MQCLOSE calls into a single call"
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQPUT1 (Put one message)",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqput1-put-one-message",
+     "quote": "The MQPUT1 call puts one message on a queue, or distribution list, or to a topic."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0087",
+   "title": "MQGET with a wait interval in a PERFORM UNTIL loop that ends on reason 2033, no message available",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQSA MQSAGET: CALL 'MQGET' in paragraph 1000-GET, PERFORM 1000-GET UNTIL WS-DONE, IF WS-REASON = 2033 SET WS-DONE"
+   ],
+   "asserts": "MQSAGET's MQGET CALL inside 1000-GET is one call_sites fact with resolves_to null and a gaps entry; the paragraph unit and its perform edges to 2000-HANDLE and 9000-BACKOUT are keyed, and the two MOVEs to the MQGMO fields are data_moves.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQGET (Get message)",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqget-get-message",
+     "quote": "The MQGET call retrieves a message from a local queue that has been opened using the MQOPEN call."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQGET (Get message)",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqget-get-message",
+     "quote": "MQRC_NO_MSG_AVAILABLE (2033, X'7F1') No message available."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0088",
+   "title": "MQCMIT and MQBACK: the sync point calls, one on the success path and one on the failure path",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQSA MQSAGET: CALL 'MQCMIT' in 3000-FINISH, CALL 'MQBACK' in 9000-BACKOUT"
+   ],
+   "asserts": "MQSAGET's MQCMIT in 3000-FINISH and MQBACK in 9000-BACKOUT are call_sites (literal, resolves_to null) with call edges and gaps entries; the syncpoint verbs are ordinary static CALLs, not a separate fact kind.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQCMIT (Commit changes)",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqcmit-commit-changes",
+     "quote": "MQCMIT (Hconn, CompCode, Reason)"
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQBACK (Back out changes)",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqback-back-out-changes",
+     "quote": "MQBACK (Hconn, Compcode, Reason)"
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0089",
+   "title": "MQINQ: an attribute inquiry whose selectors and integer attributes are two small blocks of binary words",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQSA MQSAINQ: CALL 'MQINQ' USING WS-HCONN WS-HOBJ WS-SEL-COUNT WS-SEL-BLOCK WS-INT-COUNT WS-INT-BLOCK WS-CHAR-LEN WS-CHAR-ATTRS WS-COMPCODE WS-REASON"
+   ],
+   "asserts": "MQSAINQ's MQINQ CALL is one call_sites fact (resolves_to null) with a call edge and a gaps entry; the two selector words WS-SEL-DEPTH and WS-SEL-MAX are data_items (S9(9) COMP with VALUE 3 and 15).",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQINQ (Inquire object attributes)",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqinq-inquire-object-attributes",
+     "quote": "The MQINQ call returns an array of integers and a set of character strings containing the attributes of an object."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0090",
+   "title": "MQI structures as COPY members: descriptor, object descriptor and get options under 01 levels",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQSA MQSAGET: 01 WS-MD, 01 WS-OD, 01 WS-GMO each from COPY MQSMD / MQSOD / MQSGMO"
+   ],
+   "asserts": "MQSAGET's three COPY statements (MQSMD, MQSOD, MQSGMO) each resolve to the estate's stand-in copybooks under apps/MQSA/copybook; the 01 groups WS-MD, WS-OD, WS-GMO carry copy_members and their layouts are keyed. The copybooks are estate-written stand-ins, not IBM's.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQMD - Message descriptor",
+     "url": "https://www.ibm.com/docs/en/SSFKSJ_9.3.0/refdev/q097390_.html",
+     "quote": "The structure is an input/output parameter on the MQGET, MQPUT, and MQPUT1 calls."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0091",
+   "title": "A batch MQ step: the STEPLIB concatenation carries the MQ authorized and load libraries",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQSA jcl/MQSARUN.jcl PUT010: //STEPLIB DD with MQM.SCSQAUTH and MQM.SCSQLOAD concatenated"
+   ],
+   "asserts": "MQSARUN step PUT010's STEPLIB DD is followed by two unnamed concatenation DDs, MQM.SCSQAUTH and MQM.SCSQLOAD (DISP=SHR); each is a jcl_dds fact with concat_of STEPLIB and a jcl_datasets entry.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "Dynamically calling the IBM MQ stub",
+     "url": "https://www.ibm.com/docs/SSFKSJ_9.3.0/develop/q028780_.html",
+     "quote": "For batch and IMS, in the STEPLIB concatenation of the JCL."
+    }
+   ],
+   "era": 2
   }
  ],
  "not_planted": [

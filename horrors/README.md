@@ -91,6 +91,12 @@ era-neutral syntax horror; blank is untagged.
 | H-0080 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | A DD statement that names the PATH over an alternate index, next to the DD for the base cluster | `apps/AIXA/jcl/AIXARUN.jcl` |
 | H-0081 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | A paragraph that tells file status 02, 22 and 23 apart after each access to an indexed file | `apps/AIXA/cobol/AIXAKSD.cbl` |
 | H-0082 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | IDCAMS DEFINE CLUSTER in its three kinds: INDEXED, NUMBERED and NONINDEXED | `apps/AIXA/jcl/AIXADEF.jcl` |
+| H-0086 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQPUT1: one call that puts a message with no MQOPEN and no MQCLOSE in the member | `apps/MQSA/cobol/MQSAREP.cbl` |
+| H-0087 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQGET with a wait interval in a PERFORM UNTIL loop that ends on reason 2033, no message available | `apps/MQSA/cobol/MQSAGET.cbl` |
+| H-0088 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQCMIT and MQBACK: the sync point calls, one on the success path and one on the failure path | `apps/MQSA/cobol/MQSAGET.cbl` |
+| H-0089 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQINQ: an attribute inquiry whose selectors and integer attributes are two small blocks of binary words | `apps/MQSA/cobol/MQSAINQ.cbl` |
+| H-0090 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQI structures as COPY members: descriptor, object descriptor and get options under 01 levels | `apps/MQSA/cobol/MQSAGET.cbl` |
+| H-0091 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | A batch MQ step: the STEPLIB concatenation carries the MQ authorized and load libraries | `apps/MQSA/jcl/MQSARUN.jcl` |
 
 ## Field-testing defects not planted
 

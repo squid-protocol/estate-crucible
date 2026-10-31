@@ -1,0 +1,166 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0086",
+ "title": "MQPUT1: one call that puts a message with no MQOPEN and no MQCLOSE in the member",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQSA MQSAREP: CALL 'MQPUT1' USING WS-HCONN WS-OD WS-MD WS-PMO WS-BUFLEN WS-BUF WS-COMPCODE WS-REASON"
+ ],
+ "asserts": "MQSAREP's three static CALLs (the MQ verbs) are keyed as call_sites with form literal, resolves_to null, and as call edges from the owning paragraph; each has a gaps entry because no estate member holds the MQ stub. The wrapped USING rows add no extra call_site.",
+ "citations": [
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQPUT1 (Put one message)",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqput1-put-one-message",
+   "quote": "This call encapsulates the MQOPEN, MQPUT, and MQCLOSE calls into a single call"
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQPUT1 (Put one message)",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqput1-put-one-message",
+   "quote": "The MQPUT1 call puts one message on a queue, or distribution list, or to a topic."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/MQSA/cobol/MQSAREP.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "0000-MAIN",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 26,
+      "end_line": 42,
+      "horror": "H-0086"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQCONN",
+      "line": 27,
+      "form": "literal",
+      "horror": "H-0086"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQPUT1",
+      "line": 35,
+      "form": "literal",
+      "horror": "H-0086"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQDISC",
+      "line": 41,
+      "form": "literal",
+      "horror": "H-0086"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQCONN",
+      "target": "MQCONN",
+      "line": 27,
+      "resolves_to": null,
+      "horror": "H-0086"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQPUT1",
+      "target": "MQPUT1",
+      "line": 35,
+      "resolves_to": null,
+      "horror": "H-0086"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQDISC",
+      "target": "MQDISC",
+      "line": 41,
+      "resolves_to": null,
+      "horror": "H-0086"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "12",
+      "source_kind": "literal",
+      "target": "RETURN-CODE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 30,
+      "horror": "H-0086"
+     },
+     {
+      "verb": "MOVE",
+      "source": "'ORDERS.REPLY'",
+      "source_kind": "literal",
+      "target": "MQS-OBJNAME",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 33,
+      "horror": "H-0086"
+     },
+     {
+      "verb": "MOVE",
+      "source": "'ORDER ORD00001 ACCEPTED'",
+      "source_kind": "literal",
+      "target": "WS-BUF",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 34,
+      "horror": "H-0086"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "MQCONN",
+      "line": 27,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0086"
+     },
+     {
+      "kind": "call",
+      "name": "MQPUT1",
+      "line": 35,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0086"
+     },
+     {
+      "kind": "call",
+      "name": "MQDISC",
+      "line": 41,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0086"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
