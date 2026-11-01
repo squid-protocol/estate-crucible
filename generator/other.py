@@ -64,6 +64,15 @@ def _operands_of(lines: list[str]) -> str:
     return text.split(None, 1)[1] if len(text.split(None, 1)) > 1 else ""
 
 
+def _output_stmt(m: Member, jp: dict[str, Any], step: Optional[str], out: dict[str, Any], horror: Optional[str]) -> None:
+    """An OUTPUT JCL statement (`//name OUTPUT keyword,...`): a jcl_outputs fact, job level (step None) or
+    step level (after the EXEC)."""
+    with m.horror(out.get("horror") or horror):
+        line = _jcl_stmt(m, out["name"], "OUTPUT", list(out["params"]))
+        m.fact("jcl_outputs", **jp, step=step, name=out["name"],
+               params=[p.split("=", 1)[0] for p in out["params"]], line=line)
+
+
 def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], proc: bool) -> None:
     owner = spec["name"]
     jp: dict[str, Any] = {"job": None, "proc": owner} if proc else {"job": owner, "proc": None}
@@ -80,6 +89,8 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
             _jcl_stmt(m, "", "JCLLIB", [f"ORDER=({','.join(spec['jcllib'])})"])
     for c in spec.get("comments", []):
         m.raw(f"//* {c}".rstrip())
+    for out in spec.get("job_outputs", []):
+        _output_stmt(m, jp, None, out, spec.get("horror"))
     ordinal = 0
     blocks: list[dict[str, Any]] = []  # the IF blocks open at this point, innermost last
     branch = "then"
@@ -147,6 +158,8 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                        line=line, **extra)
                 for member in step.get("include", []):
                     _jcl_stmt(m, "INC1", "INCLUDE", [f"MEMBER={member}"])
+                for out in step.get("outputs", []):
+                    _output_stmt(m, jp, step["name"], out, step.get("horror"))
                 if step.get("pgm"):
                     m.fact("call_sites", verb="EXEC PGM", form="literal", operand=step["pgm"], target=step["pgm"],
                            line=line, resolves_to=program_paths.get(step["pgm"]))
@@ -154,7 +167,10 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
         for dd in step.get("dds", []):
             concat = dd.get("concat", False)
             if dd.get("sysout"):
+                refs = dd.get("output_refs", [])
                 ops = [f"SYSOUT={dd['sysout']}", *dd.get("extra", [])]
+                if refs:
+                    ops.append("OUTPUT=" + (refs[0] if len(refs) == 1 else "(" + ",".join(refs) + ")"))
             elif dd.get("inline") is not None:
                 ops = ["*"]
             elif dd.get("nullfile"):
@@ -205,6 +221,8 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                 extra["override_of"] = dd["proc_step"]
             if dd.get("added"):
                 extra["added"] = True
+            if dd.get("output_refs"):
+                extra["output_refs"] = list(dd["output_refs"])
             symbolic = (dd.get("dsn") or "").startswith("&") and not temp
             if symbolic:
                 extra["symbolic"] = True

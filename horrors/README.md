@@ -102,6 +102,8 @@ era-neutral syntax horror; blank is untagged.
 | H-0091 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | A batch MQ step: the STEPLIB concatenation carries the MQ authorized and load libraries | `apps/MQSA/jcl/MQSARUN.jcl` |
 | H-0092 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQCONNX: the connect call that takes a connect options structure, which arrives by COPY | `apps/MQSA/cobol/MQSACNX.cbl` |
 | H-0093 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQSET: an attribute update whose selector and integer attribute are one-word blocks, on a queue opened for set | `apps/MQSA/cobol/MQSASET.cbl` |
+| H-0094 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | OUTPUT JCL statements at job and step level, referenced by the OUTPUT parameter of sysout DD statements | `apps/BDLD/jcl/BDLDOUT.jcl` |
+| H-0095 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | cobol | A COBOL RERUN clause in I-O-CONTROL names a checkpoint data set that no SELECT assigns | `apps/BDLD/cobol/BDLDCKP.cbl`, `apps/BDLD/jcl/BDLDCKJ.jcl` |
 
 ## Field-testing defects not planted
 

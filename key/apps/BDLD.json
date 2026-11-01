@@ -2,6 +2,304 @@
  "format": "estate-crucible-key/1",
  "app": "BDLD",
  "members": {
+  "apps/BDLD/cobol/BDLDCKP.cbl": {
+   "app": "BDLD",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 42,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 0,
+   "era_evidence": "the RERUN clause of I-O-CONTROL is 1974/1985 COBOL; no later construct",
+   "programs": [
+    {
+     "program_id": "BDLDCKP",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 28,
+     "end_line": 34
+    },
+    {
+     "name": "1000-COUNT",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 35,
+     "end_line": 37
+    },
+    {
+     "name": "8000-READ",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 38,
+     "end_line": 42
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "8000-READ",
+     "line": 30
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-COUNT",
+     "line": 31
+    },
+    {
+     "kind": "perform",
+     "from": "1000-COUNT",
+     "target": "8000-READ",
+     "line": 37
+    }
+   ],
+   "copies": [
+    {
+     "member": "BDLREC",
+     "kind": "copy",
+     "line": 21,
+     "resolves_to": "apps/BDLD/copybook/BDLREC.cpy"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "TRAN-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 20,
+     "copy_members": [
+      "BDLREC"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-TRAN-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 23
+    },
+    {
+     "level": 1,
+     "name": "WS-EOF-FLAG",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'N'",
+     "section": "WORKING-STORAGE",
+     "line": 24
+    },
+    {
+     "level": 88,
+     "name": "WS-EOF",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'Y'",
+     "section": "WORKING-STORAGE",
+     "line": 25
+    },
+    {
+     "level": 1,
+     "name": "WS-COUNT",
+     "pic": "9(7)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 26,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "TRAN-REC",
+     "line": 20,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "BDL-ACCT",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/BDLD/copybook/BDLREC.cpy"
+      },
+      {
+       "name": "BDL-NAME",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 10,
+       "file": "apps/BDLD/copybook/BDLREC.cpy"
+      },
+      {
+       "name": "BDL-AMT",
+       "level": 5,
+       "pic": "9(5)",
+       "usage": null,
+       "offset": 20,
+       "bytes": 5,
+       "file": "apps/BDLD/copybook/BDLREC.cpy"
+      },
+      {
+       "name": "BDL-PAD",
+       "level": 5,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 25,
+       "bytes": 10,
+       "file": "apps/BDLD/copybook/BDLREC.cpy"
+      },
+      {
+       "name": "BDL-STATUS",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 35,
+       "bytes": 1,
+       "file": "apps/BDLD/copybook/BDLREC.cpy"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(4)",
+       "usage": null,
+       "offset": 36,
+       "bytes": 4,
+       "file": "apps/BDLD/copybook/BDLREC.cpy"
+      }
+     ]
+    },
+    {
+     "record": "WS-TRAN-STATUS",
+     "line": 23,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-TRAN-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/BDLD/cobol/BDLDCKP.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-EOF-FLAG",
+     "line": 24,
+     "bytes": 1,
+     "fields": [
+      {
+       "name": "WS-EOF-FLAG",
+       "level": 1,
+       "pic": "X",
+       "usage": null,
+       "offset": 0,
+       "bytes": 1,
+       "file": "apps/BDLD/cobol/BDLDCKP.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-COUNT",
+     "line": 26,
+     "bytes": 7,
+     "fields": [
+      {
+       "name": "WS-COUNT",
+       "level": 1,
+       "pic": "9(7)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 7,
+       "file": "apps/BDLD/cobol/BDLDCKP.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "TRAN-FILE",
+     "assign": "TRANIN",
+     "organization": "SEQUENTIAL",
+     "access_mode": null,
+     "record_key": null,
+     "file_status": "WS-TRAN-STATUS",
+     "fd_copies": [
+      "BDLREC"
+     ],
+     "line": 11,
+     "rerun": {
+      "assign": "SYSCKPT",
+      "every": 1000
+     },
+     "horror": "H-0095"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "BDLDCKP",
+     "params": [],
+     "line": 27
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-COUNT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 36
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "units",
+     "name": "I-O-CONTROL",
+     "why": "an ENVIRONMENT DIVISION paragraph, not a procedure",
+     "horror": "H-0095"
+    }
+   ],
+   "horrors": [
+    "H-0095"
+   ]
+  },
   "apps/BDLD/cobol/BDLDDB2.cbl": {
    "app": "BDLD",
    "library": "cobol",
@@ -997,6 +1295,117 @@
     "H-0073"
    ]
   },
+  "apps/BDLD/jcl/BDLDCKJ.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 8,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "BDLDCKP",
+     "target": "BDLDCKP",
+     "line": 4,
+     "resolves_to": "apps/BDLD/cobol/BDLDCKP.cbl",
+     "horror": "H-0095"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "BDLDCKJ",
+     "proc": null,
+     "step": "CKP010",
+     "ordinal": 1,
+     "program": "BDLDCKP",
+     "exec_proc": null,
+     "cond": null,
+     "line": 4,
+     "horror": "H-0095"
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "BDLDCKJ",
+     "proc": null,
+     "step": "CKP010",
+     "dd": "STEPLIB",
+     "dsn": "PROD.BDLD.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 5,
+     "horror": "H-0095"
+    },
+    {
+     "job": "BDLDCKJ",
+     "proc": null,
+     "step": "CKP010",
+     "dd": "TRANIN",
+     "dsn": "PROD.BDLD.TRANS",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 6,
+     "horror": "H-0095"
+    },
+    {
+     "job": "BDLDCKJ",
+     "proc": null,
+     "step": "CKP010",
+     "dd": "SYSCKPT",
+     "dsn": "PROD.BDLD.CHKPT",
+     "generation": null,
+     "disp": "NEW",
+     "disp_normal": "KEEP",
+     "sysout": null,
+     "line": 7,
+     "horror": "H-0095"
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.BDLD.LOADLIB",
+     "generation": null,
+     "step": "CKP010",
+     "dd": "STEPLIB",
+     "line": 5,
+     "horror": "H-0095"
+    },
+    {
+     "dsn": "PROD.BDLD.TRANS",
+     "generation": null,
+     "step": "CKP010",
+     "dd": "TRANIN",
+     "line": 6,
+     "horror": "H-0095"
+    },
+    {
+     "dsn": "PROD.BDLD.CHKPT",
+     "generation": null,
+     "step": "CKP010",
+     "dd": "SYSCKPT",
+     "line": 7,
+     "horror": "H-0095"
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/BDLD/cobol/BDLDCKP.cbl",
+     "horror": "H-0095"
+    }
+   ],
+   "horrors": [
+    "H-0095"
+   ]
+  },
   "apps/BDLD/jcl/BDLDGDG.jcl": {
    "app": "BDLD",
    "library": "jcl",
@@ -1643,6 +2052,213 @@
     "H-0066",
     "H-0067",
     "H-0068"
+   ]
+  },
+  "apps/BDLD/jcl/BDLDOUT.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 15,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "BDLDRPT",
+     "target": "BDLDRPT",
+     "line": 6,
+     "resolves_to": "apps/BDLD/cobol/BDLDRPT.cbl",
+     "horror": "H-0094"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IEBGENER",
+     "target": "IEBGENER",
+     "line": 11,
+     "resolves_to": null,
+     "horror": "H-0094"
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "BDLDOUT",
+     "proc": null,
+     "step": "OUT010",
+     "ordinal": 1,
+     "program": "BDLDRPT",
+     "exec_proc": null,
+     "cond": null,
+     "line": 6,
+     "horror": "H-0094"
+    },
+    {
+     "job": "BDLDOUT",
+     "proc": null,
+     "step": "OUT020",
+     "ordinal": 2,
+     "program": "IEBGENER",
+     "exec_proc": null,
+     "cond": null,
+     "line": 11,
+     "horror": "H-0094"
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "BDLDOUT",
+     "proc": null,
+     "step": "OUT010",
+     "dd": "STEPLIB",
+     "dsn": "PROD.BDLD.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 8,
+     "horror": "H-0094"
+    },
+    {
+     "job": "BDLDOUT",
+     "proc": null,
+     "step": "OUT010",
+     "dd": "RPTOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "A",
+     "line": 9,
+     "output_refs": [
+      "*.OUT1",
+      "*.OUT2",
+      "*.LOCAL"
+     ],
+     "horror": "H-0094"
+    },
+    {
+     "job": "BDLDOUT",
+     "proc": null,
+     "step": "OUT020",
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 12,
+     "horror": "H-0094"
+    },
+    {
+     "job": "BDLDOUT",
+     "proc": null,
+     "step": "OUT020",
+     "dd": "SYSUT1",
+     "dsn": "PROD.BDLD.ERRMSG",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 13,
+     "horror": "H-0094"
+    },
+    {
+     "job": "BDLDOUT",
+     "proc": null,
+     "step": "OUT020",
+     "dd": "SYSUT2",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "A",
+     "line": 14,
+     "output_refs": [
+      "*.OUT010.LOCAL"
+     ],
+     "horror": "H-0094"
+    },
+    {
+     "job": "BDLDOUT",
+     "proc": null,
+     "step": "OUT020",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 15,
+     "dummy": true,
+     "horror": "H-0094"
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.BDLD.LOADLIB",
+     "generation": null,
+     "step": "OUT010",
+     "dd": "STEPLIB",
+     "line": 8,
+     "horror": "H-0094"
+    },
+    {
+     "dsn": "PROD.BDLD.ERRMSG",
+     "generation": null,
+     "step": "OUT020",
+     "dd": "SYSUT1",
+     "line": 13,
+     "horror": "H-0094"
+    }
+   ],
+   "file_edges": [
+    {
+     "kind": "exec",
+     "target": "apps/BDLD/cobol/BDLDRPT.cbl",
+     "horror": "H-0094"
+    }
+   ],
+   "jcl_outputs": [
+    {
+     "job": "BDLDOUT",
+     "proc": null,
+     "step": null,
+     "name": "OUT1",
+     "params": [
+      "DEST",
+      "CLASS"
+     ],
+     "line": 3,
+     "horror": "H-0094"
+    },
+    {
+     "job": "BDLDOUT",
+     "proc": null,
+     "step": null,
+     "name": "OUT2",
+     "params": [
+      "CONTROL"
+     ],
+     "line": 4,
+     "horror": "H-0094"
+    },
+    {
+     "job": "BDLDOUT",
+     "proc": null,
+     "step": "OUT010",
+     "name": "LOCAL",
+     "params": [
+      "COPIES"
+     ],
+     "line": 7,
+     "horror": "H-0094"
+    }
+   ],
+   "horrors": [
+    "H-0094"
    ]
   },
   "apps/BDLD/jcl/BDLDOVR.jcl": {

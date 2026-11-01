@@ -200,34 +200,36 @@
   "copy_collisions",
   "gaps",
   "dead",
-  "jcl_utility_cards"
+  "jcl_utility_cards",
+  "jcl_outputs"
  ],
  "fact_totals": {
-  "programs": 59,
-  "units": 163,
-  "edges": 142,
-  "call_sites": 114,
-  "copies": 79,
-  "data_items": 632,
-  "layouts": 264,
+  "programs": 60,
+  "units": 166,
+  "edges": 145,
+  "call_sites": 117,
+  "copies": 80,
+  "data_items": 637,
+  "layouts": 268,
   "sql_statements": 6,
   "sql_tables": 3,
-  "jcl_steps": 61,
-  "jcl_dds": 185,
+  "jcl_steps": 64,
+  "jcl_dds": 194,
   "screen_fields": 16,
   "csd_resources": 44,
   "transactions": 7,
   "cics_resources": 9,
-  "jcl_datasets": 100,
-  "file_control": 16,
-  "entry_points": 59,
-  "file_edges": 38,
-  "data_moves": 192,
+  "jcl_datasets": 105,
+  "file_control": 17,
+  "entry_points": 60,
+  "file_edges": 40,
+  "data_moves": 193,
   "copy_collisions": 9,
   "gaps": 49,
   "dead": 11,
   "jcl_utility_cards": 41,
-  "phantoms": 54
+  "jcl_outputs": 3,
+  "phantoms": 55
  },
  "code_pages": {
   "apps/DEUT/cobol/ZINSBER.cbl": "cp273",
@@ -583,7 +585,9 @@
   "H-0090",
   "H-0091",
   "H-0092",
-  "H-0093"
+  "H-0093",
+  "H-0094",
+  "H-0095"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -853,6 +857,24 @@
     "H-0080"
    ]
   },
+  "apps/BDLD/cobol/BDLDCKP.cbl": {
+   "app": "BDLD",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "576a218f8d2cfd28aa79df3d3fa6b0d3adaf87d1fdff161b7b083cb4137b74b3",
+   "bytes": 1466,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/BDLD.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 0,
+   "era_evidence": "the RERUN clause of I-O-CONTROL is 1974/1985 COBOL; no later construct",
+   "horrors": [
+    "H-0095"
+   ]
+  },
   "apps/BDLD/cobol/BDLDDB2.cbl": {
    "app": "BDLD",
    "library": "cobol",
@@ -941,6 +963,22 @@
     "H-0073"
    ]
   },
+  "apps/BDLD/jcl/BDLDCKJ.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "fd201bf6cca605c97c1b7f81fea8fdeaf09336466885231d23629405c96437d6",
+   "bytes": 315,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/BDLD.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0095"
+   ]
+  },
   "apps/BDLD/jcl/BDLDGDG.jcl": {
    "app": "BDLD",
    "library": "jcl",
@@ -993,6 +1031,22 @@
     "H-0066",
     "H-0067",
     "H-0068"
+   ]
+  },
+  "apps/BDLD/jcl/BDLDOUT.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "8ea7c269f50f55d9b280d4cf3cad8c2f3bc0a41ac11b8b8e23f147ecdc0dc58a",
+   "bytes": 493,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/BDLD.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0094"
    ]
   },
   "apps/BDLD/jcl/BDLDOVR.jcl": {

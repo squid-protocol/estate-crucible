@@ -172,6 +172,8 @@ class ProgramWriter:
                                            for a in sel["alternate_keys"]]
             if sel.get("relative_key"):
                 extra["relative_key"] = sel["relative_key"]
+            if sel.get("rerun"):
+                extra["rerun"] = dict(sel["rerun"])
             m.fact("file_control", select=sel["name"], assign=sel["assign"], organization=org,
                    access_mode=sel.get("access"), record_key=sel.get("record_key"), file_status=sel["status"],
                    fd_copies=fd_copies, line=line, **extra, **self.prog())
