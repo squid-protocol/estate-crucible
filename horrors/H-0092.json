@@ -1,0 +1,292 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0092",
+ "title": "MQCONNX: the connect call that takes a connect options structure, which arrives by COPY",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQSA MQSACNX: CALL 'MQCONNX' USING WS-QMGR WS-CNO WS-HCONN WS-COMPCODE WS-REASON, 01 WS-CNO from COPY MQSCNO"
+ ],
+ "asserts": "MQSACNX's MQCONNX CALL is one call_sites fact (form literal, resolves_to null) with a call edge from 0000-MAIN and a gaps entry because no estate member holds the MQ stub; the 01 group WS-CNO carries copy_members MQSCNO, which resolves to the estate's stand-in copybook under apps/MQSA/copybook. MQCONNX is a different verb from MQCONN: the key does not fold it into MQCONN.",
+ "citations": [
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQCONNX (Connect queue manager (extended))",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqconnx-connect-queue-manager-extended",
+   "quote": "The MQCONNX call is like the MQCONN call, except that MQCONNX allows options to be specified to control the way that the call works."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQCONNX (Connect queue manager (extended))",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqconnx-connect-queue-manager-extended",
+   "quote": "MQCONNX (QMgrName, ConnectOpts, Hconn, CompCode, Reason)"
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/MQSA/cobol/MQSACNX.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "0000-MAIN",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 24,
+      "end_line": 48,
+      "horror": "H-0092"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQCONNX",
+      "line": 27,
+      "form": "literal",
+      "horror": "H-0092"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQOPEN",
+      "line": 36,
+      "form": "literal",
+      "horror": "H-0092"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQCLOSE",
+      "line": 44,
+      "form": "literal",
+      "horror": "H-0092"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQDISC",
+      "line": 47,
+      "form": "literal",
+      "horror": "H-0092"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQCONNX",
+      "target": "MQCONNX",
+      "line": 27,
+      "resolves_to": null,
+      "horror": "H-0092"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQOPEN",
+      "target": "MQOPEN",
+      "line": 36,
+      "resolves_to": null,
+      "horror": "H-0092"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQCLOSE",
+      "target": "MQCLOSE",
+      "line": 44,
+      "resolves_to": null,
+      "horror": "H-0092"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQDISC",
+      "target": "MQDISC",
+      "line": 47,
+      "resolves_to": null,
+      "horror": "H-0092"
+     }
+    ],
+    "copies": [
+     {
+      "member": "MQSCNO",
+      "kind": "copy",
+      "line": 20,
+      "resolves_to": "apps/MQSA/copybook/MQSCNO.cpy",
+      "horror": "H-0092"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-CNO",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 19,
+      "copy_members": [
+       "MQSCNO"
+      ],
+      "horror": "H-0092"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-CNO",
+      "line": 19,
+      "bytes": 36,
+      "fields": [
+       {
+        "name": "MQS-CNO-VERSION",
+        "level": 5,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSCNO.cpy"
+       },
+       {
+        "name": "MQS-CNO-OPTIONS",
+        "level": 5,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 4,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSCNO.cpy"
+       },
+       {
+        "name": "MQS-CNO-APPNAME",
+        "level": 5,
+        "pic": "X(28)",
+        "usage": null,
+        "offset": 8,
+        "bytes": 28,
+        "file": "apps/MQSA/copybook/MQSCNO.cpy"
+       }
+      ],
+      "horror": "H-0092"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "'MQSACNX'",
+      "source_kind": "literal",
+      "target": "MQS-CNO-APPNAME",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 25,
+      "horror": "H-0092"
+     },
+     {
+      "verb": "MOVE",
+      "source": "2",
+      "source_kind": "literal",
+      "target": "MQS-CNO-OPTIONS",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 26,
+      "horror": "H-0092"
+     },
+     {
+      "verb": "MOVE",
+      "source": "12",
+      "source_kind": "literal",
+      "target": "RETURN-CODE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 31,
+      "horror": "H-0092"
+     },
+     {
+      "verb": "MOVE",
+      "source": "'ORDERS.IN'",
+      "source_kind": "literal",
+      "target": "MQS-OBJNAME",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 34,
+      "horror": "H-0092"
+     },
+     {
+      "verb": "MOVE",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-OO-OPTIONS",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 35,
+      "horror": "H-0092"
+     },
+     {
+      "verb": "MOVE",
+      "source": "12",
+      "source_kind": "literal",
+      "target": "RETURN-CODE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 41,
+      "horror": "H-0092"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "MQCONNX",
+      "line": 27,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0092"
+     },
+     {
+      "kind": "call",
+      "name": "MQOPEN",
+      "line": 36,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0092"
+     },
+     {
+      "kind": "call",
+      "name": "MQCLOSE",
+      "line": 44,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0092"
+     },
+     {
+      "kind": "call",
+      "name": "MQDISC",
+      "line": 47,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0092"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

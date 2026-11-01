@@ -414,6 +414,17 @@ class ProgramWriter:
             if seq:
                 self.m.phantom("edges", kind="call", **{"from": self.unit}, target=seq,
                                why=f"the sequence number of the line after a split CALL, not {operand}")
+        elif indent + 5 + len(written) + len(using) + 1 > 61:
+            # a long USING list wraps onto continuation lines, one margin-B indent in, as a real call does
+            line = self.line(f"CALL {written}", indent)
+            row = "USING"
+            for arg in st["using"]:
+                if indent + 4 + len(row) + 1 + len(arg) > 61:
+                    self.line(row, indent + 4)
+                    row = arg
+                else:
+                    row += " " + arg
+            self.line(row, indent + 4)
         else:
             line = self.line(f"CALL {written}{using}", indent)
         form = "identifier" if st["ident"] else "literal"

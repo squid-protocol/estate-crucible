@@ -167,6 +167,13 @@
    "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
    "era": 2,
    "era_evidence": "END-IF and END-READ (COBOL-85); the JCL is IDCAMS and plain EXEC steps"
+  },
+  {
+   "id": "MQSA",
+   "title": "Warlords of the Message Seas (batch MQ: the MQI beyond the core calls)",
+   "style": "batch COBOL over the MQ programming interface: MQPUT1, MQGET with wait, MQCMIT / MQBACK, MQINQ, MQCONNX, MQSET",
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); static CALLs to the MQI and plain EXEC steps"
   }
  ],
  "channels": [
@@ -196,28 +203,28 @@
   "jcl_utility_cards"
  ],
  "fact_totals": {
-  "programs": 53,
-  "units": 151,
-  "edges": 105,
-  "call_sites": 77,
-  "copies": 66,
-  "data_items": 521,
-  "layouts": 177,
+  "programs": 59,
+  "units": 163,
+  "edges": 142,
+  "call_sites": 114,
+  "copies": 79,
+  "data_items": 632,
+  "layouts": 264,
   "sql_statements": 6,
   "sql_tables": 3,
-  "jcl_steps": 55,
-  "jcl_dds": 161,
+  "jcl_steps": 61,
+  "jcl_dds": 185,
   "screen_fields": 16,
   "csd_resources": 44,
   "transactions": 7,
   "cics_resources": 9,
-  "jcl_datasets": 82,
+  "jcl_datasets": 100,
   "file_control": 16,
-  "entry_points": 53,
-  "file_edges": 32,
-  "data_moves": 158,
+  "entry_points": 59,
+  "file_edges": 38,
+  "data_moves": 192,
   "copy_collisions": 9,
-  "gaps": 18,
+  "gaps": 49,
   "dead": 11,
   "jcl_utility_cards": 41,
   "phantoms": 54
@@ -277,6 +284,9 @@
    ],
    "LOANCPY": [
     "apps/LOAN/copybook"
+   ],
+   "MQSACPY": [
+    "apps/MQSA/copybook"
    ],
    "NORDCPY": [
     "apps/NORD/copybook"
@@ -423,6 +433,13 @@
     ]
    },
    {
+    "programs": "apps/MQSA/*",
+    "order": [
+     "MQSACPY",
+     "SHRCPY"
+    ]
+   },
+   {
     "programs": "apps/NORD/*",
     "order": [
      "NORDCPY",
@@ -558,7 +575,15 @@
   "H-0082",
   "H-0083",
   "H-0084",
-  "H-0085"
+  "H-0085",
+  "H-0086",
+  "H-0087",
+  "H-0088",
+  "H-0089",
+  "H-0090",
+  "H-0091",
+  "H-0092",
+  "H-0093"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -1934,6 +1959,194 @@
    "era_evidence": ">>SOURCE FORMAT FREE directive (free-form source) needs Enterprise COBOL 6.x (#5117 era 4)",
    "horrors": [
     "H-0028"
+   ]
+  },
+  "apps/MQSA/cobol/MQSACNX.cbl": {
+   "app": "MQSA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "de5dd9056a3a2736c93f1cd2284337fa12abafafb7c10722195dc52671a34c6b",
+   "bytes": 1953,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI is a static CALL interface with no later construct",
+   "horrors": [
+    "H-0092"
+   ]
+  },
+  "apps/MQSA/cobol/MQSAGET.cbl": {
+   "app": "MQSA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "da0e8dad880b9c2c2bc03361bdde04f42dc6e492edd3ee2a90fada3574ce6654",
+   "bytes": 3020,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI is a static CALL interface with no later construct",
+   "horrors": [
+    "H-0087",
+    "H-0088",
+    "H-0090"
+   ]
+  },
+  "apps/MQSA/cobol/MQSAINQ.cbl": {
+   "app": "MQSA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "523d83a329bf59814cd2c0b33cfc1eaaa6996d8de4c36fd84f3c7cee3d38de80",
+   "bytes": 2620,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI is a static CALL interface with no later construct",
+   "horrors": [
+    "H-0089"
+   ]
+  },
+  "apps/MQSA/cobol/MQSAPUT.cbl": {
+   "app": "MQSA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "28bda81e8879386105d40d87ac7521eeb616f4698ceff565c10cbea694e729d4",
+   "bytes": 2762,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI is a static CALL interface with no later construct"
+  },
+  "apps/MQSA/cobol/MQSAREP.cbl": {
+   "app": "MQSA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "fc3db6ab2a881234e6d6e6a3600154728bd44e261d5cbf961e8338f45bb4a946",
+   "bytes": 1743,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI is a static CALL interface with no later construct",
+   "horrors": [
+    "H-0086"
+   ]
+  },
+  "apps/MQSA/cobol/MQSASET.cbl": {
+   "app": "MQSA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "3bd230cd5c156024bfb767b4918dc11c20a2db7c385d5a5d320487072e9ba35f",
+   "bytes": 2493,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI is a static CALL interface with no later construct",
+   "horrors": [
+    "H-0093"
+   ]
+  },
+  "apps/MQSA/copybook/MQSCNO.cpy": {
+   "app": "MQSA",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "a0e0318ac6e0a8fb7b377bdd45bbda2efc1f2a610242d44d906711888fbc1775",
+   "bytes": 242,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQSA/copybook/MQSGMO.cpy": {
+   "app": "MQSA",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "42fc86231061c9c14c9c42ae8ea2a4c9c4d7689a58bf767cabb79146c776faab",
+   "bytes": 251,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQSA/copybook/MQSMD.cpy": {
+   "app": "MQSA",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "ace019e1c737c676c8714b121d6395b6ecdec3973bff958cf4256cda56bb7e19",
+   "bytes": 408,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQSA/copybook/MQSOD.cpy": {
+   "app": "MQSA",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "ae7665db81031bd457b0e2db82bad6d6dca539741e909aee6efb42adc1e88e59",
+   "bytes": 231,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQSA/copybook/MQSPMO.cpy": {
+   "app": "MQSA",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "36fee403adcfba3087d256b5edb2b1a5b7bc867ab1495428f446af69b8a64710",
+   "bytes": 189,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQSA/jcl/MQSARUN.jcl": {
+   "app": "MQSA",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "7e69cbb2b4e97b613912faf673418565dd669528e655204d36542d39a4cad1ed",
+   "bytes": 1266,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0091"
    ]
   },
   "apps/NORD/cobol/KØBREG.cbl": {

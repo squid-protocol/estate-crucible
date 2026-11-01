@@ -1,0 +1,93 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0093",
+ "title": "MQSET: an attribute update whose selector and integer attribute are one-word blocks, on a queue opened for set",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQSA MQSASET: CALL 'MQSET' USING WS-HCONN WS-HOBJ WS-SEL-COUNT WS-SEL-BLOCK WS-INT-COUNT WS-INT-BLOCK WS-CHAR-LEN WS-CHAR-ATTRS WS-COMPCODE WS-REASON"
+ ],
+ "asserts": "MQSASET's MQSET CALL is one call_sites fact (resolves_to null) with a call edge and a gaps entry; the selector word WS-SEL-INHIBIT and the integer attribute WS-INHIBIT-PUT are data_items (S9(9) COMP with VALUE 6 and 1). MQSET is a different verb from MQINQ, which shares its USING shape.",
+ "citations": [
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQSET (Set object attributes)",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqset-set-object-attributes",
+   "quote": "Use the MQSET call to change the attributes of an object represented by a handle. The object must be a queue."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQSET (Set object attributes)",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqset-set-object-attributes",
+   "quote": "MQSET (Hconn, Hobj, SelectorCount, Selectors, IntAttrCount, IntAttrs, CharAttrLength, CharAttrs, Compcode, Reason)"
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/MQSA/cobol/MQSASET.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "edges": [
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQSET",
+      "line": 47,
+      "form": "literal",
+      "horror": "H-0093"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQSET",
+      "target": "MQSET",
+      "line": 47,
+      "resolves_to": null,
+      "horror": "H-0093"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 5,
+      "name": "WS-SEL-INHIBIT",
+      "pic": "S9(9)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": "6",
+      "section": "WORKING-STORAGE",
+      "line": 23,
+      "horror": "H-0093"
+     },
+     {
+      "level": 5,
+      "name": "WS-INHIBIT-PUT",
+      "pic": "S9(9)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": "1",
+      "section": "WORKING-STORAGE",
+      "line": 26,
+      "horror": "H-0093"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "MQSET",
+      "line": 47,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0093"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

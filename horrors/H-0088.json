@@ -1,0 +1,91 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0088",
+ "title": "MQCMIT and MQBACK: the sync point calls, one on the success path and one on the failure path",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQSA MQSAGET: CALL 'MQCMIT' in 3000-FINISH, CALL 'MQBACK' in 9000-BACKOUT"
+ ],
+ "asserts": "MQSAGET's MQCMIT in 3000-FINISH and MQBACK in 9000-BACKOUT are call_sites (literal, resolves_to null) with call edges and gaps entries; the syncpoint verbs are ordinary static CALLs, not a separate fact kind.",
+ "citations": [
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQCMIT (Commit changes)",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqcmit-commit-changes",
+   "quote": "MQCMIT (Hconn, CompCode, Reason)"
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQBACK (Back out changes)",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqback-back-out-changes",
+   "quote": "MQBACK (Hconn, Compcode, Reason)"
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/MQSA/cobol/MQSAGET.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "edges": [
+     {
+      "kind": "call",
+      "from": "3000-FINISH",
+      "target": "MQCMIT",
+      "line": 68,
+      "form": "literal",
+      "horror": "H-0088"
+     },
+     {
+      "kind": "call",
+      "from": "9000-BACKOUT",
+      "target": "MQBACK",
+      "line": 75,
+      "form": "literal",
+      "horror": "H-0088"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQCMIT",
+      "target": "MQCMIT",
+      "line": 68,
+      "resolves_to": null,
+      "horror": "H-0088"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQBACK",
+      "target": "MQBACK",
+      "line": 75,
+      "resolves_to": null,
+      "horror": "H-0088"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "MQCMIT",
+      "line": 68,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0088"
+     },
+     {
+      "kind": "call",
+      "name": "MQBACK",
+      "line": 75,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0088"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

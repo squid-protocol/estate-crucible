@@ -94,6 +94,14 @@ era-neutral syntax horror; blank is untagged.
 | H-0083 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | An INCLUDE statement imbeds a group of DD statements held in a member of a JCLLIB library | `apps/BDLD/jcl/BDLDINC.jcl`, `apps/BDLD/proclib/BDLDDDS.prc` |
 | H-0084 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | A SET statement assigns a symbolic parameter used in a DSN, and a DD names DSN=NULLFILE | `apps/BDLD/jcl/BDLDSET.jcl` |
 | H-0085 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | A DD added to a procedure step by naming the step and a ddname absent from the procedure | `apps/BDLD/jcl/BDLDADD.jcl` |
+| H-0086 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQPUT1: one call that puts a message with no MQOPEN and no MQCLOSE in the member | `apps/MQSA/cobol/MQSAREP.cbl` |
+| H-0087 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQGET with a wait interval in a PERFORM UNTIL loop that ends on reason 2033, no message available | `apps/MQSA/cobol/MQSAGET.cbl` |
+| H-0088 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQCMIT and MQBACK: the sync point calls, one on the success path and one on the failure path | `apps/MQSA/cobol/MQSAGET.cbl` |
+| H-0089 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQINQ: an attribute inquiry whose selectors and integer attributes are two small blocks of binary words | `apps/MQSA/cobol/MQSAINQ.cbl` |
+| H-0090 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQI structures as COPY members: descriptor, object descriptor and get options under 01 levels | `apps/MQSA/cobol/MQSAGET.cbl` |
+| H-0091 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | A batch MQ step: the STEPLIB concatenation carries the MQ authorized and load libraries | `apps/MQSA/jcl/MQSARUN.jcl` |
+| H-0092 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQCONNX: the connect call that takes a connect options structure, which arrives by COPY | `apps/MQSA/cobol/MQSACNX.cbl` |
+| H-0093 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQSET: an attribute update whose selector and integer attribute are one-word blocks, on a queue opened for set | `apps/MQSA/cobol/MQSASET.cbl` |
 
 ## Field-testing defects not planted
 
