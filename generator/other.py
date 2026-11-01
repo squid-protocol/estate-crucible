@@ -64,10 +64,22 @@ def _operands_of(lines: list[str]) -> str:
     return text.split(None, 1)[1] if len(text.split(None, 1)) > 1 else ""
 
 
+def _output_stmt(m: Member, jp: dict[str, Any], step: Optional[str], out: dict[str, Any], horror: Optional[str]) -> None:
+    """An OUTPUT JCL statement (`//name OUTPUT keyword,...`): a jcl_outputs fact, job level (step None) or
+    step level (after the EXEC)."""
+    with m.horror(out.get("horror") or horror):
+        line = _jcl_stmt(m, out["name"], "OUTPUT", list(out["params"]))
+        m.fact("jcl_outputs", **jp, step=step, name=out["name"],
+               params=[p.split("=", 1)[0] for p in out["params"]], line=line)
+
+
 def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], proc: bool) -> None:
     owner = spec["name"]
     jp: dict[str, Any] = {"job": None, "proc": owner} if proc else {"job": owner, "proc": None}
-    if proc:
+    group = bool(spec.get("include_group"))  # an INCLUDE group: bare JCL statements, no PROC / PEND
+    if group:
+        jp = {"job": None, "proc": None, "include": owner}
+    elif proc:
         _jcl_stmt(m, owner, "PROC", spec.get("symbolics", []) or [""])
     else:
         _jcl_stmt(m, owner, "JOB", [spec.get("accounting", "(ACCT)"), f"'{spec['title'][:20]}'", "CLASS=A",
@@ -77,6 +89,8 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
             _jcl_stmt(m, "", "JCLLIB", [f"ORDER=({','.join(spec['jcllib'])})"])
     for c in spec.get("comments", []):
         m.raw(f"//* {c}".rstrip())
+    for out in spec.get("job_outputs", []):
+        _output_stmt(m, jp, None, out, spec.get("horror"))
     ordinal = 0
     blocks: list[dict[str, Any]] = []  # the IF blocks open at this point, innermost last
     branch = "then"
@@ -103,6 +117,9 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
         if not step.get("dds_only"):
             ordinal += 1
             m.raw("//*")
+            if step.get("set"):
+                with m.horror(step.get("horror")):
+                    _jcl_stmt(m, "SETV", "SET", [f"{k}={v}" for k, v in step["set"]])
             operands = [f"PGM={step['pgm']}"] if step.get("pgm") else [step["proc"], *step.get("proc_parms", [])]
             if step.get("cond"):
                 operands.append(f"COND={step['cond']}")
@@ -132,9 +149,17 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                     extra["parm_overrides"] = [{"step": a, "parm": b} for a, b in step["parm_overrides"]]
                 if step.get("cond_overrides"):
                     extra["cond_overrides"] = [{"step": a, "cond": b} for a, b in step["cond_overrides"]]
+                if step.get("set"):
+                    extra["set_symbols"] = [{"name": a, "value": b} for a, b in step["set"]]
+                if step.get("include"):
+                    extra["includes"] = list(step["include"])
                 m.fact("jcl_steps", **jp, step=step["name"],
                        ordinal=ordinal, program=step.get("pgm"), exec_proc=step.get("proc"), cond=step.get("cond"),
                        line=line, **extra)
+                for member in step.get("include", []):
+                    _jcl_stmt(m, "INC1", "INCLUDE", [f"MEMBER={member}"])
+                for out in step.get("outputs", []):
+                    _output_stmt(m, jp, step["name"], out, step.get("horror"))
                 if step.get("pgm"):
                     m.fact("call_sites", verb="EXEC PGM", form="literal", operand=step["pgm"], target=step["pgm"],
                            line=line, resolves_to=program_paths.get(step["pgm"]))
@@ -142,9 +167,14 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
         for dd in step.get("dds", []):
             concat = dd.get("concat", False)
             if dd.get("sysout"):
+                refs = dd.get("output_refs", [])
                 ops = [f"SYSOUT={dd['sysout']}", *dd.get("extra", [])]
+                if refs:
+                    ops.append("OUTPUT=" + (refs[0] if len(refs) == 1 else "(" + ",".join(refs) + ")"))
             elif dd.get("inline") is not None:
                 ops = ["*"]
+            elif dd.get("nullfile"):
+                ops = ["DSN=NULLFILE"]
             elif dd.get("dummy"):
                 ops = ["DUMMY"]
             else:
@@ -171,6 +201,10 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                                  dd=prev_dd if concat else dd["name"], line=dline)
                     if (dd.get("gen") or "")[:1] in "+-" and dd.get("gen") and not row.get("horror"):
                         row["depends_on"] = ["H-0011"]  # #4331: a signed relative generation
+            elif dd.get("nullfile"):
+                with m.horror(dd.get("horror")):
+                    m.phantom("jcl_datasets", "DSN=NULLFILE is a dummy data set, not a dataset of the estate",
+                              dsn="NULLFILE", step=step["name"], line=dline)
             elif temp:
                 with m.horror(dd.get("horror")):
                     m.phantom("jcl_datasets", "a temporary data set (&&name) exists only for the job: it is "
@@ -185,6 +219,10 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                 extra["dummy"] = True
             if dd.get("proc_step"):
                 extra["override_of"] = dd["proc_step"]
+            if dd.get("added"):
+                extra["added"] = True
+            if dd.get("output_refs"):
+                extra["output_refs"] = list(dd["output_refs"])
             symbolic = (dd.get("dsn") or "").startswith("&") and not temp
             if symbolic:
                 extra["symbolic"] = True
@@ -209,7 +247,7 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                                target=run.group(1), line=at, resolves_to=program_paths.get(run.group(1)))
             if not concat:
                 prev_dd = dd["name"]
-    if proc:
+    if proc and not group:
         m.raw("//         PEND")
     m.compile = {"status": "not-cobol"}
 

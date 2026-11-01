@@ -1,0 +1,245 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0094",
+ "title": "OUTPUT JCL statements at job and step level, referenced by the OUTPUT parameter of sysout DD statements",
+ "category": "jcl",
+ "issue": 4891,
+ "shapes": [
+  "BDLD jcl/BDLDOUT.jcl: job-level //OUT1 OUTPUT DEST=NYC01,CLASS=A and //OUT2 OUTPUT CONTROL=DOUBLE before the first EXEC",
+  "BDLD jcl/BDLDOUT.jcl OUT010: step-level //LOCAL OUTPUT COPIES=2 after the EXEC; RPTOUT DD SYSOUT=A,OUTPUT=(*.OUT1,*.OUT2,*.LOCAL)",
+  "BDLD jcl/BDLDOUT.jcl OUT020: SYSUT2 DD SYSOUT=A,OUTPUT=*.OUT010.LOCAL (a reference to a step-level OUTPUT statement of an earlier step)"
+ ],
+ "asserts": "Each OUTPUT JCL statement is one jcl_outputs fact: name, params (the keywords coded), line, and step null for a job-level statement or the step it appears in. An OUTPUT statement is not a step (no jcl_steps fact) and not a DD (no jcl_dds fact). The sysout DDs that name them carry output_refs, the references in the order coded. OUT1, OUT2 and LOCAL are not datasets: no jcl_datasets fact.",
+ "citations": [
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "Chapter 12. DD statement > DD: OUTPUT > Purpose",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "Use the OUTPUT parameter with the SYSOUT parameter to associate a sysout data set explicitly with an OUTPUT JCL statement."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "Chapter 23. OUTPUT JCL statement > Location in the JCL",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "Job-level OUTPUT JCL statements: This statement appears after the JOB statement and before the first EXEC statement."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "Chapter 23. OUTPUT JCL statement > Location in the JCL",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "Step-level OUTPUT JCL statements: This statement appears in a step, that is, anywhere after the first EXEC statement in a job, except within a concatenated DD statement."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "Chapter 12. DD statement > DD: OUTPUT > Subparameter definition",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "Refers to an earlier OUTPUT JCL statement, name, in this step or an earlier step, stepname, in the same job."
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDOUT.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "BDLDRPT",
+      "target": "BDLDRPT",
+      "line": 6,
+      "resolves_to": "apps/BDLD/cobol/BDLDRPT.cbl",
+      "horror": "H-0094"
+     },
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "IEBGENER",
+      "target": "IEBGENER",
+      "line": 11,
+      "resolves_to": null,
+      "horror": "H-0094"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": "BDLDOUT",
+      "proc": null,
+      "step": "OUT010",
+      "ordinal": 1,
+      "program": "BDLDRPT",
+      "exec_proc": null,
+      "cond": null,
+      "line": 6,
+      "horror": "H-0094"
+     },
+     {
+      "job": "BDLDOUT",
+      "proc": null,
+      "step": "OUT020",
+      "ordinal": 2,
+      "program": "IEBGENER",
+      "exec_proc": null,
+      "cond": null,
+      "line": 11,
+      "horror": "H-0094"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": "BDLDOUT",
+      "proc": null,
+      "step": "OUT010",
+      "dd": "STEPLIB",
+      "dsn": "PROD.BDLD.LOADLIB",
+      "generation": null,
+      "disp": "SHR",
+      "disp_normal": null,
+      "sysout": null,
+      "line": 8,
+      "horror": "H-0094"
+     },
+     {
+      "job": "BDLDOUT",
+      "proc": null,
+      "step": "OUT010",
+      "dd": "RPTOUT",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": "A",
+      "line": 9,
+      "output_refs": [
+       "*.OUT1",
+       "*.OUT2",
+       "*.LOCAL"
+      ],
+      "horror": "H-0094"
+     },
+     {
+      "job": "BDLDOUT",
+      "proc": null,
+      "step": "OUT020",
+      "dd": "SYSPRINT",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": "*",
+      "line": 12,
+      "horror": "H-0094"
+     },
+     {
+      "job": "BDLDOUT",
+      "proc": null,
+      "step": "OUT020",
+      "dd": "SYSUT1",
+      "dsn": "PROD.BDLD.ERRMSG",
+      "generation": null,
+      "disp": "SHR",
+      "disp_normal": null,
+      "sysout": null,
+      "line": 13,
+      "horror": "H-0094"
+     },
+     {
+      "job": "BDLDOUT",
+      "proc": null,
+      "step": "OUT020",
+      "dd": "SYSUT2",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": "A",
+      "line": 14,
+      "output_refs": [
+       "*.OUT010.LOCAL"
+      ],
+      "horror": "H-0094"
+     },
+     {
+      "job": "BDLDOUT",
+      "proc": null,
+      "step": "OUT020",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 15,
+      "dummy": true,
+      "horror": "H-0094"
+     }
+    ],
+    "jcl_datasets": [
+     {
+      "dsn": "PROD.BDLD.LOADLIB",
+      "generation": null,
+      "step": "OUT010",
+      "dd": "STEPLIB",
+      "line": 8,
+      "horror": "H-0094"
+     },
+     {
+      "dsn": "PROD.BDLD.ERRMSG",
+      "generation": null,
+      "step": "OUT020",
+      "dd": "SYSUT1",
+      "line": 13,
+      "horror": "H-0094"
+     }
+    ],
+    "file_edges": [
+     {
+      "kind": "exec",
+      "target": "apps/BDLD/cobol/BDLDRPT.cbl",
+      "horror": "H-0094"
+     }
+    ],
+    "jcl_outputs": [
+     {
+      "job": "BDLDOUT",
+      "proc": null,
+      "step": null,
+      "name": "OUT1",
+      "params": [
+       "DEST",
+       "CLASS"
+      ],
+      "line": 3,
+      "horror": "H-0094"
+     },
+     {
+      "job": "BDLDOUT",
+      "proc": null,
+      "step": null,
+      "name": "OUT2",
+      "params": [
+       "CONTROL"
+      ],
+      "line": 4,
+      "horror": "H-0094"
+     },
+     {
+      "job": "BDLDOUT",
+      "proc": null,
+      "step": "OUT010",
+      "name": "LOCAL",
+      "params": [
+       "COPIES"
+      ],
+      "line": 7,
+      "horror": "H-0094"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

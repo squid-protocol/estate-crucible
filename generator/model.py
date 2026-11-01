@@ -50,6 +50,8 @@ CHANNELS = (
     "dead",
     # estate-crucible 1.2: batch utility control cards (Open World, Batch Badlands, gitgalaxy#7065)
     "jcl_utility_cards",
+    # estate-crucible 1.3: OUTPUT JCL statements (Open World, Batch Badlands, gitgalaxy#7065)
+    "jcl_outputs",
 )
 
 

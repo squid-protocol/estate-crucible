@@ -2166,6 +2166,95 @@
    "era": 2
   },
   {
+   "id": "H-0083",
+   "title": "An INCLUDE statement imbeds a group of DD statements held in a member of a JCLLIB library",
+   "category": "jcl",
+   "issue": 4891,
+   "shapes": [
+    "BDLD jcl/BDLDINC.jcl INC010: //INC1 INCLUDE MEMBER=BDLDDDS after the EXEC, JCLLIB ORDER=(PROD.BDLD.PROCLIB)",
+    "BDLD proclib/BDLDDDS.prc: the INCLUDE group, bare DD statements (SYSPRINT, SYSUT2), no PROC or PEND"
+   ],
+   "asserts": "The EXEC of INC010 is one jcl_steps fact carrying includes ['BDLDDDS']. The DDs of the INCLUDE group are jcl_dds facts of the member BDLDDDS (job null, proc null, include BDLDDDS, step null): the group is a member of its own, not a procedure, and has no jcl_steps fact. At run time the group replaces the INCLUDE statement, so SYSPRINT and SYSUT2 are DDs of step INC010.",
+   "citations": [
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "Chapter 19. INCLUDE statement > Purpose",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "Identify the name of the member of a partitioned data set (PDS) or partitioned data set extended (PDSE) that contains a set of JCL statements (such as DD and OUTPUT JCL statements) called an INCLUDE group."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "Chapter 19. INCLUDE statement > Purpose",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "The INCLUDE group replaces the INCLUDE statement, and the system processes the imbedded JCL statements as part of the JCL stream."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "Chapter 19. INCLUDE statement > Location in the JCL",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "if there is a JCLLIB statement, the INCLUDE statement must follow the JCLLIB statement."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "Chapter 19. INCLUDE statement > Considerations for using INCLUDE groups",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "Do not define procedures in an INCLUDE group."
+    }
+   ],
+   "era": 0
+  },
+  {
+   "id": "H-0084",
+   "title": "A SET statement assigns a symbolic parameter used in a DSN, and a DD names DSN=NULLFILE",
+   "category": "jcl",
+   "issue": 4891,
+   "shapes": [
+    "BDLD jcl/BDLDSET.jcl SET010: //SETV SET HLQ=PROD before the EXEC; //SORTIN DD DSN=&HLQ..BDLD.TRANS",
+    "BDLD jcl/BDLDSET.jcl: //SORTWK01 DD DSN=NULLFILE"
+   ],
+   "asserts": "The EXEC of SET010 is one jcl_steps fact carrying set_symbols [{name HLQ, value PROD}]. SORTIN is a jcl_dds fact with symbolic true and dsn '&HLQ..BDLD.TRANS'. SORTWK01 is a jcl_dds fact with dummy true and dsn null; no jcl_datasets row exists for NULLFILE (a phantom records it): NULLFILE has the same effect as DD DUMMY.",
+   "citations": [
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "Chapter 27. SET statement > Using the SET statement",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "The SET statement is not executed conditionally."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "Chapter 27. SET statement > Location in the JCL",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "It must appear in the job's JCL before the intended use of the symbolic parameter."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "Chapter 12. DD statement > DSNAME parameter > NULLFILE",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "Specifies a dummy data set. NULLFILE has the same effect as coding the DD DUMMY parameter."
+    }
+   ],
+   "era": 0
+  },
+  {
+   "id": "H-0085",
+   "title": "A DD added to a procedure step by naming the step and a ddname absent from the procedure",
+   "category": "jcl",
+   "issue": 4891,
+   "shapes": [
+    "BDLD jcl/BDLDADD.jcl ADDQ: EXEC BDLDPRC,RPT=DAILY followed by //RPT020.AUDIT DD SYSOUT=B (AUDIT is not a DD of BDLDPRC)"
+   ],
+   "asserts": "The added DD is a jcl_dds fact of step ADDQ with dd AUDIT, override_of RPT020 (the procedure step it joins), added true and sysout B. Unlike H-0075 it replaces nothing: the procedure's own DDs for RPT020 (STEPLIB, RPTOUT) are unchanged.",
+   "citations": [
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "Modifying Procedures > Adding an OUTPUT JCL or DD statement",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "To add OUTPUT JCL or DD statements to a procedure step, code in the name field of the added OUTPUT JCL or DD statement the name of the procedure step, followed by a period, followed by a name or ddname. The name must not appear on any procedure statement."
+    }
+   ],
+   "era": 0
+  },
+  {
    "id": "H-0086",
    "title": "MQPUT1: one call that puts a message with no MQOPEN and no MQCLOSE in the member",
    "category": "mq",
@@ -2346,6 +2435,77 @@
     }
    ],
    "era": 2
+  },
+  {
+   "id": "H-0094",
+   "title": "OUTPUT JCL statements at job and step level, referenced by the OUTPUT parameter of sysout DD statements",
+   "category": "jcl",
+   "issue": 4891,
+   "shapes": [
+    "BDLD jcl/BDLDOUT.jcl: job-level //OUT1 OUTPUT DEST=NYC01,CLASS=A and //OUT2 OUTPUT CONTROL=DOUBLE before the first EXEC",
+    "BDLD jcl/BDLDOUT.jcl OUT010: step-level //LOCAL OUTPUT COPIES=2 after the EXEC; RPTOUT DD SYSOUT=A,OUTPUT=(*.OUT1,*.OUT2,*.LOCAL)",
+    "BDLD jcl/BDLDOUT.jcl OUT020: SYSUT2 DD SYSOUT=A,OUTPUT=*.OUT010.LOCAL (a reference to a step-level OUTPUT statement of an earlier step)"
+   ],
+   "asserts": "Each OUTPUT JCL statement is one jcl_outputs fact: name, params (the keywords coded), line, and step null for a job-level statement or the step it appears in. An OUTPUT statement is not a step (no jcl_steps fact) and not a DD (no jcl_dds fact). The sysout DDs that name them carry output_refs, the references in the order coded. OUT1, OUT2 and LOCAL are not datasets: no jcl_datasets fact.",
+   "citations": [
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "Chapter 12. DD statement > DD: OUTPUT > Purpose",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "Use the OUTPUT parameter with the SYSOUT parameter to associate a sysout data set explicitly with an OUTPUT JCL statement."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "Chapter 23. OUTPUT JCL statement > Location in the JCL",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "Job-level OUTPUT JCL statements: This statement appears after the JOB statement and before the first EXEC statement."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "Chapter 23. OUTPUT JCL statement > Location in the JCL",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "Step-level OUTPUT JCL statements: This statement appears in a step, that is, anywhere after the first EXEC statement in a job, except within a concatenated DD statement."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+     "section": "Chapter 12. DD statement > DD: OUTPUT > Subparameter definition",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+     "quote": "Refers to an earlier OUTPUT JCL statement, name, in this step or an earlier step, stepname, in the same job."
+    }
+   ],
+   "era": 0
+  },
+  {
+   "id": "H-0095",
+   "title": "A COBOL RERUN clause in I-O-CONTROL names a checkpoint data set that no SELECT assigns",
+   "category": "cobol",
+   "issue": 4891,
+   "shapes": [
+    "BDLD cobol/BDLDCKP.cbl: I-O-CONTROL. RERUN ON SYSCKPT EVERY 1000 RECORDS OF TRAN-FILE",
+    "BDLD jcl/BDLDCKJ.jcl CKP010: SYSCKPT DD DSN=PROD.BDLD.CHKPT, the checkpoint data set, beside TRANIN, the file's own DD"
+   ],
+   "asserts": "The SELECT of TRAN-FILE is one file_control fact assigned to TRANIN and carrying rerun {assign SYSCKPT, every 1000}. SYSCKPT is the checkpoint file's assignment-name, not a file of the program: no file_control fact for it. I-O-CONTROL is a paragraph of the ENVIRONMENT DIVISION, not a unit.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.3 Language Reference (SC27-8713-02)",
+     "section": "RERUN clause",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr30.pdf",
+     "quote": "The RERUN clause specifies that checkpoint records are to be taken."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.3 Language Reference (SC27-8713-02)",
+     "section": "RERUN clause > assignment-name-1",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr30.pdf",
+     "quote": "It must not be the same assignment-name as that specified in any ASSIGN clause throughout the entire program, including contained and containing programs."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.3 Language Reference (SC27-8713-02)",
+     "section": "RERUN clause > EVERY integer-1 RECORDS",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr30.pdf",
+     "quote": "A checkpoint record is to be written for every integer-1 records in file-name-1 that are processed."
+    }
+   ],
+   "era": 0
   }
  ],
  "not_planted": [

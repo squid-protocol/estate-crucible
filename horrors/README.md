@@ -91,6 +91,9 @@ era-neutral syntax horror; blank is untagged.
 | H-0080 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | A DD statement that names the PATH over an alternate index, next to the DD for the base cluster | `apps/AIXA/jcl/AIXARUN.jcl` |
 | H-0081 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | A paragraph that tells file status 02, 22 and 23 apart after each access to an indexed file | `apps/AIXA/cobol/AIXAKSD.cbl` |
 | H-0082 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | IDCAMS DEFINE CLUSTER in its three kinds: INDEXED, NUMBERED and NONINDEXED | `apps/AIXA/jcl/AIXADEF.jcl` |
+| H-0083 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | An INCLUDE statement imbeds a group of DD statements held in a member of a JCLLIB library | `apps/BDLD/jcl/BDLDINC.jcl`, `apps/BDLD/proclib/BDLDDDS.prc` |
+| H-0084 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | A SET statement assigns a symbolic parameter used in a DSN, and a DD names DSN=NULLFILE | `apps/BDLD/jcl/BDLDSET.jcl` |
+| H-0085 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | A DD added to a procedure step by naming the step and a ddname absent from the procedure | `apps/BDLD/jcl/BDLDADD.jcl` |
 | H-0086 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQPUT1: one call that puts a message with no MQOPEN and no MQCLOSE in the member | `apps/MQSA/cobol/MQSAREP.cbl` |
 | H-0087 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQGET with a wait interval in a PERFORM UNTIL loop that ends on reason 2033, no message available | `apps/MQSA/cobol/MQSAGET.cbl` |
 | H-0088 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQCMIT and MQBACK: the sync point calls, one on the success path and one on the failure path | `apps/MQSA/cobol/MQSAGET.cbl` |
@@ -99,6 +102,8 @@ era-neutral syntax horror; blank is untagged.
 | H-0091 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | A batch MQ step: the STEPLIB concatenation carries the MQ authorized and load libraries | `apps/MQSA/jcl/MQSARUN.jcl` |
 | H-0092 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQCONNX: the connect call that takes a connect options structure, which arrives by COPY | `apps/MQSA/cobol/MQSACNX.cbl` |
 | H-0093 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQSET: an attribute update whose selector and integer attribute are one-word blocks, on a queue opened for set | `apps/MQSA/cobol/MQSASET.cbl` |
+| H-0094 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | jcl | OUTPUT JCL statements at job and step level, referenced by the OUTPUT parameter of sysout DD statements | `apps/BDLD/jcl/BDLDOUT.jcl` |
+| H-0095 | 0 | [#4891](https://github.com/squid-protocol/gitgalaxy/issues/4891) | cobol | A COBOL RERUN clause in I-O-CONTROL names a checkpoint data set that no SELECT assigns | `apps/BDLD/cobol/BDLDCKP.cbl`, `apps/BDLD/jcl/BDLDCKJ.jcl` |
 
 ## Field-testing defects not planted
 
