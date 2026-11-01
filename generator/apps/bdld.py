@@ -9,9 +9,10 @@ H-0070 (GDG (0) / (+1) in one job), H-0071 (a cataloged procedure with symbolic 
 JCLLIB), H-0072 (further utility control cards: IDCAMS LISTCAT / ALTER / PRINT, IEBCOPY, DFSORT JOINKEYS /
 OUTFIL), H-0073 (checkpoint restart: RD=R, SYSCKEOV, RESTART=(step,checkid) with SYSCHK), H-0074 (SYSOUT forms,
 DD DUMMY, COND=EVEN / ONLY), H-0075 (overrides of a cataloged procedure's PARM, COND and DD), H-0083 (an INCLUDE
-group), H-0084 (SET and DSN=NULLFILE), H-0085 (a DD added to a procedure step), H-0102 (ICETOOL
-COUNT / SELECT / OCCUR / STATS), H-0103 (DFSORT INREC IFTHEN, PARSE, OUTFIL BUILD / OVERLAY), H-0104 (IEBUPDTE,
-IEBPTPCH, IEBCOMPR control statements), H-0105 (IEFBR14 allocating and deleting data sets by DISP)."""
+group), H-0084 (SET and DSN=NULLFILE), H-0085 (a DD added to a procedure step), H-0094 (job- and step-level
+OUTPUT JCL statements referenced by sysout DDs), H-0095 (a COBOL program with a RERUN checkpoint clause), H-0102
+(ICETOOL COUNT / SELECT / OCCUR / STATS), H-0103 (DFSORT INREC IFTHEN, PARSE, OUTFIL BUILD / OVERLAY), H-0104
+(IEBUPDTE, IEBPTPCH, IEBCOMPR control statements), H-0105 (IEFBR14 allocating and deleting data sets by DISP)."""
 
 from ..data import I
 from ..stmt import goback, if_, para, perform, raw, read, sql
@@ -21,6 +22,7 @@ H64, H65, H66, H67, H68, H69, H70, H71, H72, H73, H74, H75 = (
     "H-0075")
 H102, H103, H104, H105 = "H-0102", "H-0103", "H-0104", "H-0105"
 H83, H84, H85 = "H-0083", "H-0084", "H-0085"
+H94, H95 = "H-0094", "H-0095"
 
 COPYBOOKS = [
     {"member": "BDLREC", "header": [" BDLREC   - SORTED TRANSACTION EXTRACT (40 BYTES)"],
@@ -98,6 +100,39 @@ BDLDRPT = {
                  [raw("MOVE 'REPORT DAILY' TO RPT-LINE")]),
              raw("WRITE RPT-LINE", "CLOSE RPT-FILE"),
              goback()),
+    ],
+}
+
+BDLDCKP = {
+    "member": "BDLDCKP",
+    "era": 0,
+    "era_evidence": "the RERUN clause of I-O-CONTROL is 1974/1985 COBOL; no later construct",
+    "program_id": "BDLDCKP",
+    "author": "BATCH OPERATIONS",
+    "remarks": ["BDLDCKP - COUNT THE TRANSACTION EXTRACT.",
+                "CHECKPOINT EVERY 1000 RECORDS (RERUN CLAUSE) TO THE SYSCKPT DD."],
+    "selects": [{"name": "TRAN-FILE", "assign": "TRANIN", "status": "WS-TRAN-STATUS", "horror": H95,
+                 "rerun": {"assign": "SYSCKPT", "every": 1000}}],
+    "i_o_control": ["RERUN ON SYSCKPT EVERY 1000 RECORDS OF TRAN-FILE"],
+    "special_names_horror": H95,
+    "fds": [{"fd": "TRAN-FILE", "record": I(1, "TRAN-REC", copy=["BDLREC"])}],
+    "ws": [
+        I(1, "WS-TRAN-STATUS", "X(2)"),
+        I(1, "WS-EOF-FLAG", "X", value="'N'", kids=[I(88, "WS-EOF", value="'Y'")]),
+        I(1, "WS-COUNT", "9(7)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN INPUT TRAN-FILE"),
+             perform("8000-READ"),
+             perform("1000-COUNT", until="WS-EOF"),
+             raw("CLOSE TRAN-FILE", "DISPLAY 'BDLDCKP COUNTED ' WS-COUNT"),
+             goback()),
+        para("1000-COUNT",
+             raw("ADD 1 TO WS-COUNT"),
+             perform("8000-READ")),
+        para("8000-READ",
+             read("TRAN-FILE", at_end=[raw("SET WS-EOF TO TRUE")])),
     ],
 }
 
@@ -493,6 +528,45 @@ JOBS = [
              "dds": [{"name": "AUDIT", "sysout": "B", "proc_step": "RPT020", "added": True}]},
         ],
     },
+    {
+        # OUTPUT JCL statements: two at job level (before the first EXEC), one at step level; sysout DDs
+        # reference them with *.name and *.stepname.name
+        "name": "BDLDOUT",
+        "title": "BDLD OUTPUT STATEMENTS",
+        "accounting": "(BDLD,0100)",
+        "horror": H94,
+        "job_outputs": [
+            {"name": "OUT1", "params": ["DEST=NYC01", "CLASS=A"]},
+            {"name": "OUT2", "params": ["CONTROL=DOUBLE"]},
+        ],
+        "steps": [
+            {"name": "OUT010", "pgm": "BDLDRPT", "outputs": [{"name": "LOCAL", "params": ["COPIES=2"]}], "dds": [
+                _dd("STEPLIB", LOADLIB),
+                {"name": "RPTOUT", "sysout": "A", "output_refs": ["*.OUT1", "*.OUT2", "*.LOCAL"]},
+            ]},
+            {"name": "OUT020", "pgm": "IEBGENER", "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                _dd("SYSUT1", "PROD.BDLD.ERRMSG"),
+                {"name": "SYSUT2", "sysout": "A", "output_refs": ["*.OUT010.LOCAL"]},
+                {"name": "SYSIN", "dummy": True},
+            ]},
+        ],
+    },
+    {
+        # a program with a RERUN clause: the step carries the checkpoint data set DD
+        "name": "BDLDCKJ",
+        "title": "BDLD CHECKPOINT PROGRAM",
+        "accounting": "(BDLD,0100)",
+        "horror": H95,
+        "steps": [
+            {"name": "CKP010", "pgm": "BDLDCKP", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                _dd("TRANIN", "PROD.BDLD.TRANS"),
+                _dd("SYSCKPT", "PROD.BDLD.CHKPT", ("NEW", "KEEP"),
+                    extra=["UNIT=SYSDA", "SPACE=(CYL,(1,1))"]),
+            ]},
+        ],
+    },
 ]
 
 PROCS = [
@@ -535,7 +609,7 @@ APP = {
     "style": "multi-step batch jobs: COND, IF/THEN/ELSE, temp datasets, concatenation, utility control cards",
     "copybooks": COPYBOOKS,
     "dclgen": DCLGEN,
-    "programs": [BDLDDB2, BDLDRPT],
+    "programs": [BDLDDB2, BDLDRPT, BDLDCKP],
     "jcl": JOBS,
     "procs": PROCS,
 }

@@ -30,6 +30,8 @@ Slice 3 (gitgalaxy#7065): H-0073 (checkpoint restart), H-0074 (SYSOUT forms, DUM
 
 Slice 4 (gitgalaxy#7065): H-0083 (INCLUDE group), H-0084 (SET, DSN=NULLFILE), H-0085 (a DD added to a procedure step). New optional fields: `set_symbols`, `includes` on `jcl_steps`; `added`, `include` on `jcl_dds` (SPEC section 3). The gitgalaxy scorer reports them unscored until it reads them. Every quote was read in the z/OS 2.2.0 MVS JCL Reference PDF text.
 
+Slice 5 (gitgalaxy#7065): H-0094 (OUTPUT JCL statements, job and step level, and `OUTPUT=` on a sysout DD), H-0095 (a COBOL RERUN clause naming a checkpoint data set, program BDLDCKP, job BDLDCKJ). New channel `jcl_outputs`; new optional fields `output_refs` on `jcl_dds` and `rerun` on `file_control` (SPEC section 3). The gitgalaxy scorer reports them unscored until it reads them. Quotes read in the z/OS 2.2.0 MVS JCL Reference and the Enterprise COBOL 6.3 Language Reference PDFs.
+
 Slice 6 (gitgalaxy#7065): H-0102..H-0105 plant utility constructs in `BDLDUT3`, all as `jcl_utility_cards` / `jcl_dds` facts already defined in SPEC section 3 (no new field). IEBUPDTE's data lines between `./ ADD` and `./ ENDUP` are member text and carry no fact. Not yet planted: BPXBATCH, IKJEFT01 DSNUTILB / BIND, ADRDSSU, IEBIMAGE.
 
 Remaining slices: OUTPUT JCL statements, a program that issues CHKPT; the other three levels (#4892, #4893; #4894 is the AIXA app).
