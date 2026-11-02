@@ -397,6 +397,391 @@
     }
    ]
   },
+  "apps/INVT/cobol/INVTLRG.cbl": {
+   "app": "INVT",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": true,
+   "lines": 42,
+   "compile": {
+    "status": "ibm-only",
+    "reason": "SERVICE RELOAD is an OS/VS COBOL compiler control statement; GnuCOBOL -std=ibm rejects it",
+    "check_variant": "service-reload",
+    "check_note": "every SERVICE RELOAD statement becomes CONTINUE (padded to the same width) for the check; the rest compiles as written"
+   },
+   "era": 1,
+   "era_evidence": "a LINKAGE record over 4096 bytes addressed by a second BLL cell set with ADD 4096 and then SERVICE RELOAD (CICS Application Programming Guide, Appendix B, 'BLL and large storage areas'): OS/VS COBOL, #5117 era 1",
+   "programs": [
+    {
+     "program_id": "INVTLRG",
+     "line": 7
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAINLINE",
+     "kind": "section",
+     "section": null,
+     "start_line": 30,
+     "end_line": 42,
+     "span_end": 42
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-PART-KEY",
+     "pic": "X(10)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 16
+    },
+    {
+     "level": 1,
+     "name": "BLL-CELLS",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 18,
+     "horror": "H-0099"
+    },
+    {
+     "level": 2,
+     "name": "FILLER",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 19,
+     "horror": "H-0099"
+    },
+    {
+     "level": 2,
+     "name": "LONG-BLL",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 20,
+     "horror": "H-0099"
+    },
+    {
+     "level": 2,
+     "name": "LONG-BLL2",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 21,
+     "horror": "H-0099"
+    },
+    {
+     "level": 2,
+     "name": "FULL-BLL",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 22,
+     "horror": "H-0099"
+    },
+    {
+     "level": 1,
+     "name": "STK-LONG",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 23,
+     "horror": "H-0099"
+    },
+    {
+     "level": 2,
+     "name": "LNG-HEADER",
+     "pic": "X(4000)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 24,
+     "horror": "H-0099"
+    },
+    {
+     "level": 2,
+     "name": "LNG-DETAIL",
+     "pic": "X(1000)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 25,
+     "horror": "H-0099"
+    },
+    {
+     "level": 2,
+     "name": "LNG-TRAILER",
+     "pic": "X(400)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 26,
+     "horror": "H-0099"
+    },
+    {
+     "level": 1,
+     "name": "STK-FULL",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 27,
+     "horror": "H-0099"
+    },
+    {
+     "level": 2,
+     "name": "FUL-BODY",
+     "pic": "X(4096)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 28,
+     "horror": "H-0099",
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-PART-KEY",
+     "line": 16,
+     "bytes": 10,
+     "fields": [
+      {
+       "name": "WS-PART-KEY",
+       "level": 1,
+       "pic": "X(10)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 10,
+       "file": "apps/INVT/cobol/INVTLRG.cbl"
+      }
+     ]
+    },
+    {
+     "record": "BLL-CELLS",
+     "line": 18,
+     "bytes": 16,
+     "fields": [
+      {
+       "name": "FILLER",
+       "level": 2,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/INVT/cobol/INVTLRG.cbl"
+      },
+      {
+       "name": "LONG-BLL",
+       "level": 2,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 4,
+       "bytes": 4,
+       "file": "apps/INVT/cobol/INVTLRG.cbl"
+      },
+      {
+       "name": "LONG-BLL2",
+       "level": 2,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 8,
+       "bytes": 4,
+       "file": "apps/INVT/cobol/INVTLRG.cbl"
+      },
+      {
+       "name": "FULL-BLL",
+       "level": 2,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 12,
+       "bytes": 4,
+       "file": "apps/INVT/cobol/INVTLRG.cbl"
+      }
+     ],
+     "horror": "H-0099"
+    },
+    {
+     "record": "STK-LONG",
+     "line": 23,
+     "bytes": 5400,
+     "fields": [
+      {
+       "name": "LNG-HEADER",
+       "level": 2,
+       "pic": "X(4000)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4000,
+       "file": "apps/INVT/cobol/INVTLRG.cbl"
+      },
+      {
+       "name": "LNG-DETAIL",
+       "level": 2,
+       "pic": "X(1000)",
+       "usage": null,
+       "offset": 4000,
+       "bytes": 1000,
+       "file": "apps/INVT/cobol/INVTLRG.cbl"
+      },
+      {
+       "name": "LNG-TRAILER",
+       "level": 2,
+       "pic": "X(400)",
+       "usage": null,
+       "offset": 5000,
+       "bytes": 400,
+       "file": "apps/INVT/cobol/INVTLRG.cbl"
+      }
+     ],
+     "horror": "H-0099"
+    },
+    {
+     "record": "STK-FULL",
+     "line": 27,
+     "bytes": 4096,
+     "fields": [
+      {
+       "name": "FUL-BODY",
+       "level": 2,
+       "pic": "X(4096)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4096,
+       "file": "apps/INVT/cobol/INVTLRG.cbl"
+      }
+     ],
+     "horror": "H-0099",
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "cics_resources": [
+    {
+     "verb": "READ",
+     "kind": "FILE",
+     "name": "INVTDTL",
+     "qualifier": null,
+     "record": "STK-LONG",
+     "access": "read",
+     "line": 32,
+     "horror": "H-0099"
+    },
+    {
+     "verb": "READ",
+     "kind": "FILE",
+     "name": "INVTFUL",
+     "qualifier": null,
+     "record": "STK-FULL",
+     "access": "read",
+     "line": 37,
+     "horror": "H-0099"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "INVTLRG",
+     "params": [],
+     "line": 29
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "SPACES",
+     "source_kind": "figurative",
+     "target": "WS-PART-KEY",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 31
+    },
+    {
+     "verb": "ADD",
+     "source": "4096",
+     "source_kind": "literal",
+     "target": "LONG-BLL2",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 35,
+     "horror": "H-0099"
+    },
+    {
+     "verb": "ADD",
+     "source": "LONG-BLL",
+     "source_kind": "item",
+     "target": "LONG-BLL2",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 35,
+     "horror": "H-0099"
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "data_moves",
+     "verb": "SERVICE",
+     "target": "STK-LONG",
+     "why": "SERVICE RELOAD is a compiler control statement that moves no data; its operand is a LINKAGE area, not a move target",
+     "horror": "H-0099"
+    },
+    {
+     "channel": "data_moves",
+     "verb": "SERVICE",
+     "target": "STK-FULL",
+     "why": "SERVICE RELOAD is a compiler control statement that moves no data; its operand is a LINKAGE area, not a move target",
+     "horror": "H-0099"
+    }
+   ],
+   "horrors": [
+    "H-0099"
+   ]
+  },
   "apps/INVT/cobol/INVTONL.cbl": {
    "app": "INVT",
    "library": "cobol",

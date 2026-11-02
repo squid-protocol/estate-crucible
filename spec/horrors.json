@@ -2346,6 +2346,26 @@
     }
    ],
    "era": 2
+  },
+  {
+   "id": "H-0099",
+   "title": "BLL and large storage areas: a LINKAGE record over 4096 bytes addressed by a second BLL cell set with ADD 4096",
+   "category": "layouts",
+   "issue": 5119,
+   "shapes": [
+    "INVT INVTLRG: a 5400-byte LINKAGE 01 (STK-LONG) with a primary cell LONG-BLL set by READ SET and a secondary cell LONG-BLL2 set by ADD 4096 LONG-BLL GIVING LONG-BLL2, then SERVICE RELOAD STK-LONG; a 4096-byte 01 (STK-FULL) addressed by one cell, FULL-BLL, with no secondary cell"
+   ],
+   "asserts": "STK-LONG is one 5400-byte layout (4000 + 1000 + 400); STK-FULL is one 4096-byte layout. LONG-BLL, LONG-BLL2 and FULL-BLL are 4-byte binary items of the BLL-CELLS layout (16 bytes with the FILLER); the cells are not parameters, so the PROCEDURE DIVISION entry point has no params. LONG-BLL2 has no 01 of its own (the one-to-one correspondence of cells to 01s does not hold), and STK-FULL, at exactly 4096 bytes, needs no secondary cell. SERVICE RELOAD moves no data (no data_moves row).",
+   "citations": [
+    {
+     "doc": "IBM CICS Transaction Server for OS/390 Release 3, CICS Application Programming Guide, SC33-1687-02 (March 1999), Appendix B. OS/VS COBOL",
+     "section": "Appendix B. OS/VS COBOL, 'BLL and large storage areas' (printed p. 572, Figure 120) and 'SERVICE RELOAD statement' (Figure 121)",
+     "url": "https://publibz.boulder.ibm.com/epubs/pdf/dfhp300.pdf",
+     "quote": "If an area greater than 4096 bytes is defined in the linkage section (but not as part of an OCCURS DEPENDING ON clause), additional statements may be required to establish addressability to the extra area. The ADD statement is placed after the statement that establishes addressability to the data area. No additional corresponding 01-level data name definition is added, so the usual one-to-one correspondence of BLL cells to the data areas they address is not maintained. ... If areas larger than 4096 bytes are being addressed, the secondary BLL cells must be reset before the SERVICE RELOAD statement has been executed."
+    }
+   ],
+   "notes": "Source opened and read (the PDF's text): CICS TS for OS/390 R3 Application Programming Guide (SC33-1687-02), Appendix B, printed pp. 572-574. Figure 120 shows the form this member follows: a 5400-byte FILE-REC (4000 + 1000 + 400) with cells FRPTR and FRPTR1 and ADD 4096 FRPTR GIVING FRPTR1 after the READ SET. The manual says 'greater than 4096 bytes'; that a record of exactly 4096 bytes needs no secondary cell is read from that wording, not stated as a number. The 4-byte cell width is from the PICTUREs (S9(8) COMP), as in H-0061. Statements are original, not IBM's. Like H-0062 the member is ibm-only with the service-reload check_variant. Still uncited: the OS/VS COBOL Programmer's Guide; no 'release' (the manual names compilers, not a CICS release).",
+   "era": 1
   }
  ],
  "not_planted": [

@@ -203,13 +203,13 @@
   "jcl_utility_cards"
  ],
  "fact_totals": {
-  "programs": 59,
-  "units": 163,
+  "programs": 60,
+  "units": 164,
   "edges": 142,
   "call_sites": 112,
   "copies": 79,
-  "data_items": 632,
-  "layouts": 264,
+  "data_items": 644,
+  "layouts": 268,
   "sql_statements": 6,
   "sql_tables": 3,
   "jcl_steps": 58,
@@ -217,17 +217,17 @@
   "screen_fields": 16,
   "csd_resources": 44,
   "transactions": 7,
-  "cics_resources": 9,
+  "cics_resources": 11,
   "jcl_datasets": 97,
   "file_control": 16,
-  "entry_points": 59,
+  "entry_points": 60,
   "file_edges": 38,
-  "data_moves": 192,
+  "data_moves": 195,
   "copy_collisions": 9,
   "gaps": 49,
   "dead": 11,
   "jcl_utility_cards": 40,
-  "phantoms": 53
+  "phantoms": 55
  },
  "code_pages": {
   "apps/DEUT/cobol/ZINSBER.cbl": "cp273",
@@ -580,7 +580,8 @@
   "H-0090",
   "H-0091",
   "H-0092",
-  "H-0093"
+  "H-0093",
+  "H-0099"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -1592,6 +1593,27 @@
    },
    "era": 1,
    "era_evidence": "SECTIONs and period-terminated sentences only; no END-IF, END-READ or inline PERFORM, so OS/VS COBOL (#5117 era 1)"
+  },
+  "apps/INVT/cobol/INVTLRG.cbl": {
+   "app": "INVT",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "19c0a5ac883e9c51ad9c58664dc13bef443f5c38cbb85a6befcde12e813010e1",
+   "bytes": 3360,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/INVT.json",
+   "compile": {
+    "status": "ibm-only",
+    "reason": "SERVICE RELOAD is an OS/VS COBOL compiler control statement; GnuCOBOL -std=ibm rejects it",
+    "check_variant": "service-reload",
+    "check_note": "every SERVICE RELOAD statement becomes CONTINUE (padded to the same width) for the check; the rest compiles as written"
+   },
+   "era": 1,
+   "era_evidence": "a LINKAGE record over 4096 bytes addressed by a second BLL cell set with ADD 4096 and then SERVICE RELOAD (CICS Application Programming Guide, Appendix B, 'BLL and large storage areas'): OS/VS COBOL, #5117 era 1",
+   "horrors": [
+    "H-0099"
+   ]
   },
   "apps/INVT/cobol/INVTONL.cbl": {
    "app": "INVT",
