@@ -54,6 +54,8 @@ REQUIRED = {
     "dead": ("kind", "name", "line", "why"),
     "jcl_utility_cards": ("step", "utility", "verb", "line"),
     "jcl_outputs": ("name", "line"),
+    "dli_calls": ("function", "pcb", "line"),
+    "ims_gen": ("kind", "name", "line"),
 }
 
 

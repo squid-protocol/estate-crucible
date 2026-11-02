@@ -2508,6 +2508,63 @@
    "era": 0
   },
   {
+   "id": "H-0096",
+   "title": "DBDGEN: SEGM statements coded in hierarchic order, the dependent naming its parent",
+   "category": "ims",
+   "issue": 4893,
+   "shapes": [
+    "HKEP HKEPDBD: SEGM NAME=KEEP / SEGM NAME=WALL,PARENT=KEEP / SEGM NAME=GATE,PARENT=WALL"
+   ],
+   "asserts": "HKEPDBD keys one ims_gen DBD fact and three SEGM facts (KEEP root, WALL parent KEEP, GATE parent WALL), in source order.",
+   "citations": [
+    {
+     "doc": "IBM IMS 15 documentation",
+     "section": "DEDB DBD generation input record structure",
+     "url": "https://www.ibm.com/docs/en/ims/15.6.0?topic=types-dedb-dbd-generation-input-record-structure",
+     "quote": "SEGM statements must also be placed in the same hierarchic order as the segments in the database being defined."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0097",
+   "title": "An unqualified GN repeated until the GB status code",
+   "category": "ims",
+   "issue": 4893,
+   "shapes": [
+    "HKEP HKEPWALK 1000-SCAN: CALL 'CBLTDLI' USING WS-GN DB-PCB WS-IO-AREA, repeated by a recursive PERFORM while DB-STATUS = SPACES"
+   ],
+   "asserts": "HKEPWALK's 1000-SCAN CALL is one call_sites fact (CBLTDLI, resolves_to null) and one dli_calls fact: function GN (from WS-GN VALUE 'GN  '), pcb DB-PCB, io_area WS-IO-AREA, no ssas.",
+   "citations": [
+    {
+     "doc": "IBM IMS 15 documentation",
+     "section": "GN/GHN call",
+     "url": "https://www.ibm.com/docs/SSEPH2_15.4.0/com.ibm.ims154.doc.apr/ims_gnghncall.htm",
+     "quote": "You would issue an unqualified GN call repeatedly until IMS returned a GB status code, indicating that it had reached the end of the database without being able to satisfy your call."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0098",
+   "title": "A GN issued again after GB restarts the walk at the first root",
+   "category": "ims",
+   "issue": 4893,
+   "shapes": [
+    "HKEP HKEPWALK 2000-RESTART: the same unqualified GN, issued after the loop ended on GB"
+   ],
+   "asserts": "HKEPWALK's 2000-RESTART CALL is a second dli_calls fact with the same function, pcb and io_area as H-0097's: the same call text twice, two facts.",
+   "citations": [
+    {
+     "doc": "IBM IMS 15 documentation",
+     "section": "GN/GHN call",
+     "url": "https://www.ibm.com/docs/SSEPH2_15.4.0/com.ibm.ims154.doc.apr/ims_gnghncall.htm",
+     "quote": "If you issued the GN again after the GB status code, IMS would return the first segment occurrence in the database."
+    }
+   ],
+   "era": 2
+  },
+  {
    "id": "H-0099",
    "title": "BLL and large storage areas: a LINKAGE record over 4096 bytes addressed by a second BLL cell set with ADD 4096",
    "category": "layouts",

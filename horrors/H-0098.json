@@ -1,0 +1,71 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0098",
+ "title": "A GN issued again after GB restarts the walk at the first root",
+ "category": "ims",
+ "issue": 4893,
+ "shapes": [
+  "HKEP HKEPWALK 2000-RESTART: the same unqualified GN, issued after the loop ended on GB"
+ ],
+ "asserts": "HKEPWALK's 2000-RESTART CALL is a second dli_calls fact with the same function, pcb and io_area as H-0097's: the same call text twice, two facts.",
+ "citations": [
+  {
+   "doc": "IBM IMS 15 documentation",
+   "section": "GN/GHN call",
+   "url": "https://www.ibm.com/docs/SSEPH2_15.4.0/com.ibm.ims154.doc.apr/ims_gnghncall.htm",
+   "quote": "If you issued the GN again after the GB status code, IMS would return the first segment occurrence in the database."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/HKEP/cobol/HKEPWALK.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "edges": [
+     {
+      "kind": "call",
+      "from": "2000-RESTART",
+      "target": "CBLTDLI",
+      "line": 34,
+      "form": "literal",
+      "horror": "H-0098"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "CBLTDLI",
+      "target": "CBLTDLI",
+      "line": 34,
+      "resolves_to": null,
+      "horror": "H-0098"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "CBLTDLI",
+      "line": 34,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0098"
+     }
+    ],
+    "dli_calls": [
+     {
+      "function": "GN",
+      "pcb": "DB-PCB",
+      "io_area": "WS-IO-AREA",
+      "ssas": [],
+      "line": 34,
+      "horror": "H-0098"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

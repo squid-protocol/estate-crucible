@@ -52,6 +52,9 @@ CHANNELS = (
     "jcl_utility_cards",
     # estate-crucible 1.3: OUTPUT JCL statements (Open World, Batch Badlands, gitgalaxy#7065)
     "jcl_outputs",
+    # estate-crucible 1.4: IMS (Open World, Hierarchy Keep, gitgalaxy#7065, #4893)
+    "dli_calls",
+    "ims_gen",
 )
 
 
