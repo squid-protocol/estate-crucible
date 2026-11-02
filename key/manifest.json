@@ -1598,7 +1598,7 @@
    "app": "INVT",
    "library": "cobol",
    "language": "cobol",
-   "sha256": "6db1a171bd3abcc7f6211641a78a3ae1d5b2c0dd105a185379b9f23bc8ec817a",
+   "sha256": "19c0a5ac883e9c51ad9c58664dc13bef443f5c38cbb85a6befcde12e813010e1",
    "bytes": 3360,
    "encoding": "utf-8",
    "storage": "lf",

@@ -32,11 +32,11 @@
 003200     EXEC CICS READ DATASET('INVTDTL') SET(LONG-BLL)              INVTLRG
 003300               RIDFLD(WS-PART-KEY)                                INVTLRG
 003400     END-EXEC                                                     INVTLRG
-003500     ADD 4096 LONG-BLL GIVING LONG-BLL2                           INVTLRG
-003600     SERVICE RELOAD STK-LONG                                      INVTLRG
+003500     ADD 4096 LONG-BLL GIVING LONG-BLL2.                          INVTLRG
+003600     SERVICE RELOAD STK-LONG.                                     INVTLRG
 003700     EXEC CICS READ DATASET('INVTFUL') SET(FULL-BLL)              INVTLRG
 003800               RIDFLD(WS-PART-KEY)                                INVTLRG
 003900     END-EXEC                                                     INVTLRG
-004000     SERVICE RELOAD STK-FULL                                      INVTLRG
+004000     SERVICE RELOAD STK-FULL.                                     INVTLRG
 004100     EXEC CICS RETURN                                             INVTLRG
 004200     END-EXEC.                                                    INVTLRG
