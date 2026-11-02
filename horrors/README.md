@@ -99,6 +99,7 @@ era-neutral syntax horror; blank is untagged.
 | H-0091 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | A batch MQ step: the STEPLIB concatenation carries the MQ authorized and load libraries | `apps/MQSA/jcl/MQSARUN.jcl` |
 | H-0092 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQCONNX: the connect call that takes a connect options structure, which arrives by COPY | `apps/MQSA/cobol/MQSACNX.cbl` |
 | H-0093 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQSET: an attribute update whose selector and integer attribute are one-word blocks, on a queue opened for set | `apps/MQSA/cobol/MQSASET.cbl` |
+| H-0099 | 1 | [#5119](https://github.com/squid-protocol/gitgalaxy/issues/5119) | layouts | BLL and large storage areas: a LINKAGE record over 4096 bytes addressed by a second BLL cell set with ADD 4096 | `apps/INVT/cobol/INVTLRG.cbl` |
 
 ## Field-testing defects not planted
 

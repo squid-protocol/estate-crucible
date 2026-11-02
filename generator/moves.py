@@ -5,6 +5,7 @@ Apps write most procedure statements as `raw(...)` text. That text is the genera
 statement forms the apps use:
 
     MOVE [CORRESPONDING] src TO t1 [t2 ...]      ADD a [b ...] TO t        SUBTRACT a FROM t
+    ADD a [b ...] GIVING t1 [t2 ...]             (each source -> each target; no TO / FROM)
     COMPUTE t [ROUNDED] = expr                   INITIALIZE t1 [t2 ...]    WRITE r FROM s
     PL/I: target = expr;
 
@@ -106,6 +107,14 @@ def cobol_moves(stmt: str, line: int) -> list[dict[str, Any]]:
         return [_row("MOVE", src, kind, t, line, corr, s_ref, s_ref_text) for t in _split_operands(tgts)]
     if verb in ("ADD", "SUBTRACT"):
         word = "TO" if verb == "ADD" else "FROM"
+        if verb == "ADD" and re.search(r"\bGIVING\b", rest, re.I) and not re.search(r"\bTO\b", rest, re.I):
+            srcs, tgts = _split_kw(rest, "GIVING")
+            rows = []
+            for s in _split_operands(srcs):
+                src, kind, s_ref, s_ref_text = _operand(s)
+                rows += [_row(verb, src, kind, t, line, False, s_ref, s_ref_text)
+                         for t in _split_operands(tgts) if t.upper() != "ROUNDED"]
+            return rows
         parts = _split_kw(rest, word)
         if len(parts) != 2 or re.search(r"\bGIVING\b", rest, re.I):
             raise ValueError(f"moves: {verb} form not modelled: {stmt!r}")

@@ -3,13 +3,15 @@ program (sequence numbers in cols 1-6, the deck name in 73-80, upper case throug
 SECTIONs, period-terminated sentences, with no COBOL-85 construct. One program, one
 record copybook, one job.
 
-Planted: H-0061 (CICS BLL cells in INVTONL), H-0062 (SERVICE RELOAD in INVTRLD), gitgalaxy#5118."""
+Planted: H-0061 (CICS BLL cells in INVTONL), H-0062 (SERVICE RELOAD in INVTRLD), H-0099 (a record over 4096 bytes
+addressed by a secondary BLL cell in INVTLRG), gitgalaxy#5118, #5119."""
 
 from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, section
 
 H61 = "H-0061"
 H62 = "H-0062"
+H63 = "H-0099"
 
 COPYBOOKS = [
     {"member": "INVTREC", "numbered": True, "header": [" INVTREC  - INVENTORY STOCK RECORD (80 BYTES)"],
@@ -164,6 +166,68 @@ INVTRLD = {
     ],
 }
 
+INVTLRG = {
+    "member": "INVTLRG",
+    "era": 1,
+    "era_evidence": "a LINKAGE record over 4096 bytes addressed by a second BLL cell set with ADD 4096 and then SERVICE RELOAD (CICS Application Programming Guide, Appendix B, 'BLL and large storage areas'): OS/VS COBOL, #5117 era 1",
+    "program_id": "INVTLRG",
+    "numbered": True,
+    "ident": "INVTLRG",
+    "banner": [
+        "*****************************************************************",
+        "*   INVTLRG  -  ONLINE STOCK DETAIL, LONG RECORD BY BLL CELLS   *",
+        "*   SYSTEM  :  INVT / INVENTORY CONTROL      DATE: 02/21/84     *",
+        "*****************************************************************",
+        "/",
+    ],
+    "author": "D KOWALCZYK",
+    "installation": "MATERIALS CONTROL",
+    "date_written": "02/21/84",
+    "remarks": ["INVTLRG - 5400 BYTE DETAIL RECORD, TWO BLL CELLS."],
+    "compile": "ibm-only",
+    "compile_reason": "SERVICE RELOAD is an OS/VS COBOL compiler control statement; GnuCOBOL -std=ibm rejects it",
+    "compile_check": ("service-reload", "every SERVICE RELOAD statement becomes CONTINUE (padded to the same width) for the check; the rest compiles as written"),
+    "phantoms": [
+        {"channel": "data_moves", "verb": "SERVICE", "target": t, "horror": H63,
+         "why": "SERVICE RELOAD is a compiler control statement that moves no data; its operand is a LINKAGE area, not a move target"}
+        for t in ("STK-LONG", "STK-FULL")],
+    "ws": [
+        I(1, "WS-PART-KEY", "X(10)"),
+    ],
+    "linkage": [
+        I(1, "BLL-CELLS", horror=H63, kids=[
+            I(2, "FILLER", "S9(8)", "COMP", horror=H63),
+            I(2, "LONG-BLL", "S9(8)", "COMP", horror=H63),
+            I(2, "LONG-BLL2", "S9(8)", "COMP", horror=H63),
+            I(2, "FULL-BLL", "S9(8)", "COMP", horror=H63),
+        ]),
+        I(1, "STK-LONG", horror=H63, kids=[
+            I(2, "LNG-HEADER", "X(4000)", horror=H63),
+            I(2, "LNG-DETAIL", "X(1000)", horror=H63),
+            I(2, "LNG-TRAILER", "X(400)", horror=H63),
+        ]),
+        I(1, "STK-FULL", horror=H63, kids=[
+            I(2, "FUL-BODY", "X(4096)", horror=H63),
+        ]),
+    ],
+    "units": [
+        section("0000-MAINLINE",
+                raw("MOVE SPACES TO WS-PART-KEY"),
+                cics("READ DATASET('INVTDTL') SET(LONG-BLL)", "RIDFLD(WS-PART-KEY)",
+                     resource={"verb": "READ", "kind": "FILE", "name": "INVTDTL", "record": "STK-LONG",
+                               "access": "read"},
+                     horror=H63),
+                raw("ADD 4096 LONG-BLL GIVING LONG-BLL2", horror=H63),
+                raw("SERVICE RELOAD STK-LONG", horror=H63),
+                cics("READ DATASET('INVTFUL') SET(FULL-BLL)", "RIDFLD(WS-PART-KEY)",
+                     resource={"verb": "READ", "kind": "FILE", "name": "INVTFUL", "record": "STK-FULL",
+                               "access": "read"},
+                     horror=H63),
+                raw("SERVICE RELOAD STK-FULL", horror=H63),
+                cics("RETURN")),
+    ],
+}
+
 JOBS = [
     {
         "name": "INVTDLY",
@@ -189,6 +253,6 @@ APP = {
     "title": "Inventory stock status (1983 batch deck)",
     "style": "1980s card deck: numbered cols 1-6, deck name in cols 73-80, upper case, SECTIONs, period-terminated IF",
     "copybooks": COPYBOOKS,
-    "programs": [INVTBAT, INVTONL, INVTRLD],
+    "programs": [INVTBAT, INVTONL, INVTRLD, INVTLRG],
     "jcl": JOBS,
 }
