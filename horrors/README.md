@@ -100,6 +100,8 @@ era-neutral syntax horror; blank is untagged.
 | H-0092 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQCONNX: the connect call that takes a connect options structure, which arrives by COPY | `apps/MQSA/cobol/MQSACNX.cbl` |
 | H-0093 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQSET: an attribute update whose selector and integer attribute are one-word blocks, on a queue opened for set | `apps/MQSA/cobol/MQSASET.cbl` |
 | H-0099 | 1 | [#5119](https://github.com/squid-protocol/gitgalaxy/issues/5119) | layouts | BLL and large storage areas: a LINKAGE record over 4096 bytes addressed by a second BLL cell set with ADD 4096 | `apps/INVT/cobol/INVTLRG.cbl` |
+| H-0100 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQI verbs called through a data item: CALL identifier whose VALUE names the MQ verb | `apps/MQSA/cobol/MQSADYN.cbl` |
+| H-0101 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQ trigger monitor: a program that MQGETs the trigger message structure (MQTM) from an initiation queue, the structure arriving by COPY | `apps/MQSA/cobol/MQSATRG.cbl` |
 
 ## Field-testing defects not planted
 

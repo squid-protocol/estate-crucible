@@ -7,13 +7,17 @@ Planted: H-0086 (MQPUT1 with no MQOPEN), H-0087 (MQGET with wait, loop ends on r
 and MQBACK), H-0089 (MQINQ over a selector block), H-0090 (the MQI structures arrive by COPY), H-0091 (the
 batch step: STEPLIB concatenation holding the MQ load libraries).
 Slice 2: H-0092 (MQCONNX, the connect call that takes an options structure by COPY) and H-0093 (MQSET, the
-attribute-setting sibling of MQINQ, opened with the set option)."""
+attribute-setting sibling of MQINQ, opened with the set option).
+Slice 3: H-0100 (the MQI verbs called through a data item, CALL identifier) and H-0101 (a trigger-monitor
+program that gets the MQTM trigger message from an initiation queue). Distribution lists are not planted:
+IBM documents them as not supported on IBM MQ for z/OS, and this is a z/OS estate."""
 
 from ..data import I
 from ..stmt import call, goback, if_, para, perform, raw
 
 H86, H87, H88, H89, H90, H91 = "H-0086", "H-0087", "H-0088", "H-0089", "H-0090", "H-0091"
 H92, H93 = "H-0092", "H-0093"
+H100, H101 = "H-0100", "H-0101"
 
 COPYBOOKS = [
     {"member": "MQSMD",
@@ -43,6 +47,17 @@ COPYBOOKS = [
      "items": [I(5, "MQS-CNO-VERSION", "S9(9)", "COMP", value="2"),
                I(5, "MQS-CNO-OPTIONS", "S9(9)", "COMP", value="0"),
                I(5, "MQS-CNO-APPNAME", "X(28)")]},
+    {"member": "MQSTM",
+     "header": [" MQSTM    - TRIGGER MESSAGE, STAND-IN WRITTEN FOR THIS ESTATE"],
+     "items": [I(5, "MQS-TM-STRUCID", "X(4)", value="'TM  '"),
+               I(5, "MQS-TM-VERSION", "S9(9)", "COMP", value="1"),
+               I(5, "MQS-TM-QNAME", "X(48)"),
+               I(5, "MQS-TM-PROCESS", "X(48)"),
+               I(5, "MQS-TM-TRIGDATA", "X(64)"),
+               I(5, "MQS-TM-APPTYPE", "S9(9)", "COMP", value="0"),
+               I(5, "MQS-TM-APPLID", "X(256)"),
+               I(5, "MQS-TM-ENVDATA", "X(128)"),
+               I(5, "MQS-TM-USERDATA", "X(128)")]},
 ]
 
 AUTHOR = "ORDER SYSTEMS"
@@ -247,6 +262,73 @@ MQSASET = {
     ],
 }
 
+MQSADYN = {
+    "member": "MQSADYN", **ERA,
+    "program_id": "MQSADYN", "author": AUTHOR,
+    "remarks": ["MQSADYN - PUT ONE AUDIT MESSAGE; THE MQI VERB NAMES",
+                "ARE HELD IN DATA ITEMS SO A TRACING STUB CAN REPLACE THEM."],
+    "ws": _common_ws(
+        I(1, "WS-V-CONN", "X(8)", value="'MQCONN'", horror=H100),
+        I(1, "WS-V-OPEN", "X(8)", value="'MQOPEN'", horror=H100),
+        I(1, "WS-V-PUT", "X(8)", value="'MQPUT'", horror=H100),
+        I(1, "WS-V-CLOSE", "X(8)", value="'MQCLOSE'", horror=H100),
+        I(1, "WS-V-DISC", "X(8)", value="'MQDISC'", horror=H100),
+        I(1, "WS-MD", copy=["MQSMD"]), I(1, "WS-OD", copy=["MQSOD"]), I(1, "WS-PMO", copy=["MQSPMO"])),
+    "units": [
+        para("0000-MAIN",
+             call("MQCONN", ident="WS-V-CONN", using=["WS-QMGR", "WS-HCONN", "WS-COMPCODE", "WS-REASON"],
+                  horror=H100),
+             _fail("MQSADYN", "CONNECT FAILED"),
+             perform("1000-PUT"),
+             call("MQDISC", ident="WS-V-DISC", using=["WS-HCONN", "WS-COMPCODE", "WS-REASON"],
+                  horror=H100),
+             goback(), horror=H100),
+        para("1000-PUT",
+             raw("MOVE 'AUDIT.LOG' TO MQS-OBJNAME", "MOVE 16 TO WS-OO-OPTIONS"),
+             call("MQOPEN", ident="WS-V-OPEN", using=["WS-HCONN", "WS-OD", "WS-OO-OPTIONS", "WS-HOBJ",
+                                                      "WS-COMPCODE", "WS-REASON"], horror=H100),
+             _fail("MQSADYN", "OPEN FAILED"),
+             raw("MOVE 'AUDIT RUN COMPLETE' TO WS-BUF"),
+             call("MQPUT", ident="WS-V-PUT", using=["WS-HCONN", "WS-HOBJ", "WS-MD", "WS-PMO", "WS-BUFLEN",
+                                                    "WS-BUF", "WS-COMPCODE", "WS-REASON"], horror=H100),
+             _fail("MQSADYN", "PUT FAILED"),
+             call("MQCLOSE", ident="WS-V-CLOSE", using=["WS-HCONN", "WS-HOBJ", "WS-CO-OPTIONS",
+                                                        "WS-COMPCODE", "WS-REASON"], horror=H100)),
+    ],
+}
+
+MQSATRG = {
+    "member": "MQSATRG", **ERA,
+    "program_id": "MQSATRG", "author": AUTHOR,
+    "remarks": ["MQSATRG - READ ONE TRIGGER MESSAGE FROM THE INITIATION QUEUE",
+                "AND NAME THE QUEUE THAT FIRED IT."],
+    "ws": _common_ws(
+        I(1, "WS-MD", copy=["MQSMD"]), I(1, "WS-OD", copy=["MQSOD"]), I(1, "WS-GMO", copy=["MQSGMO"]),
+        I(1, "WS-TM", copy=["MQSTM"], horror=H101)),
+    "units": [
+        para("0000-MAIN",
+             call("MQCONN", using=["WS-QMGR", "WS-HCONN", "WS-COMPCODE", "WS-REASON"]),
+             _fail("MQSATRG", "CONNECT FAILED"),
+             raw("MOVE 'ORDERS.INITQ' TO MQS-OBJNAME", "MOVE 1 TO WS-OO-OPTIONS"),
+             call("MQOPEN", using=["WS-HCONN", "WS-OD", "WS-OO-OPTIONS", "WS-HOBJ", "WS-COMPCODE",
+                                   "WS-REASON"]),
+             _fail("MQSATRG", "OPEN FAILED"),
+             perform("1000-GET"),
+             call("MQCLOSE", using=["WS-HCONN", "WS-HOBJ", "WS-CO-OPTIONS", "WS-COMPCODE", "WS-REASON"]),
+             call("MQDISC", using=["WS-HCONN", "WS-COMPCODE", "WS-REASON"]),
+             goback()),
+        para("1000-GET",
+             raw("MOVE 3 TO MQS-GMO-OPTIONS", "MOVE 30000 TO MQS-GMO-WAITINT",
+                 "MOVE 684 TO WS-BUFLEN"),
+             call("MQGET", using=["WS-HCONN", "WS-HOBJ", "WS-MD", "WS-GMO", "WS-BUFLEN", "WS-TM",
+                                  "WS-DATALEN", "WS-COMPCODE", "WS-REASON"], horror=H101),
+             if_("WS-COMPCODE = 0",
+                 [raw("DISPLAY 'MQSATRG TRIGGERED BY ' MQS-TM-QNAME", "DISPLAY 'MQSATRG PROCESS ' MQS-TM-PROCESS")],
+                 [raw("DISPLAY 'MQSATRG NO TRIGGER ' WS-REASON", "MOVE 4 TO RETURN-CODE")]),
+             horror=H101),
+    ],
+}
+
 
 def _dd(name, dsn=None, disp=("SHR",), **kw):
     return {"name": name, "dsn": dsn, "disp": disp, **kw}
@@ -273,6 +355,8 @@ JOBS = [{
         {"name": "INQ040", "pgm": "MQSAINQ", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
         {"name": "CNX050", "pgm": "MQSACNX", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
         {"name": "SET060", "pgm": "MQSASET", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
+        {"name": "DYN070", "pgm": "MQSADYN", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
+        {"name": "TRG080", "pgm": "MQSATRG", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
     ],
 }]
 
@@ -284,7 +368,7 @@ APP = {
     "style": "batch COBOL over the MQ programming interface: MQPUT1, MQGET with wait, MQCMIT / MQBACK, MQINQ, MQCONNX, MQSET",
     "copybooks": COPYBOOKS,
     "dclgen": [],
-    "programs": [MQSAPUT, MQSAGET, MQSAREP, MQSAINQ, MQSACNX, MQSASET],
+    "programs": [MQSAPUT, MQSAGET, MQSAREP, MQSAINQ, MQSACNX, MQSASET, MQSADYN, MQSATRG],
     "jcl": JOBS,
     "procs": [],
 }
