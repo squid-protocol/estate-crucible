@@ -1,0 +1,254 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0101",
+ "title": "MQ trigger monitor: a program that MQGETs the trigger message structure (MQTM) from an initiation queue, the structure arriving by COPY",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQSA MQSATRG: CALL 'MQGET' USING ... WS-TM ..., 01 WS-TM from COPY MQSTM (stand-in MQTM: structure id, version, queue name, process name, trigger data, application type, application id, environment data, user data)"
+ ],
+ "asserts": "MQSATRG's MQGET CALL is one call_sites fact (form literal, resolves_to null) with a call edge from 1000-GET and a gaps entry; the 01 group WS-TM carries copy_members MQSTM, which resolves to the estate's stand-in copybook under apps/MQSA/copybook. MQSTM holds the nine MQTM fields at the lengths IBM states (4, 10-digit integer, 48, 48, 64, 10-digit integer, 256, 128, 128), as data_items of the copybook.",
+ "citations": [
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQTM - Trigger message",
+   "url": "https://www.ibm.com/docs/en/SSFKSJ_9.3.0/refdev/q105970_.html",
+   "quote": "The MQTM structure describes the data in the trigger message that is sent by the queue manager to a trigger-monitor application when a trigger event occurs for a queue."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQTM - Trigger message (TMTD)",
+   "url": "https://www.ibm.com/docs/en/SSFKSJ_9.3.0/refdev/q105970_.html",
+   "quote": "This is free-format data for use by the trigger-monitor application that receives the trigger message."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/MQSA/cobol/MQSATRG.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "1000-GET",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 52,
+      "end_line": 65,
+      "horror": "H-0101"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "call",
+      "from": "1000-GET",
+      "target": "MQGET",
+      "line": 56,
+      "form": "literal",
+      "horror": "H-0101"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQGET",
+      "target": "MQGET",
+      "line": 56,
+      "resolves_to": null,
+      "horror": "H-0101"
+     }
+    ],
+    "copies": [
+     {
+      "member": "MQSTM",
+      "kind": "copy",
+      "line": 27,
+      "resolves_to": "apps/MQSA/copybook/MQSTM.cpy",
+      "horror": "H-0101"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-TM",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 26,
+      "copy_members": [
+       "MQSTM"
+      ],
+      "horror": "H-0101",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-TM",
+      "line": 26,
+      "bytes": 684,
+      "fields": [
+       {
+        "name": "MQS-TM-STRUCID",
+        "level": 5,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSTM.cpy"
+       },
+       {
+        "name": "MQS-TM-VERSION",
+        "level": 5,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 4,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSTM.cpy"
+       },
+       {
+        "name": "MQS-TM-QNAME",
+        "level": 5,
+        "pic": "X(48)",
+        "usage": null,
+        "offset": 8,
+        "bytes": 48,
+        "file": "apps/MQSA/copybook/MQSTM.cpy"
+       },
+       {
+        "name": "MQS-TM-PROCESS",
+        "level": 5,
+        "pic": "X(48)",
+        "usage": null,
+        "offset": 56,
+        "bytes": 48,
+        "file": "apps/MQSA/copybook/MQSTM.cpy"
+       },
+       {
+        "name": "MQS-TM-TRIGDATA",
+        "level": 5,
+        "pic": "X(64)",
+        "usage": null,
+        "offset": 104,
+        "bytes": 64,
+        "file": "apps/MQSA/copybook/MQSTM.cpy"
+       },
+       {
+        "name": "MQS-TM-APPTYPE",
+        "level": 5,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 168,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSTM.cpy"
+       },
+       {
+        "name": "MQS-TM-APPLID",
+        "level": 5,
+        "pic": "X(256)",
+        "usage": null,
+        "offset": 172,
+        "bytes": 256,
+        "file": "apps/MQSA/copybook/MQSTM.cpy"
+       },
+       {
+        "name": "MQS-TM-ENVDATA",
+        "level": 5,
+        "pic": "X(128)",
+        "usage": null,
+        "offset": 428,
+        "bytes": 128,
+        "file": "apps/MQSA/copybook/MQSTM.cpy"
+       },
+       {
+        "name": "MQS-TM-USERDATA",
+        "level": 5,
+        "pic": "X(128)",
+        "usage": null,
+        "offset": 556,
+        "bytes": 128,
+        "file": "apps/MQSA/copybook/MQSTM.cpy"
+       }
+      ],
+      "horror": "H-0101",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "3",
+      "source_kind": "literal",
+      "target": "MQS-GMO-OPTIONS",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 53,
+      "horror": "H-0101"
+     },
+     {
+      "verb": "MOVE",
+      "source": "30000",
+      "source_kind": "literal",
+      "target": "MQS-GMO-WAITINT",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 54,
+      "horror": "H-0101"
+     },
+     {
+      "verb": "MOVE",
+      "source": "684",
+      "source_kind": "literal",
+      "target": "WS-BUFLEN",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 55,
+      "horror": "H-0101"
+     },
+     {
+      "verb": "MOVE",
+      "source": "4",
+      "source_kind": "literal",
+      "target": "RETURN-CODE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 64,
+      "horror": "H-0101"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "MQGET",
+      "line": 56,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0101"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

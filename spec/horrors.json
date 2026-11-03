@@ -2366,6 +2366,56 @@
    ],
    "notes": "Source opened and read (the PDF's text): CICS TS for OS/390 R3 Application Programming Guide (SC33-1687-02), Appendix B, printed pp. 572-574. Figure 120 shows the form this member follows: a 5400-byte FILE-REC (4000 + 1000 + 400) with cells FRPTR and FRPTR1 and ADD 4096 FRPTR GIVING FRPTR1 after the READ SET. The manual says 'greater than 4096 bytes'; that a record of exactly 4096 bytes needs no secondary cell is read from that wording, not stated as a number. The 4-byte cell width is from the PICTUREs (S9(8) COMP), as in H-0061. Statements are original, not IBM's. Like H-0062 the member is ibm-only with the service-reload check_variant. Still uncited: the OS/VS COBOL Programmer's Guide; no 'release' (the manual names compilers, not a CICS release).",
    "era": 1
+  },
+  {
+   "id": "H-0100",
+   "title": "MQI verbs called through a data item: CALL identifier whose VALUE names the MQ verb",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQSA MQSADYN: 01 WS-V-CONN PIC X(8) VALUE 'MQCONN' (likewise MQOPEN, MQPUT, MQCLOSE, MQDISC) and CALL WS-V-CONN USING ... instead of CALL 'MQCONN' USING ..."
+   ],
+   "asserts": "Each CALL in MQSADYN is a call_sites fact of form identifier (operand the data item, target the verb held in its VALUE clause, resolves_to null), with a call edge from the paragraph that holds it and a gaps entry because no estate member holds the MQ stub. The five verb-name data items are data_items. The key does not fold an identifier CALL into a literal CALL, and does not drop it because the verb is a vendor entry point.",
+   "citations": [
+    {
+     "doc": "IBM Enterprise COBOL for z/OS Language Reference",
+     "section": "CALL statement",
+     "url": "https://www.ibm.com/docs/en/SS6SG3_6.4.0/lr/ref/rlpscall.html",
+     "quote": "identifier-1 must be an alphanumeric, alphabetic, or numeric data item described with USAGE DISPLAY such that its value can be a program-name."
+    },
+    {
+     "doc": "IBM Enterprise COBOL for z/OS Language Reference",
+     "section": "CALL statement",
+     "url": "https://www.ibm.com/docs/en/SS6SG3_6.4.0/lr/ref/rlpscall.html",
+     "quote": "literal-1 must be an alphanumeric literal."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0101",
+   "title": "MQ trigger monitor: a program that MQGETs the trigger message structure (MQTM) from an initiation queue, the structure arriving by COPY",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQSA MQSATRG: CALL 'MQGET' USING ... WS-TM ..., 01 WS-TM from COPY MQSTM (stand-in MQTM: structure id, version, queue name, process name, trigger data, application type, application id, environment data, user data)"
+   ],
+   "asserts": "MQSATRG's MQGET CALL is one call_sites fact (form literal, resolves_to null) with a call edge from 1000-GET and a gaps entry; the 01 group WS-TM carries copy_members MQSTM, which resolves to the estate's stand-in copybook under apps/MQSA/copybook. MQSTM holds the nine MQTM fields at the lengths IBM states (4, 10-digit integer, 48, 48, 64, 10-digit integer, 256, 128, 128), as data_items of the copybook.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQTM - Trigger message",
+     "url": "https://www.ibm.com/docs/en/SSFKSJ_9.3.0/refdev/q105970_.html",
+     "quote": "The MQTM structure describes the data in the trigger message that is sent by the queue manager to a trigger-monitor application when a trigger event occurs for a queue."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQTM - Trigger message (TMTD)",
+     "url": "https://www.ibm.com/docs/en/SSFKSJ_9.3.0/refdev/q105970_.html",
+     "quote": "This is free-format data for use by the trigger-monitor application that receives the trigger message."
+    }
+   ],
+   "era": 2
   }
  ],
  "not_planted": [

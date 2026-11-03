@@ -14,6 +14,8 @@ stand-in copybooks (IBM's are never shipped), and the STEPLIB concatenation of a
 | `MQSARUN` step `PUT010` | `//STEPLIB` followed by `MQM.SCSQAUTH` and `MQM.SCSQLOAD` concatenations | H-0091 |
 | `MQSACNX` | MQCONNX with a connect options structure from `COPY MQSCNO` | H-0092 |
 | `MQSASET` | MQSET (opened with the set option) over one-word selector and integer blocks | H-0093 |
+| `MQSADYN` | the MQI verbs called through data items: `CALL WS-V-CONN USING ...` with `VALUE 'MQCONN'` | H-0100 |
+| `MQSATRG` | MQGET of the trigger message structure from an initiation queue, `COPY MQSTM` | H-0101 |
 | `MQSAPUT` | MQOPEN / MQPUT / MQCLOSE (no dedicated horror) | |
 
 Slice 2 adds `MQSACNX`, `MQSASET`, the stand-in copybook `MQSCNO` and `MQSARUN` steps `CNX050`, `SET060`.
@@ -25,6 +27,14 @@ Generator change: `op_call` in `generator/cobol.py` now wraps a long `USING` lis
 The MQ CALLs are keyed as `call_sites` with `resolves_to` null and as `gaps` (no estate member holds the
 MQ stub). The gitgalaxy scorer has no MQ-specific channel, so no new scoring fields were added.
 
+Slice 3 adds `MQSADYN`, `MQSATRG`, the stand-in copybook `MQSTM` (the nine MQTM fields at IBM's lengths, 684 bytes)
+and `MQSARUN` steps `DYN070`, `TRG080`. `CALL identifier` is keyed form `identifier` with the target taken from the
+item's VALUE, as in the other apps; no generator change was needed.
+
+Not planted, on purpose: MQPUT with a distribution list. IBM's MQPUT page marks distribution lists "Not supported on
+IBM MQ for z/OS", and this is a z/OS estate, so the member would be invalid there. It stays out until an estate
+targets a distributed queue manager.
+
 ## First-time run
 
 | date | engine commit | scan | translate | result |
@@ -33,5 +43,5 @@ MQ stub). The gitgalaxy scorer has no MQ-specific channel, so no new scoring fie
 
 The first run needs the owner's estate-crucible release and pin bump.
 
-Remaining slices: MQPUT with distribution lists; RRS stubs (CSQBRSTB, CSQBSTUB link-edit);
-MQ triggers; IMS and CICS-MQ bridge programs; an MQ-only back-out fixture; dynamic CALLs to MQ verbs.
+Remaining slices: RRS stubs (CSQBRSTB, CSQBSTUB link-edit); IMS and CICS-MQ bridge programs; an MQ-only
+back-out fixture; trigger monitor start-up (MQTMC2, the character form passed to the started program).

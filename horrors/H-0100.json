@@ -1,0 +1,344 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0100",
+ "title": "MQI verbs called through a data item: CALL identifier whose VALUE names the MQ verb",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQSA MQSADYN: 01 WS-V-CONN PIC X(8) VALUE 'MQCONN' (likewise MQOPEN, MQPUT, MQCLOSE, MQDISC) and CALL WS-V-CONN USING ... instead of CALL 'MQCONN' USING ..."
+ ],
+ "asserts": "Each CALL in MQSADYN is a call_sites fact of form identifier (operand the data item, target the verb held in its VALUE clause, resolves_to null), with a call edge from the paragraph that holds it and a gaps entry because no estate member holds the MQ stub. The five verb-name data items are data_items. The key does not fold an identifier CALL into a literal CALL, and does not drop it because the verb is a vendor entry point.",
+ "citations": [
+  {
+   "doc": "IBM Enterprise COBOL for z/OS Language Reference",
+   "section": "CALL statement",
+   "url": "https://www.ibm.com/docs/en/SS6SG3_6.4.0/lr/ref/rlpscall.html",
+   "quote": "identifier-1 must be an alphanumeric, alphabetic, or numeric data item described with USAGE DISPLAY such that its value can be a program-name."
+  },
+  {
+   "doc": "IBM Enterprise COBOL for z/OS Language Reference",
+   "section": "CALL statement",
+   "url": "https://www.ibm.com/docs/en/SS6SG3_6.4.0/lr/ref/rlpscall.html",
+   "quote": "literal-1 must be an alphanumeric literal."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/MQSA/cobol/MQSADYN.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "0000-MAIN",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 32,
+      "end_line": 41,
+      "horror": "H-0100"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "WS-V-CONN",
+      "line": 33,
+      "form": "identifier",
+      "horror": "H-0100"
+     },
+     {
+      "kind": "perform",
+      "from": "0000-MAIN",
+      "target": "1000-PUT",
+      "line": 39,
+      "horror": "H-0100"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "WS-V-DISC",
+      "line": 40,
+      "form": "identifier",
+      "horror": "H-0100"
+     },
+     {
+      "kind": "call",
+      "from": "1000-PUT",
+      "target": "WS-V-OPEN",
+      "line": 45,
+      "form": "identifier",
+      "horror": "H-0100"
+     },
+     {
+      "kind": "call",
+      "from": "1000-PUT",
+      "target": "WS-V-PUT",
+      "line": 54,
+      "form": "identifier",
+      "horror": "H-0100"
+     },
+     {
+      "kind": "call",
+      "from": "1000-PUT",
+      "target": "WS-V-CLOSE",
+      "line": 62,
+      "form": "identifier",
+      "horror": "H-0100"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "identifier",
+      "operand": "WS-V-CONN",
+      "target": "MQCONN",
+      "line": 33,
+      "resolves_to": null,
+      "horror": "H-0100"
+     },
+     {
+      "verb": "CALL",
+      "form": "identifier",
+      "operand": "WS-V-DISC",
+      "target": "MQDISC",
+      "line": 40,
+      "resolves_to": null,
+      "horror": "H-0100"
+     },
+     {
+      "verb": "CALL",
+      "form": "identifier",
+      "operand": "WS-V-OPEN",
+      "target": "MQOPEN",
+      "line": 45,
+      "resolves_to": null,
+      "horror": "H-0100"
+     },
+     {
+      "verb": "CALL",
+      "form": "identifier",
+      "operand": "WS-V-PUT",
+      "target": "MQPUT",
+      "line": 54,
+      "resolves_to": null,
+      "horror": "H-0100"
+     },
+     {
+      "verb": "CALL",
+      "form": "identifier",
+      "operand": "WS-V-CLOSE",
+      "target": "MQCLOSE",
+      "line": 62,
+      "resolves_to": null,
+      "horror": "H-0100"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-V-CONN",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'MQCONN'",
+      "section": "WORKING-STORAGE",
+      "line": 20,
+      "horror": "H-0100"
+     },
+     {
+      "level": 1,
+      "name": "WS-V-OPEN",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'MQOPEN'",
+      "section": "WORKING-STORAGE",
+      "line": 21,
+      "horror": "H-0100"
+     },
+     {
+      "level": 1,
+      "name": "WS-V-PUT",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'MQPUT'",
+      "section": "WORKING-STORAGE",
+      "line": 22,
+      "horror": "H-0100"
+     },
+     {
+      "level": 1,
+      "name": "WS-V-CLOSE",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'MQCLOSE'",
+      "section": "WORKING-STORAGE",
+      "line": 23,
+      "horror": "H-0100"
+     },
+     {
+      "level": 1,
+      "name": "WS-V-DISC",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'MQDISC'",
+      "section": "WORKING-STORAGE",
+      "line": 24,
+      "horror": "H-0100"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-V-CONN",
+      "line": 20,
+      "bytes": 8,
+      "fields": [
+       {
+        "name": "WS-V-CONN",
+        "level": 1,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 8,
+        "file": "apps/MQSA/cobol/MQSADYN.cbl"
+       }
+      ],
+      "horror": "H-0100"
+     },
+     {
+      "record": "WS-V-OPEN",
+      "line": 21,
+      "bytes": 8,
+      "fields": [
+       {
+        "name": "WS-V-OPEN",
+        "level": 1,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 8,
+        "file": "apps/MQSA/cobol/MQSADYN.cbl"
+       }
+      ],
+      "horror": "H-0100"
+     },
+     {
+      "record": "WS-V-PUT",
+      "line": 22,
+      "bytes": 8,
+      "fields": [
+       {
+        "name": "WS-V-PUT",
+        "level": 1,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 8,
+        "file": "apps/MQSA/cobol/MQSADYN.cbl"
+       }
+      ],
+      "horror": "H-0100"
+     },
+     {
+      "record": "WS-V-CLOSE",
+      "line": 23,
+      "bytes": 8,
+      "fields": [
+       {
+        "name": "WS-V-CLOSE",
+        "level": 1,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 8,
+        "file": "apps/MQSA/cobol/MQSADYN.cbl"
+       }
+      ],
+      "horror": "H-0100"
+     },
+     {
+      "record": "WS-V-DISC",
+      "line": 24,
+      "bytes": 8,
+      "fields": [
+       {
+        "name": "WS-V-DISC",
+        "level": 1,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 8,
+        "file": "apps/MQSA/cobol/MQSADYN.cbl"
+       }
+      ],
+      "horror": "H-0100"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "12",
+      "source_kind": "literal",
+      "target": "RETURN-CODE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 36,
+      "horror": "H-0100"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "MQCONN",
+      "line": 33,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0100"
+     },
+     {
+      "kind": "call",
+      "name": "MQDISC",
+      "line": 40,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0100"
+     },
+     {
+      "kind": "call",
+      "name": "MQOPEN",
+      "line": 45,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0100"
+     },
+     {
+      "kind": "call",
+      "name": "MQPUT",
+      "line": 54,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0100"
+     },
+     {
+      "kind": "call",
+      "name": "MQCLOSE",
+      "line": 62,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0100"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
