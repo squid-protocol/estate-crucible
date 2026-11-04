@@ -1,0 +1,111 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0102",
+ "title": "ICETOOL operators beyond COPY: COUNT, SELECT, OCCUR, STATS in a TOOLIN stream",
+ "category": "jcl",
+ "issue": 4890,
+ "shapes": [
+  "BDLD jcl/BDLDUT3.jcl ICE010: TOOLIN holds COUNT FROM(IN) EMPTY, SELECT FROM(IN) TO(OUT) ON(1,10,CH) ALLDUPS, OCCUR FROM(IN) LIST(RPT) ON(1,10,CH), STATS FROM(IN) ON(21,5,ZD)"
+ ],
+ "asserts": "Each ICETOOL operator in the inline TOOLIN stream is one jcl_utility_cards fact with utility ICETOOL, dd TOOLIN, the operator as verb (COUNT, SELECT, OCCUR, STATS) and its operands (FROM / TO / LIST / ON ... as written).",
+ "citations": [
+  {
+   "doc": "DFSORT: ICETOOL Mini-User Guide (October 2010)",
+   "section": "COUNT operator",
+   "url": "https://ibm.com/support/pages/system/files/inline-files/$FILE/sorttool.pdf",
+   "quote": "COUNT - prints a message in TOOLMSG containing the count of records in a data set."
+  },
+  {
+   "doc": "DFSORT: ICETOOL Mini-User Guide (October 2010)",
+   "section": "SELECT operator",
+   "url": "https://ibm.com/support/pages/system/files/inline-files/$FILE/sorttool.pdf",
+   "quote": "SELECT - selects records from a data set for inclusion in an output data set based on meeting criteria for the number of times specified numeric or character field values occur"
+  },
+  {
+   "doc": "DFSORT: ICETOOL Mini-User Guide (October 2010)",
+   "section": "OCCUR operator",
+   "url": "https://ibm.com/support/pages/system/files/inline-files/$FILE/sorttool.pdf",
+   "quote": "OCCUR - prints each unique value for specified numeric and character fields and how many times it occurs in a separate list data set."
+  },
+  {
+   "doc": "DFSORT: ICETOOL Mini-User Guide (October 2010)",
+   "section": "STATS operator",
+   "url": "https://ibm.com/support/pages/system/files/inline-files/$FILE/sorttool.pdf",
+   "quote": "STATS - prints messages in TOOLMSG containing the minimum, maximum, average, and total for specified numeric fields in a data set."
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDUT3.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "ICE010",
+      "dd": "TOOLIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 11,
+      "inline_lines": 4,
+      "horror": "H-0102"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "ICE010",
+      "utility": "ICETOOL",
+      "dd": "TOOLIN",
+      "verb": "COUNT",
+      "operands": "FROM(IN) EMPTY",
+      "line": 12,
+      "horror": "H-0102"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "ICE010",
+      "utility": "ICETOOL",
+      "dd": "TOOLIN",
+      "verb": "SELECT",
+      "operands": "FROM(IN) TO(OUT) ON(1,10,CH) ALLDUPS",
+      "line": 13,
+      "horror": "H-0102"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "ICE010",
+      "utility": "ICETOOL",
+      "dd": "TOOLIN",
+      "verb": "OCCUR",
+      "operands": "FROM(IN) LIST(RPT) ON(1,10,CH)",
+      "line": 14,
+      "horror": "H-0102"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "ICE010",
+      "utility": "ICETOOL",
+      "dd": "TOOLIN",
+      "verb": "STATS",
+      "operands": "FROM(IN) ON(21,5,ZD)",
+      "line": 15,
+      "horror": "H-0102"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

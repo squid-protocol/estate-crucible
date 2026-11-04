@@ -1,0 +1,157 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0104",
+ "title": "Data set utility control statements: IEBUPDTE ./ ADD and ./ ENDUP with data lines between, IEBPTPCH PRINT / MEMBER / RECORD, IEBCOMPR COMPARE",
+ "category": "jcl",
+ "issue": 4890,
+ "shapes": [
+  "BDLD jcl/BDLDUT3.jcl UPD040: IEBUPDTE PARM=NEW, SYSIN holds ./ ADD NAME=BDLDNOTE,LIST=ALL, two data lines, ./ ENDUP",
+  "BDLD jcl/BDLDUT3.jcl PCH050: IEBPTPCH PRINT, MEMBER, RECORD",
+  "BDLD jcl/BDLDUT3.jcl CMP060: IEBCOMPR COMPARE TYPORG=PS"
+ ],
+ "asserts": "Each control statement is one jcl_utility_cards fact with the step's PGM as utility. IEBUPDTE's ./ statements have verb './' and operands 'ADD NAME=...' / 'ENDUP'; the data lines between them are member text, not control statements, and have no fact. PRINT, MEMBER and RECORD are three facts, as is COMPARE.",
+ "citations": [
+  {
+   "doc": "z/OS DFSMSdfp Utilities",
+   "section": "IEBUPDTE",
+   "url": "https://www.ibm.com/docs/zosbasics/com.ibm.zos.zdatamgmt/zsysprogc_utilities_IEBUPDTE.htm",
+   "quote": "The IEBUPDTE utility uses control statements with the symbols ./ (a period and slash) in the first two columns."
+  },
+  {
+   "doc": "z/OS DFSMSdfp Utilities",
+   "section": "Data set utility programs: IEBPTPCH",
+   "url": "https://www.ibm.com/docs/en/zos/latest?topic=introduction-data-set-utility-programs",
+   "quote": "Print or punch records in a sequential or partitioned data set."
+  },
+  {
+   "doc": "z/OS DFSMSdfp Utilities",
+   "section": "Data set utility programs: IEBCOMPR",
+   "url": "https://www.ibm.com/docs/en/zos/latest?topic=introduction-data-set-utility-programs",
+   "quote": "Compare records in sequential or partitioned data sets, or PDSEs."
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDUT3.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "UPD040",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 46,
+      "inline_lines": 4,
+      "horror": "H-0104"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "PCH050",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 57,
+      "inline_lines": 3,
+      "horror": "H-0104"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "CMP060",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 67,
+      "inline_lines": 1,
+      "horror": "H-0104"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "UPD040",
+      "utility": "IEBUPDTE",
+      "dd": "SYSIN",
+      "verb": "./",
+      "operands": "ADD NAME=BDLDNOTE,LIST=ALL",
+      "line": 47,
+      "horror": "H-0104"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "UPD040",
+      "utility": "IEBUPDTE",
+      "dd": "SYSIN",
+      "verb": "./",
+      "operands": "ENDUP",
+      "line": 50,
+      "horror": "H-0104"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "PCH050",
+      "utility": "IEBPTPCH",
+      "dd": "SYSIN",
+      "verb": "PRINT",
+      "operands": "TYPORG=PO,MAXFLDS=1",
+      "line": 58,
+      "horror": "H-0104"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "PCH050",
+      "utility": "IEBPTPCH",
+      "dd": "SYSIN",
+      "verb": "MEMBER",
+      "operands": "NAME=BDLDNOTE",
+      "line": 59,
+      "horror": "H-0104"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "PCH050",
+      "utility": "IEBPTPCH",
+      "dd": "SYSIN",
+      "verb": "RECORD",
+      "operands": "FIELD=(80)",
+      "line": 60,
+      "horror": "H-0104"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "CMP060",
+      "utility": "IEBCOMPR",
+      "dd": "SYSIN",
+      "verb": "COMPARE",
+      "operands": "TYPORG=PS",
+      "line": 68,
+      "horror": "H-0104"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

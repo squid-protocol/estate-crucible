@@ -1,0 +1,62 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0105",
+ "title": "IEFBR14 allocating a data set by DISP=(NEW,CATLG) and deleting it by DISP=(OLD,DELETE)",
+ "category": "jcl",
+ "issue": 4890,
+ "shapes": [
+  "BDLD jcl/BDLDUT3.jcl ALC070: EXEC PGM=IEFBR14, DD NEWDD DISP=(NEW,CATLG)",
+  "BDLD jcl/BDLDUT3.jcl DEL080: EXEC PGM=IEFBR14, DD OLDDD DISP=(OLD,DELETE) on the same DSN"
+ ],
+ "asserts": "Each DD names PROD.BDLD.WORKFILE: jcl_datasets rows for both, jcl_dds disp NEW / disp_normal CATLG and disp OLD / disp_normal DELETE. IEFBR14 is system supplied: no gap and no program edge into the estate.",
+ "citations": [
+  {
+   "doc": "z/OS DFSMSdfp Utilities",
+   "section": "IEFBR14",
+   "url": "https://www.ibm.com/docs/zosbasics/com.ibm.zos.zdatamgmt/zsysprogc_utilities_IEFBR14.htm",
+   "quote": "The utility program IEFBR14 performs no action other than return a completion code of 0"
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+   "section": "DD statement > DISP parameter > Normal termination disposition subparameter",
+   "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/iea3b6_Normal_termination_disposition_subparameter.htm",
+   "quote": "Indicates that, if the step terminates normally, the system is to place an entry pointing to the data set in the catalog."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+   "section": "DD statement > DISP parameter > Normal termination disposition subparameter",
+   "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/iea3b6_Normal_termination_disposition_subparameter.htm",
+   "quote": "Indicates that the data set is no longer needed if this step terminates normally."
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDUT3.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_datasets": [
+     {
+      "dsn": "PROD.BDLD.WORKFILE",
+      "generation": null,
+      "step": "ALC070",
+      "dd": "NEWDD",
+      "line": 72,
+      "horror": "H-0105"
+     },
+     {
+      "dsn": "PROD.BDLD.WORKFILE",
+      "generation": null,
+      "step": "DEL080",
+      "dd": "OLDDD",
+      "line": 76,
+      "horror": "H-0105"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

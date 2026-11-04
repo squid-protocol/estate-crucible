@@ -8,7 +8,9 @@ H-0067 (utility control cards), H-0068 (IKJEFT01 running a Db2 program), H-0069 
 H-0070 (GDG (0) / (+1) in one job), H-0071 (a cataloged procedure with symbolic parameters, run through
 JCLLIB), H-0072 (further utility control cards: IDCAMS LISTCAT / ALTER / PRINT, IEBCOPY, DFSORT JOINKEYS /
 OUTFIL), H-0073 (checkpoint restart: RD=R, SYSCKEOV, RESTART=(step,checkid) with SYSCHK), H-0074 (SYSOUT forms,
-DD DUMMY, COND=EVEN / ONLY), H-0075 (overrides of a cataloged procedure's PARM, COND and DD)."""
+DD DUMMY, COND=EVEN / ONLY), H-0075 (overrides of a cataloged procedure's PARM, COND and DD), H-0102 (ICETOOL
+COUNT / SELECT / OCCUR / STATS), H-0103 (DFSORT INREC IFTHEN, PARSE, OUTFIL BUILD / OVERLAY), H-0104 (IEBUPDTE,
+IEBPTPCH, IEBCOMPR control statements), H-0105 (IEFBR14 allocating and deleting data sets by DISP)."""
 
 from ..data import I
 from ..stmt import goback, if_, para, perform, raw, read, sql
@@ -16,6 +18,7 @@ from ..stmt import goback, if_, para, perform, raw, read, sql
 H64, H65, H66, H67, H68, H69, H70, H71, H72, H73, H74, H75 = (
     "H-0064", "H-0065", "H-0066", "H-0067", "H-0068", "H-0069", "H-0070", "H-0071", "H-0072", "H-0073", "H-0074",
     "H-0075")
+H102, H103, H104, H105 = "H-0102", "H-0103", "H-0104", "H-0105"
 
 COPYBOOKS = [
     {"member": "BDLREC", "header": [" BDLREC   - SORTED TRANSACTION EXTRACT (40 BYTES)"],
@@ -294,6 +297,86 @@ JOBS = [
                     ("OUTFIL", " OUTFIL FNAMES=OUT1,INCLUDE=(35,1,CH,EQ,C'A')"),
                     ("OUTFIL", " OUTFIL FNAMES=OUT2,SAVE"),
                 ]},
+            ]},
+        ],
+    },
+    {
+        # ICETOOL operators, DFSORT IFTHEN / PARSE / OUTFIL, the IEB data set utilities, IEFBR14 by DISP
+        "name": "BDLDUT3",
+        "title": "BDLD UTILITIES 3",
+        "accounting": "(BDLD,0100)",
+        "steps": [
+            {"name": "ICE010", "pgm": "ICETOOL", "dds": [
+                {"name": "TOOLMSG", "sysout": "*"},
+                {"name": "DFSMSG", "sysout": "*"},
+                _dd("IN", "PROD.BDLD.XREFIN"),
+                _dd("OUT", "PROD.BDLD.DUPS", ("NEW", "CATLG", "DELETE"),
+                    extra=["UNIT=SYSDA", "SPACE=(CYL,(1,1))", "DCB=(RECFM=FB,LRECL=40)"]),
+                {"name": "RPT", "sysout": "*"},
+                {"name": "TOOLIN", "horror": H102, "inline": [
+                    ("COUNT", "COUNT FROM(IN) EMPTY"),
+                    ("SELECT", "SELECT FROM(IN) TO(OUT) ON(1,10,CH) ALLDUPS"),
+                    ("OCCUR", "OCCUR FROM(IN) LIST(RPT) ON(1,10,CH)"),
+                    ("STATS", "STATS FROM(IN) ON(21,5,ZD)"),
+                ]},
+            ]},
+            {"name": "SRT020", "pgm": "SORT", "dds": [
+                _dd("SORTIN", "PROD.BDLD.XREFIN"),
+                _dd("SORTOUT", "PROD.BDLD.XREFFLG", ("NEW", "CATLG", "DELETE"),
+                    extra=["UNIT=SYSDA", "SPACE=(CYL,(1,1))", "DCB=(RECFM=FB,LRECL=40)"]),
+                {"name": "SYSOUT", "sysout": "*"},
+                {"name": "SYSIN", "horror": H103, "inline": [
+                    ("SORT", " SORT FIELDS=(1,10,CH,A)"),
+                    ("INREC", " INREC IFTHEN=(WHEN=(35,1,CH,EQ,C'A'),OVERLAY=(36:C'ACTIVE'))"),
+                ]},
+            ]},
+            {"name": "SRT030", "pgm": "SORT", "dds": [
+                _dd("SORTIN", "PROD.BDLD.XREFCSV"),
+                {"name": "SYSOUT", "sysout": "*"},
+                _dd("OUT1", "PROD.BDLD.PARSED1", ("NEW", "CATLG", "DELETE"),
+                    extra=["UNIT=SYSDA", "SPACE=(CYL,(1,1))", "DCB=(RECFM=FB,LRECL=40)"]),
+                _dd("OUT2", "PROD.BDLD.PARSED2", ("NEW", "CATLG", "DELETE"),
+                    extra=["UNIT=SYSDA", "SPACE=(CYL,(1,1))", "DCB=(RECFM=FB,LRECL=40)"]),
+                {"name": "SYSIN", "horror": H103, "inline": [
+                    ("SORT", " SORT FIELDS=COPY"),
+                    ("INREC", " INREC PARSE=(%01=(ENDBEFR=C',',FIXLEN=10)),BUILD=(%01,11:C'X')"),
+                    ("OUTFIL", " OUTFIL FNAMES=OUT1,OVERLAY=(41:C'ZZ')"),
+                    ("OUTFIL", " OUTFIL FNAMES=OUT2,BUILD=(1,10,C' ',11,5)"),
+                ]},
+            ]},
+            {"name": "UPD040", "pgm": "IEBUPDTE", "parm": "NEW", "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                _dd("SYSUT2", "PROD.BDLD.NOTES", ("NEW", "CATLG", "DELETE"),
+                    extra=["UNIT=SYSDA", "SPACE=(TRK,(5,1,5))", "DCB=(RECFM=FB,LRECL=80,BLKSIZE=800)"]),
+                {"name": "SYSIN", "horror": H104, "inline": [
+                    ("./", "./ ADD NAME=BDLDNOTE,LIST=ALL"),
+                    "BDLD NIGHTLY RUN NOTES, LINE ONE",
+                    "BDLD NIGHTLY RUN NOTES, LINE TWO",
+                    ("./", "./ ENDUP"),
+                ]},
+            ]},
+            {"name": "PCH050", "pgm": "IEBPTPCH", "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                _dd("SYSUT1", "PROD.BDLD.NOTES"),
+                {"name": "SYSUT2", "sysout": "A"},
+                {"name": "SYSIN", "horror": H104, "inline": [
+                    ("PRINT", " PRINT TYPORG=PO,MAXFLDS=1"),
+                    ("MEMBER", " MEMBER NAME=BDLDNOTE"),
+                    ("RECORD", " RECORD FIELD=(80)"),
+                ]},
+            ]},
+            {"name": "CMP060", "pgm": "IEBCOMPR", "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                _dd("SYSUT1", "PROD.BDLD.XREFIN"),
+                _dd("SYSUT2", "PROD.BDLD.XREFFLG"),
+                {"name": "SYSIN", "horror": H104, "inline": [("COMPARE", " COMPARE TYPORG=PS")]},
+            ]},
+            {"name": "ALC070", "pgm": "IEFBR14", "dds": [
+                _dd("NEWDD", "PROD.BDLD.WORKFILE", ("NEW", "CATLG"), horror=H105,
+                    extra=["UNIT=SYSDA", "SPACE=(CYL,(1,1))", "DCB=(RECFM=FB,LRECL=40)"]),
+            ]},
+            {"name": "DEL080", "pgm": "IEFBR14", "dds": [
+                _dd("OLDDD", "PROD.BDLD.WORKFILE", ("OLD", "DELETE"), horror=H105),
             ]},
         ],
     },
