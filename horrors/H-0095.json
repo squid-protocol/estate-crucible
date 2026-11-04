@@ -1,0 +1,177 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0095",
+ "title": "A COBOL RERUN clause in I-O-CONTROL names a checkpoint data set that no SELECT assigns",
+ "category": "cobol",
+ "issue": 4891,
+ "shapes": [
+  "BDLD cobol/BDLDCKP.cbl: I-O-CONTROL. RERUN ON SYSCKPT EVERY 1000 RECORDS OF TRAN-FILE",
+  "BDLD jcl/BDLDCKJ.jcl CKP010: SYSCKPT DD DSN=PROD.BDLD.CHKPT, the checkpoint data set, beside TRANIN, the file's own DD"
+ ],
+ "asserts": "The SELECT of TRAN-FILE is one file_control fact assigned to TRANIN and carrying rerun {assign SYSCKPT, every 1000}. SYSCKPT is the checkpoint file's assignment-name, not a file of the program: no file_control fact for it. I-O-CONTROL is a paragraph of the ENVIRONMENT DIVISION, not a unit.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.3 Language Reference (SC27-8713-02)",
+   "section": "RERUN clause",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr30.pdf",
+   "quote": "The RERUN clause specifies that checkpoint records are to be taken."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.3 Language Reference (SC27-8713-02)",
+   "section": "RERUN clause > assignment-name-1",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr30.pdf",
+   "quote": "It must not be the same assignment-name as that specified in any ASSIGN clause throughout the entire program, including contained and containing programs."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.3 Language Reference (SC27-8713-02)",
+   "section": "RERUN clause > EVERY integer-1 RECORDS",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr30.pdf",
+   "quote": "A checkpoint record is to be written for every integer-1 records in file-name-1 that are processed."
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/cobol/BDLDCKP.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "file_control": [
+     {
+      "select": "TRAN-FILE",
+      "assign": "TRANIN",
+      "organization": "SEQUENTIAL",
+      "access_mode": null,
+      "record_key": null,
+      "file_status": "WS-TRAN-STATUS",
+      "fd_copies": [
+       "BDLREC"
+      ],
+      "line": 11,
+      "rerun": {
+       "assign": "SYSCKPT",
+       "every": 1000
+      },
+      "horror": "H-0095"
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "units",
+     "name": "I-O-CONTROL",
+     "why": "an ENVIRONMENT DIVISION paragraph, not a procedure",
+     "horror": "H-0095"
+    }
+   ]
+  },
+  {
+   "member": "apps/BDLD/jcl/BDLDCKJ.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "BDLDCKP",
+      "target": "BDLDCKP",
+      "line": 4,
+      "resolves_to": "apps/BDLD/cobol/BDLDCKP.cbl",
+      "horror": "H-0095"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": "BDLDCKJ",
+      "proc": null,
+      "step": "CKP010",
+      "ordinal": 1,
+      "program": "BDLDCKP",
+      "exec_proc": null,
+      "cond": null,
+      "line": 4,
+      "horror": "H-0095"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": "BDLDCKJ",
+      "proc": null,
+      "step": "CKP010",
+      "dd": "STEPLIB",
+      "dsn": "PROD.BDLD.LOADLIB",
+      "generation": null,
+      "disp": "SHR",
+      "disp_normal": null,
+      "sysout": null,
+      "line": 5,
+      "horror": "H-0095"
+     },
+     {
+      "job": "BDLDCKJ",
+      "proc": null,
+      "step": "CKP010",
+      "dd": "TRANIN",
+      "dsn": "PROD.BDLD.TRANS",
+      "generation": null,
+      "disp": "SHR",
+      "disp_normal": null,
+      "sysout": null,
+      "line": 6,
+      "horror": "H-0095"
+     },
+     {
+      "job": "BDLDCKJ",
+      "proc": null,
+      "step": "CKP010",
+      "dd": "SYSCKPT",
+      "dsn": "PROD.BDLD.CHKPT",
+      "generation": null,
+      "disp": "NEW",
+      "disp_normal": "KEEP",
+      "sysout": null,
+      "line": 7,
+      "horror": "H-0095"
+     }
+    ],
+    "jcl_datasets": [
+     {
+      "dsn": "PROD.BDLD.LOADLIB",
+      "generation": null,
+      "step": "CKP010",
+      "dd": "STEPLIB",
+      "line": 5,
+      "horror": "H-0095"
+     },
+     {
+      "dsn": "PROD.BDLD.TRANS",
+      "generation": null,
+      "step": "CKP010",
+      "dd": "TRANIN",
+      "line": 6,
+      "horror": "H-0095"
+     },
+     {
+      "dsn": "PROD.BDLD.CHKPT",
+      "generation": null,
+      "step": "CKP010",
+      "dd": "SYSCKPT",
+      "line": 7,
+      "horror": "H-0095"
+     }
+    ],
+    "file_edges": [
+     {
+      "kind": "exec",
+      "target": "apps/BDLD/cobol/BDLDCKP.cbl",
+      "horror": "H-0095"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
