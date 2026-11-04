@@ -8,7 +8,8 @@ H-0067 (utility control cards), H-0068 (IKJEFT01 running a Db2 program), H-0069 
 H-0070 (GDG (0) / (+1) in one job), H-0071 (a cataloged procedure with symbolic parameters, run through
 JCLLIB), H-0072 (further utility control cards: IDCAMS LISTCAT / ALTER / PRINT, IEBCOPY, DFSORT JOINKEYS /
 OUTFIL), H-0073 (checkpoint restart: RD=R, SYSCKEOV, RESTART=(step,checkid) with SYSCHK), H-0074 (SYSOUT forms,
-DD DUMMY, COND=EVEN / ONLY), H-0075 (overrides of a cataloged procedure's PARM, COND and DD), H-0102 (ICETOOL
+DD DUMMY, COND=EVEN / ONLY), H-0075 (overrides of a cataloged procedure's PARM, COND and DD), H-0083 (an INCLUDE
+group), H-0084 (SET and DSN=NULLFILE), H-0085 (a DD added to a procedure step), H-0102 (ICETOOL
 COUNT / SELECT / OCCUR / STATS), H-0103 (DFSORT INREC IFTHEN, PARSE, OUTFIL BUILD / OVERLAY), H-0104 (IEBUPDTE,
 IEBPTPCH, IEBCOMPR control statements), H-0105 (IEFBR14 allocating and deleting data sets by DISP)."""
 
@@ -19,6 +20,7 @@ H64, H65, H66, H67, H68, H69, H70, H71, H72, H73, H74, H75 = (
     "H-0064", "H-0065", "H-0066", "H-0067", "H-0068", "H-0069", "H-0070", "H-0071", "H-0072", "H-0073", "H-0074",
     "H-0075")
 H102, H103, H104, H105 = "H-0102", "H-0103", "H-0104", "H-0105"
+H83, H84, H85 = "H-0083", "H-0084", "H-0085"
 
 COPYBOOKS = [
     {"member": "BDLREC", "header": [" BDLREC   - SORTED TRANSACTION EXTRACT (40 BYTES)"],
@@ -449,6 +451,48 @@ JOBS = [
              "dds": [{"name": "RPTOUT", "sysout": "B", "proc_step": "RPT020"}]},
         ],
     },
+    {
+        # an INCLUDE group (member BDLDDDS of the JCLLIB library) holds the step's output DDs
+        "name": "BDLDINC",
+        "title": "BDLD INCLUDE GROUP",
+        "accounting": "(BDLD,0100)",
+        "jcllib": ["PROD.BDLD.PROCLIB"],
+        "horror": H83,
+        "steps": [
+            {"name": "INC010", "pgm": "IEBGENER", "include": ["BDLDDDS"], "dds": [
+                _dd("SYSUT1", "PROD.BDLD.ERRMSG"),
+                {"name": "SYSIN", "dummy": True},
+            ]},
+        ],
+    },
+    {
+        # a SET statement assigns a symbolic parameter used in a DSN; DSN=NULLFILE is a dummy data set
+        "name": "BDLDSET",
+        "title": "BDLD SET NULLFILE",
+        "accounting": "(BDLD,0100)",
+        "steps": [
+            {"name": "SET010", "pgm": "SORT", "set": [("HLQ", "PROD")], "horror": H84, "dds": [
+                _dd("SORTIN", "&HLQ..BDLD.TRANS", horror=H84),
+                _dd("SORTOUT", "PROD.BDLD.SETOUT", ("NEW", "CATLG", "DELETE"),
+                    extra=["UNIT=SYSDA", "SPACE=(CYL,(5,1))", "DCB=(RECFM=FB,LRECL=40)"]),
+                {"name": "SYSOUT", "sysout": "*"},
+                {"name": "SORTWK01", "dummy": True, "nullfile": True, "horror": H84},
+                {"name": "SYSIN", "inline": [("SORT", " SORT FIELDS=(1,10,CH,A)")]},
+            ]},
+        ],
+    },
+    {
+        # a DD added to a procedure step: its ddname is not on any procedure statement
+        "name": "BDLDADD",
+        "title": "BDLD ADDED DD",
+        "accounting": "(BDLD,0100)",
+        "jcllib": ["PROD.BDLD.PROCLIB"],
+        "horror": H85,
+        "steps": [
+            {"name": "ADDQ", "proc": "BDLDPRC", "proc_parms": ["RPT=DAILY"],
+             "dds": [{"name": "AUDIT", "sysout": "B", "proc_step": "RPT020", "added": True}]},
+        ],
+    },
 ]
 
 PROCS = [
@@ -472,6 +516,15 @@ PROCS = [
         ],
     },
 ]
+
+PROCS.append({
+    # an INCLUDE group: bare DD statements imbedded where the INCLUDE statement stands (not a procedure)
+    "name": "BDLDDDS",
+    "include_group": True,
+    "horror": H83,
+    "steps": [],
+    "job_dds": [{"name": "SYSPRINT", "sysout": "*"}, {"name": "SYSUT2", "sysout": "A"}],
+})
 
 
 APP = {

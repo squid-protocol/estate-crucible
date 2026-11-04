@@ -1,0 +1,150 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0084",
+ "title": "A SET statement assigns a symbolic parameter used in a DSN, and a DD names DSN=NULLFILE",
+ "category": "jcl",
+ "issue": 4891,
+ "shapes": [
+  "BDLD jcl/BDLDSET.jcl SET010: //SETV SET HLQ=PROD before the EXEC; //SORTIN DD DSN=&HLQ..BDLD.TRANS",
+  "BDLD jcl/BDLDSET.jcl: //SORTWK01 DD DSN=NULLFILE"
+ ],
+ "asserts": "The EXEC of SET010 is one jcl_steps fact carrying set_symbols [{name HLQ, value PROD}]. SORTIN is a jcl_dds fact with symbolic true and dsn '&HLQ..BDLD.TRANS'. SORTWK01 is a jcl_dds fact with dummy true and dsn null; no jcl_datasets row exists for NULLFILE (a phantom records it): NULLFILE has the same effect as DD DUMMY.",
+ "citations": [
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "Chapter 27. SET statement > Using the SET statement",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "The SET statement is not executed conditionally."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "Chapter 27. SET statement > Location in the JCL",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "It must appear in the job's JCL before the intended use of the symbolic parameter."
+  },
+  {
+   "doc": "z/OS MVS JCL Reference (z/OS 2.2.0)",
+   "section": "Chapter 12. DD statement > DSNAME parameter > NULLFILE",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.2.0/pdf/iea3b611.pdf",
+   "quote": "Specifies a dummy data set. NULLFILE has the same effect as coding the DD DUMMY parameter."
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDSET.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "SORT",
+      "target": "SORT",
+      "line": 5,
+      "resolves_to": null,
+      "horror": "H-0084"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": "BDLDSET",
+      "proc": null,
+      "step": "SET010",
+      "ordinal": 1,
+      "program": "SORT",
+      "exec_proc": null,
+      "cond": null,
+      "line": 5,
+      "set_symbols": [
+       {
+        "name": "HLQ",
+        "value": "PROD"
+       }
+      ],
+      "horror": "H-0084"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": "BDLDSET",
+      "proc": null,
+      "step": "SET010",
+      "dd": "SORTIN",
+      "dsn": "&HLQ..BDLD.TRANS",
+      "generation": null,
+      "disp": "SHR",
+      "disp_normal": null,
+      "sysout": null,
+      "line": 6,
+      "symbolic": true,
+      "horror": "H-0084"
+     },
+     {
+      "job": "BDLDSET",
+      "proc": null,
+      "step": "SET010",
+      "dd": "SORTWK01",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 10,
+      "dummy": true,
+      "horror": "H-0084"
+     },
+     {
+      "job": "BDLDSET",
+      "proc": null,
+      "step": "SET010",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 11,
+      "inline_lines": 1,
+      "horror": "H-0084"
+     }
+    ],
+    "jcl_datasets": [
+     {
+      "dsn": "&HLQ..BDLD.TRANS",
+      "generation": null,
+      "step": "SET010",
+      "dd": "SORTIN",
+      "line": 6,
+      "horror": "H-0084"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDSET",
+      "proc": null,
+      "step": "SET010",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "SORT",
+      "operands": "FIELDS=(1,10,CH,A)",
+      "line": 12,
+      "horror": "H-0084"
+     }
+    ]
+   },
+   "phantoms": [
+    {
+     "channel": "jcl_datasets",
+     "dsn": "NULLFILE",
+     "step": "SET010",
+     "line": 10,
+     "why": "DSN=NULLFILE is a dummy data set, not a dataset of the estate",
+     "horror": "H-0084"
+    }
+   ]
+  }
+ ]
+}
