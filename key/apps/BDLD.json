@@ -1573,7 +1573,18 @@
      "horror": "H-0075"
     }
    ],
+   "phantoms": [
+    {
+     "channel": "jcl_datasets",
+     "dsn": "PROD.BDLD.PROCLIB",
+     "step": null,
+     "line": 3,
+     "why": "JCLLIB ORDER names a library search path, not a dataset a step reads",
+     "horror": "H-0071"
+    }
+   ],
    "horrors": [
+    "H-0071",
     "H-0075"
    ]
   },
@@ -1596,6 +1607,16 @@
      "exec_proc": "BDLDPRC",
      "cond": null,
      "line": 6,
+     "horror": "H-0071"
+    }
+   ],
+   "phantoms": [
+    {
+     "channel": "jcl_datasets",
+     "dsn": "PROD.BDLD.PROCLIB",
+     "step": null,
+     "line": 3,
+     "why": "JCLLIB ORDER names a library search path, not a dataset a step reads",
      "horror": "H-0071"
     }
    ],

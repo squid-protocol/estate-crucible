@@ -248,6 +248,7 @@ JOBS = [
         "title": "BDLD PROC RUN",
         "accounting": "(BDLD,0100)",
         "jcllib": ["PROD.BDLD.PROCLIB"],
+        "jcllib_horror": H71,
         "horror": H71,
         "comments": ["RUN THE CATALOGED PROCEDURE BDLDPRC WITH RPT=MONTHLY"],
         "steps": [
@@ -357,6 +358,7 @@ JOBS = [
         "title": "BDLD PROC OVERRIDES",
         "accounting": "(BDLD,0100)",
         "jcllib": ["PROD.BDLD.PROCLIB"],
+        "jcllib_horror": H71,
         "horror": H75,
         "steps": [
             {"name": "QTR", "proc": "BDLDPRC", "proc_parms": ["RPT=DAILY"],
