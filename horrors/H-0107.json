@@ -1,0 +1,97 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0107",
+ "title": "An ESDS opened I-O and updated in place: ORGANIZATION IS SEQUENTIAL, READ then REWRITE",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXAESU: SELECT LOG-FILE ASSIGN TO LOGUPD ORGANIZATION IS SEQUENTIAL; OPEN I-O LOG-FILE; READ LOG-FILE; REWRITE LOG-REC"
+ ],
+ "asserts": "The SELECT is one file_control fact (select LOG-FILE, assign LOGUPD, organization SEQUENTIAL, access_mode SEQUENTIAL, record_key null) with no alternate_keys and no relative_key; the program declares nothing that says ESDS, as for H-0078. DD LOGUPD names PROD.AIXA.LOG, the NONINDEXED cluster H-0082 defines. The program REWRITEs only after a successful READ and never DELETEs: a sequential file has no DELETE statement.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "REWRITE statement",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "the last prior input/output statement executed for this file must be a successfully executed READ statement."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "DELETE statement",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "File-name-1 must be the name of an indexed or relative file."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXAESU.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "1000-MARK",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 36,
+      "end_line": 42,
+      "horror": "H-0107"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "perform",
+      "from": "1000-MARK",
+      "target": "8000-READ",
+      "line": 42,
+      "horror": "H-0107"
+     }
+    ],
+    "file_control": [
+     {
+      "select": "LOG-FILE",
+      "assign": "LOGUPD",
+      "organization": "SEQUENTIAL",
+      "access_mode": "SEQUENTIAL",
+      "record_key": null,
+      "file_status": "WS-LOG-STATUS",
+      "fd_copies": [],
+      "line": 11,
+      "horror": "H-0107"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "'ORDER ORD00001 REVIEWED'",
+      "source_kind": "literal",
+      "target": "LOG-TEXT",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 38,
+      "horror": "H-0107"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-MARKED",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 40,
+      "horror": "H-0107"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
