@@ -435,6 +435,10 @@ class ProgramWriter:
         self.edge("call", operand, line, form=form)
         self.m.fact("call_sites", verb="CALL", form=form, operand=operand, target=st["target"], line=line,
                     resolves_to=self.program_paths.get(st["target"]))
+        if st["target"] == "CBLTDLI" and not st["ident"] and len(st["using"]) >= 3:
+            # the DL/I call: function code, PCB, I/O area, then the SSAs (IMS Application Programming APIs)
+            self.m.fact("dli_calls", function=self.idents.get(st["using"][0], "").strip(), pcb=st["using"][1],
+                        io_area=st["using"][2], ssas=list(st["using"][3:]), line=line)
 
     def op_if(self, st: Stmt, indent: int) -> None:
         self.line(f"IF {st['cond']}", indent)

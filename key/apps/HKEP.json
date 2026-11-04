@@ -1,0 +1,460 @@
+{
+ "format": "estate-crucible-key/1",
+ "app": "HKEP",
+ "members": {
+  "apps/HKEP/asm/HKEPDBD.asm": {
+   "app": "HKEP",
+   "library": "asm",
+   "language": "hlasm",
+   "numbered": false,
+   "lines": 8,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); DL/I is a static CALL interface to CBLTDLI",
+   "ims_gen": [
+    {
+     "kind": "DBD",
+     "name": "HKEPDB",
+     "line": 2,
+     "horror": "H-0096"
+    },
+    {
+     "kind": "SEGM",
+     "name": "KEEP",
+     "parent": "",
+     "bytes": 40,
+     "line": 3,
+     "horror": "H-0096"
+    },
+    {
+     "kind": "SEGM",
+     "name": "WALL",
+     "parent": "KEEP",
+     "bytes": 40,
+     "line": 4,
+     "horror": "H-0096"
+    },
+    {
+     "kind": "SEGM",
+     "name": "GATE",
+     "parent": "WALL",
+     "bytes": 40,
+     "line": 5,
+     "horror": "H-0096"
+    }
+   ],
+   "horrors": [
+    "H-0096"
+   ]
+  },
+  "apps/HKEP/cobol/HKEPWALK.cbl": {
+   "app": "HKEP",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 37,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); DL/I is a static CALL interface to CBLTDLI",
+   "programs": [
+    {
+     "program_id": "HKEPWALK",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 23,
+     "end_line": 26
+    },
+    {
+     "name": "1000-SCAN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 27,
+     "end_line": 32
+    },
+    {
+     "name": "2000-RESTART",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 33,
+     "end_line": 37
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-SCAN",
+     "line": 24
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-RESTART",
+     "line": 25
+    },
+    {
+     "kind": "call",
+     "from": "1000-SCAN",
+     "target": "CBLTDLI",
+     "line": 28,
+     "form": "literal",
+     "horror": "H-0097"
+    },
+    {
+     "kind": "perform",
+     "from": "1000-SCAN",
+     "target": "1000-SCAN",
+     "line": 31
+    },
+    {
+     "kind": "call",
+     "from": "2000-RESTART",
+     "target": "CBLTDLI",
+     "line": 34,
+     "form": "literal",
+     "horror": "H-0098"
+    }
+   ],
+   "call_sites": [
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "CBLTDLI",
+     "target": "CBLTDLI",
+     "line": 28,
+     "resolves_to": null,
+     "horror": "H-0097"
+    },
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "CBLTDLI",
+     "target": "CBLTDLI",
+     "line": 34,
+     "resolves_to": null,
+     "horror": "H-0098"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-GN",
+     "pic": "X(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'GN  '",
+     "section": "WORKING-STORAGE",
+     "line": 10
+    },
+    {
+     "level": 1,
+     "name": "WS-COUNT",
+     "pic": "S9(4)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 11
+    },
+    {
+     "level": 1,
+     "name": "WS-IO-AREA",
+     "pic": "X(80)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 12
+    },
+    {
+     "level": 1,
+     "name": "IO-PCB",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 14
+    },
+    {
+     "level": 5,
+     "name": "IO-LTERM",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 15
+    },
+    {
+     "level": 5,
+     "name": "IO-RSV",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 16
+    },
+    {
+     "level": 5,
+     "name": "IO-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 17
+    },
+    {
+     "level": 1,
+     "name": "DB-PCB",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 18
+    },
+    {
+     "level": 5,
+     "name": "DB-DBD",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 19
+    },
+    {
+     "level": 5,
+     "name": "DB-LEVEL",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 20
+    },
+    {
+     "level": 5,
+     "name": "DB-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 21,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-GN",
+     "line": 10,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-GN",
+       "level": 1,
+       "pic": "X(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/HKEP/cobol/HKEPWALK.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-COUNT",
+     "line": 11,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-COUNT",
+       "level": 1,
+       "pic": "S9(4)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/HKEP/cobol/HKEPWALK.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-IO-AREA",
+     "line": 12,
+     "bytes": 80,
+     "fields": [
+      {
+       "name": "WS-IO-AREA",
+       "level": 1,
+       "pic": "X(80)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 80,
+       "file": "apps/HKEP/cobol/HKEPWALK.cbl"
+      }
+     ]
+    },
+    {
+     "record": "IO-PCB",
+     "line": 14,
+     "bytes": 12,
+     "fields": [
+      {
+       "name": "IO-LTERM",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/HKEP/cobol/HKEPWALK.cbl"
+      },
+      {
+       "name": "IO-RSV",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 2,
+       "file": "apps/HKEP/cobol/HKEPWALK.cbl"
+      },
+      {
+       "name": "IO-STATUS",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 2,
+       "file": "apps/HKEP/cobol/HKEPWALK.cbl"
+      }
+     ]
+    },
+    {
+     "record": "DB-PCB",
+     "line": 18,
+     "bytes": 12,
+     "fields": [
+      {
+       "name": "DB-DBD",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/HKEP/cobol/HKEPWALK.cbl"
+      },
+      {
+       "name": "DB-LEVEL",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 2,
+       "file": "apps/HKEP/cobol/HKEPWALK.cbl"
+      },
+      {
+       "name": "DB-STATUS",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 2,
+       "file": "apps/HKEP/cobol/HKEPWALK.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "HKEPWALK",
+     "params": [
+      "IO-PCB",
+      "DB-PCB"
+     ],
+     "line": 22
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-COUNT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 30
+    }
+   ],
+   "gaps": [
+    {
+     "kind": "call",
+     "name": "CBLTDLI",
+     "line": 28,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0097"
+    },
+    {
+     "kind": "call",
+     "name": "CBLTDLI",
+     "line": 34,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0098"
+    }
+   ],
+   "dli_calls": [
+    {
+     "function": "GN",
+     "pcb": "DB-PCB",
+     "io_area": "WS-IO-AREA",
+     "ssas": [],
+     "line": 28,
+     "horror": "H-0097"
+    },
+    {
+     "function": "GN",
+     "pcb": "DB-PCB",
+     "io_area": "WS-IO-AREA",
+     "ssas": [],
+     "line": 34,
+     "horror": "H-0098"
+    }
+   ],
+   "horrors": [
+    "H-0097",
+    "H-0098"
+   ]
+  }
+ }
+}

@@ -1,0 +1,63 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0096",
+ "title": "DBDGEN: SEGM statements coded in hierarchic order, the dependent naming its parent",
+ "category": "ims",
+ "issue": 4893,
+ "shapes": [
+  "HKEP HKEPDBD: SEGM NAME=KEEP / SEGM NAME=WALL,PARENT=KEEP / SEGM NAME=GATE,PARENT=WALL"
+ ],
+ "asserts": "HKEPDBD keys one ims_gen DBD fact and three SEGM facts (KEEP root, WALL parent KEEP, GATE parent WALL), in source order.",
+ "citations": [
+  {
+   "doc": "IBM IMS 15 documentation",
+   "section": "DEDB DBD generation input record structure",
+   "url": "https://www.ibm.com/docs/en/ims/15.6.0?topic=types-dedb-dbd-generation-input-record-structure",
+   "quote": "SEGM statements must also be placed in the same hierarchic order as the segments in the database being defined."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/HKEP/asm/HKEPDBD.asm",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "ims_gen": [
+     {
+      "kind": "DBD",
+      "name": "HKEPDB",
+      "line": 2,
+      "horror": "H-0096"
+     },
+     {
+      "kind": "SEGM",
+      "name": "KEEP",
+      "parent": "",
+      "bytes": 40,
+      "line": 3,
+      "horror": "H-0096"
+     },
+     {
+      "kind": "SEGM",
+      "name": "WALL",
+      "parent": "KEEP",
+      "bytes": 40,
+      "line": 4,
+      "horror": "H-0096"
+     },
+     {
+      "kind": "SEGM",
+      "name": "GATE",
+      "parent": "WALL",
+      "bytes": 40,
+      "line": 5,
+      "horror": "H-0096"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

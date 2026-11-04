@@ -1,0 +1,71 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0097",
+ "title": "An unqualified GN repeated until the GB status code",
+ "category": "ims",
+ "issue": 4893,
+ "shapes": [
+  "HKEP HKEPWALK 1000-SCAN: CALL 'CBLTDLI' USING WS-GN DB-PCB WS-IO-AREA, repeated by a recursive PERFORM while DB-STATUS = SPACES"
+ ],
+ "asserts": "HKEPWALK's 1000-SCAN CALL is one call_sites fact (CBLTDLI, resolves_to null) and one dli_calls fact: function GN (from WS-GN VALUE 'GN  '), pcb DB-PCB, io_area WS-IO-AREA, no ssas.",
+ "citations": [
+  {
+   "doc": "IBM IMS 15 documentation",
+   "section": "GN/GHN call",
+   "url": "https://www.ibm.com/docs/SSEPH2_15.4.0/com.ibm.ims154.doc.apr/ims_gnghncall.htm",
+   "quote": "You would issue an unqualified GN call repeatedly until IMS returned a GB status code, indicating that it had reached the end of the database without being able to satisfy your call."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/HKEP/cobol/HKEPWALK.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "edges": [
+     {
+      "kind": "call",
+      "from": "1000-SCAN",
+      "target": "CBLTDLI",
+      "line": 28,
+      "form": "literal",
+      "horror": "H-0097"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "CBLTDLI",
+      "target": "CBLTDLI",
+      "line": 28,
+      "resolves_to": null,
+      "horror": "H-0097"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "CBLTDLI",
+      "line": 28,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0097"
+     }
+    ],
+    "dli_calls": [
+     {
+      "function": "GN",
+      "pcb": "DB-PCB",
+      "io_area": "WS-IO-AREA",
+      "ssas": [],
+      "line": 28,
+      "horror": "H-0097"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
