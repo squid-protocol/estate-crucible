@@ -8,7 +8,7 @@ gitgalaxy#7065, JCL execution (#4891) and utilities (#4890). App `BDLD`
 | `BDLDNITE` | SORT, `&&` temp dataset, IKJEFT01 running a Db2 program, STEPLIB concatenation, `COND=`, IF/THEN/ELSE/ENDIF | H-0064, H-0065, H-0066, H-0067, H-0068 |
 | `BDLDRST` | JOB `RESTART=LOAD020`, `EXEC PARM=` | H-0069 |
 | `BDLDUTIL` | IDCAMS DELETE/SET/DEFINE/REPRO, IEBGENER, ICETOOL, DFSORT INREC/OUTREC/SUM | H-0067 |
-| `BDLDPRCJ` + `proclib/BDLDPRC` | cataloged procedure with symbolic parameters (`&HLQ..`, `PARM='&RPT'`) next to a real `&&` temp dataset; `JCLLIB ORDER=`; `EXEC BDLDPRC,RPT=MONTHLY` | H-0071 |
+| `BDLDPRCJ` + `proclib/BDLDPRC` | cataloged procedure with symbolic parameters (`&HLQ..`, `PARM='&RPT'`) next to a real `&&` temp dataset; `JCLLIB ORDER=` (its library is a key phantom, not a dataset); `EXEC BDLDPRC,RPT=MONTHLY` | H-0071 |
 | `BDLDUT2` | IDCAMS LISTCAT / ALTER (hyphen continuation) / PRINT, IEBCOPY COPY + SELECT, DFSORT JOINKEYS x2 / REFORMAT / SORT FIELDS=COPY / OUTFIL x2 | H-0072 |
 | `BDLDCHK` | deferred checkpoint restart: `RESTART=(CHK020,C0000012)`, `SYSCHK` DD before the first EXEC, `RD=R`, `SYSCKEOV` | H-0073 |
 | `BDLDSYS` | `SYSOUT=(A,,STD1)` / `Z,DEST=` / `*`, `DD DUMMY`, `COND=EVEN`, `COND=((4,LT,SYS010),ONLY)` | H-0074 |

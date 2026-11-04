@@ -74,7 +74,11 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                                      "MSGCLASS=X", *spec.get("job_extra", []),
                                      *(["NOTIFY=&SYSUID"] if spec.get("notify", True) else [])])
         if spec.get("jcllib"):
-            _jcl_stmt(m, "", "JCLLIB", [f"ORDER=({','.join(spec['jcllib'])})"])
+            jcllib_line = _jcl_stmt(m, "", "JCLLIB", [f"ORDER=({','.join(spec['jcllib'])})"])
+            with m.horror(spec.get("jcllib_horror")):
+                for lib in spec["jcllib"]:
+                    m.phantom("jcl_datasets", "JCLLIB ORDER names a library search path, not a dataset a step reads",
+                              dsn=lib, step=None, line=jcllib_line)
     for c in spec.get("comments", []):
         m.raw(f"//* {c}".rstrip())
     ordinal = 0

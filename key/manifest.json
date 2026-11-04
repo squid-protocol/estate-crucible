@@ -227,7 +227,7 @@
   "gaps": 59,
   "dead": 11,
   "jcl_utility_cards": 40,
-  "phantoms": 55
+  "phantoms": 57
  },
  "code_pages": {
   "apps/DEUT/cobol/ZINSBER.cbl": "cp273",
@@ -976,6 +976,7 @@
     "status": "not-cobol"
    },
    "horrors": [
+    "H-0071",
     "H-0075"
    ]
   },
