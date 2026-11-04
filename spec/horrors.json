@@ -2556,6 +2556,97 @@
     }
    ],
    "era": 0
+  },
+  {
+   "id": "H-0106",
+   "title": "A relative file read ACCESS SEQUENTIAL after a START, and a second one written ACCESS RANDOM with REWRITE and DELETE",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXARRS: SELECT SLOT-IN ... ORGANIZATION IS RELATIVE / ACCESS MODE IS SEQUENTIAL / RELATIVE KEY IS WS-IN-NO; START SLOT-IN KEY IS NOT LESS THAN WS-IN-NO",
+    "AIXA AIXARRS: SELECT SLOT-OUT ... ORGANIZATION IS RELATIVE / ACCESS MODE IS RANDOM / RELATIVE KEY IS WS-OUT-NO; WRITE, REWRITE and DELETE by relative number"
+   ],
+   "asserts": "Two file_control facts in AIXARRS, both organization RELATIVE with record_key null: SLOT-IN with access_mode SEQUENTIAL and relative_key WS-IN-NO, SLOT-OUT with access_mode RANDOM and relative_key WS-OUT-NO. The access mode is part of each fact: the same organization (the one AIXARRD declares DYNAMIC, H-0077) is reached in three different ways. The two SELECTs name different relative keys and different data sets (DD SLOTIN on PROD.AIXA.SLOTS, DD SLOTOUT on PROD.AIXA.SLOTH, defined by the DEFINE CLUSTER NUMBERED card of step IDC010 of job AIXADF2), so neither is an alias of the other.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "START statement",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "Must name a file with sequential or dynamic access."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "DELETE statement",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "For files in random or dynamic access mode, the system removes the record identified by the contents of the prime RECORD KEY data item for indexed files, or the RELATIVE KEY data item for relative files."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "DELETE statement",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "If the file does not contain such a record, an INVALID KEY condition exists."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0107",
+   "title": "An ESDS opened I-O and updated in place: ORGANIZATION IS SEQUENTIAL, READ then REWRITE",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAESU: SELECT LOG-FILE ASSIGN TO LOGUPD ORGANIZATION IS SEQUENTIAL; OPEN I-O LOG-FILE; READ LOG-FILE; REWRITE LOG-REC"
+   ],
+   "asserts": "The SELECT is one file_control fact (select LOG-FILE, assign LOGUPD, organization SEQUENTIAL, access_mode SEQUENTIAL, record_key null) with no alternate_keys and no relative_key; the program declares nothing that says ESDS, as for H-0078. DD LOGUPD names PROD.AIXA.LOG, the NONINDEXED cluster H-0082 defines. The program REWRITEs only after a successful READ and never DELETEs: a sequential file has no DELETE statement.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "REWRITE statement",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "the last prior input/output statement executed for this file must be a successfully executed READ statement."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "DELETE statement",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "File-name-1 must be the name of an indexed or relative file."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0108",
+   "title": "A KSDS with two alternate keys, one unique and one WITH DUPLICATES, each reached by its own PATH DD",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAKS2: ALTERNATE RECORD KEY IS CUS-TAX / ALTERNATE RECORD KEY IS CUS-NAME WITH DUPLICATES",
+    "AIXA jcl/AIXADF2.jcl IDC020: DEFINE ALTERNATEINDEX ... UNIQUEKEY and DEFINE ALTERNATEINDEX ... NONUNIQUEKEY, one DEFINE PATH and one BLDINDEX for each",
+    "AIXA jcl/AIXARU2.jcl KS2030: //CUSKSD on the base cluster, //CUSKSD1 on the TAX path, //CUSKSD2 on the NAME path"
+   ],
+   "asserts": "The SELECT is one file_control fact (select CUS-FILE, assign CUSKSD, organization INDEXED, access_mode DYNAMIC, record_key CUS-ID) with alternate_keys [{name CUS-TAX, duplicates false}, {name CUS-NAME, duplicates true}], in source order: the flag is per key, not per file. Step IDC020 of AIXADF2 holds seven jcl_utility_cards facts, utility IDCAMS: verb DEFINE for the cluster, for each ALTERNATEINDEX (the CUS-TAX one UNIQUEKEY, the CUS-NAME one NONUNIQUEKEY) and for each PATH, then two BLDINDEX, each continued with a trailing hyphen. Step KS2030 of AIXARU2 has four jcl_dds facts: CUSKSD on PROD.AIXA.CUST, CUSKSD1 on PROD.AIXA.CUST.TAXPATH and CUSKSD2 on PROD.AIXA.CUST.NAMPATH; the DDs name the paths, never the alternate indexes.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "ALTERNATE RECORD KEY clause",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "If the DUPLICATES phrase is not specified, the values contained in the ALTERNATE RECORD KEY data item must be unique among records in the file."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "ALTERNATE RECORD KEY clause",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "If the DUPLICATES phrase is specified, the values contained in the ALTERNATE RECORD KEY data item can be duplicated within any records in the file."
+    },
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+     "section": "DEFINE ALTERNATEINDEX",
+     "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-alternateindex",
+     "quote": "UNIQUEKEY|NONUNIQUEKEY"
+    }
+   ],
+   "era": 2,
+   "notes": "The UNIQUEKEY|NONUNIQUEKEY citation is the syntax line, not prose (the parameter page was too large to fetch); the pairing of UNIQUEKEY with a key without DUPLICATES is the standard IBM practice, not a rule quoted here."
   }
  ],
  "not_planted": [

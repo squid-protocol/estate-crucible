@@ -1,0 +1,210 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0108",
+ "title": "A KSDS with two alternate keys, one unique and one WITH DUPLICATES, each reached by its own PATH DD",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXAKS2: ALTERNATE RECORD KEY IS CUS-TAX / ALTERNATE RECORD KEY IS CUS-NAME WITH DUPLICATES",
+  "AIXA jcl/AIXADF2.jcl IDC020: DEFINE ALTERNATEINDEX ... UNIQUEKEY and DEFINE ALTERNATEINDEX ... NONUNIQUEKEY, one DEFINE PATH and one BLDINDEX for each",
+  "AIXA jcl/AIXARU2.jcl KS2030: //CUSKSD on the base cluster, //CUSKSD1 on the TAX path, //CUSKSD2 on the NAME path"
+ ],
+ "asserts": "The SELECT is one file_control fact (select CUS-FILE, assign CUSKSD, organization INDEXED, access_mode DYNAMIC, record_key CUS-ID) with alternate_keys [{name CUS-TAX, duplicates false}, {name CUS-NAME, duplicates true}], in source order: the flag is per key, not per file. Step IDC020 of AIXADF2 holds seven jcl_utility_cards facts, utility IDCAMS: verb DEFINE for the cluster, for each ALTERNATEINDEX (the CUS-TAX one UNIQUEKEY, the CUS-NAME one NONUNIQUEKEY) and for each PATH, then two BLDINDEX, each continued with a trailing hyphen. Step KS2030 of AIXARU2 has four jcl_dds facts: CUSKSD on PROD.AIXA.CUST, CUSKSD1 on PROD.AIXA.CUST.TAXPATH and CUSKSD2 on PROD.AIXA.CUST.NAMPATH; the DDs name the paths, never the alternate indexes.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "ALTERNATE RECORD KEY clause",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "If the DUPLICATES phrase is not specified, the values contained in the ALTERNATE RECORD KEY data item must be unique among records in the file."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "ALTERNATE RECORD KEY clause",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "If the DUPLICATES phrase is specified, the values contained in the ALTERNATE RECORD KEY data item can be duplicated within any records in the file."
+  },
+  {
+   "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+   "section": "DEFINE ALTERNATEINDEX",
+   "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-alternateindex",
+   "quote": "UNIQUEKEY|NONUNIQUEKEY"
+  }
+ ],
+ "era": 2,
+ "notes": "The UNIQUEKEY|NONUNIQUEKEY citation is the syntax line, not prose (the parameter page was too large to fetch); the pairing of UNIQUEKEY with a key without DUPLICATES is the standard IBM practice, not a rule quoted here.",
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXAKS2.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "9000-STATUS",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 61,
+      "end_line": 67,
+      "horror": "H-0108"
+     }
+    ],
+    "file_control": [
+     {
+      "select": "CUS-FILE",
+      "assign": "CUSKSD",
+      "organization": "INDEXED",
+      "access_mode": "DYNAMIC",
+      "record_key": "CUS-ID",
+      "file_status": "WS-CUS-STATUS",
+      "fd_copies": [],
+      "line": 11,
+      "alternate_keys": [
+       {
+        "name": "CUS-TAX",
+        "duplicates": false
+       },
+       {
+        "name": "CUS-NAME",
+        "duplicates": true
+       }
+      ],
+      "horror": "H-0108"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/AIXA/jcl/AIXADF2.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "AIXADF2",
+      "proc": null,
+      "step": "IDC020",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 15,
+      "inline_lines": 17,
+      "horror": "H-0108"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "AIXADF2",
+      "proc": null,
+      "step": "IDC020",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "CLUSTER (NAME(PROD.AIXA.CUST) INDEXED KEYS(8 0) RECORDSIZE(40 40) CYLINDERS(1 1))",
+      "line": 16,
+      "horror": "H-0108"
+     },
+     {
+      "job": "AIXADF2",
+      "proc": null,
+      "step": "IDC020",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "ALTERNATEINDEX (NAME(PROD.AIXA.CUST.TAXAIX) RELATE(PROD.AIXA.CUST) KEYS(9 8) UNIQUEKEY UPGRADE CYLINDERS(1 1))",
+      "line": 19,
+      "horror": "H-0108"
+     },
+     {
+      "job": "AIXADF2",
+      "proc": null,
+      "step": "IDC020",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "ALTERNATEINDEX (NAME(PROD.AIXA.CUST.NAMAIX) RELATE(PROD.AIXA.CUST) KEYS(20 17) NONUNIQUEKEY UPGRADE CYLINDERS(1 1))",
+      "line": 22,
+      "horror": "H-0108"
+     },
+     {
+      "job": "AIXADF2",
+      "proc": null,
+      "step": "IDC020",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "PATH (NAME(PROD.AIXA.CUST.TAXPATH) PATHENTRY(PROD.AIXA.CUST.TAXAIX) UPDATE)",
+      "line": 25,
+      "horror": "H-0108"
+     },
+     {
+      "job": "AIXADF2",
+      "proc": null,
+      "step": "IDC020",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "PATH (NAME(PROD.AIXA.CUST.NAMPATH) PATHENTRY(PROD.AIXA.CUST.NAMAIX) UPDATE)",
+      "line": 27,
+      "horror": "H-0108"
+     },
+     {
+      "job": "AIXADF2",
+      "proc": null,
+      "step": "IDC020",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "BLDINDEX",
+      "operands": "INDATASET(PROD.AIXA.CUST) OUTDATASET(PROD.AIXA.CUST.TAXAIX)",
+      "line": 29,
+      "horror": "H-0108"
+     },
+     {
+      "job": "AIXADF2",
+      "proc": null,
+      "step": "IDC020",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "BLDINDEX",
+      "operands": "INDATASET(PROD.AIXA.CUST) OUTDATASET(PROD.AIXA.CUST.NAMAIX)",
+      "line": 31,
+      "horror": "H-0108"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/AIXA/jcl/AIXARU2.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_datasets": [
+     {
+      "dsn": "PROD.AIXA.CUST.TAXPATH",
+      "generation": null,
+      "step": "KS2030",
+      "dd": "CUSKSD1",
+      "line": 18,
+      "horror": "H-0108"
+     },
+     {
+      "dsn": "PROD.AIXA.CUST.NAMPATH",
+      "generation": null,
+      "step": "KS2030",
+      "dd": "CUSKSD2",
+      "line": 19,
+      "horror": "H-0108"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

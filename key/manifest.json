@@ -203,30 +203,30 @@
   "jcl_utility_cards"
  ],
  "fact_totals": {
-  "programs": 62,
-  "units": 168,
-  "edges": 154,
-  "call_sites": 132,
+  "programs": 65,
+  "units": 180,
+  "edges": 166,
+  "call_sites": 137,
   "copies": 86,
-  "data_items": 685,
-  "layouts": 300,
+  "data_items": 714,
+  "layouts": 314,
   "sql_statements": 6,
   "sql_tables": 3,
-  "jcl_steps": 68,
-  "jcl_dds": 211,
+  "jcl_steps": 73,
+  "jcl_dds": 227,
   "screen_fields": 16,
   "csd_resources": 44,
   "transactions": 7,
   "cics_resources": 11,
-  "jcl_datasets": 116,
-  "file_control": 16,
-  "entry_points": 62,
-  "file_edges": 40,
-  "data_moves": 209,
+  "jcl_datasets": 125,
+  "file_control": 20,
+  "entry_points": 65,
+  "file_edges": 43,
+  "data_moves": 225,
   "copy_collisions": 9,
   "gaps": 62,
   "dead": 11,
-  "jcl_utility_cards": 56,
+  "jcl_utility_cards": 64,
   "phantoms": 57
  },
  "code_pages": {
@@ -587,7 +587,10 @@
   "H-0102",
   "H-0103",
   "H-0104",
-  "H-0105"
+  "H-0105",
+  "H-0106",
+  "H-0107",
+  "H-0108"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -787,6 +790,42 @@
     "H-0078"
    ]
   },
+  "apps/AIXA/cobol/AIXAESU.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "6b6988bf4898b82edcfb7037796ed69cbc1069e7bb7cbe2ca1b8f26906c65b92",
+   "bytes": 1670,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-READ (COBOL-85); no later construct",
+   "horrors": [
+    "H-0107"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAKS2.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "cdac294a9e182ac7e37cf1c5a371ec8f7a4a59a036658b8423c584f5149d77f8",
+   "bytes": 2330,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+   "horrors": [
+    "H-0108"
+   ]
+  },
   "apps/AIXA/cobol/AIXAKSD.cbl": {
    "app": "AIXA",
    "library": "cobol",
@@ -824,6 +863,24 @@
     "H-0077"
    ]
   },
+  "apps/AIXA/cobol/AIXARRS.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "13b4115ac54a477e7d860e16daf53189a12700a6e7eb174ca98d54fe01dc84ea",
+   "bytes": 2847,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-START, END-READ, END-WRITE, END-REWRITE, END-DELETE (COBOL-85); no later construct",
+   "horrors": [
+    "H-0106"
+   ]
+  },
   "apps/AIXA/jcl/AIXADEF.jcl": {
    "app": "AIXA",
    "library": "jcl",
@@ -839,6 +896,39 @@
    "horrors": [
     "H-0079",
     "H-0082"
+   ]
+  },
+  "apps/AIXA/jcl/AIXADF2.jcl": {
+   "app": "AIXA",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "f9fdbe7bee7711a9156305ac56b979a6130f5dccfe7dba277af56da404d03c7f",
+   "bytes": 1173,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0106",
+    "H-0108"
+   ]
+  },
+  "apps/AIXA/jcl/AIXARU2.jcl": {
+   "app": "AIXA",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "9b51fb4efbc07db78f8bfef616c83179538dc0cf2da45d01c19f8416f468166e",
+   "bytes": 665,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0108"
    ]
   },
   "apps/AIXA/jcl/AIXARUN.jcl": {

@@ -6,12 +6,16 @@ data set, and what file status each access ends in.
 Planted: H-0076 (ALTERNATE RECORD KEY ... WITH DUPLICATES), H-0077 (RELATIVE KEY over an RRDS), H-0078 (a
 SELECT over an ESDS: ORGANIZATION IS SEQUENTIAL), H-0079 (IDCAMS DEFINE ALTERNATEINDEX / DEFINE PATH /
 BLDINDEX), H-0080 (a DD that names the PATH), H-0081 (file status 02 / 22 / 23 handled in a paragraph),
-H-0082 (DEFINE CLUSTER in its three kinds: INDEXED, NUMBERED, NONINDEXED)."""
+H-0082 (DEFINE CLUSTER in its three kinds: INDEXED, NUMBERED, NONINDEXED).
+Slice 1 adds H-0106 (an RRDS read ACCESS SEQUENTIAL with START and written ACCESS RANDOM with REWRITE / DELETE),
+H-0107 (an ESDS opened I-O: READ then REWRITE) and H-0108 (a KSDS with a unique and a duplicate alternate key,
+UNIQUEKEY and NONUNIQUEKEY alternate indexes, one PATH DD each)."""
 
 from ..data import I
 from ..stmt import goback, if_, para, perform, raw, read
 
 H76, H77, H78, H79, H80, H81, H82 = "H-0076", "H-0077", "H-0078", "H-0079", "H-0080", "H-0081", "H-0082"
+H106, H107, H108 = "H-0106", "H-0107", "H-0108"
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -138,6 +142,141 @@ AIXAESD = {
     ],
 }
 
+AIXARRS = {
+    "member": "AIXARRS",
+    "era": 2,
+    "era_evidence": "END-START, END-READ, END-WRITE, END-REWRITE, END-DELETE (COBOL-85); no later construct",
+    "program_id": "AIXARRS",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXARRS - COPY PICK SLOTS TO A HISTORY RRDS.",
+                "IN BY SEQUENCE FROM SLOT 5, OUT BY NUMBER."],
+    "selects": [
+        {"name": "SLOT-IN", "assign": "SLOTIN", "status": "WS-IN-STATUS", "org": "RELATIVE",
+         "access": "SEQUENTIAL", "relative_key": "WS-IN-NO", "horror": H106},
+        {"name": "SLOT-OUT", "assign": "SLOTOUT", "status": "WS-OUT-STATUS", "org": "RELATIVE",
+         "access": "RANDOM", "relative_key": "WS-OUT-NO", "horror": H106},
+    ],
+    "fds": [
+        {"fd": "SLOT-IN", "record": I(1, "IN-REC", kids=[
+            I(5, "IN-ID", "X(8)"), I(5, "IN-QTY", "9(5)"), I(5, "FILLER", "X(27)")])},
+        {"fd": "SLOT-OUT", "record": I(1, "OUT-REC", kids=[
+            I(5, "OUT-ID", "X(8)"), I(5, "OUT-QTY", "9(5)"), I(5, "FILLER", "X(27)")])},
+    ],
+    "ws": [
+        I(1, "WS-IN-STATUS", "X(2)"),
+        I(1, "WS-OUT-STATUS", "X(2)"),
+        I(1, "WS-IN-NO", "9(4)", value="ZERO"),
+        I(1, "WS-OUT-NO", "9(4)", value="ZERO"),
+        I(1, "WS-EOF-FLAG", "X", value="'N'", kids=[I(88, "WS-EOF", value="'Y'")]),
+        I(1, "WS-COPIED", "9(5)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN INPUT SLOT-IN", "OPEN I-O SLOT-OUT"),
+             perform("1000-POSITION"),
+             perform("2000-COPY", until="WS-EOF"),
+             perform("3000-TRIM"),
+             raw("CLOSE SLOT-IN", "CLOSE SLOT-OUT", "DISPLAY 'AIXARRS COPIED ' WS-COPIED"),
+             goback()),
+        para("1000-POSITION",
+             raw("MOVE 5 TO WS-IN-NO",
+                 "START SLOT-IN KEY IS NOT LESS THAN WS-IN-NO",
+                 "    INVALID KEY SET WS-EOF TO TRUE",
+                 "END-START")),
+        para("2000-COPY",
+             raw("READ SLOT-IN", "    AT END SET WS-EOF TO TRUE", "END-READ"),
+             if_("NOT WS-EOF",
+                 [raw("MOVE IN-REC TO OUT-REC", "MOVE WS-IN-NO TO WS-OUT-NO",
+                      "WRITE OUT-REC", "    INVALID KEY PERFORM 2100-REPLACE", "END-WRITE",
+                      "ADD 1 TO WS-COPIED")])),
+        para("2100-REPLACE",
+             raw("REWRITE OUT-REC", "    INVALID KEY DISPLAY 'SLOT LOST ' WS-OUT-NO", "END-REWRITE")),
+        para("3000-TRIM",
+             raw("MOVE 99 TO WS-OUT-NO",
+                 "DELETE SLOT-OUT RECORD", "    INVALID KEY DISPLAY 'SLOT 99 NOT THERE'", "END-DELETE")),
+    ],
+}
+
+AIXAESU = {
+    "member": "AIXAESU",
+    "era": 2,
+    "era_evidence": "END-READ (COBOL-85); no later construct",
+    "program_id": "AIXAESU",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAESU - MARK LOG RECORDS REVIEWED.",
+                "AN ESDS RECORD KEEPS ITS LENGTH; NO DELETE."],
+    "selects": [{"name": "LOG-FILE", "assign": "LOGUPD", "status": "WS-LOG-STATUS", "org": "SEQUENTIAL",
+                 "access": "SEQUENTIAL", "horror": H107}],
+    "fds": [{"fd": "LOG-FILE", "record": I(1, "LOG-REC", kids=[
+        I(5, "LOG-TS", "X(14)"), I(5, "LOG-TEXT", "X(40)"), I(5, "FILLER", "X(6)")])}],
+    "ws": [
+        I(1, "WS-LOG-STATUS", "X(2)"),
+        I(1, "WS-EOF-FLAG", "X", value="'N'", kids=[I(88, "WS-EOF", value="'Y'")]),
+        I(1, "WS-MARKED", "9(5)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN I-O LOG-FILE"),
+             perform("8000-READ"),
+             perform("1000-MARK", until="WS-EOF"),
+             raw("CLOSE LOG-FILE", "DISPLAY 'AIXAESU MARKED ' WS-MARKED"),
+             goback()),
+        para("1000-MARK",
+             if_("LOG-TEXT = 'ORDER ORD00001 ACCEPTED'",
+                 [raw("MOVE 'ORDER ORD00001 REVIEWED' TO LOG-TEXT",
+                      "REWRITE LOG-REC", "ADD 1 TO WS-MARKED")]),
+             perform("8000-READ"),
+             horror=H107),
+        para("8000-READ",
+             read("LOG-FILE", at_end=[raw("SET WS-EOF TO TRUE")])),
+    ],
+}
+
+AIXAKS2 = {
+    "member": "AIXAKS2",
+    "era": 2,
+    "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+    "program_id": "AIXAKS2",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAKS2 - CUSTOMERS, TWO ALTERNATE KEYS.",
+                "TAX ID IS UNIQUE, NAME MAY REPEAT."],
+    "selects": [{"name": "CUS-FILE", "assign": "CUSKSD", "status": "WS-CUS-STATUS", "org": "INDEXED",
+                 "access": "DYNAMIC", "record_key": "CUS-ID",
+                 "alternate_keys": [{"name": "CUS-TAX", "duplicates": False},
+                                    {"name": "CUS-NAME", "duplicates": True}], "horror": H108}],
+    "fds": [{"fd": "CUS-FILE", "record": I(1, "CUS-REC", kids=[
+        I(5, "CUS-ID", "X(8)"), I(5, "CUS-TAX", "X(9)"), I(5, "CUS-NAME", "X(20)"), I(5, "FILLER", "X(3)")])}],
+    "ws": [
+        I(1, "WS-CUS-STATUS", "X(2)"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN I-O CUS-FILE"),
+             if_("WS-CUS-STATUS NOT = '00'",
+                 [raw("DISPLAY 'AIXAKS2 OPEN FAILED ' WS-CUS-STATUS", "MOVE 12 TO RETURN-CODE"), goback()]),
+             perform("1000-ADD"),
+             perform("2000-PROBE"),
+             raw("CLOSE CUS-FILE"),
+             goback()),
+        para("1000-ADD",
+             raw("MOVE 'CUS00001' TO CUS-ID", "MOVE '123456789' TO CUS-TAX", "MOVE 'SMITH' TO CUS-NAME",
+                 "WRITE CUS-REC"),
+             perform("9000-STATUS"),
+             raw("MOVE 'CUS00002' TO CUS-ID", "MOVE '987654321' TO CUS-TAX", "WRITE CUS-REC"),
+             perform("9000-STATUS"),
+             raw("MOVE 'CUS00003' TO CUS-ID", "MOVE '123456789' TO CUS-TAX", "WRITE CUS-REC"),
+             perform("9000-STATUS")),
+        para("2000-PROBE",
+             raw("MOVE '987654321' TO CUS-TAX",
+                 "READ CUS-FILE KEY IS CUS-TAX", "    INVALID KEY DISPLAY 'TAX ID NOT FOUND'", "END-READ"),
+             perform("9000-STATUS")),
+        para("9000-STATUS",
+             if_("WS-CUS-STATUS = '22'", [raw("DISPLAY 'DUPLICATE KEY ' CUS-ID")]),
+             if_("WS-CUS-STATUS = '02'", [raw("DISPLAY 'DUPLICATE NAME ' CUS-NAME")]),
+             horror=H108),
+    ],
+}
+
 
 def _dd(name, dsn=None, disp=("SHR",), **kw):
     return {"name": name, "dsn": dsn, "disp": disp, **kw}
@@ -204,6 +343,71 @@ JOBS = [
             ]},
         ],
     },
+    {
+        # slice 1: the history RRDS, the customer KSDS with a unique and a duplicate alternate key
+        "name": "AIXADF2",
+        "title": "AIXA DEFINE VSAM 2",
+        "accounting": "(AIXA,0100)",
+        "comments": ["DEFINE THE HISTORY RRDS, THE CUSTOMER KSDS, TWO ALTERNATE INDEXES AND THEIR PATHS"],
+        "steps": [
+            {"name": "IDC010", "pgm": "IDCAMS", "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                {"name": "SYSIN", "horror": H106, "inline": [
+                    ("DEFINE", [" DEFINE CLUSTER (NAME(PROD.AIXA.SLOTH) -",
+                                "        NUMBERED RECORDSIZE(40 40) -",
+                                "        CYLINDERS(1 1))"]),
+                ]},
+            ]},
+            {"name": "IDC020", "pgm": "IDCAMS", "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                {"name": "SYSIN", "horror": H108, "inline": [
+                    ("DEFINE", [" DEFINE CLUSTER (NAME(PROD.AIXA.CUST) -",
+                                "        INDEXED KEYS(8 0) RECORDSIZE(40 40) -",
+                                "        CYLINDERS(1 1))"]),
+                    ("DEFINE", [" DEFINE ALTERNATEINDEX (NAME(PROD.AIXA.CUST.TAXAIX) -",
+                                "        RELATE(PROD.AIXA.CUST) KEYS(9 8) -",
+                                "        UNIQUEKEY UPGRADE CYLINDERS(1 1))"]),
+                    ("DEFINE", [" DEFINE ALTERNATEINDEX (NAME(PROD.AIXA.CUST.NAMAIX) -",
+                                "        RELATE(PROD.AIXA.CUST) KEYS(20 17) -",
+                                "        NONUNIQUEKEY UPGRADE CYLINDERS(1 1))"]),
+                    ("DEFINE", [" DEFINE PATH (NAME(PROD.AIXA.CUST.TAXPATH) -",
+                                "        PATHENTRY(PROD.AIXA.CUST.TAXAIX) UPDATE)"]),
+                    ("DEFINE", [" DEFINE PATH (NAME(PROD.AIXA.CUST.NAMPATH) -",
+                                "        PATHENTRY(PROD.AIXA.CUST.NAMAIX) UPDATE)"]),
+                    ("BLDINDEX", [" BLDINDEX INDATASET(PROD.AIXA.CUST) -",
+                                  "        OUTDATASET(PROD.AIXA.CUST.TAXAIX)"]),
+                    ("BLDINDEX", [" BLDINDEX INDATASET(PROD.AIXA.CUST) -",
+                                  "        OUTDATASET(PROD.AIXA.CUST.NAMAIX)"]),
+                ]},
+            ]},
+        ],
+    },
+    {
+        # slice 1: the RRDS copy, the in-place ESDS update, the two-alternate-key KSDS, a PATH DD per key
+        "name": "AIXARU2",
+        "title": "AIXA ORDER RUN 2",
+        "accounting": "(AIXA,0100)",
+        "steps": [
+            {"name": "RRS010", "pgm": "AIXARRS", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                _dd("SLOTIN", "PROD.AIXA.SLOTS", ("OLD",)),
+                _dd("SLOTOUT", "PROD.AIXA.SLOTH", ("OLD",)),
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
+            {"name": "ESU020", "pgm": "AIXAESU", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                _dd("LOGUPD", "PROD.AIXA.LOG", ("OLD",)),
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
+            {"name": "KS2030", "pgm": "AIXAKS2", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                _dd("CUSKSD", "PROD.AIXA.CUST", ("OLD",)),
+                _dd("CUSKSD1", "PROD.AIXA.CUST.TAXPATH", ("OLD",), horror=H108),
+                _dd("CUSKSD2", "PROD.AIXA.CUST.NAMPATH", ("OLD",), horror=H108),
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
+        ],
+    },
 ]
 
 APP = {
@@ -214,7 +418,7 @@ APP = {
     "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
     "copybooks": [],
     "dclgen": [],
-    "programs": [AIXAKSD, AIXARRD, AIXAESD],
+    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2],
     "jcl": JOBS,
     "procs": [],
 }

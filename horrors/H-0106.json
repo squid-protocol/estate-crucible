@@ -1,0 +1,108 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0106",
+ "title": "A relative file read ACCESS SEQUENTIAL after a START, and a second one written ACCESS RANDOM with REWRITE and DELETE",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXARRS: SELECT SLOT-IN ... ORGANIZATION IS RELATIVE / ACCESS MODE IS SEQUENTIAL / RELATIVE KEY IS WS-IN-NO; START SLOT-IN KEY IS NOT LESS THAN WS-IN-NO",
+  "AIXA AIXARRS: SELECT SLOT-OUT ... ORGANIZATION IS RELATIVE / ACCESS MODE IS RANDOM / RELATIVE KEY IS WS-OUT-NO; WRITE, REWRITE and DELETE by relative number"
+ ],
+ "asserts": "Two file_control facts in AIXARRS, both organization RELATIVE with record_key null: SLOT-IN with access_mode SEQUENTIAL and relative_key WS-IN-NO, SLOT-OUT with access_mode RANDOM and relative_key WS-OUT-NO. The access mode is part of each fact: the same organization (the one AIXARRD declares DYNAMIC, H-0077) is reached in three different ways. The two SELECTs name different relative keys and different data sets (DD SLOTIN on PROD.AIXA.SLOTS, DD SLOTOUT on PROD.AIXA.SLOTH, defined by the DEFINE CLUSTER NUMBERED card of step IDC010 of job AIXADF2), so neither is an alias of the other.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "START statement",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "Must name a file with sequential or dynamic access."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "DELETE statement",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "For files in random or dynamic access mode, the system removes the record identified by the contents of the prime RECORD KEY data item for indexed files, or the RELATIVE KEY data item for relative files."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "DELETE statement",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "If the file does not contain such a record, an INVALID KEY condition exists."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXARRS.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "file_control": [
+     {
+      "select": "SLOT-IN",
+      "assign": "SLOTIN",
+      "organization": "RELATIVE",
+      "access_mode": "SEQUENTIAL",
+      "record_key": null,
+      "file_status": "WS-IN-STATUS",
+      "fd_copies": [],
+      "line": 11,
+      "relative_key": "WS-IN-NO",
+      "horror": "H-0106"
+     },
+     {
+      "select": "SLOT-OUT",
+      "assign": "SLOTOUT",
+      "organization": "RELATIVE",
+      "access_mode": "RANDOM",
+      "record_key": null,
+      "file_status": "WS-OUT-STATUS",
+      "fd_copies": [],
+      "line": 16,
+      "relative_key": "WS-OUT-NO",
+      "horror": "H-0106"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/AIXA/jcl/AIXADF2.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "AIXADF2",
+      "proc": null,
+      "step": "IDC010",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 7,
+      "inline_lines": 3,
+      "horror": "H-0106"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "AIXADF2",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "CLUSTER (NAME(PROD.AIXA.SLOTH) NUMBERED RECORDSIZE(40 40) CYLINDERS(1 1))",
+      "line": 8,
+      "horror": "H-0106"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
