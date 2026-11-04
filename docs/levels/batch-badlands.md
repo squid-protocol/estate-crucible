@@ -34,7 +34,7 @@ Slice 5 (gitgalaxy#7065): H-0094 (OUTPUT JCL statements, job and step level, and
 
 Slice 6 (gitgalaxy#7065): H-0102..H-0105 plant utility constructs in `BDLDUT3`, all as `jcl_utility_cards` / `jcl_dds` facts already defined in SPEC section 3 (no new field). IEBUPDTE's data lines between `./ ADD` and `./ ENDUP` are member text and carry no fact. Not yet planted: BPXBATCH, IKJEFT01 DSNUTILB / BIND, ADRDSSU, IEBIMAGE.
 
-Remaining slices: OUTPUT JCL statements, a program that issues CHKPT; the other three levels (#4892, #4893; #4894 is the AIXA app).
+Remaining slices: plants for BPXBATCH, IKJEFT01 DSNUTILB / BIND, ADRDSSU and IEBIMAGE (a new release and pin bump follow); the other three levels (#4892, #4893; #4894 is the AIXA app).
 
 Key additions (SPEC section 3): the `jcl_utility_cards` channel and the optional fields `parm`,
 `if_cond`, `branch`, `restart` on `jcl_steps` and `temp`, `concat_of`, `dummy`, `inline_lines` on
@@ -44,7 +44,10 @@ Key additions (SPEC section 3): the `jcl_utility_cards` channel and the optional
 
 | date | engine commit | scan | translate | result |
 |---|---|---|---|---|
-| pending | pending | pending | pending | pending |
+| 2026-11-04 | scan `997dd1fb6`, translate `a50e79393` (key v0.7.0) | 18 of 21 horrors pass; H-0071, H-0083, H-0085 fail | 3 programs: 1 whole, 1 hole, 1 refused | measured once; development data from here |
 
-The first run needs gitgalaxy's scorer to read the new channel and fields (a gitgalaxy-side change,
-not part of this PR).
+Scan: the three failures had one cause, JCLLIB order libraries read as dataset references (gitgalaxy#7693, fixed after the run;
+all 21 pass at v0.7.0 in gitgalaxy's baseline). Translate: BDLDRPT whole (8/8 statements); BDLDDB2 15/16, the hole is its
+`EXEC SQL` (stub-only run, no generated Db2 repository); BDLDCKP refused, its DATA DIVISION did not parse (the I-O-CONTROL
+RERUN program). Source: gitgalaxy#7702 (scan), gitgalaxy#7065 (translate); the numbers live in gitgalaxy's
+`tests/estate_crucible/levels.json`. Following Open World rule 5 this row is not re-measured; later runs are development data.
