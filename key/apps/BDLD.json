@@ -2600,6 +2600,814 @@
     "H-0072"
    ]
   },
+  "apps/BDLD/jcl/BDLDUT3.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 76,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "ICETOOL",
+     "target": "ICETOOL",
+     "line": 4,
+     "resolves_to": null
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "SORT",
+     "target": "SORT",
+     "line": 18,
+     "resolves_to": null
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "SORT",
+     "target": "SORT",
+     "line": 28,
+     "resolves_to": null
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IEBUPDTE",
+     "target": "IEBUPDTE",
+     "line": 42,
+     "resolves_to": null
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IEBPTPCH",
+     "target": "IEBPTPCH",
+     "line": 53,
+     "resolves_to": null
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IEBCOMPR",
+     "target": "IEBCOMPR",
+     "line": 63,
+     "resolves_to": null
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IEFBR14",
+     "target": "IEFBR14",
+     "line": 71,
+     "resolves_to": null
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IEFBR14",
+     "target": "IEFBR14",
+     "line": 75,
+     "resolves_to": null
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "ICE010",
+     "ordinal": 1,
+     "program": "ICETOOL",
+     "exec_proc": null,
+     "cond": null,
+     "line": 4
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT020",
+     "ordinal": 2,
+     "program": "SORT",
+     "exec_proc": null,
+     "cond": null,
+     "line": 18
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT030",
+     "ordinal": 3,
+     "program": "SORT",
+     "exec_proc": null,
+     "cond": null,
+     "line": 28
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "UPD040",
+     "ordinal": 4,
+     "program": "IEBUPDTE",
+     "exec_proc": null,
+     "cond": null,
+     "line": 42,
+     "parm": "NEW"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "PCH050",
+     "ordinal": 5,
+     "program": "IEBPTPCH",
+     "exec_proc": null,
+     "cond": null,
+     "line": 53
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "CMP060",
+     "ordinal": 6,
+     "program": "IEBCOMPR",
+     "exec_proc": null,
+     "cond": null,
+     "line": 63
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "ALC070",
+     "ordinal": 7,
+     "program": "IEFBR14",
+     "exec_proc": null,
+     "cond": null,
+     "line": 71
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "DEL080",
+     "ordinal": 8,
+     "program": "IEFBR14",
+     "exec_proc": null,
+     "cond": null,
+     "line": 75
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "ICE010",
+     "dd": "TOOLMSG",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 5
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "ICE010",
+     "dd": "DFSMSG",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 6
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "ICE010",
+     "dd": "IN",
+     "dsn": "PROD.BDLD.XREFIN",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 7
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "ICE010",
+     "dd": "OUT",
+     "dsn": "PROD.BDLD.DUPS",
+     "generation": null,
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 8
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "ICE010",
+     "dd": "RPT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 10
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "ICE010",
+     "dd": "TOOLIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 11,
+     "inline_lines": 4,
+     "horror": "H-0102"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT020",
+     "dd": "SORTIN",
+     "dsn": "PROD.BDLD.XREFIN",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 19
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT020",
+     "dd": "SORTOUT",
+     "dsn": "PROD.BDLD.XREFFLG",
+     "generation": null,
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 20
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT020",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 22
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT020",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 23,
+     "inline_lines": 2,
+     "horror": "H-0103"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT030",
+     "dd": "SORTIN",
+     "dsn": "PROD.BDLD.XREFCSV",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 29
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT030",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 30
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT030",
+     "dd": "OUT1",
+     "dsn": "PROD.BDLD.PARSED1",
+     "generation": null,
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 31
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT030",
+     "dd": "OUT2",
+     "dsn": "PROD.BDLD.PARSED2",
+     "generation": null,
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 33
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT030",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 35,
+     "inline_lines": 4,
+     "horror": "H-0103"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "UPD040",
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 43
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "UPD040",
+     "dd": "SYSUT2",
+     "dsn": "PROD.BDLD.NOTES",
+     "generation": null,
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 44
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "UPD040",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 46,
+     "inline_lines": 4,
+     "horror": "H-0104"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "PCH050",
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 54
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "PCH050",
+     "dd": "SYSUT1",
+     "dsn": "PROD.BDLD.NOTES",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 55
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "PCH050",
+     "dd": "SYSUT2",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "A",
+     "line": 56
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "PCH050",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 57,
+     "inline_lines": 3,
+     "horror": "H-0104"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "CMP060",
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 64
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "CMP060",
+     "dd": "SYSUT1",
+     "dsn": "PROD.BDLD.XREFIN",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 65
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "CMP060",
+     "dd": "SYSUT2",
+     "dsn": "PROD.BDLD.XREFFLG",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 66
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "CMP060",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 67,
+     "inline_lines": 1,
+     "horror": "H-0104"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "ALC070",
+     "dd": "NEWDD",
+     "dsn": "PROD.BDLD.WORKFILE",
+     "generation": null,
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 72
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "DEL080",
+     "dd": "OLDDD",
+     "dsn": "PROD.BDLD.WORKFILE",
+     "generation": null,
+     "disp": "OLD",
+     "disp_normal": "DELETE",
+     "sysout": null,
+     "line": 76
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.BDLD.XREFIN",
+     "generation": null,
+     "step": "ICE010",
+     "dd": "IN",
+     "line": 7
+    },
+    {
+     "dsn": "PROD.BDLD.DUPS",
+     "generation": null,
+     "step": "ICE010",
+     "dd": "OUT",
+     "line": 8
+    },
+    {
+     "dsn": "PROD.BDLD.XREFIN",
+     "generation": null,
+     "step": "SRT020",
+     "dd": "SORTIN",
+     "line": 19
+    },
+    {
+     "dsn": "PROD.BDLD.XREFFLG",
+     "generation": null,
+     "step": "SRT020",
+     "dd": "SORTOUT",
+     "line": 20
+    },
+    {
+     "dsn": "PROD.BDLD.XREFCSV",
+     "generation": null,
+     "step": "SRT030",
+     "dd": "SORTIN",
+     "line": 29
+    },
+    {
+     "dsn": "PROD.BDLD.PARSED1",
+     "generation": null,
+     "step": "SRT030",
+     "dd": "OUT1",
+     "line": 31
+    },
+    {
+     "dsn": "PROD.BDLD.PARSED2",
+     "generation": null,
+     "step": "SRT030",
+     "dd": "OUT2",
+     "line": 33
+    },
+    {
+     "dsn": "PROD.BDLD.NOTES",
+     "generation": null,
+     "step": "UPD040",
+     "dd": "SYSUT2",
+     "line": 44
+    },
+    {
+     "dsn": "PROD.BDLD.NOTES",
+     "generation": null,
+     "step": "PCH050",
+     "dd": "SYSUT1",
+     "line": 55
+    },
+    {
+     "dsn": "PROD.BDLD.XREFIN",
+     "generation": null,
+     "step": "CMP060",
+     "dd": "SYSUT1",
+     "line": 65
+    },
+    {
+     "dsn": "PROD.BDLD.XREFFLG",
+     "generation": null,
+     "step": "CMP060",
+     "dd": "SYSUT2",
+     "line": 66
+    },
+    {
+     "dsn": "PROD.BDLD.WORKFILE",
+     "generation": null,
+     "step": "ALC070",
+     "dd": "NEWDD",
+     "line": 72,
+     "horror": "H-0105"
+    },
+    {
+     "dsn": "PROD.BDLD.WORKFILE",
+     "generation": null,
+     "step": "DEL080",
+     "dd": "OLDDD",
+     "line": 76,
+     "horror": "H-0105"
+    }
+   ],
+   "gaps": [
+    {
+     "kind": "exec",
+     "name": "IEBUPDTE",
+     "line": 42,
+     "why": "no member of the estate holds the program"
+    },
+    {
+     "kind": "exec",
+     "name": "IEBPTPCH",
+     "line": 53,
+     "why": "no member of the estate holds the program"
+    },
+    {
+     "kind": "exec",
+     "name": "IEBCOMPR",
+     "line": 63,
+     "why": "no member of the estate holds the program"
+    }
+   ],
+   "jcl_utility_cards": [
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "ICE010",
+     "utility": "ICETOOL",
+     "dd": "TOOLIN",
+     "verb": "COUNT",
+     "operands": "FROM(IN) EMPTY",
+     "line": 12,
+     "horror": "H-0102"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "ICE010",
+     "utility": "ICETOOL",
+     "dd": "TOOLIN",
+     "verb": "SELECT",
+     "operands": "FROM(IN) TO(OUT) ON(1,10,CH) ALLDUPS",
+     "line": 13,
+     "horror": "H-0102"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "ICE010",
+     "utility": "ICETOOL",
+     "dd": "TOOLIN",
+     "verb": "OCCUR",
+     "operands": "FROM(IN) LIST(RPT) ON(1,10,CH)",
+     "line": 14,
+     "horror": "H-0102"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "ICE010",
+     "utility": "ICETOOL",
+     "dd": "TOOLIN",
+     "verb": "STATS",
+     "operands": "FROM(IN) ON(21,5,ZD)",
+     "line": 15,
+     "horror": "H-0102"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT020",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "SORT",
+     "operands": "FIELDS=(1,10,CH,A)",
+     "line": 24,
+     "horror": "H-0103"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT020",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "INREC",
+     "operands": "IFTHEN=(WHEN=(35,1,CH,EQ,C'A'),OVERLAY=(36:C'ACTIVE'))",
+     "line": 25,
+     "horror": "H-0103"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT030",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "SORT",
+     "operands": "FIELDS=COPY",
+     "line": 36,
+     "horror": "H-0103"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT030",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "INREC",
+     "operands": "PARSE=(%01=(ENDBEFR=C',',FIXLEN=10)),BUILD=(%01,11:C'X')",
+     "line": 37,
+     "horror": "H-0103"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT030",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "OUTFIL",
+     "operands": "FNAMES=OUT1,OVERLAY=(41:C'ZZ')",
+     "line": 38,
+     "horror": "H-0103"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "SRT030",
+     "utility": "SORT",
+     "dd": "SYSIN",
+     "verb": "OUTFIL",
+     "operands": "FNAMES=OUT2,BUILD=(1,10,C' ',11,5)",
+     "line": 39,
+     "horror": "H-0103"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "UPD040",
+     "utility": "IEBUPDTE",
+     "dd": "SYSIN",
+     "verb": "./",
+     "operands": "ADD NAME=BDLDNOTE,LIST=ALL",
+     "line": 47,
+     "horror": "H-0104"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "UPD040",
+     "utility": "IEBUPDTE",
+     "dd": "SYSIN",
+     "verb": "./",
+     "operands": "ENDUP",
+     "line": 50,
+     "horror": "H-0104"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "PCH050",
+     "utility": "IEBPTPCH",
+     "dd": "SYSIN",
+     "verb": "PRINT",
+     "operands": "TYPORG=PO,MAXFLDS=1",
+     "line": 58,
+     "horror": "H-0104"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "PCH050",
+     "utility": "IEBPTPCH",
+     "dd": "SYSIN",
+     "verb": "MEMBER",
+     "operands": "NAME=BDLDNOTE",
+     "line": 59,
+     "horror": "H-0104"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "PCH050",
+     "utility": "IEBPTPCH",
+     "dd": "SYSIN",
+     "verb": "RECORD",
+     "operands": "FIELD=(80)",
+     "line": 60,
+     "horror": "H-0104"
+    },
+    {
+     "job": "BDLDUT3",
+     "proc": null,
+     "step": "CMP060",
+     "utility": "IEBCOMPR",
+     "dd": "SYSIN",
+     "verb": "COMPARE",
+     "operands": "TYPORG=PS",
+     "line": 68,
+     "horror": "H-0104"
+    }
+   ],
+   "horrors": [
+    "H-0102",
+    "H-0103",
+    "H-0104",
+    "H-0105"
+   ]
+  },
   "apps/BDLD/jcl/BDLDUTIL.jcl": {
    "app": "BDLD",
    "library": "jcl",

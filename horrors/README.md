@@ -102,6 +102,10 @@ era-neutral syntax horror; blank is untagged.
 | H-0099 | 1 | [#5119](https://github.com/squid-protocol/gitgalaxy/issues/5119) | layouts | BLL and large storage areas: a LINKAGE record over 4096 bytes addressed by a second BLL cell set with ADD 4096 | `apps/INVT/cobol/INVTLRG.cbl` |
 | H-0100 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQI verbs called through a data item: CALL identifier whose VALUE names the MQ verb | `apps/MQSA/cobol/MQSADYN.cbl` |
 | H-0101 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQ trigger monitor: a program that MQGETs the trigger message structure (MQTM) from an initiation queue, the structure arriving by COPY | `apps/MQSA/cobol/MQSATRG.cbl` |
+| H-0102 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | ICETOOL operators beyond COPY: COUNT, SELECT, OCCUR, STATS in a TOOLIN stream | `apps/BDLD/jcl/BDLDUT3.jcl` |
+| H-0103 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | DFSORT record reformatting beyond FIELDS: INREC IFTHEN / OVERLAY, INREC PARSE with BUILD, OUTFIL OVERLAY and BUILD | `apps/BDLD/jcl/BDLDUT3.jcl` |
+| H-0104 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | Data set utility control statements: IEBUPDTE ./ ADD and ./ ENDUP with data lines between, IEBPTPCH PRINT / MEMBER / RECORD, IEBCOMPR COMPARE | `apps/BDLD/jcl/BDLDUT3.jcl` |
+| H-0105 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | IEFBR14 allocating a data set by DISP=(NEW,CATLG) and deleting it by DISP=(OLD,DELETE) | `apps/BDLD/jcl/BDLDUT3.jcl` |
 
 ## Field-testing defects not planted
 

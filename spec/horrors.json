@@ -2416,6 +2416,146 @@
     }
    ],
    "era": 2
+  },
+  {
+   "id": "H-0102",
+   "title": "ICETOOL operators beyond COPY: COUNT, SELECT, OCCUR, STATS in a TOOLIN stream",
+   "category": "jcl",
+   "issue": 4890,
+   "shapes": [
+    "BDLD jcl/BDLDUT3.jcl ICE010: TOOLIN holds COUNT FROM(IN) EMPTY, SELECT FROM(IN) TO(OUT) ON(1,10,CH) ALLDUPS, OCCUR FROM(IN) LIST(RPT) ON(1,10,CH), STATS FROM(IN) ON(21,5,ZD)"
+   ],
+   "asserts": "Each ICETOOL operator in the inline TOOLIN stream is one jcl_utility_cards fact with utility ICETOOL, dd TOOLIN, the operator as verb (COUNT, SELECT, OCCUR, STATS) and its operands (FROM / TO / LIST / ON ... as written).",
+   "citations": [
+    {
+     "doc": "DFSORT: ICETOOL Mini-User Guide (October 2010)",
+     "section": "COUNT operator",
+     "url": "https://ibm.com/support/pages/system/files/inline-files/$FILE/sorttool.pdf",
+     "quote": "COUNT - prints a message in TOOLMSG containing the count of records in a data set."
+    },
+    {
+     "doc": "DFSORT: ICETOOL Mini-User Guide (October 2010)",
+     "section": "SELECT operator",
+     "url": "https://ibm.com/support/pages/system/files/inline-files/$FILE/sorttool.pdf",
+     "quote": "SELECT - selects records from a data set for inclusion in an output data set based on meeting criteria for the number of times specified numeric or character field values occur"
+    },
+    {
+     "doc": "DFSORT: ICETOOL Mini-User Guide (October 2010)",
+     "section": "OCCUR operator",
+     "url": "https://ibm.com/support/pages/system/files/inline-files/$FILE/sorttool.pdf",
+     "quote": "OCCUR - prints each unique value for specified numeric and character fields and how many times it occurs in a separate list data set."
+    },
+    {
+     "doc": "DFSORT: ICETOOL Mini-User Guide (October 2010)",
+     "section": "STATS operator",
+     "url": "https://ibm.com/support/pages/system/files/inline-files/$FILE/sorttool.pdf",
+     "quote": "STATS - prints messages in TOOLMSG containing the minimum, maximum, average, and total for specified numeric fields in a data set."
+    }
+   ],
+   "era": 0
+  },
+  {
+   "id": "H-0103",
+   "title": "DFSORT record reformatting beyond FIELDS: INREC IFTHEN / OVERLAY, INREC PARSE with BUILD, OUTFIL OVERLAY and BUILD",
+   "category": "jcl",
+   "issue": 4890,
+   "shapes": [
+    "BDLD jcl/BDLDUT3.jcl SRT020: SORT FIELDS, then INREC IFTHEN=(WHEN=(...),OVERLAY=(...))",
+    "BDLD jcl/BDLDUT3.jcl SRT030: SORT FIELDS=COPY, INREC PARSE=(%01=(ENDBEFR=...,FIXLEN=...)),BUILD=(%01,...), then two OUTFIL statements, one with OVERLAY and one with BUILD"
+   ],
+   "asserts": "Each control statement in the inline SYSIN stream is one jcl_utility_cards fact with utility SORT, its verb (SORT, INREC, OUTFIL) and its operands as written on the one line; the two OUTFIL statements are two facts, and a parsed field such as %01 is part of the operands, not a statement of its own.",
+   "citations": [
+    {
+     "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.4.0)",
+     "section": "INREC control statement",
+     "url": "https://ibm.com/docs/SSLTBW_2.4.0/com.ibm.zos.v2r4.icea100/ice2ca_INREC_control_statement.htm",
+     "quote": "IFTHEN clauses allow you to reformat different records in different ways"
+    },
+    {
+     "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.4.0)",
+     "section": "INREC control statement: PARSE",
+     "url": "https://ibm.com/docs/SSLTBW_2.4.0/com.ibm.zos.v2r4.icea100/ice2ca_INREC_control_statement.htm",
+     "quote": "This operand allows you to extract variable position/length fields into fixed parsed fields."
+    },
+    {
+     "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.4.0)",
+     "section": "INREC control statement: OVERLAY",
+     "url": "https://ibm.com/docs/SSLTBW_2.4.0/com.ibm.zos.v2r4.icea100/ice2ca_INREC_control_statement.htm",
+     "quote": "Specifies each item that is to overlay specific columns in the reformatted record."
+    },
+    {
+     "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.1.0)",
+     "section": "OUTFIL control statements",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.icea100/oufcst.htm",
+     "quote": "OUTFIL control statements allow you to create one or more output data sets for a sort, copy, or merge application"
+    }
+   ],
+   "era": 0
+  },
+  {
+   "id": "H-0104",
+   "title": "Data set utility control statements: IEBUPDTE ./ ADD and ./ ENDUP with data lines between, IEBPTPCH PRINT / MEMBER / RECORD, IEBCOMPR COMPARE",
+   "category": "jcl",
+   "issue": 4890,
+   "shapes": [
+    "BDLD jcl/BDLDUT3.jcl UPD040: IEBUPDTE PARM=NEW, SYSIN holds ./ ADD NAME=BDLDNOTE,LIST=ALL, two data lines, ./ ENDUP",
+    "BDLD jcl/BDLDUT3.jcl PCH050: IEBPTPCH PRINT, MEMBER, RECORD",
+    "BDLD jcl/BDLDUT3.jcl CMP060: IEBCOMPR COMPARE TYPORG=PS"
+   ],
+   "asserts": "Each control statement is one jcl_utility_cards fact with the step's PGM as utility. IEBUPDTE's ./ statements have verb './' and operands 'ADD NAME=...' / 'ENDUP'; the data lines between them are member text, not control statements, and have no fact. PRINT, MEMBER and RECORD are three facts, as is COMPARE.",
+   "citations": [
+    {
+     "doc": "z/OS DFSMSdfp Utilities",
+     "section": "IEBUPDTE",
+     "url": "https://www.ibm.com/docs/zosbasics/com.ibm.zos.zdatamgmt/zsysprogc_utilities_IEBUPDTE.htm",
+     "quote": "The IEBUPDTE utility uses control statements with the symbols ./ (a period and slash) in the first two columns."
+    },
+    {
+     "doc": "z/OS DFSMSdfp Utilities",
+     "section": "Data set utility programs: IEBPTPCH",
+     "url": "https://www.ibm.com/docs/en/zos/latest?topic=introduction-data-set-utility-programs",
+     "quote": "Print or punch records in a sequential or partitioned data set."
+    },
+    {
+     "doc": "z/OS DFSMSdfp Utilities",
+     "section": "Data set utility programs: IEBCOMPR",
+     "url": "https://www.ibm.com/docs/en/zos/latest?topic=introduction-data-set-utility-programs",
+     "quote": "Compare records in sequential or partitioned data sets, or PDSEs."
+    }
+   ],
+   "era": 0
+  },
+  {
+   "id": "H-0105",
+   "title": "IEFBR14 allocating a data set by DISP=(NEW,CATLG) and deleting it by DISP=(OLD,DELETE)",
+   "category": "jcl",
+   "issue": 4890,
+   "shapes": [
+    "BDLD jcl/BDLDUT3.jcl ALC070: EXEC PGM=IEFBR14, DD NEWDD DISP=(NEW,CATLG)",
+    "BDLD jcl/BDLDUT3.jcl DEL080: EXEC PGM=IEFBR14, DD OLDDD DISP=(OLD,DELETE) on the same DSN"
+   ],
+   "asserts": "Each DD names PROD.BDLD.WORKFILE: jcl_datasets rows for both, jcl_dds disp NEW / disp_normal CATLG and disp OLD / disp_normal DELETE. IEFBR14 is system supplied: no gap and no program edge into the estate.",
+   "citations": [
+    {
+     "doc": "z/OS DFSMSdfp Utilities",
+     "section": "IEFBR14",
+     "url": "https://www.ibm.com/docs/zosbasics/com.ibm.zos.zdatamgmt/zsysprogc_utilities_IEFBR14.htm",
+     "quote": "The utility program IEFBR14 performs no action other than return a completion code of 0"
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+     "section": "DD statement > DISP parameter > Normal termination disposition subparameter",
+     "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/iea3b6_Normal_termination_disposition_subparameter.htm",
+     "quote": "Indicates that, if the step terminates normally, the system is to place an entry pointing to the data set in the catalog."
+    },
+    {
+     "doc": "z/OS MVS JCL Reference (z/OS 2.1.0)",
+     "section": "DD statement > DISP parameter > Normal termination disposition subparameter",
+     "url": "https://www.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieab600/iea3b6_Normal_termination_disposition_subparameter.htm",
+     "quote": "Indicates that the data set is no longer needed if this step terminates normally."
+    }
+   ],
+   "era": 0
   }
  ],
  "not_planted": [

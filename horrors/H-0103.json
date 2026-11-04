@@ -1,0 +1,148 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0103",
+ "title": "DFSORT record reformatting beyond FIELDS: INREC IFTHEN / OVERLAY, INREC PARSE with BUILD, OUTFIL OVERLAY and BUILD",
+ "category": "jcl",
+ "issue": 4890,
+ "shapes": [
+  "BDLD jcl/BDLDUT3.jcl SRT020: SORT FIELDS, then INREC IFTHEN=(WHEN=(...),OVERLAY=(...))",
+  "BDLD jcl/BDLDUT3.jcl SRT030: SORT FIELDS=COPY, INREC PARSE=(%01=(ENDBEFR=...,FIXLEN=...)),BUILD=(%01,...), then two OUTFIL statements, one with OVERLAY and one with BUILD"
+ ],
+ "asserts": "Each control statement in the inline SYSIN stream is one jcl_utility_cards fact with utility SORT, its verb (SORT, INREC, OUTFIL) and its operands as written on the one line; the two OUTFIL statements are two facts, and a parsed field such as %01 is part of the operands, not a statement of its own.",
+ "citations": [
+  {
+   "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.4.0)",
+   "section": "INREC control statement",
+   "url": "https://ibm.com/docs/SSLTBW_2.4.0/com.ibm.zos.v2r4.icea100/ice2ca_INREC_control_statement.htm",
+   "quote": "IFTHEN clauses allow you to reformat different records in different ways"
+  },
+  {
+   "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.4.0)",
+   "section": "INREC control statement: PARSE",
+   "url": "https://ibm.com/docs/SSLTBW_2.4.0/com.ibm.zos.v2r4.icea100/ice2ca_INREC_control_statement.htm",
+   "quote": "This operand allows you to extract variable position/length fields into fixed parsed fields."
+  },
+  {
+   "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.4.0)",
+   "section": "INREC control statement: OVERLAY",
+   "url": "https://ibm.com/docs/SSLTBW_2.4.0/com.ibm.zos.v2r4.icea100/ice2ca_INREC_control_statement.htm",
+   "quote": "Specifies each item that is to overlay specific columns in the reformatted record."
+  },
+  {
+   "doc": "z/OS DFSORT Application Programming Guide (z/OS 2.1.0)",
+   "section": "OUTFIL control statements",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.icea100/oufcst.htm",
+   "quote": "OUTFIL control statements allow you to create one or more output data sets for a sort, copy, or merge application"
+  }
+ ],
+ "era": 0,
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDUT3.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "SRT020",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 23,
+      "inline_lines": 2,
+      "horror": "H-0103"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "SRT030",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 35,
+      "inline_lines": 4,
+      "horror": "H-0103"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "SRT020",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "SORT",
+      "operands": "FIELDS=(1,10,CH,A)",
+      "line": 24,
+      "horror": "H-0103"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "SRT020",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "INREC",
+      "operands": "IFTHEN=(WHEN=(35,1,CH,EQ,C'A'),OVERLAY=(36:C'ACTIVE'))",
+      "line": 25,
+      "horror": "H-0103"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "SRT030",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "SORT",
+      "operands": "FIELDS=COPY",
+      "line": 36,
+      "horror": "H-0103"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "SRT030",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "INREC",
+      "operands": "PARSE=(%01=(ENDBEFR=C',',FIXLEN=10)),BUILD=(%01,11:C'X')",
+      "line": 37,
+      "horror": "H-0103"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "SRT030",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "OUTFIL",
+      "operands": "FNAMES=OUT1,OVERLAY=(41:C'ZZ')",
+      "line": 38,
+      "horror": "H-0103"
+     },
+     {
+      "job": "BDLDUT3",
+      "proc": null,
+      "step": "SRT030",
+      "utility": "SORT",
+      "dd": "SYSIN",
+      "verb": "OUTFIL",
+      "operands": "FNAMES=OUT2,BUILD=(1,10,C' ',11,5)",
+      "line": 39,
+      "horror": "H-0103"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
