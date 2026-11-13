@@ -16,6 +16,9 @@ stand-in copybooks (IBM's are never shipped), and the STEPLIB concatenation of a
 | `MQSASET` | MQSET (opened with the set option) over one-word selector and integer blocks | H-0093 |
 | `MQSADYN` | the MQI verbs called through data items: `CALL WS-V-CONN USING ...` with `VALUE 'MQCONN'` | H-0100 |
 | `MQSATRG` | MQGET of the trigger message structure from an initiation queue, `COPY MQSTM` | H-0101 |
+| `MQSARRS` + `MQSALNK` step `LKRRS10` | SRRCMIT / SRRBACK; IEWL link-edit with CSQBRSTB and ATRSCSS | H-0111 |
+| `MQSATMC` | LINKAGE `COPY MQSTMC2` (MQTMC2 character trigger message), `PROCEDURE DIVISION USING` | H-0112 |
+| `MQSABKO` + `MQSALNK` step `LKBKO20` | MQ-only MQBACK; link-edit with CSQBSTUB | H-0113 |
 | `MQSAPUT` | MQOPEN / MQPUT / MQCLOSE (no dedicated horror) | |
 
 Slice 2 adds `MQSACNX`, `MQSASET`, the stand-in copybook `MQSCNO` and `MQSARUN` steps `CNX050`, `SET060`.
@@ -43,5 +46,8 @@ targets a distributed queue manager.
 
 The first run needs the owner's estate-crucible release and pin bump.
 
-Remaining slices: RRS stubs (CSQBRSTB, CSQBSTUB link-edit); IMS and CICS-MQ bridge programs; an MQ-only
-back-out fixture; trigger monitor start-up (MQTMC2, the character form passed to the started program).
+Slice 4 adds `MQSARRS`, `MQSATMC`, `MQSABKO`, the stand-in copybook `MQSTMC2` (ten character fields, 732 bytes),
+`MQSARUN` steps `RRS090`, `TMC100`, `BKO110`, and the link-edit job `MQSALNK`. Citations are from IBM MQ 9.3
+(`release` set on each horror). H-0110 is taken by the Alternate Index Archipelago slice 3 (PR #25).
+
+Remaining slices: IMS and CICS-MQ bridge programs; the `levels.json` rows for slice 4 (gitgalaxy side, separate PR).
