@@ -176,6 +176,13 @@
    "era_evidence": "END-IF (COBOL-85); static CALLs to the MQI and plain EXEC steps"
   },
   {
+   "id": "MQBR",
+   "title": "Bridge Road (MQ messages that start IMS and CICS work)",
+   "style": "batch COBOL senders for the IMS bridge (MQIIH) and the CICS bridge (MQCIH), and the IMS MPP the bridge starts",
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); static CALLs to the MQI and DL/I and plain EXEC steps"
+  },
+  {
    "id": "HKEP",
    "title": "Hierarchy Keep (batch IMS: DL/I calls and a DBD)",
    "style": "batch COBOL over DL/I (CBLTDLI) with a DBDGEN member",
@@ -213,32 +220,32 @@
   "ims_gen"
  ],
  "fact_totals": {
-  "programs": 68,
-  "units": 189,
-  "edges": 176,
-  "call_sites": 145,
-  "copies": 87,
-  "data_items": 741,
-  "layouts": 328,
+  "programs": 71,
+  "units": 195,
+  "edges": 193,
+  "call_sites": 161,
+  "copies": 95,
+  "data_items": 851,
+  "layouts": 357,
   "sql_statements": 6,
   "sql_tables": 3,
-  "jcl_steps": 80,
-  "jcl_dds": 248,
+  "jcl_steps": 82,
+  "jcl_dds": 256,
   "screen_fields": 16,
   "csd_resources": 48,
   "transactions": 8,
   "cics_resources": 13,
-  "jcl_datasets": 133,
+  "jcl_datasets": 139,
   "file_control": 21,
-  "entry_points": 68,
-  "file_edges": 45,
-  "data_moves": 231,
+  "entry_points": 71,
+  "file_edges": 47,
+  "data_moves": 250,
   "copy_collisions": 9,
-  "gaps": 64,
+  "gaps": 78,
   "dead": 11,
   "jcl_utility_cards": 67,
   "jcl_outputs": 3,
-  "dli_calls": 2,
+  "dli_calls": 4,
   "ims_gen": 4,
   "phantoms": 61
  },
@@ -297,6 +304,9 @@
    ],
    "LOANCPY": [
     "apps/LOAN/copybook"
+   ],
+   "MQBRCPY": [
+    "apps/MQBR/copybook"
    ],
    "MQSACPY": [
     "apps/MQSA/copybook"
@@ -448,6 +458,13 @@
    {
     "programs": "apps/MODN/*",
     "order": [
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/MQBR/*",
+    "order": [
+     "MQBRCPY",
      "SHRCPY"
     ]
    },
@@ -619,7 +636,10 @@
   "H-0107",
   "H-0108",
   "H-0109",
-  "H-0110"
+  "H-0110",
+  "H-0114",
+  "H-0115",
+  "H-0116"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -2260,6 +2280,138 @@
    "horrors": [
     "H-0028"
    ]
+  },
+  "apps/MQBR/cobol/MQBRCIH.cbl": {
+   "app": "MQBR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "b2c8cb39be392e3494c47a579252b1baf3b04054f2f2a7a4a604360b06137fc0",
+   "bytes": 2604,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI and DL/I are static CALL interfaces",
+   "horrors": [
+    "H-0115"
+   ]
+  },
+  "apps/MQBR/cobol/MQBRIMS.cbl": {
+   "app": "MQBR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "1c6d74511c8984c72a3eb10f9a4099675ceac31cfbe27f1a42ff63ff4affc2e3",
+   "bytes": 2771,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI and DL/I are static CALL interfaces",
+   "horrors": [
+    "H-0114"
+   ]
+  },
+  "apps/MQBR/cobol/MQBRMPP.cbl": {
+   "app": "MQBR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "2cc0f708c5b2748c992ea8c44571ad00e7f39d281035c2f6f6f19c909921de19",
+   "bytes": 1554,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI and DL/I are static CALL interfaces",
+   "horrors": [
+    "H-0116"
+   ]
+  },
+  "apps/MQBR/copybook/MQBCIH.cpy": {
+   "app": "MQBR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "f905268d17d913eccc33267b79318a81cd071ef489b1efc4294737e09c92677e",
+   "bytes": 2202,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQBR/copybook/MQBIIH.cpy": {
+   "app": "MQBR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "e22827b9bff98d32d7649298937b4994b856378b3bf458631c06ded0c6d57508",
+   "bytes": 955,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQBR/copybook/MQBMD.cpy": {
+   "app": "MQBR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "ec26f5d5f288f7e2e7302f2c5f1229d1df7ed0669fef8fec7ac5eb2311ef0a19",
+   "bytes": 342,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQBR/copybook/MQBOD.cpy": {
+   "app": "MQBR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "3146b3303aa794ccdff79f653e0436e0db8df51483b4c2f499c53db8dd4e8c48",
+   "bytes": 231,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQBR/copybook/MQBPMO.cpy": {
+   "app": "MQBR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "8154afe49526e74dd3bbfb1ce0214da50616522750ea4cf6cbe2748938e0308d",
+   "bytes": 189,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQBR/jcl/MQBRRUN.jcl": {
+   "app": "MQBR",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "c06133bdebfe27a38d36a71d6133fdf1e845c75b88a1d5d5dccd1384643c90c4",
+   "bytes": 529,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "not-cobol"
+   }
   },
   "apps/MQSA/cobol/MQSACNX.cbl": {
    "app": "MQSA",
