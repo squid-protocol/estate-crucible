@@ -1,155 +1,68 @@
 {
  "format": "estate-crucible-horror/1",
  "id": "H-0117",
- "title": "A qualified SSA: segment name, then a parenthesised qualification statement, passed after the I/O area",
+ "title": "PSBGEN: a database PCB followed by one SENSEG per sensitive segment, the path from the root included",
  "category": "ims",
  "issue": 4893,
  "shapes": [
-  "HKEP HKEPFIND: SSA-KEEP ('KEEP    ' '(' 'KEEPKEY ' ' =' 'K0001234' ')') as the fourth operand of CALL 'CBLTDLI' with a GU"
+  "HKEP HKEPPSB: PCB TYPE=DB,DBDNAME=HKEPDB2,PROCOPT=G / SENSEG NAME=KEEP / SENSEG NAME=WALL,PARENT=KEEP / PSBGEN PSBNAME=HKEPPSB"
  ],
- "asserts": "HKEPFIND's CALL is one call_sites fact and one dli_calls fact: function GU, pcb DB-PCB, io_area WS-IO-AREA, ssas [SSA-KEEP]; SSA-KEEP is a group of six data_items facts in storage order.",
+ "asserts": "HKEPPSB keys one ims_gen PCB fact (name HKEPDB2, the DBD it names), two SENSEG facts (KEEP, WALL, each with pcb HKEPDB2) in source order, and one PSB fact (HKEPPSB).",
  "citations": [
   {
    "doc": "IBM IMS 15.1 documentation",
-   "section": "Segment search arguments (SSAs)",
-   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.apg/ims_ssas.htm",
-   "quote": "A qualified SSA describes the segment occurrence that you want to access."
+   "section": "The database PCB statement",
+   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_dbpcbstat.htm",
+   "quote": "The database PCB statement defines the DBD of the database that the application program will access."
   },
   {
    "doc": "IBM IMS 15.1 documentation",
-   "section": "Segment search arguments (SSAs)",
-   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.apg/ims_ssas.htm",
-   "quote": "This description is called a qualification statement and has three parts."
+   "section": "The SENSEG statement",
+   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_sensegstat.htm",
+   "quote": "SENSEG statements must immediately follow the PCB statement to which they are related."
   },
   {
    "doc": "IBM IMS 15.1 documentation",
-   "section": "Segment search arguments (SSAs)",
-   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.apg/ims_ssas.htm",
-   "quote": "The qualification statement is enclosed in parentheses."
+   "section": "The SENSEG statement",
+   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_sensegstat.htm",
+   "quote": "A separate SENSEG statement must exist for each segment type."
   }
  ],
  "era": 2,
  "release": "IMS 15.1",
+ "notes": "WALL is a dependent of KEEP, so the PSB is sensitive to the root as well as to WALL, as the SENSEG page requires of a segment beneath the root. PARENT= and PROCOPT= are coded for realism; the key asserts neither (the pages read do not define them).",
  "planted": [
   {
-   "member": "apps/HKEP/cobol/HKEPFIND.cbl",
+   "member": "apps/HKEP/asm/HKEPPSB.asm",
    "compile": {
-    "status": "compiled"
+    "status": "not-cobol"
    },
    "expected": {
-    "edges": [
+    "ims_gen": [
      {
-      "kind": "call",
-      "from": "0000-MAIN",
-      "target": "CBLTDLI",
-      "line": 29,
-      "form": "literal",
-      "horror": "H-0117"
-     }
-    ],
-    "call_sites": [
-     {
-      "verb": "CALL",
-      "form": "literal",
-      "operand": "CBLTDLI",
-      "target": "CBLTDLI",
-      "line": 29,
-      "resolves_to": null,
-      "horror": "H-0117"
-     }
-    ],
-    "data_items": [
-     {
-      "level": 5,
-      "name": "SSA-SEGNAME",
-      "pic": "X(8)",
-      "usage": null,
-      "occurs": null,
-      "redefines": null,
-      "value": "'KEEP    '",
-      "section": "WORKING-STORAGE",
-      "line": 12,
+      "kind": "PCB",
+      "name": "HKEPDB2",
+      "line": 2,
       "horror": "H-0117"
      },
      {
-      "level": 5,
-      "name": "SSA-LPAREN",
-      "pic": "X",
-      "usage": null,
-      "occurs": null,
-      "redefines": null,
-      "value": "'('",
-      "section": "WORKING-STORAGE",
-      "line": 13,
+      "kind": "SENSEG",
+      "name": "KEEP",
+      "pcb": "HKEPDB2",
+      "line": 3,
       "horror": "H-0117"
      },
      {
-      "level": 5,
-      "name": "SSA-FLDNAME",
-      "pic": "X(8)",
-      "usage": null,
-      "occurs": null,
-      "redefines": null,
-      "value": "'KEEPKEY '",
-      "section": "WORKING-STORAGE",
-      "line": 14,
+      "kind": "SENSEG",
+      "name": "WALL",
+      "pcb": "HKEPDB2",
+      "line": 4,
       "horror": "H-0117"
      },
      {
-      "level": 5,
-      "name": "SSA-OPER",
-      "pic": "XX",
-      "usage": null,
-      "occurs": null,
-      "redefines": null,
-      "value": "' ='",
-      "section": "WORKING-STORAGE",
-      "line": 15,
-      "horror": "H-0117"
-     },
-     {
-      "level": 5,
-      "name": "SSA-FLDVAL",
-      "pic": "X(8)",
-      "usage": null,
-      "occurs": null,
-      "redefines": null,
-      "value": "'K0001234'",
-      "section": "WORKING-STORAGE",
-      "line": 16,
-      "horror": "H-0117"
-     },
-     {
-      "level": 5,
-      "name": "SSA-RPAREN",
-      "pic": "X",
-      "usage": null,
-      "occurs": null,
-      "redefines": null,
-      "value": "')'",
-      "section": "WORKING-STORAGE",
-      "line": 17,
-      "horror": "H-0117"
-     }
-    ],
-    "gaps": [
-     {
-      "kind": "call",
-      "name": "CBLTDLI",
-      "line": 29,
-      "why": "no member of the estate holds the program",
-      "horror": "H-0117"
-     }
-    ],
-    "dli_calls": [
-     {
-      "function": "GU",
-      "pcb": "DB-PCB",
-      "io_area": "WS-IO-AREA",
-      "ssas": [
-       "SSA-KEEP"
-      ],
-      "line": 29,
+      "kind": "PSB",
+      "name": "HKEPPSB",
+      "line": 5,
       "horror": "H-0117"
      }
     ]

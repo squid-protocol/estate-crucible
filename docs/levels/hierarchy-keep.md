@@ -18,13 +18,13 @@ New channels: `dli_calls`, `ims_gen` (SPEC section 3).
 
 | horror | planted | IBM text it rests on |
 |---|---|---|
-| H-0114 | `HKEPPSB.asm`: PCB TYPE=DB, SENSEG KEEP, SENSEG WALL, PSBGEN | The database PCB statement; The SENSEG statement |
-| H-0115 | `HKEPDB2.asm`: FIELD after each SEGM (KEEPKEY, WALLKEY) | FIELD statement overview; FIELD statements (NAME required for SSA fields) |
-| H-0116 | `HKEPDB2.asm`: LCHILD NAME=(ENTRY,HKEPDB3) after KEEP's FIELD | LCHILD statement overview; LCHILD statements |
-| H-0117 | `HKEPFIND.cbl`: GU with the qualified SSA `SSA-KEEP` | Segment search arguments (SSAs), Qualified SSAs |
+| H-0117 | `HKEPPSB.asm`: PCB TYPE=DB, SENSEG KEEP, SENSEG WALL, PSBGEN | The database PCB statement; The SENSEG statement |
+| H-0118 | `HKEPDB2.asm`: FIELD after each SEGM (KEEPKEY, WALLKEY) | FIELD statement overview; FIELD statements (NAME required for SSA fields) |
+| H-0119 | `HKEPDB2.asm`: LCHILD NAME=(ENTRY,HKEPDB3) after KEEP's FIELD | LCHILD statement overview; LCHILD statements |
+| H-0120 | `HKEPFIND.cbl`: GU with the qualified SSA `SSA-KEEP` | Segment search arguments (SSAs), Qualified SSAs |
 
-Channel `ims_gen` gains FIELD, LCHILD, PCB, SENSEG and PSB kinds (SPEC section 3). New ids start at H-0114
-because H-0111..H-0113 are on an open Warlords PR.
+Channel `ims_gen` gains FIELD, LCHILD, PCB, SENSEG and PSB kinds (SPEC section 3). New ids start at H-0117
+(H-0114..H-0116 are the Bridge Road horrors; H-0111..H-0113 are on an open Warlords PR).
 
 ## Not yet planted (no IBM quote verified yet, so nothing planted)
 

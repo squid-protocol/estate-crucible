@@ -18,7 +18,7 @@
      "kind": "DBD",
      "name": "HKEPDB2",
      "line": 2,
-     "horror": "H-0115"
+     "horror": "H-0118"
     },
     {
      "kind": "SEGM",
@@ -26,7 +26,7 @@
      "parent": "",
      "bytes": 40,
      "line": 3,
-     "horror": "H-0115"
+     "horror": "H-0118"
     },
     {
      "kind": "FIELD",
@@ -35,7 +35,7 @@
      "bytes": 8,
      "start": 1,
      "line": 4,
-     "horror": "H-0115"
+     "horror": "H-0118"
     },
     {
      "kind": "LCHILD",
@@ -43,7 +43,7 @@
      "dbname": "HKEPDB3",
      "segment": "KEEP",
      "line": 5,
-     "horror": "H-0116"
+     "horror": "H-0119"
     },
     {
      "kind": "SEGM",
@@ -51,7 +51,7 @@
      "parent": "KEEP",
      "bytes": 40,
      "line": 6,
-     "horror": "H-0115"
+     "horror": "H-0118"
     },
     {
      "kind": "FIELD",
@@ -60,12 +60,12 @@
      "bytes": 8,
      "start": 1,
      "line": 7,
-     "horror": "H-0115"
+     "horror": "H-0118"
     }
    ],
    "horrors": [
-    "H-0115",
-    "H-0116"
+    "H-0118",
+    "H-0119"
    ]
   },
   "apps/HKEP/asm/HKEPDBD.asm": {
@@ -131,31 +131,31 @@
      "kind": "PCB",
      "name": "HKEPDB2",
      "line": 2,
-     "horror": "H-0114"
+     "horror": "H-0117"
     },
     {
      "kind": "SENSEG",
      "name": "KEEP",
      "pcb": "HKEPDB2",
      "line": 3,
-     "horror": "H-0114"
+     "horror": "H-0117"
     },
     {
      "kind": "SENSEG",
      "name": "WALL",
      "pcb": "HKEPDB2",
      "line": 4,
-     "horror": "H-0114"
+     "horror": "H-0117"
     },
     {
      "kind": "PSB",
      "name": "HKEPPSB",
      "line": 5,
-     "horror": "H-0114"
+     "horror": "H-0117"
     }
    ],
    "horrors": [
-    "H-0114"
+    "H-0117"
    ]
   },
   "apps/HKEP/cobol/HKEPFIND.cbl": {
@@ -191,7 +191,7 @@
      "target": "CBLTDLI",
      "line": 29,
      "form": "literal",
-     "horror": "H-0117"
+     "horror": "H-0120"
     }
    ],
    "call_sites": [
@@ -202,7 +202,7 @@
      "target": "CBLTDLI",
      "line": 29,
      "resolves_to": null,
-     "horror": "H-0117"
+     "horror": "H-0120"
     }
    ],
    "data_items": [
@@ -249,7 +249,7 @@
      "value": "'KEEP    '",
      "section": "WORKING-STORAGE",
      "line": 12,
-     "horror": "H-0117"
+     "horror": "H-0120"
     },
     {
      "level": 5,
@@ -261,7 +261,7 @@
      "value": "'('",
      "section": "WORKING-STORAGE",
      "line": 13,
-     "horror": "H-0117"
+     "horror": "H-0120"
     },
     {
      "level": 5,
@@ -273,7 +273,7 @@
      "value": "'KEEPKEY '",
      "section": "WORKING-STORAGE",
      "line": 14,
-     "horror": "H-0117"
+     "horror": "H-0120"
     },
     {
      "level": 5,
@@ -285,7 +285,7 @@
      "value": "' ='",
      "section": "WORKING-STORAGE",
      "line": 15,
-     "horror": "H-0117"
+     "horror": "H-0120"
     },
     {
      "level": 5,
@@ -297,7 +297,7 @@
      "value": "'K0001234'",
      "section": "WORKING-STORAGE",
      "line": 16,
-     "horror": "H-0117"
+     "horror": "H-0120"
     },
     {
      "level": 5,
@@ -309,7 +309,7 @@
      "value": "')'",
      "section": "WORKING-STORAGE",
      "line": 17,
-     "horror": "H-0117"
+     "horror": "H-0120"
     },
     {
      "level": 1,
@@ -586,7 +586,7 @@
      "name": "CBLTDLI",
      "line": 29,
      "why": "no member of the estate holds the program",
-     "horror": "H-0117"
+     "horror": "H-0120"
     }
    ],
    "dli_calls": [
@@ -598,11 +598,11 @@
       "SSA-KEEP"
      ],
      "line": 29,
-     "horror": "H-0117"
+     "horror": "H-0120"
     }
    ],
    "horrors": [
-    "H-0117"
+    "H-0120"
    ]
   },
   "apps/HKEP/cobol/HKEPWALK.cbl": {

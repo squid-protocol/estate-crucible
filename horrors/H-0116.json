@@ -1,44 +1,83 @@
 {
  "format": "estate-crucible-horror/1",
  "id": "H-0116",
- "title": "DBD LCHILD statement naming a logical child segment in another database, after the SEGM and FIELD it belongs to",
+ "title": "IMS bridge transaction: GU the input message and ISRT the reply to the IO PCB, which the bridge returns to the reply-to queue",
  "category": "ims",
- "issue": 4893,
+ "issue": 4892,
  "shapes": [
-  "HKEP HKEPDB2: LCHILD NAME=(ENTRY,HKEPDB3) between FIELD KEEPKEY and SEGM WALL"
+  "MQBR MQBRMPP: CALL 'CBLTDLI' USING WS-GU IO-PCB WS-IN-AREA, then CALL 'CBLTDLI' USING WS-ISRT IO-PCB WS-OUT-AREA (LL ZZ and text)"
  ],
- "asserts": "HKEPDB2 keys one LCHILD fact (name ENTRY, dbname HKEPDB3, segment KEEP: the SEGM it follows).",
+ "asserts": "MQBRMPP's ISRT CALL (tagged) is one call_sites fact (CBLTDLI, resolves_to null), a call edge from 1000-REPLY, a gaps entry and one dli_calls fact: function ISRT (from WS-ISRT VALUE 'ISRT'), pcb IO-PCB, io_area WS-OUT-AREA, no ssas. The ISRT to the IO PCB is the call the IMS bridge returns as the reply message.",
  "citations": [
   {
-   "doc": "IBM IMS 15.1 documentation",
-   "section": "LCHILD statement overview",
-   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_lchildstat.htm",
-   "quote": "LCHILD statements immediately follow the SEGM, FIELD, or XDFLD statement of the segment involved in the relationship."
+   "doc": "IBM MQ 9.3 developing applications",
+   "section": "Reply messages from IMS",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q023260_.html",
+   "quote": "When an IMS transaction ISRTs to its IOPCB, the message is routed back to the originating LTERM or TPIPE. These are seen in IBM MQ as reply messages."
   },
   {
-   "doc": "IBM IMS 15.1 documentation",
-   "section": "LCHILD statements",
-   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.sur/ims_lchildstmt.htm",
-   "quote": "The dbname parameter is the name of the database that contains the segment type specified in segname1."
+   "doc": "IBM MQ 9.3 developing applications",
+   "section": "Reply messages from IMS",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q023260_.html",
+   "quote": "Reply messages from IMS are put onto the reply-to queue specified in the original message."
   }
  ],
  "era": 2,
- "release": "IMS 15.1",
- "notes": "HKEPDB3 is not in the estate: the LCHILD names a database outside it, as the page allows. POINTER= and PAIR= are not coded; the key asserts neither.",
+ "notes": "The citations document the ISRT-to-IO-PCB reply. The GU of the input message in the same member is a standard DL/I message call that no cited rule covers, so it is not tagged and the key asserts nothing about it for this horror (see H-0097 for a cited DL/I call).",
  "planted": [
   {
-   "member": "apps/HKEP/asm/HKEPDB2.asm",
+   "member": "apps/MQBR/cobol/MQBRMPP.cbl",
    "compile": {
-    "status": "not-cobol"
+    "status": "compiled"
    },
    "expected": {
-    "ims_gen": [
+    "units": [
      {
-      "kind": "LCHILD",
-      "name": "ENTRY",
-      "dbname": "HKEPDB3",
-      "segment": "KEEP",
-      "line": 5,
+      "name": "1000-REPLY",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 33,
+      "end_line": 37,
+      "horror": "H-0116"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "call",
+      "from": "1000-REPLY",
+      "target": "CBLTDLI",
+      "line": 34,
+      "form": "literal",
+      "horror": "H-0116"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "CBLTDLI",
+      "target": "CBLTDLI",
+      "line": 34,
+      "resolves_to": null,
+      "horror": "H-0116"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "CBLTDLI",
+      "line": 34,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0116"
+     }
+    ],
+    "dli_calls": [
+     {
+      "function": "ISRT",
+      "pcb": "IO-PCB",
+      "io_area": "WS-OUT-AREA",
+      "ssas": [],
+      "line": 34,
       "horror": "H-0116"
      }
     ]

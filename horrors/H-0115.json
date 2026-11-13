@@ -1,76 +1,492 @@
 {
  "format": "estate-crucible-horror/1",
  "id": "H-0115",
- "title": "DBD FIELD statements following the SEGM they describe, NAME= coded for a field an SSA names",
- "category": "ims",
- "issue": 4893,
+ "title": "CICS bridge message: MQMD format MQFMT_CICS, an MQCIH structure (version 2), then the COMMAREA data in one MQPUT buffer",
+ "category": "mq",
+ "issue": 4892,
  "shapes": [
-  "HKEP HKEPDB2: SEGM NAME=KEEP / FIELD NAME=(KEEPKEY,SEQ,U),BYTES=8,START=1,TYPE=C; SEGM NAME=WALL / FIELD NAME=(WALLKEY,SEQ,U),..."
+  "MQBR MQBRCIH: CALL 'MQPUT' USING ... WS-MSGLEN WS-MSG ..., 01 WS-MSG = 05 WS-CIH (COPY MQBCIH, the 180-byte MQCIH version 2 stand-in) + WS-COMMAREA X(40); MQCIH Format set to the COMMAREA's format name, LinkType program, UOWControl only"
  ],
- "asserts": "HKEPDB2 keys one DBD fact, two SEGM facts and two FIELD facts (KEEPKEY of segment KEEP, WALLKEY of segment WALL; bytes 8, start 1), each FIELD attached to the SEGM before it.",
+ "asserts": "MQBRCIH's MQPUT CALL is one call_sites fact (form literal, resolves_to null) with a call edge from 0000-MAIN and a gaps entry. The 01 group WS-MSG holds WS-CIH (copy_members MQBCIH, whose 38 fields total 180 bytes, the length IBM gives MQCIH_LENGTH_2, with StrucLength VALUE 180 and Version VALUE 2) followed by the 40-character WS-COMMAREA, and WS-MSGLEN is 180 + 40 = 220; the key's layouts fact for WS-MSG is 220 bytes. The key asserts the layout only: it does not model the bridge.",
  "citations": [
   {
-   "doc": "IBM IMS 15.1 documentation",
-   "section": "FIELD statement overview",
-   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_fieldstat.htm",
-   "quote": "FIELD statements must immediately follow the SEGM statement to which they are related."
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQCIH - CICS bridge header",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q094830_.html",
+   "quote": "StrucLength (length of MQCIH structure) MQCIH_LENGTH_2 180"
   },
   {
-   "doc": "IBM IMS 15.1 documentation",
-   "section": "FIELD statements",
-   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.sur/ims_fieldstmt.htm",
-   "quote": "The NAME parameter is required on the following types of fields:"
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQCIH - CICS bridge header",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q094830_.html",
+   "quote": "The bridge accepts either a version-1 or a version-2 MQCIH structure, but for 3270 transactions, you must use a version-2 structure."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "Format (MQCHAR8) for MQCIH",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q095010_.html",
+   "quote": "For DPL requests, Format must be the format name of the COMMAREA."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "LinkType (MQLONG) for MQCIH",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q095050_.html",
+   "quote": "MQCLT_PROGRAM DPL program."
   }
  ],
  "era": 2,
- "release": "IMS 15.1",
- "notes": "The page lists, under that sentence, the field types referenced by a segment search argument (SSA); KEEPKEY is the field HKEPFIND's SSA names (H-0117).",
+ "notes": "The MQCIH field table is the one in the MQCIH page (Table 2); the estate stand-in follows its order and lengths (the four trailing fields CursorPosition, ErrorOffset, InputItem and Reserved4 are the version 2 additions). UOWControl 273 is MQCUOWC_ONLY and LinkType 1 is MQCLT_PROGRAM, both from the constants pages (q091210, q090990). The program the bridge links to is not planted.",
  "planted": [
   {
-   "member": "apps/HKEP/asm/HKEPDB2.asm",
+   "member": "apps/MQBR/cobol/MQBRCIH.cbl",
    "compile": {
-    "status": "not-cobol"
+    "status": "compiled"
    },
    "expected": {
-    "ims_gen": [
+    "edges": [
      {
-      "kind": "DBD",
-      "name": "HKEPDB2",
-      "line": 2,
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQPUT",
+      "line": 47,
+      "form": "literal",
+      "horror": "H-0115"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQPUT",
+      "target": "MQPUT",
+      "line": 47,
+      "resolves_to": null,
+      "horror": "H-0115"
+     }
+    ],
+    "copies": [
+     {
+      "member": "MQBCIH",
+      "kind": "copy",
+      "line": 26,
+      "resolves_to": "apps/MQBR/copybook/MQBCIH.cpy",
+      "horror": "H-0115"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-MSG",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 24,
       "horror": "H-0115"
      },
      {
-      "kind": "SEGM",
-      "name": "KEEP",
-      "parent": "",
-      "bytes": 40,
-      "line": 3,
+      "level": 5,
+      "name": "WS-CIH",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 25,
+      "copy_members": [
+       "MQBCIH"
+      ],
       "horror": "H-0115"
      },
      {
-      "kind": "FIELD",
-      "name": "KEEPKEY",
-      "segment": "KEEP",
-      "bytes": 8,
-      "start": 1,
-      "line": 4,
-      "horror": "H-0115"
-     },
+      "level": 5,
+      "name": "WS-COMMAREA",
+      "pic": "X(40)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'ORD00001 100'",
+      "section": "WORKING-STORAGE",
+      "line": 27,
+      "horror": "H-0115",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "layouts": [
      {
-      "kind": "SEGM",
-      "name": "WALL",
-      "parent": "KEEP",
-      "bytes": 40,
-      "line": 6,
-      "horror": "H-0115"
-     },
+      "record": "WS-MSG",
+      "line": 24,
+      "bytes": 220,
+      "fields": [
+       {
+        "name": "MQB-CIH-STRUCID",
+        "level": 10,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-VERSION",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 4,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-LENGTH",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 8,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-ENCODING",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 12,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-CCSID",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 16,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-FORMAT",
+        "level": 10,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 20,
+        "bytes": 8,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-FLAGS",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 28,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-RETURNCODE",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 32,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-COMPCODE",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 36,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-REASON",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 40,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-UOWCONTROL",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 44,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-GETWAIT",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 48,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-LINKTYPE",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 52,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-OUTDATALEN",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 56,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-FACKEEP",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 60,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-ADSDESC",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 64,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-CONVTASK",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 68,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-TASKEND",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 72,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-FACILITY",
+        "level": 10,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 76,
+        "bytes": 8,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-FUNCTION",
+        "level": 10,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 84,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-ABENDCODE",
+        "level": 10,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 88,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-AUTH",
+        "level": 10,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 92,
+        "bytes": 8,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-RESERVED1",
+        "level": 10,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 100,
+        "bytes": 8,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-REPLYFMT",
+        "level": 10,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 108,
+        "bytes": 8,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-REMOTESYS",
+        "level": 10,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 116,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-REMOTETRAN",
+        "level": 10,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 120,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-TRANID",
+        "level": 10,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 124,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-FACLIKE",
+        "level": 10,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 128,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-AID",
+        "level": 10,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 132,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-STARTCODE",
+        "level": 10,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 136,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-CANCELCODE",
+        "level": 10,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 140,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-NEXTTRAN",
+        "level": 10,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 144,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-RESERVED2",
+        "level": 10,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 148,
+        "bytes": 8,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-RESERVED3",
+        "level": 10,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 156,
+        "bytes": 8,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-CURSOR",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 164,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-ERROFFSET",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 168,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-INPUTITEM",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 172,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "MQB-CIH-RESERVED4",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 176,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBCIH.cpy"
+       },
+       {
+        "name": "WS-COMMAREA",
+        "level": 5,
+        "pic": "X(40)",
+        "usage": null,
+        "offset": 180,
+        "bytes": 40,
+        "file": "apps/MQBR/cobol/MQBRCIH.cbl"
+       }
+      ],
+      "horror": "H-0115",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "gaps": [
      {
-      "kind": "FIELD",
-      "name": "WALLKEY",
-      "segment": "WALL",
-      "bytes": 8,
-      "start": 1,
-      "line": 7,
+      "kind": "call",
+      "name": "MQPUT",
+      "line": 47,
+      "why": "no member of the estate holds the program",
       "horror": "H-0115"
      }
     ]

@@ -5,15 +5,15 @@ HLASM macro statements. Every name and layout here is original to this estate.
 
 Slice 1, only what an IBM quote was verified for: H-0096 (DBDGEN: SEGM statements in hierarchic order),
 H-0097 (an unqualified GN repeated until the GB status code), H-0098 (a GN issued again after GB).
-Slice 2 (a quote read from the IMS 15.1 manual for each): H-0114 (PSBGEN with a database PCB and SENSEGs),
-H-0115 (DBD FIELD after its SEGM), H-0116 (DBD LCHILD after its SEGM/FIELD), H-0117 (a qualified SSA).
+Slice 2 (a quote read from the IMS 15.1 manual for each): H-0117 (PSBGEN with a database PCB and SENSEGs),
+H-0118 (DBD FIELD after its SEGM), H-0119 (DBD LCHILD after its SEGM/FIELD), H-0120 (a qualified SSA).
 EXEC DLI, GU/ISRT/REPL/DLET beyond the one GU here, and the DFSRRC00 step are later slices."""
 
 from ..data import I
 from ..stmt import call, goback, if_, para, perform, raw
 
 H96, H97, H98 = "H-0096", "H-0097", "H-0098"
-H114, H115, H116, H117 = "H-0114", "H-0115", "H-0116", "H-0117"
+H117, H118, H119, H120 = "H-0117", "H-0118", "H-0119", "H-0120"
 
 AUTHOR = "KEEP SYSTEMS"
 ERA = {"era": 2, "era_evidence": "END-IF (COBOL-85); DL/I is a static CALL interface to CBLTDLI"}
@@ -69,7 +69,7 @@ HKEPDBD = {
     ],
 }
 
-# ---- slice 2: DBD FIELD / LCHILD (H-0115, H-0116), PSBGEN with SENSEG (H-0114), a qualified SSA (H-0117)
+# ---- slice 2: DBD FIELD / LCHILD (H-0118, H-0119), PSBGEN with SENSEG (H-0117), a qualified SSA (H-0120)
 
 
 def _field(name, seg, start=1, nbytes=8):
@@ -79,14 +79,14 @@ def _field(name, seg, start=1, nbytes=8):
 
 
 HKEPDB2 = {
-    "member": "HKEPDB2", "csect": "", "numbered": False, "horror": H115, **ERA,
+    "member": "HKEPDB2", "csect": "", "numbered": False, "horror": H118, **ERA,
     "comments": ["HKEPDB2 - KEEP DATABASE WITH SEQUENCE FIELDS AND A LOGICAL CHILD"],
     "statements": [
         {"op": "DBD", "operands": ["NAME=HKEPDB2,ACCESS=(HDAM,VSAM)"],
          "facts": [{"channel": "ims_gen", "kind": "DBD", "name": "HKEPDB2"}]},
         _seg("KEEP", None, ""),
         _field("KEEPKEY", "KEEP"),
-        {"op": "LCHILD", "operands": ["NAME=(ENTRY,HKEPDB3)"], "horror": H116,
+        {"op": "LCHILD", "operands": ["NAME=(ENTRY,HKEPDB3)"], "horror": H119,
          "facts": [{"channel": "ims_gen", "kind": "LCHILD", "name": "ENTRY", "dbname": "HKEPDB3",
                     "segment": "KEEP"}]},
         _seg("WALL", "KEEP", ""),
@@ -103,7 +103,7 @@ def _senseg(name, parent):
 
 
 HKEPPSB = {
-    "member": "HKEPPSB", "csect": "", "numbered": False, "horror": H114, **ERA,
+    "member": "HKEPPSB", "csect": "", "numbered": False, "horror": H117, **ERA,
     "comments": ["HKEPPSB - PSB FOR HKEPFIND: DB PCB SENSITIVE TO KEEP AND WALL"],
     "statements": [
         {"op": "PCB", "operands": ["TYPE=DB", "DBDNAME=HKEPDB2", "PROCOPT=G", "KEYLEN=16"],
@@ -123,12 +123,12 @@ HKEPFIND = {
         I(1, "WS-GU", "X(4)", value="'GU  '"),
         I(1, "WS-IO-AREA", "X(80)"),
         I(1, "SSA-KEEP", kids=[
-            I(5, "SSA-SEGNAME", "X(8)", value="'KEEP    '", horror=H117),
-            I(5, "SSA-LPAREN", "X", value="'('", horror=H117),
-            I(5, "SSA-FLDNAME", "X(8)", value="'KEEPKEY '", horror=H117),
-            I(5, "SSA-OPER", "XX", value="' ='", horror=H117),
-            I(5, "SSA-FLDVAL", "X(8)", value="'K0001234'", horror=H117),
-            I(5, "SSA-RPAREN", "X", value="')'", horror=H117),
+            I(5, "SSA-SEGNAME", "X(8)", value="'KEEP    '", horror=H120),
+            I(5, "SSA-LPAREN", "X", value="'('", horror=H120),
+            I(5, "SSA-FLDNAME", "X(8)", value="'KEEPKEY '", horror=H120),
+            I(5, "SSA-OPER", "XX", value="' ='", horror=H120),
+            I(5, "SSA-FLDVAL", "X(8)", value="'K0001234'", horror=H120),
+            I(5, "SSA-RPAREN", "X", value="')'", horror=H120),
         ]),
     ],
     "linkage": [
@@ -138,7 +138,7 @@ HKEPFIND = {
     "using": ["IO-PCB", "DB-PCB"],
     "units": [
         para("0000-MAIN",
-             call("CBLTDLI", using=["WS-GU", "DB-PCB", "WS-IO-AREA", "SSA-KEEP"], horror=H117),
+             call("CBLTDLI", using=["WS-GU", "DB-PCB", "WS-IO-AREA", "SSA-KEEP"], horror=H120),
              if_("DB-STATUS = SPACES", [raw("DISPLAY 'KEEP FOUND'")]),
              goback()),
     ],
