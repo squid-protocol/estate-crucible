@@ -220,13 +220,13 @@
   "ims_gen"
  ],
  "fact_totals": {
-  "programs": 71,
-  "units": 195,
-  "edges": 193,
-  "call_sites": 161,
+  "programs": 72,
+  "units": 196,
+  "edges": 194,
+  "call_sites": 162,
   "copies": 95,
-  "data_items": 851,
-  "layouts": 357,
+  "data_items": 868,
+  "layouts": 362,
   "sql_statements": 6,
   "sql_tables": 3,
   "jcl_steps": 82,
@@ -237,16 +237,16 @@
   "cics_resources": 13,
   "jcl_datasets": 139,
   "file_control": 21,
-  "entry_points": 71,
+  "entry_points": 72,
   "file_edges": 47,
   "data_moves": 250,
   "copy_collisions": 9,
-  "gaps": 78,
+  "gaps": 79,
   "dead": 11,
   "jcl_utility_cards": 67,
   "jcl_outputs": 3,
-  "dli_calls": 4,
-  "ims_gen": 4,
+  "dli_calls": 5,
+  "ims_gen": 14,
   "phantoms": 61
  },
  "code_pages": {
@@ -639,7 +639,11 @@
   "H-0110",
   "H-0114",
   "H-0115",
-  "H-0116"
+  "H-0116",
+  "H-0117",
+  "H-0118",
+  "H-0119",
+  "H-0120"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -1782,6 +1786,25 @@
    },
    "generated_from": "apps/GULF/bms/GULFMS.bms"
   },
+  "apps/HKEP/asm/HKEPDB2.asm": {
+   "app": "HKEP",
+   "library": "asm",
+   "language": "hlasm",
+   "sha256": "dc764638751342a9f94994dddaa64163241d57de9f9935dc98371ed619f045b0",
+   "bytes": 399,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/HKEP.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); DL/I is a static CALL interface to CBLTDLI",
+   "horrors": [
+    "H-0118",
+    "H-0119"
+   ]
+  },
   "apps/HKEP/asm/HKEPDBD.asm": {
    "app": "HKEP",
    "library": "asm",
@@ -1798,6 +1821,42 @@
    "era_evidence": "END-IF (COBOL-85); DL/I is a static CALL interface to CBLTDLI",
    "horrors": [
     "H-0096"
+   ]
+  },
+  "apps/HKEP/asm/HKEPPSB.asm": {
+   "app": "HKEP",
+   "library": "asm",
+   "language": "hlasm",
+   "sha256": "e6ea8af7061844db379c8a0c5cb5c1f48d47a79879027c900c159f2d504e9376",
+   "bytes": 244,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/HKEP.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); DL/I is a static CALL interface to CBLTDLI",
+   "horrors": [
+    "H-0117"
+   ]
+  },
+  "apps/HKEP/cobol/HKEPFIND.cbl": {
+   "app": "HKEP",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "64f04c6b0271715ff8d40fe9bab11999ba43386ca5ed5e1b50533bfc0802a823",
+   "bytes": 1420,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/HKEP.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); DL/I is a static CALL interface to CBLTDLI",
+   "horrors": [
+    "H-0120"
    ]
   },
   "apps/HKEP/cobol/HKEPWALK.cbl": {

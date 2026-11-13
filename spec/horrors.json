@@ -3027,6 +3027,125 @@
    ],
    "era": 2,
    "notes": "The citations document the ISRT-to-IO-PCB reply. The GU of the input message in the same member is a standard DL/I message call that no cited rule covers, so it is not tagged and the key asserts nothing about it for this horror (see H-0097 for a cited DL/I call)."
+  },
+  {
+   "id": "H-0117",
+   "title": "PSBGEN: a database PCB followed by one SENSEG per sensitive segment, the path from the root included",
+   "category": "ims",
+   "issue": 4893,
+   "shapes": [
+    "HKEP HKEPPSB: PCB TYPE=DB,DBDNAME=HKEPDB2,PROCOPT=G / SENSEG NAME=KEEP / SENSEG NAME=WALL,PARENT=KEEP / PSBGEN PSBNAME=HKEPPSB"
+   ],
+   "asserts": "HKEPPSB keys one ims_gen PCB fact (name HKEPDB2, the DBD it names), two SENSEG facts (KEEP, WALL, each with pcb HKEPDB2) in source order, and one PSB fact (HKEPPSB).",
+   "citations": [
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "The database PCB statement",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_dbpcbstat.htm",
+     "quote": "The database PCB statement defines the DBD of the database that the application program will access."
+    },
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "The SENSEG statement",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_sensegstat.htm",
+     "quote": "SENSEG statements must immediately follow the PCB statement to which they are related."
+    },
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "The SENSEG statement",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_sensegstat.htm",
+     "quote": "A separate SENSEG statement must exist for each segment type."
+    }
+   ],
+   "era": 2,
+   "release": "IMS 15.1",
+   "notes": "WALL is a dependent of KEEP, so the PSB is sensitive to the root as well as to WALL, as the SENSEG page requires of a segment beneath the root. PARENT= and PROCOPT= are coded for realism; the key asserts neither (the pages read do not define them)."
+  },
+  {
+   "id": "H-0118",
+   "title": "DBD FIELD statements following the SEGM they describe, NAME= coded for a field an SSA names",
+   "category": "ims",
+   "issue": 4893,
+   "shapes": [
+    "HKEP HKEPDB2: SEGM NAME=KEEP / FIELD NAME=(KEEPKEY,SEQ,U),BYTES=8,START=1,TYPE=C; SEGM NAME=WALL / FIELD NAME=(WALLKEY,SEQ,U),..."
+   ],
+   "asserts": "HKEPDB2 keys one DBD fact, two SEGM facts and two FIELD facts (KEEPKEY of segment KEEP, WALLKEY of segment WALL; bytes 8, start 1), each FIELD attached to the SEGM before it.",
+   "citations": [
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "FIELD statement overview",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_fieldstat.htm",
+     "quote": "FIELD statements must immediately follow the SEGM statement to which they are related."
+    },
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "FIELD statements",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.sur/ims_fieldstmt.htm",
+     "quote": "The NAME parameter is required on the following types of fields:"
+    }
+   ],
+   "era": 2,
+   "release": "IMS 15.1",
+   "notes": "The page lists, under that sentence, the field types referenced by a segment search argument (SSA); KEEPKEY is the field HKEPFIND's SSA names (H-0120)."
+  },
+  {
+   "id": "H-0119",
+   "title": "DBD LCHILD statement naming a logical child segment in another database, after the SEGM and FIELD it belongs to",
+   "category": "ims",
+   "issue": 4893,
+   "shapes": [
+    "HKEP HKEPDB2: LCHILD NAME=(ENTRY,HKEPDB3) between FIELD KEEPKEY and SEGM WALL"
+   ],
+   "asserts": "HKEPDB2 keys one LCHILD fact (name ENTRY, dbname HKEPDB3, segment KEEP: the SEGM it follows).",
+   "citations": [
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "LCHILD statement overview",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_lchildstat.htm",
+     "quote": "LCHILD statements immediately follow the SEGM, FIELD, or XDFLD statement of the segment involved in the relationship."
+    },
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "LCHILD statements",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.sur/ims_lchildstmt.htm",
+     "quote": "The dbname parameter is the name of the database that contains the segment type specified in segname1."
+    }
+   ],
+   "era": 2,
+   "release": "IMS 15.1",
+   "notes": "HKEPDB3 is not in the estate: the LCHILD names a database outside it, as the page allows. POINTER= and PAIR= are not coded; the key asserts neither."
+  },
+  {
+   "id": "H-0120",
+   "title": "A qualified SSA: segment name, then a parenthesised qualification statement, passed after the I/O area",
+   "category": "ims",
+   "issue": 4893,
+   "shapes": [
+    "HKEP HKEPFIND: SSA-KEEP ('KEEP    ' '(' 'KEEPKEY ' ' =' 'K0001234' ')') as the fourth operand of CALL 'CBLTDLI' with a GU"
+   ],
+   "asserts": "HKEPFIND's CALL is one call_sites fact and one dli_calls fact: function GU, pcb DB-PCB, io_area WS-IO-AREA, ssas [SSA-KEEP]; SSA-KEEP is a group of six data_items facts in storage order.",
+   "citations": [
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "Segment search arguments (SSAs)",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.apg/ims_ssas.htm",
+     "quote": "A qualified SSA describes the segment occurrence that you want to access."
+    },
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "Segment search arguments (SSAs)",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.apg/ims_ssas.htm",
+     "quote": "This description is called a qualification statement and has three parts."
+    },
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "Segment search arguments (SSAs)",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.apg/ims_ssas.htm",
+     "quote": "The qualification statement is enclosed in parentheses."
+    }
+   ],
+   "era": 2,
+   "release": "IMS 15.1"
   }
  ],
  "not_planted": [
