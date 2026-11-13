@@ -2925,6 +2925,99 @@
    ],
    "era": 2,
    "notes": "The ZFS definition (a z/OS UNIX zFS file system) is on the same page; only the restriction sentence is quoted verbatim. CONTROLINTERVALSIZE(4096) is legal (the page rounds a linear data set's size up to a 4096 multiple); the key asserts the cards, not the rounding. The DEFINE CLUSTER overview page carries only the syntax table, so the parameter page is cited."
+  },
+  {
+   "id": "H-0111",
+   "title": "RRS batch: a program that commits with SRRCMIT / SRRBACK, linked with the CSQBRSTB stub and the ATRSCSS callable services stub",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQSA MQSARRS: CALL 'SRRCMIT' USING WS-RRS-RC after a good MQPUT, CALL 'SRRBACK' otherwise; no MQCMIT or MQBACK",
+    "MQSA jcl/MQSALNK.jcl LKRRS10: IEWL with SYSLIB MQM.SCSQLOAD and SYS1.CSSLIB, SYSLIN INCLUDE SYSLIB(CSQBRSTB), INCLUDE SYSLIB(ATRSCSS)"
+   ],
+   "asserts": "MQSARRS holds two call_sites facts to SRRCMIT and SRRBACK (form literal, resolves_to null, a gaps entry each) and none to MQCMIT or MQBACK. Step LKRRS10 of MQSALNK is a jcl_steps fact (program IEWL, parm LIST,MAP; IEWL is a gaps entry, no member holds it); its SYSLIB DD is MQM.SCSQLOAD with SYS1.CSSLIB concatenated (two jcl_datasets entries), and its SYSLIN instream data yields jcl_utility_cards facts (utility IEWL, verb INCLUDE) for SYSLIB(CSQBRSTB) and SYSLIB(ATRSCSS), then INCLUDE OBJLIB(MQSARRS) and NAME. The pairing is the fact: the program is linked with the RRS stub, so MQCMIT / MQBACK would fail with MQRC_ENVIRONMENT_ERROR.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications",
+     "section": "The RRS batch adapter",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q027130_.html",
+     "quote": "This adapter requires you to change any MQCMIT statement to SRRCMIT and any MQBACK statement to SRRBACK in your IBM MQ application. (If you code MQCMIT or MQBACK in an application linked with CSQBRSTB, you receive MQRC_ENVIRONMENT_ERROR.)"
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications",
+     "section": "IBM MQ for z/OS stub programs",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q025760_.html",
+     "quote": "If you use the CSQBRSTB stub program, link-edit with ATRSCSS from SYS1.CSSLIB."
+    }
+   ],
+   "era": 2,
+   "release": "IBM MQ 9.3"
+  },
+  {
+   "id": "H-0112",
+   "title": "Trigger monitor start-up: a program started by a trigger monitor receives the MQTMC2 character form of the trigger message through PROCEDURE DIVISION USING",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQSA MQSATMC: LINKAGE 01 LK-TMC from COPY MQSTMC2 (stand-in MQTMC2: ten character fields, 732 bytes); PROCEDURE DIVISION USING LK-TMC",
+    "MQSA jcl/MQSARUN.jcl TMC100: EXEC PGM=MQSATMC"
+   ],
+   "asserts": "MQSATMC's procedure division USING list is [LK-TMC]; the 01 LK-TMC in the LINKAGE SECTION carries copy_members MQSTMC2, which resolves to the estate's stand-in copybook under apps/MQSA/copybook. MQSTMC2 holds the ten MQTMC2 fields as alphanumeric items at IBM's lengths (4, 4, 48, 48, 64, 4, 256, 128, 128, 48): every non-character field of MQTM is a character field here, and the queue manager name is last. Step TMC100 of MQSARUN executes MQSATMC.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications",
+     "section": "MQTMC2 - Trigger message 2 (character format)",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q100940_.html",
+     "quote": "The MQTMC2 structure is very similar to the format of the MQTM structure. The difference is that the non-character fields in MQTM are changed in MQTMC2 to character fields of the same length, and the queue manager name is added at the end of the structure."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications",
+     "section": "MQTMC2 - Trigger message 2 (character format)",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q100940_.html",
+     "quote": "The trigger monitor application can pass the MQTM structure directly to the started application, or pass an MQTMC2 structure instead, depending on what is permitted by the environment and convenient for the started application."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications",
+     "section": "ApplType (MQCHAR4) for MQTMC2",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q100980_.html",
+     "quote": "This field always contains blanks, whatever the value in the ApplType field in the MQTM structure of the original trigger message."
+    }
+   ],
+   "era": 2,
+   "release": "IBM MQ 9.3"
+  },
+  {
+   "id": "H-0113",
+   "title": "MQ-only back-out fixture: a put under syncpoint undone with MQBACK in a program linked with the plain batch stub CSQBSTUB",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQSA MQSABKO: MQPUT then CALL 'MQBACK' USING WS-HCONN WS-COMPCODE WS-REASON; no MQCMIT, no SRRBACK",
+    "MQSA jcl/MQSALNK.jcl LKBKO20: IEWL, SYSLIN INCLUDE SYSLIB(CSQBSTUB), INCLUDE OBJLIB(MQSABKO)"
+   ],
+   "asserts": "MQSABKO holds one MQBACK call_sites fact (form literal, resolves_to null, a gaps entry), called from 0000-MAIN, and no SRRCMIT / SRRBACK / MQCMIT call. Step LKBKO20 of MQSALNK is a jcl_steps fact (program IEWL) whose SYSLIN instream data yields jcl_utility_cards facts INCLUDE SYSLIB(CSQBSTUB), INCLUDE OBJLIB(MQSABKO) and NAME MQSABKO(R): it is linked with CSQBSTUB, not CSQBRSTB. The unit of work touches only MQ resources, which is the case IBM gives for MQBACK in a batch program. Contrast H-0111, where the back-out is SRRBACK because the program is linked with the RRS stub.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications",
+     "section": "MQBACK - Back out changes",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q101690_.html",
+     "quote": "Batch programs (including IMS batch DL/I programs) can use the MQBACK call if the unit of work affects only MQ resources."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications",
+     "section": "MQBACK - Back out changes",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q101690_.html",
+     "quote": "On z/OS, this call is used only by batch programs (including IMS batch DL/I programs)."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications",
+     "section": "IBM MQ for z/OS stub programs",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q025760_.html",
+     "quote": "Before you can run a program written with IBM MQ for z/OS, you must link-edit it to the stub program supplied with IBM MQ for z/OS for the environment in which you are running the application."
+    }
+   ],
+   "era": 2,
+   "release": "IBM MQ 9.3"
   }
  ],
  "not_planted": [
