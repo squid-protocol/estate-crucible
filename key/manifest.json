@@ -213,26 +213,26 @@
   "ims_gen"
  ],
  "fact_totals": {
-  "programs": 67,
-  "units": 186,
-  "edges": 174,
+  "programs": 68,
+  "units": 189,
+  "edges": 176,
   "call_sites": 144,
   "copies": 87,
-  "data_items": 730,
-  "layouts": 323,
+  "data_items": 741,
+  "layouts": 328,
   "sql_statements": 6,
   "sql_tables": 3,
   "jcl_steps": 79,
   "jcl_dds": 246,
   "screen_fields": 16,
-  "csd_resources": 44,
-  "transactions": 7,
-  "cics_resources": 11,
+  "csd_resources": 48,
+  "transactions": 8,
+  "cics_resources": 13,
   "jcl_datasets": 133,
   "file_control": 21,
-  "entry_points": 67,
+  "entry_points": 68,
   "file_edges": 45,
-  "data_moves": 227,
+  "data_moves": 231,
   "copy_collisions": 9,
   "gaps": 64,
   "dead": 11,
@@ -617,7 +617,8 @@
   "H-0105",
   "H-0106",
   "H-0107",
-  "H-0108"
+  "H-0108",
+  "H-0109"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -799,6 +800,24 @@
     "H-0011"
    ]
   },
+  "apps/AIXA/cobol/AIXACIC.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "0025b35d48663f1c66ac3ec116b4bacfd2ec6f977ba785c27509722b646177d0",
+   "bytes": 1691,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "era": 2,
+   "era_evidence": "EXEC CICS ... RESP() and END-IF (COBOL-85) (#5117 era 2)",
+   "horrors": [
+    "H-0109"
+   ]
+  },
   "apps/AIXA/cobol/AIXAESD.cbl": {
    "app": "AIXA",
    "library": "cobol",
@@ -907,6 +926,21 @@
    "horrors": [
     "H-0106"
    ]
+  },
+  "apps/AIXA/csd/AIXAGRP.csd": {
+   "app": "AIXA",
+   "library": "csd",
+   "language": "csd",
+   "sha256": "6db2a6bed57627042f0369ab616230488a5f7a6897460c7e2cbc2e0ca0c08f7c",
+   "bytes": 267,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); the JCL is IDCAMS and plain EXEC steps"
   },
   "apps/AIXA/jcl/AIXADEF.jcl": {
    "app": "AIXA",

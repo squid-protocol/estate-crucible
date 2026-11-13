@@ -9,13 +9,15 @@ BLDINDEX), H-0080 (a DD that names the PATH), H-0081 (file status 02 / 22 / 23 h
 H-0082 (DEFINE CLUSTER in its three kinds: INDEXED, NUMBERED, NONINDEXED).
 Slice 1 adds H-0106 (an RRDS read ACCESS SEQUENTIAL with START and written ACCESS RANDOM with REWRITE / DELETE),
 H-0107 (an ESDS opened I-O: READ then REWRITE) and H-0108 (a KSDS with a unique and a duplicate alternate key,
-UNIQUEKEY and NONUNIQUEKEY alternate indexes, one PATH DD each)."""
+UNIQUEKEY and NONUNIQUEKEY alternate indexes, one PATH DD each).
+Slice 2 adds H-0109 (EXEC CICS READ with RIDFLD naming a relative byte address, RBA, on an ESDS and a relative
+record number, RRN, on an RRDS)."""
 
 from ..data import I
-from ..stmt import goback, if_, para, perform, raw, read
+from ..stmt import cics, goback, if_, para, perform, raw, read
 
 H76, H77, H78, H79, H80, H81, H82 = "H-0076", "H-0077", "H-0078", "H-0079", "H-0080", "H-0081", "H-0082"
-H106, H107, H108 = "H-0106", "H-0107", "H-0108"
+H106, H107, H108, H109 = "H-0106", "H-0107", "H-0108", "H-0109"
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -277,6 +279,61 @@ AIXAKS2 = {
     ],
 }
 
+AIXACIC = {
+    "member": "AIXACIC",
+    "era": 2,
+    "era_evidence": "EXEC CICS ... RESP() and END-IF (COBOL-85) (#5117 era 2)",
+    "program_id": "AIXACIC",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXACIC - ONLINE LOOKUP (TRANSACTION AXLK).",
+                "AUDIT LOG RECORD BY BYTE ADDRESS, PICK SLOT BY RECORD NUMBER."],
+    "compile": "compiled-stubbed",
+    "ws": [
+        I(1, "WS-LOG-REC", kids=[
+            I(5, "WL-TS", "X(14)"), I(5, "WL-TEXT", "X(40)"), I(5, "FILLER", "X(6)")]),
+        I(1, "WS-SLOT-REC", kids=[
+            I(5, "WSL-ID", "X(8)"), I(5, "WSL-QTY", "9(5)"), I(5, "FILLER", "X(27)")]),
+        I(1, "WS-LOG-RBA", "S9(8)", "COMP", value="ZERO"),
+        I(1, "WS-SLOT-RRN", "S9(8)", "COMP", value="ZERO"),
+        I(1, "WS-RESP", "S9(8)", "COMP"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             perform("1000-LOG-BY-RBA"),
+             perform("2000-SLOT-BY-RRN"),
+             cics("RETURN")),
+        para("1000-LOG-BY-RBA",
+             raw("MOVE ZERO TO WS-LOG-RBA"),
+             cics("READ FILE('AIXALOG') INTO(WS-LOG-REC)", "RIDFLD(WS-LOG-RBA) RBA",
+                  "RESP(WS-RESP)", horror=H109,
+                  resource={"verb": "READ", "kind": "FILE", "name": "AIXALOG", "record": "WS-LOG-REC",
+                            "access": "read"}),
+             if_("WS-RESP NOT = 0", [raw("MOVE 4 TO RETURN-CODE")])),
+        para("2000-SLOT-BY-RRN",
+             raw("MOVE 3 TO WS-SLOT-RRN"),
+             cics("READ FILE('AIXASLT') INTO(WS-SLOT-REC)", "RIDFLD(WS-SLOT-RRN) RRN",
+                  "RESP(WS-RESP)", horror=H109,
+                  resource={"verb": "READ", "kind": "FILE", "name": "AIXASLT", "record": "WS-SLOT-REC",
+                            "access": "read"}),
+             if_("WS-RESP NOT = 0", [raw("MOVE 4 TO RETURN-CODE")])),
+    ],
+}
+
+CSD = [
+    {
+        "group": "AIXAGRP",
+        "era": 2,
+        "era_evidence": "CSD DEFINE PROGRAM / TRANSACTION / FILE is RDO (CICS/MVS 2.x, #5117 era 2)",
+        "title": "ORDER SYSTEMS",
+        "defines": [
+            ("PROGRAM", "AIXACIC", {"LANGUAGE": "COBOL"}),
+            ("TRANSACTION", "AXLK", {"PROGRAM": "AIXACIC"}),
+            ("FILE", "AIXALOG", {"DSNAME": "PROD.AIXA.LOG"}),
+            ("FILE", "AIXASLT", {"DSNAME": "PROD.AIXA.SLOTS"}),
+        ],
+    },
+]
+
 
 def _dd(name, dsn=None, disp=("SHR",), **kw):
     return {"name": name, "dsn": dsn, "disp": disp, **kw}
@@ -418,7 +475,8 @@ APP = {
     "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
     "copybooks": [],
     "dclgen": [],
-    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2],
+    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXACIC],
+    "csd": CSD,
     "jcl": JOBS,
     "procs": [],
 }
