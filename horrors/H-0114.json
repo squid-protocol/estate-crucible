@@ -1,0 +1,73 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0114",
+ "title": "PSBGEN: a database PCB followed by one SENSEG per sensitive segment, the path from the root included",
+ "category": "ims",
+ "issue": 4893,
+ "shapes": [
+  "HKEP HKEPPSB: PCB TYPE=DB,DBDNAME=HKEPDB2,PROCOPT=G / SENSEG NAME=KEEP / SENSEG NAME=WALL,PARENT=KEEP / PSBGEN PSBNAME=HKEPPSB"
+ ],
+ "asserts": "HKEPPSB keys one ims_gen PCB fact (name HKEPDB2, the DBD it names), two SENSEG facts (KEEP, WALL, each with pcb HKEPDB2) in source order, and one PSB fact (HKEPPSB).",
+ "citations": [
+  {
+   "doc": "IBM IMS 15.1 documentation",
+   "section": "The database PCB statement",
+   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_dbpcbstat.htm",
+   "quote": "The database PCB statement defines the DBD of the database that the application program will access."
+  },
+  {
+   "doc": "IBM IMS 15.1 documentation",
+   "section": "The SENSEG statement",
+   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_sensegstat.htm",
+   "quote": "SENSEG statements must immediately follow the PCB statement to which they are related."
+  },
+  {
+   "doc": "IBM IMS 15.1 documentation",
+   "section": "The SENSEG statement",
+   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_sensegstat.htm",
+   "quote": "A separate SENSEG statement must exist for each segment type."
+  }
+ ],
+ "era": 2,
+ "release": "IMS 15.1",
+ "notes": "WALL is a dependent of KEEP, so the PSB is sensitive to the root as well as to WALL, as the SENSEG page requires of a segment beneath the root. PARENT= and PROCOPT= are coded for realism; the key asserts neither (the pages read do not define them).",
+ "planted": [
+  {
+   "member": "apps/HKEP/asm/HKEPPSB.asm",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "ims_gen": [
+     {
+      "kind": "PCB",
+      "name": "HKEPDB2",
+      "line": 2,
+      "horror": "H-0114"
+     },
+     {
+      "kind": "SENSEG",
+      "name": "KEEP",
+      "pcb": "HKEPDB2",
+      "line": 3,
+      "horror": "H-0114"
+     },
+     {
+      "kind": "SENSEG",
+      "name": "WALL",
+      "pcb": "HKEPDB2",
+      "line": 4,
+      "horror": "H-0114"
+     },
+     {
+      "kind": "PSB",
+      "name": "HKEPPSB",
+      "line": 5,
+      "horror": "H-0114"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

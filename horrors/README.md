@@ -119,6 +119,10 @@ era-neutral syntax horror; blank is untagged.
 | H-0108 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | A KSDS with two alternate keys, one unique and one WITH DUPLICATES, each reached by its own PATH DD | `apps/AIXA/cobol/AIXAKS2.cbl`, `apps/AIXA/jcl/AIXADF2.jcl`, `apps/AIXA/jcl/AIXARU2.jcl` |
 | H-0109 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | EXEC CICS READ with RIDFLD naming a relative byte address (RBA, an ESDS) and a relative record number (RRN, an RRDS) | `apps/AIXA/cobol/AIXACIC.cbl` |
 | H-0110 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | IDCAMS DEFINE CLUSTER with LINEAR and ZFS: data sets with no record structure | `apps/AIXA/jcl/AIXADF3.jcl` |
+| H-0114 | 2 | [#4893](https://github.com/squid-protocol/gitgalaxy/issues/4893) | ims | PSBGEN: a database PCB followed by one SENSEG per sensitive segment, the path from the root included | `apps/HKEP/asm/HKEPPSB.asm` |
+| H-0115 | 2 | [#4893](https://github.com/squid-protocol/gitgalaxy/issues/4893) | ims | DBD FIELD statements following the SEGM they describe, NAME= coded for a field an SSA names | `apps/HKEP/asm/HKEPDB2.asm` |
+| H-0116 | 2 | [#4893](https://github.com/squid-protocol/gitgalaxy/issues/4893) | ims | DBD LCHILD statement naming a logical child segment in another database, after the SEGM and FIELD it belongs to | `apps/HKEP/asm/HKEPDB2.asm` |
+| H-0117 | 2 | [#4893](https://github.com/squid-protocol/gitgalaxy/issues/4893) | ims | A qualified SSA: segment name, then a parenthesised qualification statement, passed after the I/O area | `apps/HKEP/cobol/HKEPFIND.cbl` |
 
 ## Field-testing defects not planted
 

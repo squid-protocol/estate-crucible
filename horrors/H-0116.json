@@ -1,0 +1,49 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0116",
+ "title": "DBD LCHILD statement naming a logical child segment in another database, after the SEGM and FIELD it belongs to",
+ "category": "ims",
+ "issue": 4893,
+ "shapes": [
+  "HKEP HKEPDB2: LCHILD NAME=(ENTRY,HKEPDB3) between FIELD KEEPKEY and SEGM WALL"
+ ],
+ "asserts": "HKEPDB2 keys one LCHILD fact (name ENTRY, dbname HKEPDB3, segment KEEP: the SEGM it follows).",
+ "citations": [
+  {
+   "doc": "IBM IMS 15.1 documentation",
+   "section": "LCHILD statement overview",
+   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_lchildstat.htm",
+   "quote": "LCHILD statements immediately follow the SEGM, FIELD, or XDFLD statement of the segment involved in the relationship."
+  },
+  {
+   "doc": "IBM IMS 15.1 documentation",
+   "section": "LCHILD statements",
+   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.sur/ims_lchildstmt.htm",
+   "quote": "The dbname parameter is the name of the database that contains the segment type specified in segname1."
+  }
+ ],
+ "era": 2,
+ "release": "IMS 15.1",
+ "notes": "HKEPDB3 is not in the estate: the LCHILD names a database outside it, as the page allows. POINTER= and PAIR= are not coded; the key asserts neither.",
+ "planted": [
+  {
+   "member": "apps/HKEP/asm/HKEPDB2.asm",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "ims_gen": [
+     {
+      "kind": "LCHILD",
+      "name": "ENTRY",
+      "dbname": "HKEPDB3",
+      "segment": "KEEP",
+      "line": 5,
+      "horror": "H-0116"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

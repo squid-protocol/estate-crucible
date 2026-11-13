@@ -1,0 +1,81 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0115",
+ "title": "DBD FIELD statements following the SEGM they describe, NAME= coded for a field an SSA names",
+ "category": "ims",
+ "issue": 4893,
+ "shapes": [
+  "HKEP HKEPDB2: SEGM NAME=KEEP / FIELD NAME=(KEEPKEY,SEQ,U),BYTES=8,START=1,TYPE=C; SEGM NAME=WALL / FIELD NAME=(WALLKEY,SEQ,U),..."
+ ],
+ "asserts": "HKEPDB2 keys one DBD fact, two SEGM facts and two FIELD facts (KEEPKEY of segment KEEP, WALLKEY of segment WALL; bytes 8, start 1), each FIELD attached to the SEGM before it.",
+ "citations": [
+  {
+   "doc": "IBM IMS 15.1 documentation",
+   "section": "FIELD statement overview",
+   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_fieldstat.htm",
+   "quote": "FIELD statements must immediately follow the SEGM statement to which they are related."
+  },
+  {
+   "doc": "IBM IMS 15.1 documentation",
+   "section": "FIELD statements",
+   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.sur/ims_fieldstmt.htm",
+   "quote": "The NAME parameter is required on the following types of fields:"
+  }
+ ],
+ "era": 2,
+ "release": "IMS 15.1",
+ "notes": "The page lists, under that sentence, the field types referenced by a segment search argument (SSA); KEEPKEY is the field HKEPFIND's SSA names (H-0117).",
+ "planted": [
+  {
+   "member": "apps/HKEP/asm/HKEPDB2.asm",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "ims_gen": [
+     {
+      "kind": "DBD",
+      "name": "HKEPDB2",
+      "line": 2,
+      "horror": "H-0115"
+     },
+     {
+      "kind": "SEGM",
+      "name": "KEEP",
+      "parent": "",
+      "bytes": 40,
+      "line": 3,
+      "horror": "H-0115"
+     },
+     {
+      "kind": "FIELD",
+      "name": "KEEPKEY",
+      "segment": "KEEP",
+      "bytes": 8,
+      "start": 1,
+      "line": 4,
+      "horror": "H-0115"
+     },
+     {
+      "kind": "SEGM",
+      "name": "WALL",
+      "parent": "KEEP",
+      "bytes": 40,
+      "line": 6,
+      "horror": "H-0115"
+     },
+     {
+      "kind": "FIELD",
+      "name": "WALLKEY",
+      "segment": "WALL",
+      "bytes": 8,
+      "start": 1,
+      "line": 7,
+      "horror": "H-0115"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

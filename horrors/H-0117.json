@@ -1,0 +1,160 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0117",
+ "title": "A qualified SSA: segment name, then a parenthesised qualification statement, passed after the I/O area",
+ "category": "ims",
+ "issue": 4893,
+ "shapes": [
+  "HKEP HKEPFIND: SSA-KEEP ('KEEP    ' '(' 'KEEPKEY ' ' =' 'K0001234' ')') as the fourth operand of CALL 'CBLTDLI' with a GU"
+ ],
+ "asserts": "HKEPFIND's CALL is one call_sites fact and one dli_calls fact: function GU, pcb DB-PCB, io_area WS-IO-AREA, ssas [SSA-KEEP]; SSA-KEEP is a group of six data_items facts in storage order.",
+ "citations": [
+  {
+   "doc": "IBM IMS 15.1 documentation",
+   "section": "Segment search arguments (SSAs)",
+   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.apg/ims_ssas.htm",
+   "quote": "A qualified SSA describes the segment occurrence that you want to access."
+  },
+  {
+   "doc": "IBM IMS 15.1 documentation",
+   "section": "Segment search arguments (SSAs)",
+   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.apg/ims_ssas.htm",
+   "quote": "This description is called a qualification statement and has three parts."
+  },
+  {
+   "doc": "IBM IMS 15.1 documentation",
+   "section": "Segment search arguments (SSAs)",
+   "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.apg/ims_ssas.htm",
+   "quote": "The qualification statement is enclosed in parentheses."
+  }
+ ],
+ "era": 2,
+ "release": "IMS 15.1",
+ "planted": [
+  {
+   "member": "apps/HKEP/cobol/HKEPFIND.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "edges": [
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "CBLTDLI",
+      "line": 29,
+      "form": "literal",
+      "horror": "H-0117"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "CBLTDLI",
+      "target": "CBLTDLI",
+      "line": 29,
+      "resolves_to": null,
+      "horror": "H-0117"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 5,
+      "name": "SSA-SEGNAME",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'KEEP    '",
+      "section": "WORKING-STORAGE",
+      "line": 12,
+      "horror": "H-0117"
+     },
+     {
+      "level": 5,
+      "name": "SSA-LPAREN",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'('",
+      "section": "WORKING-STORAGE",
+      "line": 13,
+      "horror": "H-0117"
+     },
+     {
+      "level": 5,
+      "name": "SSA-FLDNAME",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'KEEPKEY '",
+      "section": "WORKING-STORAGE",
+      "line": 14,
+      "horror": "H-0117"
+     },
+     {
+      "level": 5,
+      "name": "SSA-OPER",
+      "pic": "XX",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "' ='",
+      "section": "WORKING-STORAGE",
+      "line": 15,
+      "horror": "H-0117"
+     },
+     {
+      "level": 5,
+      "name": "SSA-FLDVAL",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'K0001234'",
+      "section": "WORKING-STORAGE",
+      "line": 16,
+      "horror": "H-0117"
+     },
+     {
+      "level": 5,
+      "name": "SSA-RPAREN",
+      "pic": "X",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "')'",
+      "section": "WORKING-STORAGE",
+      "line": 17,
+      "horror": "H-0117"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "CBLTDLI",
+      "line": 29,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0117"
+     }
+    ],
+    "dli_calls": [
+     {
+      "function": "GU",
+      "pcb": "DB-PCB",
+      "io_area": "WS-IO-AREA",
+      "ssas": [
+       "SSA-KEEP"
+      ],
+      "line": 29,
+      "horror": "H-0117"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

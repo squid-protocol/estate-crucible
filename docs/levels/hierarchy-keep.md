@@ -14,9 +14,21 @@ the scorer over this level is the first-time number, measured once, then it is d
 
 New channels: `dli_calls`, `ims_gen` (SPEC section 3).
 
-## Not in slice 1 (no IBM quote verified yet, so nothing planted)
+## Slice 2 (IMS 15.1 manual pages read; quotes in `spec/horrors.json`)
 
-PSBGEN / PCB / SENSEG, DBD FIELD / LCHILD / DATASET, qualified SSAs, GU / GHU / GNP / ISRT / REPL / DLET,
+| horror | planted | IBM text it rests on |
+|---|---|---|
+| H-0114 | `HKEPPSB.asm`: PCB TYPE=DB, SENSEG KEEP, SENSEG WALL, PSBGEN | The database PCB statement; The SENSEG statement |
+| H-0115 | `HKEPDB2.asm`: FIELD after each SEGM (KEEPKEY, WALLKEY) | FIELD statement overview; FIELD statements (NAME required for SSA fields) |
+| H-0116 | `HKEPDB2.asm`: LCHILD NAME=(ENTRY,HKEPDB3) after KEEP's FIELD | LCHILD statement overview; LCHILD statements |
+| H-0117 | `HKEPFIND.cbl`: GU with the qualified SSA `SSA-KEEP` | Segment search arguments (SSAs), Qualified SSAs |
+
+Channel `ims_gen` gains FIELD, LCHILD, PCB, SENSEG and PSB kinds (SPEC section 3). New ids start at H-0114
+because H-0111..H-0113 are on an open Warlords PR.
+
+## Not yet planted (no IBM quote verified yet, so nothing planted)
+
+DBD DATASET / XDFLD, PROCOPT values, SENSEG PARENT=, LCHILD POINTER= / PAIR=, command codes, multiple qualification statements, GHU / GNP / ISRT / REPL / DLET,
 EXEC DLI, the `DFSRRC00` batch step and its `PARM`. Each needs its manual page read and quoted verbatim first.
 
 ## First-time run
