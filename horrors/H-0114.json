@@ -1,0 +1,362 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0114",
+ "title": "IMS bridge message: MQMD format MQFMT_IMS, an MQIIH structure, then LLZZ-framed transaction data in one MQPUT buffer",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQBR MQBRIMS: CALL 'MQPUT' USING ... WS-MSGLEN WS-MSG ..., 01 WS-MSG = 05 WS-IIH (COPY MQBIIH, the 84-byte MQIIH stand-in) + WS-LL + WS-ZZ (halfword binary) + WS-TRANCODE X(8) + WS-DATA X(12); MOVE 'MQIMS' TO the MQMD format"
+ ],
+ "asserts": "MQBRIMS's MQPUT CALL is one call_sites fact (form literal, resolves_to null) with a call edge from 0000-MAIN and a gaps entry. The 01 group WS-MSG holds, in order, WS-IIH (copy_members MQBIIH, whose fields total 84 bytes, the length IBM gives MQIIH_LENGTH_1), the halfword binary items WS-LL (VALUE 24) and WS-ZZ, the 8-character WS-TRANCODE and the 12-character WS-DATA. WS-LL is 4 (LLZZ) + 8 + 12 = 24, and the MQPUT length item WS-MSGLEN is 84 + 24 = 108, so the LL bytes plus the MQIIH length equal the message length as IBM requires. The key's layouts fact for WS-MSG is 108 bytes (MQIIH 84, then 2, 2, 8 and 12). The key asserts the layout only: it does not model the bridge.",
+ "citations": [
+  {
+   "doc": "IBM MQ 9.3 developing applications",
+   "section": "How the IMS bridge deals with messages",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q023200_.html",
+   "quote": "Messages containing IMS transaction data and an MQIIH structure (described in MQIIH ): MQIIH LLZZ<trancode><data>[LLZZ<data>][LLZZ<data>]"
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications",
+   "section": "How the IMS bridge deals with messages",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q023200_.html",
+   "quote": "Set the Format field of the MQMD structure to MQFMT_IMS to use the MQIIH structure."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications",
+   "section": "How the IMS bridge deals with messages",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q023200_.html",
+   "quote": "IBM MQ validates the message data to ensure that the sum of the LL bytes plus the length of the MQIIH (if it is present) is equal to the message length."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQIIH - IMS information header",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q096960_.html",
+   "quote": "StrucLength (length of MQIIH structure) MQIIH_LENGTH_1 84"
+  }
+ ],
+ "era": 2,
+ "notes": "MQFMT_IMS is the name of the MQIIH format; the estate's value 'MQIMS' (padded to 8) is IBM's constant value, which the MQIIH page lists only by name, so the key asserts the layout, not the literal. The copybook field names are the estate's own. MQIIH CommitMode '1' (send then commit) is set by the sender; IBM's initial value is '0'.",
+ "planted": [
+  {
+   "member": "apps/MQBR/cobol/MQBRIMS.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "edges": [
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQPUT",
+      "line": 50,
+      "form": "literal",
+      "horror": "H-0114"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQPUT",
+      "target": "MQPUT",
+      "line": 50,
+      "resolves_to": null,
+      "horror": "H-0114"
+     }
+    ],
+    "copies": [
+     {
+      "member": "MQBIIH",
+      "kind": "copy",
+      "line": 26,
+      "resolves_to": "apps/MQBR/copybook/MQBIIH.cpy",
+      "horror": "H-0114"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-MSG",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 24,
+      "horror": "H-0114"
+     },
+     {
+      "level": 5,
+      "name": "WS-IIH",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 25,
+      "copy_members": [
+       "MQBIIH"
+      ],
+      "horror": "H-0114"
+     },
+     {
+      "level": 5,
+      "name": "WS-LL",
+      "pic": "S9(4)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": "24",
+      "section": "WORKING-STORAGE",
+      "line": 27,
+      "horror": "H-0114"
+     },
+     {
+      "level": 5,
+      "name": "WS-ZZ",
+      "pic": "S9(4)",
+      "usage": "COMP",
+      "occurs": null,
+      "redefines": null,
+      "value": "0",
+      "section": "WORKING-STORAGE",
+      "line": 28,
+      "horror": "H-0114"
+     },
+     {
+      "level": 5,
+      "name": "WS-TRANCODE",
+      "pic": "X(8)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'ORDENTRY'",
+      "section": "WORKING-STORAGE",
+      "line": 29,
+      "horror": "H-0114"
+     },
+     {
+      "level": 5,
+      "name": "WS-DATA",
+      "pic": "X(12)",
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": "'ORD00001 100'",
+      "section": "WORKING-STORAGE",
+      "line": 30,
+      "horror": "H-0114",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-MSG",
+      "line": 24,
+      "bytes": 108,
+      "fields": [
+       {
+        "name": "MQB-IIH-STRUCID",
+        "level": 10,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-VERSION",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 4,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-LENGTH",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 8,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-ENCODING",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 12,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-CCSID",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 16,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-FORMAT",
+        "level": 10,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 20,
+        "bytes": 8,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-FLAGS",
+        "level": 10,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 28,
+        "bytes": 4,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-LTERM",
+        "level": 10,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 32,
+        "bytes": 8,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-MFSMAP",
+        "level": 10,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 40,
+        "bytes": 8,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-REPLYFMT",
+        "level": 10,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 48,
+        "bytes": 8,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-AUTH",
+        "level": 10,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 56,
+        "bytes": 8,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-TRANINST",
+        "level": 10,
+        "pic": "X(16)",
+        "usage": null,
+        "offset": 64,
+        "bytes": 16,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-TRANSTATE",
+        "level": 10,
+        "pic": "X",
+        "usage": null,
+        "offset": 80,
+        "bytes": 1,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-COMMIT",
+        "level": 10,
+        "pic": "X",
+        "usage": null,
+        "offset": 81,
+        "bytes": 1,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-SECURITY",
+        "level": 10,
+        "pic": "X",
+        "usage": null,
+        "offset": 82,
+        "bytes": 1,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "MQB-IIH-RESERVED",
+        "level": 10,
+        "pic": "X",
+        "usage": null,
+        "offset": 83,
+        "bytes": 1,
+        "file": "apps/MQBR/copybook/MQBIIH.cpy"
+       },
+       {
+        "name": "WS-LL",
+        "level": 5,
+        "pic": "S9(4)",
+        "usage": "COMP",
+        "offset": 84,
+        "bytes": 2,
+        "file": "apps/MQBR/cobol/MQBRIMS.cbl"
+       },
+       {
+        "name": "WS-ZZ",
+        "level": 5,
+        "pic": "S9(4)",
+        "usage": "COMP",
+        "offset": 86,
+        "bytes": 2,
+        "file": "apps/MQBR/cobol/MQBRIMS.cbl"
+       },
+       {
+        "name": "WS-TRANCODE",
+        "level": 5,
+        "pic": "X(8)",
+        "usage": null,
+        "offset": 88,
+        "bytes": 8,
+        "file": "apps/MQBR/cobol/MQBRIMS.cbl"
+       },
+       {
+        "name": "WS-DATA",
+        "level": 5,
+        "pic": "X(12)",
+        "usage": null,
+        "offset": 96,
+        "bytes": 12,
+        "file": "apps/MQBR/cobol/MQBRIMS.cbl"
+       }
+      ],
+      "horror": "H-0114",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "MQPUT",
+      "line": 50,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0114"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
