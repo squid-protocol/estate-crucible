@@ -1,0 +1,68 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0109",
+ "title": "EXEC CICS READ with RIDFLD naming a relative byte address (RBA, an ESDS) and a relative record number (RRN, an RRDS)",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXACIC 1000-LOG-BY-RBA: EXEC CICS READ FILE('AIXALOG') INTO(WS-LOG-REC) RIDFLD(WS-LOG-RBA) RBA",
+  "AIXA AIXACIC 2000-SLOT-BY-RRN: EXEC CICS READ FILE('AIXASLT') INTO(WS-SLOT-REC) RIDFLD(WS-SLOT-RRN) RRN"
+ ],
+ "asserts": "Paragraph 1000-LOG-BY-RBA holds one cics_resources fact (verb READ, kind FILE, name AIXALOG, record WS-LOG-REC, access read) and 2000-SLOT-BY-RRN one (verb READ, kind FILE, name AIXASLT, record WS-SLOT-REC, access read): the RBA and RRN keywords change what RIDFLD holds, not which resource is read, so the file name comes from FILE(), never from RIDFLD. RIDFLD names WS-LOG-RBA and WS-SLOT-RRN, S9(8) COMP fullword binary data items, not keys and not files; the RBA and RRN keywords are not resource names or call sites. The two files are the ESDS PROD.AIXA.LOG and the RRDS PROD.AIXA.SLOTS that the batch programs of this app open, defined to CICS by the FILE entries of AIXAGRP.",
+ "citations": [
+  {
+   "doc": "CICS Transaction Server for z/OS 6.x, Application programming reference: READ (file control)",
+   "section": "READ: RBA option",
+   "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=summary-read",
+   "quote": "RBA (VSAM KSDS or ESDS base data sets, or CICS-maintained data tables only, but not paths) specifies that the record identification field specified in the RIDFLD option contains a relative byte address."
+  },
+  {
+   "doc": "CICS Transaction Server for z/OS 6.x, Application programming reference: READ (file control)",
+   "section": "READ: RRN option",
+   "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=summary-read",
+   "quote": "RRN (VSAM RRDS) specifies that the record identification field specified in the RIDFLD option contains a relative record number."
+  },
+  {
+   "doc": "CICS Transaction Server for z/OS 6.x, Application programming reference: READ (file control)",
+   "section": "READ: RIDFLD option",
+   "url": "https://www.ibm.com/docs/en/cics-ts/6.x?topic=summary-read",
+   "quote": "For a relative byte address or a relative record number, the format of this field must be fullword binary."
+  }
+ ],
+ "era": 2,
+ "release": "CICS TS 6.x (page also served for 5.6)",
+ "notes": "The citation page is the 6.x one; the 5.6 copy of the topic carries the same option names but was not compared sentence by sentence. The engine's cics_resources channel does not record the RBA / RRN keyword, so the key asserts the resource and record only. The page restricts RBA to ESDS and KSDS bases and RRN to RRDS; AIXALOG and AIXASLT follow that.",
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXACIC.cbl",
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "expected": {
+    "cics_resources": [
+     {
+      "verb": "READ",
+      "kind": "FILE",
+      "name": "AIXALOG",
+      "qualifier": null,
+      "record": "WS-LOG-REC",
+      "access": "read",
+      "line": 29,
+      "horror": "H-0109"
+     },
+     {
+      "verb": "READ",
+      "kind": "FILE",
+      "name": "AIXASLT",
+      "qualifier": null,
+      "record": "WS-SLOT-REC",
+      "access": "read",
+      "line": 38,
+      "horror": "H-0109"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

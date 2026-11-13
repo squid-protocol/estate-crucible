@@ -2,6 +2,385 @@
  "format": "estate-crucible-key/1",
  "app": "AIXA",
  "members": {
+  "apps/AIXA/cobol/AIXACIC.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 44,
+   "compile": {
+    "status": "compiled-stubbed"
+   },
+   "era": 2,
+   "era_evidence": "EXEC CICS ... RESP() and END-IF (COBOL-85) (#5117 era 2)",
+   "programs": [
+    {
+     "program_id": "AIXACIC",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 22,
+     "end_line": 26
+    },
+    {
+     "name": "1000-LOG-BY-RBA",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 27,
+     "end_line": 35
+    },
+    {
+     "name": "2000-SLOT-BY-RRN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 36,
+     "end_line": 44
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-LOG-BY-RBA",
+     "line": 23
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-SLOT-BY-RRN",
+     "line": 24
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-LOG-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 10
+    },
+    {
+     "level": 5,
+     "name": "WL-TS",
+     "pic": "X(14)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 11
+    },
+    {
+     "level": 5,
+     "name": "WL-TEXT",
+     "pic": "X(40)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 12
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(6)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 13
+    },
+    {
+     "level": 1,
+     "name": "WS-SLOT-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 14
+    },
+    {
+     "level": 5,
+     "name": "WSL-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 15
+    },
+    {
+     "level": 5,
+     "name": "WSL-QTY",
+     "pic": "9(5)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 16
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(27)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 17
+    },
+    {
+     "level": 1,
+     "name": "WS-LOG-RBA",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 18
+    },
+    {
+     "level": 1,
+     "name": "WS-SLOT-RRN",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 19
+    },
+    {
+     "level": 1,
+     "name": "WS-RESP",
+     "pic": "S9(8)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 20
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-LOG-REC",
+     "line": 10,
+     "bytes": 60,
+     "fields": [
+      {
+       "name": "WL-TS",
+       "level": 5,
+       "pic": "X(14)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 14,
+       "file": "apps/AIXA/cobol/AIXACIC.cbl"
+      },
+      {
+       "name": "WL-TEXT",
+       "level": 5,
+       "pic": "X(40)",
+       "usage": null,
+       "offset": 14,
+       "bytes": 40,
+       "file": "apps/AIXA/cobol/AIXACIC.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(6)",
+       "usage": null,
+       "offset": 54,
+       "bytes": 6,
+       "file": "apps/AIXA/cobol/AIXACIC.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-SLOT-REC",
+     "line": 14,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "WSL-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXACIC.cbl"
+      },
+      {
+       "name": "WSL-QTY",
+       "level": 5,
+       "pic": "9(5)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 5,
+       "file": "apps/AIXA/cobol/AIXACIC.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(27)",
+       "usage": null,
+       "offset": 13,
+       "bytes": 27,
+       "file": "apps/AIXA/cobol/AIXACIC.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-LOG-RBA",
+     "line": 18,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-LOG-RBA",
+       "level": 1,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/AIXA/cobol/AIXACIC.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-SLOT-RRN",
+     "line": 19,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-SLOT-RRN",
+       "level": 1,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/AIXA/cobol/AIXACIC.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-RESP",
+     "line": 20,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-RESP",
+       "level": 1,
+       "pic": "S9(8)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/AIXA/cobol/AIXACIC.cbl"
+      }
+     ]
+    }
+   ],
+   "cics_resources": [
+    {
+     "verb": "READ",
+     "kind": "FILE",
+     "name": "AIXALOG",
+     "qualifier": null,
+     "record": "WS-LOG-REC",
+     "access": "read",
+     "line": 29,
+     "horror": "H-0109"
+    },
+    {
+     "verb": "READ",
+     "kind": "FILE",
+     "name": "AIXASLT",
+     "qualifier": null,
+     "record": "WS-SLOT-REC",
+     "access": "read",
+     "line": 38,
+     "horror": "H-0109"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "AIXACIC",
+     "params": [],
+     "line": 21
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "ZERO",
+     "source_kind": "figurative",
+     "target": "WS-LOG-RBA",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 28
+    },
+    {
+     "verb": "MOVE",
+     "source": "4",
+     "source_kind": "literal",
+     "target": "RETURN-CODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 34
+    },
+    {
+     "verb": "MOVE",
+     "source": "3",
+     "source_kind": "literal",
+     "target": "WS-SLOT-RRN",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 37
+    },
+    {
+     "verb": "MOVE",
+     "source": "4",
+     "source_kind": "literal",
+     "target": "RETURN-CODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 43
+    }
+   ],
+   "horrors": [
+    "H-0109"
+   ]
+  },
   "apps/AIXA/cobol/AIXAESD.cbl": {
    "app": "AIXA",
    "library": "cobol",
@@ -2215,6 +2594,56 @@
    ],
    "horrors": [
     "H-0106"
+   ]
+  },
+  "apps/AIXA/csd/AIXAGRP.csd": {
+   "app": "AIXA",
+   "library": "csd",
+   "language": "csd",
+   "numbered": false,
+   "lines": 5,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); the JCL is IDCAMS and plain EXEC steps",
+   "csd_resources": [
+    {
+     "type": "PROGRAM",
+     "name": "AIXACIC",
+     "group": "AIXAGRP",
+     "line": 2
+    },
+    {
+     "type": "TRANSACTION",
+     "name": "AXLK",
+     "group": "AIXAGRP",
+     "line": 3,
+     "program": "AIXACIC"
+    },
+    {
+     "type": "FILE",
+     "name": "AIXALOG",
+     "group": "AIXAGRP",
+     "line": 4,
+     "dsname": "PROD.AIXA.LOG"
+    },
+    {
+     "type": "FILE",
+     "name": "AIXASLT",
+     "group": "AIXAGRP",
+     "line": 5,
+     "dsname": "PROD.AIXA.SLOTS"
+    }
+   ],
+   "transactions": [
+    {
+     "transid": "AXLK",
+     "program": "AIXACIC",
+     "group": "AIXAGRP",
+     "line": 3,
+     "resolves_to": "apps/AIXA/cobol/AIXACIC.cbl"
+    }
    ]
   },
   "apps/AIXA/jcl/AIXADEF.jcl": {
