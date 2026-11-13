@@ -118,6 +118,7 @@ era-neutral syntax horror; blank is untagged.
 | H-0107 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | An ESDS opened I-O and updated in place: ORGANIZATION IS SEQUENTIAL, READ then REWRITE | `apps/AIXA/cobol/AIXAESU.cbl` |
 | H-0108 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | A KSDS with two alternate keys, one unique and one WITH DUPLICATES, each reached by its own PATH DD | `apps/AIXA/cobol/AIXAKS2.cbl`, `apps/AIXA/jcl/AIXADF2.jcl`, `apps/AIXA/jcl/AIXARU2.jcl` |
 | H-0109 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | EXEC CICS READ with RIDFLD naming a relative byte address (RBA, an ESDS) and a relative record number (RRN, an RRDS) | `apps/AIXA/cobol/AIXACIC.cbl` |
+| H-0110 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | IDCAMS DEFINE CLUSTER with LINEAR and ZFS: data sets with no record structure | `apps/AIXA/jcl/AIXADF3.jcl` |
 
 ## Field-testing defects not planted
 

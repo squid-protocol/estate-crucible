@@ -216,14 +216,14 @@
   "programs": 68,
   "units": 189,
   "edges": 176,
-  "call_sites": 144,
+  "call_sites": 145,
   "copies": 87,
   "data_items": 741,
   "layouts": 328,
   "sql_statements": 6,
   "sql_tables": 3,
-  "jcl_steps": 79,
-  "jcl_dds": 246,
+  "jcl_steps": 80,
+  "jcl_dds": 248,
   "screen_fields": 16,
   "csd_resources": 48,
   "transactions": 8,
@@ -236,7 +236,7 @@
   "copy_collisions": 9,
   "gaps": 64,
   "dead": 11,
-  "jcl_utility_cards": 65,
+  "jcl_utility_cards": 67,
   "jcl_outputs": 3,
   "dli_calls": 2,
   "ims_gen": 4,
@@ -618,7 +618,8 @@
   "H-0106",
   "H-0107",
   "H-0108",
-  "H-0109"
+  "H-0109",
+  "H-0110"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -974,6 +975,22 @@
    "horrors": [
     "H-0106",
     "H-0108"
+   ]
+  },
+  "apps/AIXA/jcl/AIXADF3.jcl": {
+   "app": "AIXA",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "c03cc2c8b871408374ddd44f3ed5de9134c55c1efa557a2f47c8d376971d9383",
+   "bytes": 441,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0110"
    ]
   },
   "apps/AIXA/jcl/AIXARU2.jcl": {

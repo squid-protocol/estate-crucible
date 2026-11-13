@@ -2898,6 +2898,33 @@
    "era": 2,
    "release": "CICS TS 6.x (page also served for 5.6)",
    "notes": "The citation page is the 6.x one; the 5.6 copy of the topic carries the same option names but was not compared sentence by sentence. The engine's cics_resources channel does not record the RBA / RRN keyword, so the key asserts the resource and record only. The page restricts RBA to ESDS and KSDS bases and RRN to RRDS; AIXALOG and AIXASLT follow that."
+  },
+  {
+   "id": "H-0110",
+   "title": "IDCAMS DEFINE CLUSTER with LINEAR and ZFS: data sets with no record structure",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA jcl/AIXADF3.jcl IDC010: DEFINE CLUSTER (NAME(PROD.AIXA.EXTRACT) LINEAR CONTROLINTERVALSIZE(4096) ...)",
+    "AIXA jcl/AIXADF3.jcl IDC010: DEFINE CLUSTER (NAME(PROD.AIXA.REPORTS.ZFS) ZFS CYLINDERS(5 1))"
+   ],
+   "asserts": "Two jcl_utility_cards facts with verb DEFINE of step IDC010 of AIXADF3, one per card. The LINEAR card defines PROD.AIXA.EXTRACT, a linear data set; the ZFS card defines PROD.AIXA.REPORTS.ZFS, a linear data set that is a z/OS UNIX zFS file system. Neither is a KSDS, RRDS or ESDS: neither card carries KEYS or RECORDSIZE, and no COBOL SELECT reads either data set, so no program organization corresponds to these kinds (unlike INDEXED, NUMBERED and NONINDEXED of H-0082).",
+   "citations": [
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0), DEFINE CLUSTER Optional Parameters",
+     "section": "INDEXED|LINEAR|NONINDEXED|NUMBERED|ZFS: LINEAR",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.5.0/com.ibm.zos.v2r5.idai200/da6i2118.htm",
+     "quote": "Specifies that the cluster being defined is for linear data."
+    },
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0), DEFINE CLUSTER Optional Parameters",
+     "section": "INDEXED|LINEAR|NONINDEXED|NUMBERED|ZFS: ZFS",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_2.5.0/com.ibm.zos.v2r5.idai200/da6i2118.htm",
+     "quote": "All restrictions and conditions applicable to linear data sets apply to ZFS CLUSTERs."
+    }
+   ],
+   "era": 2,
+   "notes": "The ZFS definition (a z/OS UNIX zFS file system) is on the same page; only the restriction sentence is quoted verbatim. CONTROLINTERVALSIZE(4096) is legal (the page rounds a linear data set's size up to a 4096 multiple); the key asserts the cards, not the rounding. The DEFINE CLUSTER overview page carries only the syntax table, so the parameter page is cited."
   }
  ],
  "not_planted": [

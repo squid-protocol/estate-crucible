@@ -3020,6 +3020,93 @@
     "H-0108"
    ]
   },
+  "apps/AIXA/jcl/AIXADF3.jcl": {
+   "app": "AIXA",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 13,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IDCAMS",
+     "target": "IDCAMS",
+     "line": 5,
+     "resolves_to": null
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "AIXADF3",
+     "proc": null,
+     "step": "IDC010",
+     "ordinal": 1,
+     "program": "IDCAMS",
+     "exec_proc": null,
+     "cond": null,
+     "line": 5
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "AIXADF3",
+     "proc": null,
+     "step": "IDC010",
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 6
+    },
+    {
+     "job": "AIXADF3",
+     "proc": null,
+     "step": "IDC010",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 7,
+     "inline_lines": 5,
+     "horror": "H-0110"
+    }
+   ],
+   "jcl_utility_cards": [
+    {
+     "job": "AIXADF3",
+     "proc": null,
+     "step": "IDC010",
+     "utility": "IDCAMS",
+     "dd": "SYSIN",
+     "verb": "DEFINE",
+     "operands": "CLUSTER (NAME(PROD.AIXA.EXTRACT) LINEAR CONTROLINTERVALSIZE(4096) CYLINDERS(1 1))",
+     "line": 8,
+     "horror": "H-0110"
+    },
+    {
+     "job": "AIXADF3",
+     "proc": null,
+     "step": "IDC010",
+     "utility": "IDCAMS",
+     "dd": "SYSIN",
+     "verb": "DEFINE",
+     "operands": "CLUSTER (NAME(PROD.AIXA.REPORTS.ZFS) ZFS CYLINDERS(5 1))",
+     "line": 11,
+     "horror": "H-0110"
+    }
+   ],
+   "horrors": [
+    "H-0110"
+   ]
+  },
   "apps/AIXA/jcl/AIXARU2.jcl": {
    "app": "AIXA",
    "library": "jcl",

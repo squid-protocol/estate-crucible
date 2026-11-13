@@ -17,7 +17,7 @@ from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, read
 
 H76, H77, H78, H79, H80, H81, H82 = "H-0076", "H-0077", "H-0078", "H-0079", "H-0080", "H-0081", "H-0082"
-H106, H107, H108, H109 = "H-0106", "H-0107", "H-0108", "H-0109"
+H106, H107, H108, H109, H110 = "H-0106", "H-0107", "H-0108", "H-0109", "H-0110"
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -462,6 +462,25 @@ JOBS = [
                 _dd("CUSKSD1", "PROD.AIXA.CUST.TAXPATH", ("OLD",), horror=H108),
                 _dd("CUSKSD2", "PROD.AIXA.CUST.NAMPATH", ("OLD",), horror=H108),
                 {"name": "SYSOUT", "sysout": "*"},
+            ]},
+        ],
+    },
+    {
+        # slice 3: a LINEAR data set and a zFS aggregate; neither has records, so no KEYS and no RECORDSIZE
+        "name": "AIXADF3",
+        "title": "AIXA DEFINE LINEAR ZFS",
+        "accounting": "(AIXA,0100)",
+        "comments": ["DEFINE THE LINEAR EXTRACT DATA SET AND THE ZFS AGGREGATE FOR THE ORDER REPORTS"],
+        "steps": [
+            {"name": "IDC010", "pgm": "IDCAMS", "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                {"name": "SYSIN", "horror": H110, "inline": [
+                    ("DEFINE", [" DEFINE CLUSTER (NAME(PROD.AIXA.EXTRACT) -",
+                                "        LINEAR CONTROLINTERVALSIZE(4096) -",
+                                "        CYLINDERS(1 1))"]),
+                    ("DEFINE", [" DEFINE CLUSTER (NAME(PROD.AIXA.REPORTS.ZFS) -",
+                                "        ZFS CYLINDERS(5 1))"]),
+                ]},
             ]},
         ],
     },
