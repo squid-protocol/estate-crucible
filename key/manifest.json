@@ -216,14 +216,14 @@
   "programs": 71,
   "units": 192,
   "edges": 193,
-  "call_sites": 166,
+  "call_sites": 167,
   "copies": 97,
   "data_items": 792,
   "layouts": 369,
   "sql_statements": 6,
   "sql_tables": 3,
-  "jcl_steps": 84,
-  "jcl_dds": 269,
+  "jcl_steps": 85,
+  "jcl_dds": 271,
   "screen_fields": 16,
   "csd_resources": 48,
   "transactions": 8,
@@ -236,7 +236,7 @@
   "copy_collisions": 9,
   "gaps": 83,
   "dead": 11,
-  "jcl_utility_cards": 72,
+  "jcl_utility_cards": 74,
   "jcl_outputs": 3,
   "dli_calls": 2,
   "ims_gen": 4,
@@ -619,6 +619,7 @@
   "H-0107",
   "H-0108",
   "H-0109",
+  "H-0110",
   "H-0111",
   "H-0112",
   "H-0113"
@@ -977,6 +978,22 @@
    "horrors": [
     "H-0106",
     "H-0108"
+   ]
+  },
+  "apps/AIXA/jcl/AIXADF3.jcl": {
+   "app": "AIXA",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "c03cc2c8b871408374ddd44f3ed5de9134c55c1efa557a2f47c8d376971d9383",
+   "bytes": 441,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0110"
    ]
   },
   "apps/AIXA/jcl/AIXARU2.jcl": {
