@@ -21,6 +21,7 @@ H64, H65, H66, H67, H68, H69, H70, H71, H72, H73, H74, H75 = (
     "H-0064", "H-0065", "H-0066", "H-0067", "H-0068", "H-0069", "H-0070", "H-0071", "H-0072", "H-0073", "H-0074",
     "H-0075")
 H102, H103, H104, H105 = "H-0102", "H-0103", "H-0104", "H-0105"
+H121, H122 = "H-0121", "H-0122"
 H83, H84, H85 = "H-0083", "H-0084", "H-0085"
 H94, H95 = "H-0094", "H-0095"
 
@@ -414,6 +415,37 @@ JOBS = [
             ]},
             {"name": "DEL080", "pgm": "IEFBR14", "dds": [
                 _dd("OLDDD", "PROD.BDLD.WORKFILE", ("OLD", "DELETE"), horror=H105),
+            ]},
+        ],
+    },
+    {
+        # DFSMSdss dump and restore of a data set group; an IEBIMAGE forms control buffer into the image library
+        "name": "BDLDUT4",
+        "title": "BDLD UTILITIES 4",
+        "accounting": "(BDLD,0100)",
+        "steps": [
+            {"name": "DMP010", "pgm": "ADRDSSU", "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                _dd("DROUT", "PROD.BDLD.DUMP", ("NEW", "CATLG", "DELETE"),
+                    extra=["UNIT=SYSDA", "SPACE=(CYL,(5,1))"]),
+                {"name": "SYSIN", "horror": H121, "inline": [
+                    ("DUMP", [" DUMP DATASET(INCLUDE(PROD.BDLD.**)) -", "      OUTDDNAME(DROUT)"]),
+                ]},
+            ]},
+            {"name": "RST020", "pgm": "ADRDSSU", "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                _dd("DRIN", "PROD.BDLD.DUMP"),
+                {"name": "SYSIN", "horror": H121, "inline": [
+                    ("RESTORE", [" RESTORE DATASET(INCLUDE(PROD.BDLD.**)) -", "      INDDNAME(DRIN)"]),
+                ]},
+            ]},
+            {"name": "IMG030", "pgm": "IEBIMAGE", "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                _dd("SYSUT1", "SYS1.IMAGELIB", ("OLD",), horror=H122),
+                {"name": "SYSIN", "horror": H122, "inline": [
+                    ("FCB", " FCB CH1=1,CH12=80,LPI=8"),
+                    ("NAME", " NAME BDLD"),
+                ]},
             ]},
         ],
     },
