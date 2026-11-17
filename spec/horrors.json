@@ -3146,6 +3146,77 @@
    ],
    "era": 2,
    "release": "IMS 15.1"
+  },
+  {
+   "id": "H-0121",
+   "title": "DFSMSdss ADRDSSU: a DUMP and a RESTORE command with a continued DATASET(INCLUDE(...)) filter",
+   "category": "jcl",
+   "issue": 4890,
+   "shapes": [
+    "BDLD jcl/BDLDUT4.jcl DMP010: EXEC PGM=ADRDSSU, SYSIN holds DUMP DATASET(INCLUDE(PROD.BDLD.**)) - continued, OUTDDNAME(DROUT)",
+    "BDLD jcl/BDLDUT4.jcl RST020: EXEC PGM=ADRDSSU, SYSIN holds RESTORE DATASET(INCLUDE(PROD.BDLD.**)) - continued, INDDNAME(DRIN)"
+   ],
+   "asserts": "Each command in the inline SYSIN stream is one jcl_utility_cards fact with utility ADRDSSU, dd SYSIN, verb DUMP or RESTORE and its operands with the continuation hyphen dropped and the two lines joined; the continued command is one fact, not two. The DD named by OUTDDNAME / INDDNAME (DROUT, DRIN) is an ordinary jcl_dds fact of the step. ADRDSSU is system supplied: no program edge into the estate. The data set group PROD.BDLD.** is a filter in an operand, not a dataset reference.",
+   "citations": [
+    {
+     "doc": "z/OS V1R13.0 DFSMSdss Storage Administration (SC35-0423-16)",
+     "section": "DUMP command for DFSMSdss",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/dgt2u2b0.pdf",
+     "quote": "With the DUMP command, you can dump DASD data to a basic sequential data set, a large format sequential data set or an extended format sequential data set."
+    },
+    {
+     "doc": "z/OS V1R13.0 DFSMSdss Storage Administration (SC35-0423-16)",
+     "section": "Restoring data sets",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/dgt2u2b0.pdf",
+     "quote": "With the RESTORE command, you can restore data to DASD volumes from DFSMSdss-produced dump volumes, which are identified with the INDDNAME keyword."
+    },
+    {
+     "doc": "z/OS V1R13.0 DFSMSdss Storage Administration (SC35-0423-16)",
+     "section": "Uses of filtering",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/dgt2u2b0.pdf",
+     "quote": "//STEP1     EXEC PGM=ADRDSSU,REGION=4000K"
+    }
+   ],
+   "era": 0,
+   "release": "z/OS 1.13"
+  },
+  {
+   "id": "H-0122",
+   "title": "IEBIMAGE building a forms control buffer module: FCB then NAME statements, SYSUT1 the image library DISP=OLD",
+   "category": "jcl",
+   "issue": 4890,
+   "shapes": [
+    "BDLD jcl/BDLDUT4.jcl IMG030: EXEC PGM=IEBIMAGE, SYSUT1 DD DSN=SYS1.IMAGELIB,DISP=OLD, SYSIN holds FCB CH1=1,CH12=80,LPI=8 and NAME BDLD"
+   ],
+   "asserts": "Each control statement in the inline SYSIN stream is one jcl_utility_cards fact with utility IEBIMAGE, dd SYSIN, verb FCB or NAME and its operands as written; SYSUT1 is a jcl_dds fact on SYS1.IMAGELIB with disp OLD. IEBIMAGE is system supplied: no program edge into the estate. The NAME operand BDLD names a library module, not a program or a data set.",
+   "citations": [
+    {
+     "doc": "z/OS V2R1.0 DFSMSdfp Utilities (SC23-6864)",
+     "section": "Chapter 7. IEBIMAGE (Create Printer Image) Program",
+     "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/pdf/dgt3u100.pdf",
+     "quote": "Forms control buffer modules for the 3800 and 4248 that specify controls for the vertical line spacing and any one of 12 channel codes per line."
+    },
+    {
+     "doc": "z/OS V2R1.0 DFSMSdfp Utilities (SC23-6864)",
+     "section": "IEBIMAGE: Utility Control Statements, Table 28",
+     "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/pdf/dgt3u100.pdf",
+     "quote": "Creates a 3800 or 4248 forms control buffer module and stores it in an image library."
+    },
+    {
+     "doc": "z/OS V2R1.0 DFSMSdfp Utilities (SC23-6864)",
+     "section": "IEBIMAGE: NAME Statement",
+     "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/pdf/dgt3u100.pdf",
+     "quote": "The NAME statement is required, and must be the last statement in each operation group."
+    },
+    {
+     "doc": "z/OS V2R1.0 DFSMSdfp Utilities (SC23-6864)",
+     "section": "IEBIMAGE: SYSUT1 DD Statement",
+     "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/pdf/dgt3u100.pdf",
+     "quote": "DISP=OLD should be specified on the SYSUT1 DD statement."
+    }
+   ],
+   "era": 0,
+   "release": "z/OS 2.1"
   }
  ],
  "not_planted": [

@@ -1,0 +1,100 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0122",
+ "title": "IEBIMAGE building a forms control buffer module: FCB then NAME statements, SYSUT1 the image library DISP=OLD",
+ "category": "jcl",
+ "issue": 4890,
+ "shapes": [
+  "BDLD jcl/BDLDUT4.jcl IMG030: EXEC PGM=IEBIMAGE, SYSUT1 DD DSN=SYS1.IMAGELIB,DISP=OLD, SYSIN holds FCB CH1=1,CH12=80,LPI=8 and NAME BDLD"
+ ],
+ "asserts": "Each control statement in the inline SYSIN stream is one jcl_utility_cards fact with utility IEBIMAGE, dd SYSIN, verb FCB or NAME and its operands as written; SYSUT1 is a jcl_dds fact on SYS1.IMAGELIB with disp OLD. IEBIMAGE is system supplied: no program edge into the estate. The NAME operand BDLD names a library module, not a program or a data set.",
+ "citations": [
+  {
+   "doc": "z/OS V2R1.0 DFSMSdfp Utilities (SC23-6864)",
+   "section": "Chapter 7. IEBIMAGE (Create Printer Image) Program",
+   "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/pdf/dgt3u100.pdf",
+   "quote": "Forms control buffer modules for the 3800 and 4248 that specify controls for the vertical line spacing and any one of 12 channel codes per line."
+  },
+  {
+   "doc": "z/OS V2R1.0 DFSMSdfp Utilities (SC23-6864)",
+   "section": "IEBIMAGE: Utility Control Statements, Table 28",
+   "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/pdf/dgt3u100.pdf",
+   "quote": "Creates a 3800 or 4248 forms control buffer module and stores it in an image library."
+  },
+  {
+   "doc": "z/OS V2R1.0 DFSMSdfp Utilities (SC23-6864)",
+   "section": "IEBIMAGE: NAME Statement",
+   "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/pdf/dgt3u100.pdf",
+   "quote": "The NAME statement is required, and must be the last statement in each operation group."
+  },
+  {
+   "doc": "z/OS V2R1.0 DFSMSdfp Utilities (SC23-6864)",
+   "section": "IEBIMAGE: SYSUT1 DD Statement",
+   "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/pdf/dgt3u100.pdf",
+   "quote": "DISP=OLD should be specified on the SYSUT1 DD statement."
+  }
+ ],
+ "era": 0,
+ "release": "z/OS 2.1",
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDUT4.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "BDLDUT4",
+      "proc": null,
+      "step": "IMG030",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 24,
+      "inline_lines": 2,
+      "horror": "H-0122"
+     }
+    ],
+    "jcl_datasets": [
+     {
+      "dsn": "SYS1.IMAGELIB",
+      "generation": null,
+      "step": "IMG030",
+      "dd": "SYSUT1",
+      "line": 23,
+      "horror": "H-0122"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDUT4",
+      "proc": null,
+      "step": "IMG030",
+      "utility": "IEBIMAGE",
+      "dd": "SYSIN",
+      "verb": "FCB",
+      "operands": "CH1=1,CH12=80,LPI=8",
+      "line": 25,
+      "horror": "H-0122"
+     },
+     {
+      "job": "BDLDUT4",
+      "proc": null,
+      "step": "IMG030",
+      "utility": "IEBIMAGE",
+      "dd": "SYSIN",
+      "verb": "NAME",
+      "operands": "BDLD",
+      "line": 26,
+      "horror": "H-0122"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

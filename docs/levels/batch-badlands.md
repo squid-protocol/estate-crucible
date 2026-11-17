@@ -32,9 +32,11 @@ Slice 4 (gitgalaxy#7065): H-0083 (INCLUDE group), H-0084 (SET, DSN=NULLFILE), H-
 
 Slice 5 (gitgalaxy#7065): H-0094 (OUTPUT JCL statements, job and step level, and `OUTPUT=` on a sysout DD), H-0095 (a COBOL RERUN clause naming a checkpoint data set, program BDLDCKP, job BDLDCKJ). New channel `jcl_outputs`; new optional fields `output_refs` on `jcl_dds` and `rerun` on `file_control` (SPEC section 3). The gitgalaxy scorer reports them unscored until it reads them. Quotes read in the z/OS 2.2.0 MVS JCL Reference and the Enterprise COBOL 6.3 Language Reference PDFs.
 
-Slice 6 (gitgalaxy#7065): H-0102..H-0105 plant utility constructs in `BDLDUT3`, all as `jcl_utility_cards` / `jcl_dds` facts already defined in SPEC section 3 (no new field). IEBUPDTE's data lines between `./ ADD` and `./ ENDUP` are member text and carry no fact. Not yet planted: BPXBATCH, IKJEFT01 DSNUTILB / BIND, ADRDSSU, IEBIMAGE.
+Slice 6 (gitgalaxy#7065): H-0102..H-0105 plant utility constructs in `BDLDUT3`, all as `jcl_utility_cards` / `jcl_dds` facts already defined in SPEC section 3 (no new field). IEBUPDTE's data lines between `./ ADD` and `./ ENDUP` are member text and carry no fact. Not yet planted: BPXBATCH, IKJEFT01 DSNUTILB / BIND (ADRDSSU and IEBIMAGE: slice 7).
 
-Remaining slices: plants for BPXBATCH, IKJEFT01 DSNUTILB / BIND, ADRDSSU and IEBIMAGE (a new release and pin bump follow); the other three levels (#4892, #4893; #4894 is the AIXA app).
+Slice 7 (gitgalaxy#7065): H-0121 (ADRDSSU `DUMP` and `RESTORE`, a continued command is one fact) and H-0122 (IEBIMAGE `FCB` and `NAME`, `SYSUT1` on SYS1.IMAGELIB DISP=OLD) in the new job `BDLDUT4`, as `jcl_utility_cards` / `jcl_dds` facts already defined in SPEC section 3 (no new field). Quotes read in the z/OS 1.13 DFSMSdss Storage Administration PDF and the z/OS 2.1 DFSMSdfp Utilities PDF.
+
+Remaining slices: plants for BPXBATCH and IKJEFT01 DSNUTILB / BIND (a new release and pin bump follow); the other three levels (#4892, #4893; #4894 is the AIXA app).
 
 Key additions (SPEC section 3): the `jcl_utility_cards` channel and the optional fields `parm`,
 `if_cond`, `branch`, `restart` on `jcl_steps` and `temp`, `concat_of`, `dummy`, `inline_lines` on

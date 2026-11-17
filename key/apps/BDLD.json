@@ -4317,6 +4317,284 @@
     "H-0105"
    ]
   },
+  "apps/BDLD/jcl/BDLDUT4.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 27,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "ADRDSSU",
+     "target": "ADRDSSU",
+     "line": 4,
+     "resolves_to": null
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "ADRDSSU",
+     "target": "ADRDSSU",
+     "line": 13,
+     "resolves_to": null
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IEBIMAGE",
+     "target": "IEBIMAGE",
+     "line": 21,
+     "resolves_to": null
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "DMP010",
+     "ordinal": 1,
+     "program": "ADRDSSU",
+     "exec_proc": null,
+     "cond": null,
+     "line": 4
+    },
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "RST020",
+     "ordinal": 2,
+     "program": "ADRDSSU",
+     "exec_proc": null,
+     "cond": null,
+     "line": 13
+    },
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "IMG030",
+     "ordinal": 3,
+     "program": "IEBIMAGE",
+     "exec_proc": null,
+     "cond": null,
+     "line": 21
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "DMP010",
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 5
+    },
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "DMP010",
+     "dd": "DROUT",
+     "dsn": "PROD.BDLD.DUMP",
+     "generation": null,
+     "disp": "NEW",
+     "disp_normal": "CATLG",
+     "sysout": null,
+     "line": 6
+    },
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "DMP010",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 8,
+     "inline_lines": 2,
+     "horror": "H-0121"
+    },
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "RST020",
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 14
+    },
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "RST020",
+     "dd": "DRIN",
+     "dsn": "PROD.BDLD.DUMP",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 15
+    },
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "RST020",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 16,
+     "inline_lines": 2,
+     "horror": "H-0121"
+    },
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "IMG030",
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 22
+    },
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "IMG030",
+     "dd": "SYSUT1",
+     "dsn": "SYS1.IMAGELIB",
+     "generation": null,
+     "disp": "OLD",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 23
+    },
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "IMG030",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 24,
+     "inline_lines": 2,
+     "horror": "H-0122"
+    }
+   ],
+   "jcl_datasets": [
+    {
+     "dsn": "PROD.BDLD.DUMP",
+     "generation": null,
+     "step": "DMP010",
+     "dd": "DROUT",
+     "line": 6
+    },
+    {
+     "dsn": "PROD.BDLD.DUMP",
+     "generation": null,
+     "step": "RST020",
+     "dd": "DRIN",
+     "line": 15
+    },
+    {
+     "dsn": "SYS1.IMAGELIB",
+     "generation": null,
+     "step": "IMG030",
+     "dd": "SYSUT1",
+     "line": 23,
+     "horror": "H-0122"
+    }
+   ],
+   "gaps": [
+    {
+     "kind": "exec",
+     "name": "ADRDSSU",
+     "line": 4,
+     "why": "no member of the estate holds the program"
+    },
+    {
+     "kind": "exec",
+     "name": "ADRDSSU",
+     "line": 13,
+     "why": "no member of the estate holds the program"
+    },
+    {
+     "kind": "exec",
+     "name": "IEBIMAGE",
+     "line": 21,
+     "why": "no member of the estate holds the program"
+    }
+   ],
+   "jcl_utility_cards": [
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "DMP010",
+     "utility": "ADRDSSU",
+     "dd": "SYSIN",
+     "verb": "DUMP",
+     "operands": "DATASET(INCLUDE(PROD.BDLD.**)) OUTDDNAME(DROUT)",
+     "line": 9,
+     "horror": "H-0121"
+    },
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "RST020",
+     "utility": "ADRDSSU",
+     "dd": "SYSIN",
+     "verb": "RESTORE",
+     "operands": "DATASET(INCLUDE(PROD.BDLD.**)) INDDNAME(DRIN)",
+     "line": 17,
+     "horror": "H-0121"
+    },
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "IMG030",
+     "utility": "IEBIMAGE",
+     "dd": "SYSIN",
+     "verb": "FCB",
+     "operands": "CH1=1,CH12=80,LPI=8",
+     "line": 25,
+     "horror": "H-0122"
+    },
+    {
+     "job": "BDLDUT4",
+     "proc": null,
+     "step": "IMG030",
+     "utility": "IEBIMAGE",
+     "dd": "SYSIN",
+     "verb": "NAME",
+     "operands": "BDLD",
+     "line": 26,
+     "horror": "H-0122"
+    }
+   ],
+   "horrors": [
+    "H-0121",
+    "H-0122"
+   ]
+  },
   "apps/BDLD/jcl/BDLDUTIL.jcl": {
    "app": "BDLD",
    "library": "jcl",

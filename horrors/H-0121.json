@@ -1,0 +1,99 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0121",
+ "title": "DFSMSdss ADRDSSU: a DUMP and a RESTORE command with a continued DATASET(INCLUDE(...)) filter",
+ "category": "jcl",
+ "issue": 4890,
+ "shapes": [
+  "BDLD jcl/BDLDUT4.jcl DMP010: EXEC PGM=ADRDSSU, SYSIN holds DUMP DATASET(INCLUDE(PROD.BDLD.**)) - continued, OUTDDNAME(DROUT)",
+  "BDLD jcl/BDLDUT4.jcl RST020: EXEC PGM=ADRDSSU, SYSIN holds RESTORE DATASET(INCLUDE(PROD.BDLD.**)) - continued, INDDNAME(DRIN)"
+ ],
+ "asserts": "Each command in the inline SYSIN stream is one jcl_utility_cards fact with utility ADRDSSU, dd SYSIN, verb DUMP or RESTORE and its operands with the continuation hyphen dropped and the two lines joined; the continued command is one fact, not two. The DD named by OUTDDNAME / INDDNAME (DROUT, DRIN) is an ordinary jcl_dds fact of the step. ADRDSSU is system supplied: no program edge into the estate. The data set group PROD.BDLD.** is a filter in an operand, not a dataset reference.",
+ "citations": [
+  {
+   "doc": "z/OS V1R13.0 DFSMSdss Storage Administration (SC35-0423-16)",
+   "section": "DUMP command for DFSMSdss",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/dgt2u2b0.pdf",
+   "quote": "With the DUMP command, you can dump DASD data to a basic sequential data set, a large format sequential data set or an extended format sequential data set."
+  },
+  {
+   "doc": "z/OS V1R13.0 DFSMSdss Storage Administration (SC35-0423-16)",
+   "section": "Restoring data sets",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/dgt2u2b0.pdf",
+   "quote": "With the RESTORE command, you can restore data to DASD volumes from DFSMSdss-produced dump volumes, which are identified with the INDDNAME keyword."
+  },
+  {
+   "doc": "z/OS V1R13.0 DFSMSdss Storage Administration (SC35-0423-16)",
+   "section": "Uses of filtering",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/dgt2u2b0.pdf",
+   "quote": "//STEP1     EXEC PGM=ADRDSSU,REGION=4000K"
+  }
+ ],
+ "era": 0,
+ "release": "z/OS 1.13",
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDUT4.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "BDLDUT4",
+      "proc": null,
+      "step": "DMP010",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 8,
+      "inline_lines": 2,
+      "horror": "H-0121"
+     },
+     {
+      "job": "BDLDUT4",
+      "proc": null,
+      "step": "RST020",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 16,
+      "inline_lines": 2,
+      "horror": "H-0121"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDUT4",
+      "proc": null,
+      "step": "DMP010",
+      "utility": "ADRDSSU",
+      "dd": "SYSIN",
+      "verb": "DUMP",
+      "operands": "DATASET(INCLUDE(PROD.BDLD.**)) OUTDDNAME(DROUT)",
+      "line": 9,
+      "horror": "H-0121"
+     },
+     {
+      "job": "BDLDUT4",
+      "proc": null,
+      "step": "RST020",
+      "utility": "ADRDSSU",
+      "dd": "SYSIN",
+      "verb": "RESTORE",
+      "operands": "DATASET(INCLUDE(PROD.BDLD.**)) INDDNAME(DRIN)",
+      "line": 17,
+      "horror": "H-0121"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
