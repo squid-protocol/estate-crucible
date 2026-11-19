@@ -22,6 +22,7 @@ H64, H65, H66, H67, H68, H69, H70, H71, H72, H73, H74, H75 = (
     "H-0075")
 H102, H103, H104, H105 = "H-0102", "H-0103", "H-0104", "H-0105"
 H121, H122 = "H-0121", "H-0122"
+H123, H124, H125 = "H-0123", "H-0124", "H-0125"
 H83, H84, H85 = "H-0083", "H-0084", "H-0085"
 H94, H95 = "H-0094", "H-0095"
 
@@ -445,6 +446,44 @@ JOBS = [
                 {"name": "SYSIN", "horror": H122, "inline": [
                     ("FCB", " FCB CH1=1,CH12=80,LPI=8"),
                     ("NAME", " NAME BDLD"),
+                ]},
+            ]},
+        ],
+    },
+    {
+        # BPXBATCH running a shell script (PARM, STDENV and STDPARM streams), DSNUTILB running RUNSTATS, and BIND
+        # PACKAGE / BIND PLAN subcommands under IKJEFT01
+        "name": "BDLDUT5",
+        "title": "BDLD UTILITIES 5",
+        "accounting": "(BDLD,0100)",
+        "steps": [
+            {"name": "BPX010", "pgm": "BPXBATCH", "parm": "SH /u/bdld/bin/purge.sh 30", "horror": H123, "dds": [
+                {"name": "STDOUT", "sysout": "*"},
+                {"name": "STDERR", "sysout": "*"},
+                {"name": "STDENV", "inline": ["LANG=En_US.IBM-1047", "LC_ALL=En_US.IBM-1047"]},
+            ]},
+            {"name": "BPX020", "pgm": "BPXBATCH", "horror": H123, "dds": [
+                {"name": "STDOUT", "sysout": "*"},
+                {"name": "STDERR", "sysout": "*"},
+                {"name": "STDPARM", "inline": ["SH /u/bdld/bin/purge.sh AAAA", "BBBB"]},
+            ]},
+            {"name": "RUN030", "pgm": "DSNUTILB", "parm": "DB2P,BDLDRUNS", "horror": H124, "dds": [
+                _dd("STEPLIB", "DSN.V13R1.SDSNLOAD"),
+                {"name": "SYSPRINT", "sysout": "*"},
+                {"name": "UTPRINT", "sysout": "*"},
+                {"name": "SYSIN", "inline": [
+                    ("RUNSTATS", ["RUNSTATS TABLESPACE BDLDDB.BDLDTS", "      UPDATE SPACE"]),
+                ]},
+            ]},
+            {"name": "BND040", "pgm": "IKJEFT01", "horror": H125, "dds": [
+                _dd("STEPLIB", "DSN.V13R1.SDSNLOAD"),
+                _dd("DBRMLIB", "PROD.BDLD.DBRMLIB"),
+                {"name": "SYSTSPRT", "sysout": "*"},
+                {"name": "SYSTSIN", "inline": [
+                    ("DSN", " DSN SYSTEM(DB2P)"),
+                    ("BIND", [" BIND PACKAGE(BDLDCOLL) MEMBER(BDLDDB2) -", "      ACTION(REPLACE)"]),
+                    ("BIND", [" BIND PLAN(BDLDPLN) PKLIST(BDLDCOLL.*) -", "      ACTION(REPLACE)"]),
+                    ("END", " END"),
                 ]},
             ]},
         ],

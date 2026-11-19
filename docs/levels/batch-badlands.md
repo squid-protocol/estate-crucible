@@ -36,7 +36,9 @@ Slice 6 (gitgalaxy#7065): H-0102..H-0105 plant utility constructs in `BDLDUT3`, 
 
 Slice 7 (gitgalaxy#7065): H-0121 (ADRDSSU `DUMP` and `RESTORE`, a continued command is one fact) and H-0122 (IEBIMAGE `FCB` and `NAME`, `SYSUT1` on SYS1.IMAGELIB DISP=OLD) in the new job `BDLDUT4`, as `jcl_utility_cards` / `jcl_dds` facts already defined in SPEC section 3 (no new field). Quotes read in the z/OS 1.13 DFSMSdss Storage Administration PDF and the z/OS 2.1 DFSMSdfp Utilities PDF.
 
-Remaining slices: plants for BPXBATCH and IKJEFT01 DSNUTILB / BIND (a new release and pin bump follow); the other three levels (#4892, #4893; #4894 is the AIXA app).
+Slice 8 (gitgalaxy#7065): H-0123 (BPXBATCH, `PARM='SH ...'` naming a z/OS UNIX path, STDENV and STDPARM in-stream), H-0124 (DSNUTILB `PARM='subsystem,utility-id'`, a RUNSTATS statement continued without a hyphen) and H-0125 (DSN `BIND PACKAGE` / `BIND PLAN` under IKJEFT01, hyphen-continued; `MEMBER(BDLDDB2)` names a DBRM, not a call) in the new job `BDLDUT5`, as `jcl_steps` / `jcl_dds` / `jcl_utility_cards` facts already defined in SPEC section 3 (no new field). Quotes read in the z/OS 3.1 UNIX System Services User's Guide (SA23-2279-60: the BPXBATCH chapter; the Command Reference is not on the box), the Db2 13 Utility Guide and Reference and the Db2 13 Command Reference text. Key correction: the system-supplied programs BPXBATCH, ADRDSSU, IEBCOPY, IEBUPDTE, IEBPTPCH, IEBCOMPR and IEBIMAGE joined `SYSTEM_MEMBERS`, so their `EXEC PGM` is no `gaps` fact (SPEC section 3 already says names the system supplies are not gaps); seven `gaps` facts of earlier slices went with it.
+
+Remaining slices: a new release and pin bump (owner-approved, separate); the other three levels (#4892, #4893; #4894 is the AIXA app).
 
 Key additions (SPEC section 3): the `jcl_utility_cards` channel and the optional fields `parm`,
 `if_cond`, `branch`, `restart` on `jcl_steps` and `temp`, `concat_of`, `dummy`, `inline_lines` on
