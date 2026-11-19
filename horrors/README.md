@@ -128,6 +128,9 @@ era-neutral syntax horror; blank is untagged.
 | H-0120 | 2 | [#4893](https://github.com/squid-protocol/gitgalaxy/issues/4893) | ims | A qualified SSA: segment name, then a parenthesised qualification statement, passed after the I/O area | `apps/HKEP/cobol/HKEPFIND.cbl` |
 | H-0121 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | DFSMSdss ADRDSSU: a DUMP and a RESTORE command with a continued DATASET(INCLUDE(...)) filter | `apps/BDLD/jcl/BDLDUT4.jcl` |
 | H-0122 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | IEBIMAGE building a forms control buffer module: FCB then NAME statements, SYSUT1 the image library DISP=OLD | `apps/BDLD/jcl/BDLDUT4.jcl` |
+| H-0123 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | BPXBATCH running a z/OS UNIX shell script: PARM with SH and a path, STDENV and STDPARM in-stream data sets | `apps/BDLD/jcl/BDLDUT5.jcl` |
+| H-0124 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | DSNUTILB running RUNSTATS: PARM 'subsystem,utility-id', a free-form control statement continued without a hyphen | `apps/BDLD/jcl/BDLDUT5.jcl` |
+| H-0125 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | DSN subcommands BIND PACKAGE (MEMBER) and BIND PLAN (PKLIST) under IKJEFT01, each continued with a hyphen | `apps/BDLD/jcl/BDLDUT5.jcl` |
 
 ## Field-testing defects not planted
 

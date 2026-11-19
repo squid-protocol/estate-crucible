@@ -1,0 +1,138 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0123",
+ "title": "BPXBATCH running a z/OS UNIX shell script: PARM with SH and a path, STDENV and STDPARM in-stream data sets",
+ "category": "jcl",
+ "issue": 4890,
+ "shapes": [
+  "BDLD jcl/BDLDUT5.jcl BPX010: EXEC PGM=BPXBATCH,PARM='SH /u/bdld/bin/purge.sh 30', STDOUT and STDERR SYSOUT=*, STDENV DD * holding LANG and LC_ALL",
+  "BDLD jcl/BDLDUT5.jcl BPX020: EXEC PGM=BPXBATCH with no PARM, STDPARM DD * holding SH /u/bdld/bin/purge.sh AAAA continued by a second line BBBB"
+ ],
+ "asserts": "Each BPXBATCH step is a jcl_steps fact with program BPXBATCH (BPX010 with parm 'SH /u/bdld/bin/purge.sh 30', BPX020 with none) and an EXEC PGM call_sites fact that resolves to nothing in the estate and is no gap: BPXBATCH is system supplied. The path /u/bdld/bin/purge.sh is a z/OS UNIX file named in a shell command: not a dataset, not a program, no edge. STDOUT and STDERR are jcl_dds facts with sysout *. STDENV and STDPARM are jcl_dds facts with inline_lines 2; their lines are environment variables and parameter text, not utility control statements, so the steps have no jcl_utility_cards fact (the SH token and the continuation line BBBB are not verbs).",
+ "citations": [
+  {
+   "doc": "z/OS 3.1 z/OS UNIX System Services User's Guide (SA23-2279-60)",
+   "section": "The BPXBATCH utility",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_3.1.0/pdf/bpxa400.pdf",
+   "quote": "BPXBATCH is a utility that you can use to run shell commands or executable files through the batch facility."
+  },
+  {
+   "doc": "z/OS 3.1 z/OS UNIX System Services User's Guide (SA23-2279-60)",
+   "section": "Passing parameter data to BPXBATCH",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_3.1.0/pdf/bpxa400.pdf",
+   "quote": "In a batch job, BPXBATCH only allows up to 100 bytes for the parameter string due to JCL limitations."
+  },
+  {
+   "doc": "z/OS 3.1 z/OS UNIX System Services User's Guide (SA23-2279-60)",
+   "section": "Passing environment variables to BPXBATCH",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_3.1.0/pdf/bpxa400.pdf",
+   "quote": "To pass environment variables to BPXBATCH, you define a file containing the variable definitions and allocate it to the STDENV ddname."
+  },
+  {
+   "doc": "z/OS 3.1 z/OS UNIX System Services User's Guide (SA23-2279-60)",
+   "section": "Guidelines for defining STDPARM",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_3.1.0/pdf/bpxa400.pdf",
+   "quote": "If the STDPARM ddname is defined, BPXBATCH uses the data found in the specified file rather than what is found in the parameter string or in the STDIN ddname."
+  },
+  {
+   "doc": "z/OS 3.1 z/OS UNIX System Services User's Guide (SA23-2279-60)",
+   "section": "Guidelines for defining STDPARM",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_3.1.0/pdf/bpxa400.pdf",
+   "quote": "Records in in-stream data sets are concatenated with blanks as separator characters, and the string remaining after the SH token is passed as a single argument to a /bin/sh -c command."
+  },
+  {
+   "doc": "z/OS 3.1 z/OS UNIX System Services User's Guide (SA23-2279-60)",
+   "section": "Guidelines for defining stdin, stdout, and stderr",
+   "url": "https://www.ibm.com/docs/en/SSLTBW_3.1.0/pdf/bpxa400.pdf",
+   "quote": "It can be a sequential data set, a partitioned data set (PDS) member, a partitioned data set extended (PDSE) member, or SYSOUT."
+  }
+ ],
+ "era": 0,
+ "release": "z/OS 3.1",
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDUT5.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "BPXBATCH",
+      "target": "BPXBATCH",
+      "line": 4,
+      "resolves_to": null,
+      "horror": "H-0123"
+     },
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "BPXBATCH",
+      "target": "BPXBATCH",
+      "line": 12,
+      "resolves_to": null,
+      "horror": "H-0123"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": "BDLDUT5",
+      "proc": null,
+      "step": "BPX010",
+      "ordinal": 1,
+      "program": "BPXBATCH",
+      "exec_proc": null,
+      "cond": null,
+      "line": 4,
+      "parm": "SH /u/bdld/bin/purge.sh 30",
+      "horror": "H-0123"
+     },
+     {
+      "job": "BDLDUT5",
+      "proc": null,
+      "step": "BPX020",
+      "ordinal": 2,
+      "program": "BPXBATCH",
+      "exec_proc": null,
+      "cond": null,
+      "line": 12,
+      "horror": "H-0123"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": "BDLDUT5",
+      "proc": null,
+      "step": "BPX010",
+      "dd": "STDENV",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 7,
+      "inline_lines": 2,
+      "horror": "H-0123"
+     },
+     {
+      "job": "BDLDUT5",
+      "proc": null,
+      "step": "BPX020",
+      "dd": "STDPARM",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 15,
+      "inline_lines": 2,
+      "horror": "H-0123"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
