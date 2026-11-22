@@ -992,6 +992,503 @@
     "H-0107"
    ]
   },
+  "apps/AIXA/cobol/AIXAFOP.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 84,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and OPTIONAL (COBOL-85); no later construct",
+   "programs": [
+    {
+     "program_id": "AIXAFOP",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 50,
+     "end_line": 58
+    },
+    {
+     "name": "1000-CTL-STATUS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 59,
+     "end_line": 66,
+     "horror": "H-0129"
+    },
+    {
+     "name": "2000-CHK-STATUS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 67,
+     "end_line": 75,
+     "horror": "H-0129"
+    },
+    {
+     "name": "3000-ORD-STATUS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 76,
+     "end_line": 84,
+     "horror": "H-0129"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-CTL-STATUS",
+     "line": 52
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-CHK-STATUS",
+     "line": 54
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "3000-ORD-STATUS",
+     "line": 56
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "CTL-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 30
+    },
+    {
+     "level": 5,
+     "name": "CTL-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 31
+    },
+    {
+     "level": 5,
+     "name": "CTL-VAL",
+     "pic": "X(32)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 32
+    },
+    {
+     "level": 1,
+     "name": "CHK-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 35
+    },
+    {
+     "level": 5,
+     "name": "CHK-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 36
+    },
+    {
+     "level": 5,
+     "name": "CHK-VAL",
+     "pic": "X(32)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 37
+    },
+    {
+     "level": 1,
+     "name": "ORD-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 40
+    },
+    {
+     "level": 5,
+     "name": "ORD-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 41
+    },
+    {
+     "level": 5,
+     "name": "ORD-CUST",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 42
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(24)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 43
+    },
+    {
+     "level": 1,
+     "name": "WS-CTL-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 45
+    },
+    {
+     "level": 1,
+     "name": "WS-CHK-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 46
+    },
+    {
+     "level": 1,
+     "name": "WS-ORD-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 47
+    },
+    {
+     "level": 1,
+     "name": "WS-BAD",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 48,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "CTL-REC",
+     "line": 30,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "CTL-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      },
+      {
+       "name": "CTL-VAL",
+       "level": 5,
+       "pic": "X(32)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 32,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      }
+     ]
+    },
+    {
+     "record": "CHK-REC",
+     "line": 35,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "CHK-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      },
+      {
+       "name": "CHK-VAL",
+       "level": 5,
+       "pic": "X(32)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 32,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      }
+     ]
+    },
+    {
+     "record": "ORD-REC",
+     "line": 40,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "ORD-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      },
+      {
+       "name": "ORD-CUST",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(24)",
+       "usage": null,
+       "offset": 16,
+       "bytes": 24,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-CTL-STATUS",
+     "line": 45,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-CTL-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-CHK-STATUS",
+     "line": 46,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-CHK-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-ORD-STATUS",
+     "line": 47,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-ORD-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BAD",
+     "line": 48,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-BAD",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "CTL-FILE",
+     "assign": "CTLKSD",
+     "organization": "INDEXED",
+     "access_mode": "SEQUENTIAL",
+     "record_key": "CTL-ID",
+     "file_status": "WS-CTL-STATUS",
+     "fd_copies": [],
+     "line": 11,
+     "optional": true,
+     "horror": "H-0129"
+    },
+    {
+     "select": "CHK-FILE",
+     "assign": "CHKKSD",
+     "organization": "INDEXED",
+     "access_mode": "SEQUENTIAL",
+     "record_key": "CHK-ID",
+     "file_status": "WS-CHK-STATUS",
+     "fd_copies": [],
+     "line": 16,
+     "horror": "H-0129"
+    },
+    {
+     "select": "ORD-FILE",
+     "assign": "ORDKSD",
+     "organization": "INDEXED",
+     "access_mode": "SEQUENTIAL",
+     "record_key": "ORD-CUST",
+     "file_status": "WS-ORD-STATUS",
+     "fd_copies": [],
+     "line": 21,
+     "horror": "H-0129"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "AIXAFOP",
+     "params": [],
+     "line": 49
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 64,
+     "horror": "H-0129"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 70,
+     "horror": "H-0129"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 73,
+     "horror": "H-0129"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 79,
+     "horror": "H-0129"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 82,
+     "horror": "H-0129"
+    }
+   ],
+   "horrors": [
+    "H-0129"
+   ]
+  },
   "apps/AIXA/cobol/AIXAKS2.cbl": {
    "app": "AIXA",
    "library": "cobol",

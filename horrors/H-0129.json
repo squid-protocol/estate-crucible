@@ -1,0 +1,173 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0129",
+ "title": "Open-time file statuses 05, 35 and 39 over KSDS files: an OPTIONAL file with no data set, a nonoptional one, and a record key that disagrees with the cluster",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXAFOP: SELECT OPTIONAL CTL-FILE and SELECT CHK-FILE, both ORGANIZATION IS INDEXED over DDs with no data set behind them, and SELECT ORD-FILE over DD ORDKSD with RECORD KEY IS ORD-CUST (offset 8); 0000-MAIN OPEN INPUTs each and PERFORMs 1000-CTL-STATUS (tests '05'), 2000-CHK-STATUS (tests '35'), 3000-ORD-STATUS (tests '39')"
+ ],
+ "asserts": "The SELECT of CTL-FILE carries OPTIONAL (file_control optional = true; the other two carry no optional field). Each of 1000-, 2000-, 3000- is one units fact, PERFORMed once from 0000-MAIN as plain edges facts, and each tests the FILE STATUS item named in its own SELECT (WS-CTL-STATUS, WS-CHK-STATUS, WS-ORD-STATUS). At run time, OPEN INPUT of the optional file with no data set present ends in 05 (success, file unavailable); OPEN INPUT of the nonoptional file with no data set ends in 35 (permanent error); OPEN INPUT of ORD-FILE, whose key starts at offset 8 while the PROD.AIXA.ORDER cluster is defined KEYS(8 0), ends in 39 (fixed-attribute conflict). 05 has high-order digit 0 (successful), 35 and 39 digit 3 (permanent error). No READ is issued: the statuses are open-time only.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "An OPEN statement was successfully executed, but the referenced optional file was unavailable at the time the OPEN statement was executed."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "An OPEN statement with the INPUT, I-O, or EXTEND phrase was attempted on a nonoptional file that was unavailable."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The OPEN statement was unsuccessful because a conflict was detected between the fixed file attributes and the attributes specified for that file in the program. These attributes include the organization of the file (sequential, relative, or indexed), the prime record key, the alternate record keys, the code set, the maximum record size, the record type (fixed or variable), and the blocking factor."
+  }
+ ],
+ "era": 2,
+ "notes": "Quotes are the Table 34 entries for 05, 35 and 39 from igy6lr40.pdf via pdftotext, joined across line breaks. Table 34 says 05 does not apply to VSAM sequential files, so the optional plant is a KSDS. 04 (record length conflict on READ) is not planted here: it needs a variable-length record, which this generator's FDs (RECORDING MODE F) do not render. The JCL does not allocate CTLKSD or CHKKSD and no step runs AIXAFOP; the statuses are what IBM says for that allocation. GnuCOBOL statuses were not compared.",
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXAFOP.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "1000-CTL-STATUS",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 59,
+      "end_line": 66,
+      "horror": "H-0129"
+     },
+     {
+      "name": "2000-CHK-STATUS",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 67,
+      "end_line": 75,
+      "horror": "H-0129"
+     },
+     {
+      "name": "3000-ORD-STATUS",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 76,
+      "end_line": 84,
+      "horror": "H-0129"
+     }
+    ],
+    "file_control": [
+     {
+      "select": "CTL-FILE",
+      "assign": "CTLKSD",
+      "organization": "INDEXED",
+      "access_mode": "SEQUENTIAL",
+      "record_key": "CTL-ID",
+      "file_status": "WS-CTL-STATUS",
+      "fd_copies": [],
+      "line": 11,
+      "optional": true,
+      "horror": "H-0129"
+     },
+     {
+      "select": "CHK-FILE",
+      "assign": "CHKKSD",
+      "organization": "INDEXED",
+      "access_mode": "SEQUENTIAL",
+      "record_key": "CHK-ID",
+      "file_status": "WS-CHK-STATUS",
+      "fd_copies": [],
+      "line": 16,
+      "horror": "H-0129"
+     },
+     {
+      "select": "ORD-FILE",
+      "assign": "ORDKSD",
+      "organization": "INDEXED",
+      "access_mode": "SEQUENTIAL",
+      "record_key": "ORD-CUST",
+      "file_status": "WS-ORD-STATUS",
+      "fd_copies": [],
+      "line": 21,
+      "horror": "H-0129"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 64,
+      "horror": "H-0129"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 70,
+      "horror": "H-0129"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 73,
+      "horror": "H-0129"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 79,
+      "horror": "H-0129"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 82,
+      "horror": "H-0129"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

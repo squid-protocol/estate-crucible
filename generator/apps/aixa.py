@@ -11,13 +11,16 @@ Slice 1 adds H-0106 (an RRDS read ACCESS SEQUENTIAL with START and written ACCES
 H-0107 (an ESDS opened I-O: READ then REWRITE) and H-0108 (a KSDS with a unique and a duplicate alternate key,
 UNIQUEKEY and NONUNIQUEKEY alternate indexes, one PATH DD each).
 Slice 2 adds H-0109 (EXEC CICS READ with RIDFLD naming a relative byte address, RBA, on an ESDS and a relative
-record number, RRN, on an RRDS)."""
+record number, RRN, on an RRDS).
+Slice 11 adds H-0129 (the open-time file statuses 05, 35 and 39: an OPTIONAL KSDS with no data set, a
+nonoptional one, and a SELECT whose record key disagrees with the cluster)."""
 
 from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, read
 
 H76, H77, H78, H79, H80, H81, H82 = "H-0076", "H-0077", "H-0078", "H-0079", "H-0080", "H-0081", "H-0082"
 H106, H107, H108, H109, H110 = "H-0106", "H-0107", "H-0108", "H-0109", "H-0110"
+H129 = "H-0129"
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -279,6 +282,61 @@ AIXAKS2 = {
     ],
 }
 
+AIXAFOP = {
+    "member": "AIXAFOP",
+    "era": 2,
+    "era_evidence": "END-IF and OPTIONAL (COBOL-85); no later construct",
+    "program_id": "AIXAFOP",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAFOP - OPEN-TIME FILE STATUS OVER KSDS FILES.",
+                "FILE STATUS 05, 35 AND 39 ARE TESTED IN ONE PARAGRAPH EACH."],
+    "selects": [
+        {"name": "CTL-FILE", "assign": "CTLKSD", "status": "WS-CTL-STATUS", "org": "INDEXED",
+         "access": "SEQUENTIAL", "record_key": "CTL-ID", "optional": True, "horror": H129},
+        {"name": "CHK-FILE", "assign": "CHKKSD", "status": "WS-CHK-STATUS", "org": "INDEXED",
+         "access": "SEQUENTIAL", "record_key": "CHK-ID", "horror": H129},
+        {"name": "ORD-FILE", "assign": "ORDKSD", "status": "WS-ORD-STATUS", "org": "INDEXED",
+         "access": "SEQUENTIAL", "record_key": "ORD-CUST", "horror": H129},
+    ],
+    "fds": [
+        {"fd": "CTL-FILE", "record": I(1, "CTL-REC", kids=[
+            I(5, "CTL-ID", "X(8)"), I(5, "CTL-VAL", "X(32)")])},
+        {"fd": "CHK-FILE", "record": I(1, "CHK-REC", kids=[
+            I(5, "CHK-ID", "X(8)"), I(5, "CHK-VAL", "X(32)")])},
+        {"fd": "ORD-FILE", "record": I(1, "ORD-REC", kids=[
+            I(5, "ORD-ID", "X(8)"), I(5, "ORD-CUST", "X(8)"), I(5, "FILLER", "X(24)")])},
+    ],
+    "ws": [
+        I(1, "WS-CTL-STATUS", "X(2)"),
+        I(1, "WS-CHK-STATUS", "X(2)"),
+        I(1, "WS-ORD-STATUS", "X(2)"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN INPUT CTL-FILE"),
+             perform("1000-CTL-STATUS"),
+             raw("OPEN INPUT CHK-FILE"),
+             perform("2000-CHK-STATUS"),
+             raw("OPEN INPUT ORD-FILE"),
+             perform("3000-ORD-STATUS"),
+             raw("DISPLAY 'AIXAFOP BAD ' WS-BAD"),
+             goback()),
+        para("1000-CTL-STATUS",
+             if_("WS-CTL-STATUS = '05'", [raw("DISPLAY 'CONTROL FILE ABSENT, TREATED AS EMPTY'")],
+                 [if_("WS-CTL-STATUS NOT = '00'", [raw("ADD 1 TO WS-BAD")])]),
+             horror=H129),
+        para("2000-CHK-STATUS",
+             if_("WS-CHK-STATUS = '35'", [raw("DISPLAY 'CHECK FILE NOT AVAILABLE'", "ADD 1 TO WS-BAD")],
+                 [if_("WS-CHK-STATUS NOT = '00'", [raw("ADD 1 TO WS-BAD")])]),
+             horror=H129),
+        para("3000-ORD-STATUS",
+             if_("WS-ORD-STATUS = '39'", [raw("DISPLAY 'ORDER FILE ATTRIBUTE CONFLICT'", "ADD 1 TO WS-BAD")],
+                 [if_("WS-ORD-STATUS NOT = '00'", [raw("ADD 1 TO WS-BAD")])]),
+             horror=H129),
+    ],
+}
+
 AIXACIC = {
     "member": "AIXACIC",
     "era": 2,
@@ -494,7 +552,7 @@ APP = {
     "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
     "copybooks": [],
     "dclgen": [],
-    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXACIC],
+    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXACIC],
     "csd": CSD,
     "jcl": JOBS,
     "procs": [],
