@@ -11,13 +11,16 @@ Slice 1 adds H-0106 (an RRDS read ACCESS SEQUENTIAL with START and written ACCES
 H-0107 (an ESDS opened I-O: READ then REWRITE) and H-0108 (a KSDS with a unique and a duplicate alternate key,
 UNIQUEKEY and NONUNIQUEKEY alternate indexes, one PATH DD each).
 Slice 2 adds H-0109 (EXEC CICS READ with RIDFLD naming a relative byte address, RBA, on an ESDS and a relative
-record number, RRN, on an RRDS)."""
+record number, RRN, on an RRDS).
+Slice 10 adds H-0127 (FILE STATUS 22, 23 and 24 tested in one paragraph over an RRDS) and H-0128 (FILE STATUS 41,
+42, 47, 48 and 49, the logic-error statuses, tested in one paragraph over an ESDS opened the wrong way)."""
 
 from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, read
 
 H76, H77, H78, H79, H80, H81, H82 = "H-0076", "H-0077", "H-0078", "H-0079", "H-0080", "H-0081", "H-0082"
 H106, H107, H108, H109, H110 = "H-0106", "H-0107", "H-0108", "H-0109", "H-0110"
+H127, H128 = "H-0127", "H-0128"
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -279,6 +282,88 @@ AIXAKS2 = {
     ],
 }
 
+AIXAFRL = {
+    "member": "AIXAFRL",
+    "era": 2,
+    "era_evidence": "END-IF, END-WRITE and END-READ (COBOL-85); no later construct",
+    "program_id": "AIXAFRL",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAFRL - PICK SLOT CLAIMS IN AN RRDS.",
+                "FILE STATUS 22, 23 AND 24 ARE TESTED IN ONE PARAGRAPH."],
+    "selects": [{"name": "SLOT-FILE", "assign": "SLOTS", "status": "WS-SLOT-STATUS", "org": "RELATIVE",
+                 "access": "DYNAMIC", "relative_key": "WS-SLOT-NO", "horror": H127}],
+    "fds": [{"fd": "SLOT-FILE", "record": I(1, "SLOT-REC", kids=[
+        I(5, "SLOT-ID", "X(8)"), I(5, "SLOT-QTY", "9(5)"), I(5, "FILLER", "X(27)")])}],
+    "ws": [
+        I(1, "WS-SLOT-STATUS", "X(2)"),
+        I(1, "WS-SLOT-NO", "9(4)", value="ZERO"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN I-O SLOT-FILE"),
+             perform("1000-CLAIM"),
+             perform("2000-PROBE"),
+             raw("CLOSE SLOT-FILE", "DISPLAY 'AIXAFRL BAD ' WS-BAD"),
+             goback()),
+        para("1000-CLAIM",
+             raw("MOVE 3 TO WS-SLOT-NO", "MOVE 'SLOT0003' TO SLOT-ID", "MOVE 12 TO SLOT-QTY",
+                 "WRITE SLOT-REC", "END-WRITE"),
+             perform("9000-STATUS"),
+             raw("WRITE SLOT-REC", "END-WRITE"),
+             perform("9000-STATUS")),
+        para("2000-PROBE",
+             raw("MOVE 9 TO WS-SLOT-NO", "READ SLOT-FILE", "END-READ"),
+             perform("9000-STATUS")),
+        para("9000-STATUS",
+             if_("WS-SLOT-STATUS = '22'", [raw("DISPLAY 'SLOT ALREADY CLAIMED'", "ADD 1 TO WS-BAD")],
+                 [if_("WS-SLOT-STATUS = '23'", [raw("DISPLAY 'SLOT NOT FOUND'", "ADD 1 TO WS-BAD")],
+                      [if_("WS-SLOT-STATUS = '24'", [raw("DISPLAY 'SLOT BEYOND FILE'", "ADD 1 TO WS-BAD")])])]),
+             horror=H127),
+    ],
+}
+
+AIXAFES = {
+    "member": "AIXAFES",
+    "era": 2,
+    "era_evidence": "END-IF (COBOL-85); no later construct",
+    "program_id": "AIXAFES",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAFES - AUDIT LOG ESDS OPENED THE WRONG WAY ON PURPOSE.",
+                "FILE STATUS 41, 42, 47, 48 AND 49 ARE TESTED IN ONE PARAGRAPH."],
+    "selects": [{"name": "LOG-FILE", "assign": "LOGESD", "status": "WS-LOG-STATUS", "org": "SEQUENTIAL",
+                 "access": "SEQUENTIAL", "horror": H128}],
+    "fds": [{"fd": "LOG-FILE", "record": I(1, "LOG-REC", kids=[
+        I(5, "LOG-TS", "X(14)"), I(5, "LOG-TEXT", "X(40)"), I(5, "FILLER", "X(6)")])}],
+    "ws": [
+        I(1, "WS-LOG-STATUS", "X(2)"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN INPUT LOG-FILE"),
+             raw("OPEN INPUT LOG-FILE"),
+             perform("9000-STATUS"),
+             raw("MOVE 'ORDER ORD00009 ACCEPTED' TO LOG-TEXT", "WRITE LOG-REC"),
+             perform("9000-STATUS"),
+             raw("REWRITE LOG-REC"),
+             perform("9000-STATUS"),
+             raw("CLOSE LOG-FILE", "CLOSE LOG-FILE"),
+             perform("9000-STATUS"),
+             raw("OPEN OUTPUT LOG-FILE", "READ LOG-FILE", "END-READ"),
+             perform("9000-STATUS"),
+             raw("CLOSE LOG-FILE", "DISPLAY 'AIXAFES BAD ' WS-BAD"),
+             goback()),
+        para("9000-STATUS",
+             if_("WS-LOG-STATUS = '41'", [raw("DISPLAY 'FILE ALREADY OPEN'", "ADD 1 TO WS-BAD")]),
+             if_("WS-LOG-STATUS = '42'", [raw("DISPLAY 'FILE NOT OPEN'", "ADD 1 TO WS-BAD")]),
+             if_("WS-LOG-STATUS = '47'", [raw("DISPLAY 'READ ON OUTPUT FILE'", "ADD 1 TO WS-BAD")]),
+             if_("WS-LOG-STATUS = '48'", [raw("DISPLAY 'WRITE ON INPUT FILE'", "ADD 1 TO WS-BAD")]),
+             if_("WS-LOG-STATUS = '49'", [raw("DISPLAY 'REWRITE ON INPUT FILE'", "ADD 1 TO WS-BAD")]),
+             horror=H128),
+    ],
+}
+
 AIXACIC = {
     "member": "AIXACIC",
     "era": 2,
@@ -494,7 +579,7 @@ APP = {
     "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
     "copybooks": [],
     "dclgen": [],
-    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXACIC],
+    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFRL, AIXAFES, AIXACIC],
     "csd": CSD,
     "jcl": JOBS,
     "procs": [],

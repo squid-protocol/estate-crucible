@@ -1,0 +1,109 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0127",
+ "title": "A paragraph that tells file status 22, 23 and 24 apart after random access to a relative file (RRDS)",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXAFRL: SELECT SLOT-FILE ORGANIZATION IS RELATIVE ACCESS MODE IS DYNAMIC RELATIVE KEY IS WS-SLOT-NO; 9000-STATUS: IF WS-SLOT-STATUS = '22' ... IF WS-SLOT-STATUS = '23' ... IF WS-SLOT-STATUS = '24', PERFORMed after each WRITE and after a READ by relative number"
+ ],
+ "asserts": "9000-STATUS is one units fact, PERFORMed from 1000-CLAIM (twice) and 2000-PROBE (once) as plain edges facts. The comparisons are tests of the FILE STATUS item named in the SELECT (WS-SLOT-STATUS, file_status of SLOT-FILE), a RELATIVE file (relative_key WS-SLOT-NO) accessed DYNAMIC. At run time the second WRITE of slot 3 ends in status 22 (the slot is already occupied) and the READ of the empty slot 9 ends in 23; this program does not produce 24 (a WRITE beyond the externally defined boundary of the file), the paragraph tests for it. All three have first digit 2, the invalid-key class: each is an unsuccessful completion, unlike 02 of H-0081.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "An attempt was made to write a record that would create a duplicate key in a relative file."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "An attempt was made to randomly access a record that does not exist in the file."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "An attempt was made to write beyond the externally defined boundaries of a relative or indexed file."
+  }
+ ],
+ "era": 2,
+ "notes": "Quotes are the Table 34 entries for 22, 23 and 24 as extracted from the PDF text, joined across line breaks; entry 22 is a two-sentence cell, the first sentence (relative files) is quoted. The key asserts the three status values and the paragraph, not the rest of the entries. The runtime outcome beyond 22 and 23 is not asserted. Status 24 is not forced because the boundary is set by the IDCAMS definition of the cluster.",
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXAFRL.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "9000-STATUS",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 51,
+      "end_line": 65,
+      "horror": "H-0127"
+     }
+    ],
+    "file_control": [
+     {
+      "select": "SLOT-FILE",
+      "assign": "SLOTS",
+      "organization": "RELATIVE",
+      "access_mode": "DYNAMIC",
+      "record_key": null,
+      "file_status": "WS-SLOT-STATUS",
+      "fd_copies": [],
+      "line": 11,
+      "relative_key": "WS-SLOT-NO",
+      "horror": "H-0127"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 54,
+      "horror": "H-0127"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 58,
+      "horror": "H-0127"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 62,
+      "horror": "H-0127"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

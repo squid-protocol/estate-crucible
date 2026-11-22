@@ -17,7 +17,16 @@ gitgalaxy#7065, VSAM organizations and access paths (#4894). App `AIXA`
 | `AIXADF2` | `DEFINE CLUSTER` for the history RRDS (IDC010); the customer KSDS, `UNIQUEKEY` and `NONUNIQUEKEY` alternate indexes, a PATH and a `BLDINDEX` each (IDC020) | H-0106, H-0108 |
 | `AIXARU2` | `//CUSKSD` on the base cluster, `//CUSKSD1` on the TAX path, `//CUSKSD2` on the NAME path | H-0108 |
 
-All six programs compile under `cobc -std=ibm`.
+Slice 10 (file status, in two programs not named in the JCL):
+
+| member | what it plants | horrors |
+|---|---|---|
+| `AIXAFRL` | the RRDS opened `I-O`, `ACCESS DYNAMIC`; `9000-STATUS` tests 22 (second `WRITE` of a slot), 23 (`READ` of an empty slot) and 24 | H-0127 |
+| `AIXAFES` | the ESDS opened `INPUT` twice, `WRITE` / `REWRITE` while open `INPUT`, `CLOSE` twice, `READ` while open `OUTPUT`; `9000-STATUS` tests 41, 42, 47, 48, 49 | H-0128 |
+
+Statuses 21 / 43 / 46 are H-0126 (estate-crucible#32). Still unplanted: 04, 05, 14, 34, 35, 37-39, 44.
+
+All six programs from the first table compile under `cobc -std=ibm`.
 
 New optional fields on `file_control` (listed in SPEC section 3): `alternate_keys`
 (`[{name, duplicates}]`, present only when the SELECT has an ALTERNATE RECORD KEY) and `relative_key`
