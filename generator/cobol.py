@@ -143,14 +143,15 @@ class ProgramWriter:
 
     def select(self, sel: dict[str, Any]) -> None:
         m = self.m
+        opt = "OPTIONAL " if sel.get("optional") else ""
         with m.horror(sel.get("horror")):
             if sel.get("assign_split"):
                 # ASSIGN TO at the end of its line, the assignment-name on the next, both lines
                 # carrying an identification tag in cols 73-80 (#4264)
-                line = m.cobol(f"SELECT {sel['name']} ASSIGN TO", tag=sel["assign_split"])
+                line = m.cobol(f"SELECT {opt}{sel['name']} ASSIGN TO", tag=sel["assign_split"])
                 m.cobol(f"    {sel['assign']}", tag=sel["assign_split"])
             else:
-                line = m.cobol(f"SELECT {sel['name']} ASSIGN TO {sel['assign']}")
+                line = m.cobol(f"SELECT {opt}{sel['name']} ASSIGN TO {sel['assign']}")
             org = sel.get("org", "SEQUENTIAL")
             m.cobol(f"ORGANIZATION IS {org}", indent=4)
             if sel.get("access"):
@@ -172,6 +173,8 @@ class ProgramWriter:
                                            for a in sel["alternate_keys"]]
             if sel.get("relative_key"):
                 extra["relative_key"] = sel["relative_key"]
+            if sel.get("optional"):
+                extra["optional"] = True
             if sel.get("rerun"):
                 extra["rerun"] = dict(sel["rerun"])
             m.fact("file_control", select=sel["name"], assign=sel["assign"], organization=org,

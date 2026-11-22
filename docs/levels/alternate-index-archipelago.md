@@ -16,12 +16,13 @@ gitgalaxy#7065, VSAM organizations and access paths (#4894). App `AIXA`
 | `AIXAKS2` | KSDS with two alternate keys, `CUS-TAX` unique and `CUS-NAME WITH DUPLICATES` | H-0108 |
 | `AIXADF2` | `DEFINE CLUSTER` for the history RRDS (IDC010); the customer KSDS, `UNIQUEKEY` and `NONUNIQUEKEY` alternate indexes, a PATH and a `BLDINDEX` each (IDC020) | H-0106, H-0108 |
 | `AIXARU2` | `//CUSKSD` on the base cluster, `//CUSKSD1` on the TAX path, `//CUSKSD2` on the NAME path | H-0108 |
+| `AIXAFOP` | `SELECT OPTIONAL` KSDS, a nonoptional KSDS and a SELECT whose record key disagrees with the cluster: open-time file status 05 / 35 / 39 | H-0129 |
 
-All six programs compile under `cobc -std=ibm`.
+All seven programs compile under `cobc -std=ibm`.
 
 New optional fields on `file_control` (listed in SPEC section 3): `alternate_keys`
 (`[{name, duplicates}]`, present only when the SELECT has an ALTERNATE RECORD KEY) and `relative_key`
-(present only when the SELECT has a RELATIVE KEY). The gitgalaxy scorer does not read them yet, so they
+(present only when the SELECT has a RELATIVE KEY); `optional` (true, present only when the SELECT says OPTIONAL). The gitgalaxy scorer does not read them yet, so they
 score as unscored until it does.
 
 Known key question, not changed: the COBOL source alone does not tell an ESDS from a QSAM data set
@@ -35,6 +36,6 @@ Known key question, not changed: the COBOL source alone does not tell an ESDS fr
 
 The first run needs the owner's release and pin bump, and gitgalaxy's scorer to read the new fields.
 
-Remaining slices: scorer support for `alternate_keys` /
+Remaining slices: file status 04 (needs a variable-length FD the generator cannot render yet), 37, 14/34/44 and 9x; the answer-key edge 2000-COPY -> 2100-REPLACE in AIXARRS (a PERFORM inside an INVALID KEY, see handoff 4894-aixa-check-20261122); scorer support for `alternate_keys` /
 `relative_key` (gitgalaxy side); RBA / RRN access (CICS `RIDFLD`, cics-crucible side); alternate-index
 upgrade-set behaviour; LINEAR and ZFS clusters; an ESDS with an alternate index (not supported in COBOL).

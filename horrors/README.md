@@ -131,6 +131,7 @@ era-neutral syntax horror; blank is untagged.
 | H-0123 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | BPXBATCH running a z/OS UNIX shell script: PARM with SH and a path, STDENV and STDPARM in-stream data sets | `apps/BDLD/jcl/BDLDUT5.jcl` |
 | H-0124 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | DSNUTILB running RUNSTATS: PARM 'subsystem,utility-id', a free-form control statement continued without a hyphen | `apps/BDLD/jcl/BDLDUT5.jcl` |
 | H-0125 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | DSN subcommands BIND PACKAGE (MEMBER) and BIND PLAN (PKLIST) under IKJEFT01, each continued with a hyphen | `apps/BDLD/jcl/BDLDUT5.jcl` |
+| H-0129 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | Open-time file statuses 05, 35 and 39 over KSDS files: an OPTIONAL file with no data set, a nonoptional one, and a record key that disagrees with the cluster | `apps/AIXA/cobol/AIXAFOP.cbl` |
 
 ## Field-testing defects not planted
 
