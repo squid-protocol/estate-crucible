@@ -131,6 +131,7 @@ era-neutral syntax horror; blank is untagged.
 | H-0123 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | BPXBATCH running a z/OS UNIX shell script: PARM with SH and a path, STDENV and STDPARM in-stream data sets | `apps/BDLD/jcl/BDLDUT5.jcl` |
 | H-0124 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | DSNUTILB running RUNSTATS: PARM 'subsystem,utility-id', a free-form control statement continued without a hyphen | `apps/BDLD/jcl/BDLDUT5.jcl` |
 | H-0125 | 0 | [#4890](https://github.com/squid-protocol/gitgalaxy/issues/4890) | jcl | DSN subcommands BIND PACKAGE (MEMBER) and BIND PLAN (PKLIST) under IKJEFT01, each continued with a hyphen | `apps/BDLD/jcl/BDLDUT5.jcl` |
+| H-0126 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | A paragraph that tells file status 21, 43 and 46 apart after sequential access to an indexed file | `apps/AIXA/cobol/AIXAFSQ.cbl` |
 
 ## Field-testing defects not planted
 

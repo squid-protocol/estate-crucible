@@ -16,8 +16,9 @@ gitgalaxy#7065, VSAM organizations and access paths (#4894). App `AIXA`
 | `AIXAKS2` | KSDS with two alternate keys, `CUS-TAX` unique and `CUS-NAME WITH DUPLICATES` | H-0108 |
 | `AIXADF2` | `DEFINE CLUSTER` for the history RRDS (IDC010); the customer KSDS, `UNIQUEKEY` and `NONUNIQUEKEY` alternate indexes, a PATH and a `BLDINDEX` each (IDC020) | H-0106, H-0108 |
 | `AIXARU2` | `//CUSKSD` on the base cluster, `//CUSKSD1` on the TAX path, `//CUSKSD2` on the NAME path | H-0108 |
+| `AIXAFSQ` | KSDS opened `OUTPUT` then `I-O`, `ACCESS SEQUENTIAL`: an out-of-order `WRITE` (21), a `REWRITE` before any `READ` (43), a `READ` after AT END (46), tested in one paragraph | H-0126 |
 
-All six programs compile under `cobc -std=ibm`.
+All seven programs compile under `cobc -std=ibm`.
 
 New optional fields on `file_control` (listed in SPEC section 3): `alternate_keys`
 (`[{name, duplicates}]`, present only when the SELECT has an ALTERNATE RECORD KEY) and `relative_key`

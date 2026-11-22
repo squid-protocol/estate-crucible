@@ -992,6 +992,399 @@
     "H-0107"
    ]
   },
+  "apps/AIXA/cobol/AIXAFSQ.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 77,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+   "programs": [
+    {
+     "program_id": "AIXAFSQ",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 30,
+     "end_line": 38
+    },
+    {
+     "name": "1000-LOAD",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 39,
+     "end_line": 46
+    },
+    {
+     "name": "2000-UPDATE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 47,
+     "end_line": 58
+    },
+    {
+     "name": "2100-NEXT",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 59,
+     "end_line": 62
+    },
+    {
+     "name": "9000-STATUS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 63,
+     "end_line": 77,
+     "horror": "H-0126"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-LOAD",
+     "line": 32
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-UPDATE",
+     "line": 35
+    },
+    {
+     "kind": "perform",
+     "from": "1000-LOAD",
+     "target": "9000-STATUS",
+     "line": 43
+    },
+    {
+     "kind": "perform",
+     "from": "1000-LOAD",
+     "target": "9000-STATUS",
+     "line": 46
+    },
+    {
+     "kind": "perform",
+     "from": "2000-UPDATE",
+     "target": "9000-STATUS",
+     "line": 50
+    },
+    {
+     "kind": "perform",
+     "from": "2000-UPDATE",
+     "target": "2100-NEXT",
+     "line": 54
+    },
+    {
+     "kind": "perform",
+     "from": "2000-UPDATE",
+     "target": "9000-STATUS",
+     "line": 58
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "SEQ-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 20
+    },
+    {
+     "level": 5,
+     "name": "SEQ-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 21
+    },
+    {
+     "level": 5,
+     "name": "SEQ-CUST",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 22
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(24)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 23
+    },
+    {
+     "level": 1,
+     "name": "WS-SEQ-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 25
+    },
+    {
+     "level": 1,
+     "name": "WS-EOF-FLAG",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'N'",
+     "section": "WORKING-STORAGE",
+     "line": 26
+    },
+    {
+     "level": 88,
+     "name": "WS-EOF",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'Y'",
+     "section": "WORKING-STORAGE",
+     "line": 27
+    },
+    {
+     "level": 1,
+     "name": "WS-BAD",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 28,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "SEQ-REC",
+     "line": 20,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "SEQ-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAFSQ.cbl"
+      },
+      {
+       "name": "SEQ-CUST",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAFSQ.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(24)",
+       "usage": null,
+       "offset": 16,
+       "bytes": 24,
+       "file": "apps/AIXA/cobol/AIXAFSQ.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-SEQ-STATUS",
+     "line": 25,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-SEQ-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAFSQ.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-EOF-FLAG",
+     "line": 26,
+     "bytes": 1,
+     "fields": [
+      {
+       "name": "WS-EOF-FLAG",
+       "level": 1,
+       "pic": "X",
+       "usage": null,
+       "offset": 0,
+       "bytes": 1,
+       "file": "apps/AIXA/cobol/AIXAFSQ.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BAD",
+     "line": 28,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-BAD",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAFSQ.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "SEQ-FILE",
+     "assign": "ORDSEQ",
+     "organization": "INDEXED",
+     "access_mode": "SEQUENTIAL",
+     "record_key": "SEQ-ID",
+     "file_status": "WS-SEQ-STATUS",
+     "fd_copies": [],
+     "line": 11,
+     "horror": "H-0126"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "AIXAFSQ",
+     "params": [],
+     "line": 29
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "'ORD00002'",
+     "source_kind": "literal",
+     "target": "SEQ-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 40
+    },
+    {
+     "verb": "MOVE",
+     "source": "'CUST0002'",
+     "source_kind": "literal",
+     "target": "SEQ-CUST",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 41
+    },
+    {
+     "verb": "MOVE",
+     "source": "'ORD00001'",
+     "source_kind": "literal",
+     "target": "SEQ-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 44
+    },
+    {
+     "verb": "MOVE",
+     "source": "'CUST0009'",
+     "source_kind": "literal",
+     "target": "SEQ-CUST",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 48
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 66,
+     "horror": "H-0126"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 70,
+     "horror": "H-0126"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 74,
+     "horror": "H-0126"
+    }
+   ],
+   "horrors": [
+    "H-0126"
+   ]
+  },
   "apps/AIXA/cobol/AIXAKS2.cbl": {
    "app": "AIXA",
    "library": "cobol",
