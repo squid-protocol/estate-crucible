@@ -11,13 +11,61 @@ Slice 1 adds H-0106 (an RRDS read ACCESS SEQUENTIAL with START and written ACCES
 H-0107 (an ESDS opened I-O: READ then REWRITE) and H-0108 (a KSDS with a unique and a duplicate alternate key,
 UNIQUEKEY and NONUNIQUEKEY alternate indexes, one PATH DD each).
 Slice 2 adds H-0109 (EXEC CICS READ with RIDFLD naming a relative byte address, RBA, on an ESDS and a relative
-record number, RRN, on an RRDS)."""
+record number, RRN, on an RRDS).
+Slice 9 adds H-0126 (FILE STATUS 21, 43 and 46 tested in one paragraph over a sequentially accessed KSDS)."""
 
 from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, read
 
 H76, H77, H78, H79, H80, H81, H82 = "H-0076", "H-0077", "H-0078", "H-0079", "H-0080", "H-0081", "H-0082"
-H106, H107, H108, H109, H110 = "H-0106", "H-0107", "H-0108", "H-0109", "H-0110"
+H106, H107, H108, H109, H110, H126 = "H-0106", "H-0107", "H-0108", "H-0109", "H-0110", "H-0126"
+
+AIXAFSQ = {
+    "member": "AIXAFSQ",
+    "era": 2,
+    "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+    "program_id": "AIXAFSQ",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAFSQ - SEQUENTIAL LOAD AND UPDATE OF THE ORDER KSDS.",
+                "FILE STATUS 21, 43 AND 46 ARE TESTED IN ONE PARAGRAPH."],
+    "selects": [{"name": "SEQ-FILE", "assign": "ORDSEQ", "status": "WS-SEQ-STATUS", "org": "INDEXED",
+                 "access": "SEQUENTIAL", "record_key": "SEQ-ID", "horror": H126}],
+    "fds": [{"fd": "SEQ-FILE", "record": I(1, "SEQ-REC", kids=[
+        I(5, "SEQ-ID", "X(8)"), I(5, "SEQ-CUST", "X(8)"), I(5, "FILLER", "X(24)")])}],
+    "ws": [
+        I(1, "WS-SEQ-STATUS", "X(2)"),
+        I(1, "WS-EOF-FLAG", "X", value="'N'", kids=[I(88, "WS-EOF", value="'Y'")]),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN OUTPUT SEQ-FILE"),
+             perform("1000-LOAD"),
+             raw("CLOSE SEQ-FILE", "OPEN I-O SEQ-FILE"),
+             perform("2000-UPDATE"),
+             raw("CLOSE SEQ-FILE", "DISPLAY 'AIXAFSQ BAD ' WS-BAD"),
+             goback()),
+        para("1000-LOAD",
+             raw("MOVE 'ORD00002' TO SEQ-ID", "MOVE 'CUST0002' TO SEQ-CUST", "WRITE SEQ-REC"),
+             perform("9000-STATUS"),
+             raw("MOVE 'ORD00001' TO SEQ-ID", "WRITE SEQ-REC"),
+             perform("9000-STATUS")),
+        para("2000-UPDATE",
+             raw("MOVE 'CUST0009' TO SEQ-CUST", "REWRITE SEQ-REC"),
+             perform("9000-STATUS"),
+             raw("READ SEQ-FILE NEXT RECORD", "    AT END SET WS-EOF TO TRUE", "END-READ"),
+             perform("2100-NEXT", until="WS-EOF"),
+             raw("READ SEQ-FILE NEXT RECORD", "    AT END SET WS-EOF TO TRUE", "END-READ"),
+             perform("9000-STATUS")),
+        para("2100-NEXT",
+             raw("READ SEQ-FILE NEXT RECORD", "    AT END SET WS-EOF TO TRUE", "END-READ")),
+        para("9000-STATUS",
+             if_("WS-SEQ-STATUS = '21'", [raw("DISPLAY 'KEY OUT OF SEQUENCE'", "ADD 1 TO WS-BAD")],
+                 [if_("WS-SEQ-STATUS = '43'", [raw("DISPLAY 'REWRITE WITHOUT READ'", "ADD 1 TO WS-BAD")],
+                      [if_("WS-SEQ-STATUS = '46'", [raw("DISPLAY 'READ PAST END'", "ADD 1 TO WS-BAD")])])]),
+             horror=H126),
+    ],
+}
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -494,7 +542,7 @@ APP = {
     "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
     "copybooks": [],
     "dclgen": [],
-    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXACIC],
+    "programs": [AIXAFSQ, AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXACIC],
     "csd": CSD,
     "jcl": JOBS,
     "procs": [],

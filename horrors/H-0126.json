@@ -1,0 +1,108 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0126",
+ "title": "A paragraph that tells file status 21, 43 and 46 apart after sequential access to an indexed file",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXAFSQ: SELECT SEQ-FILE ORGANIZATION IS INDEXED ACCESS MODE IS SEQUENTIAL RECORD KEY IS SEQ-ID; 9000-STATUS: IF WS-SEQ-STATUS = '21' ... IF WS-SEQ-STATUS = '43' ... IF WS-SEQ-STATUS = '46', PERFORMed after each WRITE, after a REWRITE with no READ and after a READ past end"
+ ],
+ "asserts": "9000-STATUS is one units fact, PERFORMed from 1000-LOAD (twice) and 2000-UPDATE (twice) as plain edges facts. The comparisons are tests of the FILE STATUS item named in the SELECT (WS-SEQ-STATUS, file_status of SEQ-FILE), whose access mode is SEQUENTIAL over an INDEXED file. At run time the second WRITE (ORD00001 after ORD00002 on OPEN OUTPUT) ends in status 21 (ascending key order broken), the REWRITE issued right after OPEN I-O, before any READ, ends in 43, and the READ issued after the AT END condition ends in 46. All three are unsuccessful (first digit 2 or 4); none is a status the program can treat as success, unlike 02 of H-0081.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "the ascending key requirement of successive record key values has been violated"
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "was not a successfully executed READ statement"
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "no valid next record had been established"
+  }
+ ],
+ "era": 2,
+ "notes": "Quotes are fragments of the Table 34 entries for 21, 43 and 46, to be re-read against the PDF when it is next at hand; the key asserts the three status values and the paragraph, not the wording of the full entries. The runtime outcome of the program is not asserted beyond these three statuses.",
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXAFSQ.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "9000-STATUS",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 63,
+      "end_line": 77,
+      "horror": "H-0126"
+     }
+    ],
+    "file_control": [
+     {
+      "select": "SEQ-FILE",
+      "assign": "ORDSEQ",
+      "organization": "INDEXED",
+      "access_mode": "SEQUENTIAL",
+      "record_key": "SEQ-ID",
+      "file_status": "WS-SEQ-STATUS",
+      "fd_copies": [],
+      "line": 11,
+      "horror": "H-0126"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 66,
+      "horror": "H-0126"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 70,
+      "horror": "H-0126"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 74,
+      "horror": "H-0126"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
