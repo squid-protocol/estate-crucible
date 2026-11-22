@@ -3412,6 +3412,38 @@
    ],
    "era": 2,
    "notes": "Quotes are the Table 34 entries for 05, 35 and 39 from igy6lr40.pdf via pdftotext, joined across line breaks. Table 34 says 05 does not apply to VSAM sequential files, so the optional plant is a KSDS. 04 (record length conflict on READ) is not planted here: it needs a variable-length record, which this generator's FDs (RECORDING MODE F) do not render. The JCL does not allocate CTLKSD or CHKKSD and no step runs AIXAFOP; the statuses are what IBM says for that allocation. GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0130",
+   "title": "File status 14 on a sequential READ of an RRDS with a too-small relative key item, 34 on a WRITE past the end of an ESDS, and 38 on an OPEN of a file closed WITH LOCK",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAFLK: SELECT SLOT-FILE ORGANIZATION IS RELATIVE ACCESS MODE IS SEQUENTIAL with RELATIVE KEY IS WS-SLOT-NO PIC 9(2), and SELECT LOG-FILE ORGANIZATION IS SEQUENTIAL over DD LOGESD (an ESDS); 0000-MAIN OPEN INPUTs SLOT-FILE, PERFORMs 1000-SCAN-SLOTS UNTIL WS-SLOT-STATUS NOT = '00' then 1100-SLOT-STATUS (tests '14'); OPEN EXTENDs LOG-FILE, PERFORMs 2000-FILL-LOG UNTIL WS-LOG-STATUS NOT = '00' then 2100-LOG-STATUS (tests '34'); CLOSE LOG-FILE WITH LOCK, OPEN INPUT LOG-FILE, PERFORM 3000-LOCK-STATUS (tests '38')"
+   ],
+   "asserts": "The two SELECTs are one file_control fact each: SLOT-FILE is org RELATIVE, access SEQUENTIAL, with relative_key WS-SLOT-NO (a PIC 9(2) item, so relative record numbers above 99 do not fit); LOG-FILE is org SEQUENTIAL. 1100-, 2100- and 3000- are each one units fact, PERFORMed once from 0000-MAIN as plain edges facts (1000- and 2000- are PERFORMed UNTIL), and each tests the FILE STATUS item named in its own SELECT (WS-SLOT-STATUS, WS-LOG-STATUS, WS-LOG-STATUS). At run time, the sequential READ of a relative file whose next relative record number has more significant digits than WS-SLOT-NO ends in 14 (high-order digit 1, at-end condition); a WRITE past the externally defined boundary of the ESDS ends in 34 (digit 3, permanent error); an OPEN of a file previously closed WITH LOCK ends in 38 (digit 3). No INVALID KEY phrase is coded, so status alone reports each condition.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A sequential READ statement was attempted for a relative file, and the number of significant digits in the relative record number was larger than the size of the relative key data item described for the file."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A permanent error exists because of a boundary violation; an attempt was made to write beyond the externally defined boundaries of a sequential file."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "An OPEN statement was attempted on a file previously closed with lock."
+    }
+   ],
+   "era": 2,
+   "notes": "Quotes are the Table 34 entries for 14, 34 and 38 from igy6lr40.pdf via pdftotext, joined across line breaks. Table 34 words 34 for a sequential file; an ESDS is the VSAM sequential file, and how many records fill the extent depends on the cluster's space, so the key asserts the status the loop ends in, not a count. The slot RRDS must hold a record numbered above 99 for 14 to occur; no JCL step runs AIXAFLK and the statuses are what IBM says for such a data set. 37 (open mode the file cannot support) and 44 (record size on REWRITE or a RECORD IS VARYING bound) are not planted: 37 depends on how the data set is allocated and 44 needs a variable-length FD this generator does not render. GnuCOBOL statuses were not compared."
   }
  ],
  "not_planted": [
