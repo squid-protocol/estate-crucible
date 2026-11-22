@@ -1,0 +1,146 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0128",
+ "title": "A paragraph that tells the logic-error file statuses 41, 42, 47, 48 and 49 apart over an ESDS opened the wrong way",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXAFES: SELECT LOG-FILE ORGANIZATION IS SEQUENTIAL (the ESDS of H-0078); 0000-MAIN opens it INPUT twice, WRITEs and REWRITEs it while open INPUT, CLOSEs it twice, then READs it while open OUTPUT; 9000-STATUS: five IFs on WS-LOG-STATUS = '41', '42', '47', '48', '49'"
+ ],
+ "asserts": "9000-STATUS is one units fact, PERFORMed five times from 0000-MAIN as plain edges facts; its five comparisons test the FILE STATUS item named in the SELECT (WS-LOG-STATUS, file_status of LOG-FILE). At run time the second OPEN INPUT ends in 41, the WRITE on the input file in 48, the REWRITE in 49, the second CLOSE in 42, and the READ on the file open OUTPUT in 47. All five have first digit 4, the logic-error class: the program sequence, not the data or the data set, is wrong. The key asserts no recovery: the program only counts them.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "An OPEN statement was attempted for a file in the open mode."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A CLOSE statement was attempted for a file not in the open mode."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The execution of a READ statement was attempted on a file not open in the input or I-O mode."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The execution of a WRITE statement was attempted on a file not open in the I-O, output, or extend mode."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The execution of a DELETE or REWRITE statement was attempted on a file not open in the I-O mode."
+  }
+ ],
+ "era": 2,
+ "notes": "Quotes are the Table 34 entries for 41, 42, 47, 48 and 49 as extracted from the PDF text, joined across line breaks. Status 43 and 46 are H-0126; 49 is the REWRITE case here (DELETE is not used, an ESDS has none). The runtime outcome of each statement is what the IBM table says for this sequence; GnuCOBOL's statuses were not compared.",
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXAFES.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "9000-STATUS",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 46,
+      "end_line": 66,
+      "horror": "H-0128"
+     }
+    ],
+    "file_control": [
+     {
+      "select": "LOG-FILE",
+      "assign": "LOGESD",
+      "organization": "SEQUENTIAL",
+      "access_mode": "SEQUENTIAL",
+      "record_key": null,
+      "file_status": "WS-LOG-STATUS",
+      "fd_copies": [],
+      "line": 11,
+      "horror": "H-0128"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 49,
+      "horror": "H-0128"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 53,
+      "horror": "H-0128"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 57,
+      "horror": "H-0128"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 61,
+      "horror": "H-0128"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 65,
+      "horror": "H-0128"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
