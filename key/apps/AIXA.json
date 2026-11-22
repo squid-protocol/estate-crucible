@@ -992,6 +992,517 @@
     "H-0107"
    ]
   },
+  "apps/AIXA/cobol/AIXAFLK.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 87,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and CLOSE ... WITH LOCK (COBOL-85); no later construct",
+   "programs": [
+    {
+     "program_id": "AIXAFLK",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 40,
+     "end_line": 52
+    },
+    {
+     "name": "1000-SCAN-SLOTS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 53,
+     "end_line": 56
+    },
+    {
+     "name": "1100-SLOT-STATUS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 57,
+     "end_line": 65,
+     "horror": "H-0130"
+    },
+    {
+     "name": "2000-FILL-LOG",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 66,
+     "end_line": 69
+    },
+    {
+     "name": "2100-LOG-STATUS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 70,
+     "end_line": 78,
+     "horror": "H-0130"
+    },
+    {
+     "name": "3000-LOCK-STATUS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 79,
+     "end_line": 87,
+     "horror": "H-0130"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-SCAN-SLOTS",
+     "line": 42
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1100-SLOT-STATUS",
+     "line": 43
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-FILL-LOG",
+     "line": 46
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2100-LOG-STATUS",
+     "line": 47
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "3000-LOCK-STATUS",
+     "line": 50
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "SLOT-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 24
+    },
+    {
+     "level": 5,
+     "name": "SLOT-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 25
+    },
+    {
+     "level": 5,
+     "name": "SLOT-QTY",
+     "pic": "9(5)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 26
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(27)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 27
+    },
+    {
+     "level": 1,
+     "name": "LOG-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 30
+    },
+    {
+     "level": 5,
+     "name": "LOG-TS",
+     "pic": "X(14)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 31
+    },
+    {
+     "level": 5,
+     "name": "LOG-TEXT",
+     "pic": "X(40)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 32
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(6)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 33
+    },
+    {
+     "level": 1,
+     "name": "WS-SLOT-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 35
+    },
+    {
+     "level": 1,
+     "name": "WS-LOG-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 36
+    },
+    {
+     "level": 1,
+     "name": "WS-SLOT-NO",
+     "pic": "9(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 37
+    },
+    {
+     "level": 1,
+     "name": "WS-BAD",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 38,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "SLOT-REC",
+     "line": 24,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "SLOT-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      },
+      {
+       "name": "SLOT-QTY",
+       "level": 5,
+       "pic": "9(5)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 5,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(27)",
+       "usage": null,
+       "offset": 13,
+       "bytes": 27,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      }
+     ]
+    },
+    {
+     "record": "LOG-REC",
+     "line": 30,
+     "bytes": 60,
+     "fields": [
+      {
+       "name": "LOG-TS",
+       "level": 5,
+       "pic": "X(14)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 14,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      },
+      {
+       "name": "LOG-TEXT",
+       "level": 5,
+       "pic": "X(40)",
+       "usage": null,
+       "offset": 14,
+       "bytes": 40,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(6)",
+       "usage": null,
+       "offset": 54,
+       "bytes": 6,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-SLOT-STATUS",
+     "line": 35,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-SLOT-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-LOG-STATUS",
+     "line": 36,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-LOG-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-SLOT-NO",
+     "line": 37,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-SLOT-NO",
+       "level": 1,
+       "pic": "9(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BAD",
+     "line": 38,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-BAD",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "SLOT-FILE",
+     "assign": "SLOTS",
+     "organization": "RELATIVE",
+     "access_mode": "SEQUENTIAL",
+     "record_key": null,
+     "file_status": "WS-SLOT-STATUS",
+     "fd_copies": [],
+     "line": 11,
+     "relative_key": "WS-SLOT-NO",
+     "horror": "H-0130"
+    },
+    {
+     "select": "LOG-FILE",
+     "assign": "LOGESD",
+     "organization": "SEQUENTIAL",
+     "access_mode": "SEQUENTIAL",
+     "record_key": null,
+     "file_status": "WS-LOG-STATUS",
+     "fd_copies": [],
+     "line": 16,
+     "horror": "H-0130"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "AIXAFLK",
+     "params": [],
+     "line": 39
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 60,
+     "horror": "H-0130"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 63,
+     "horror": "H-0130"
+    },
+    {
+     "verb": "MOVE",
+     "source": "'20261122090000'",
+     "source_kind": "literal",
+     "target": "LOG-TS",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 67
+    },
+    {
+     "verb": "MOVE",
+     "source": "'FILL TO THE END OF THE EXTENT'",
+     "source_kind": "literal",
+     "target": "LOG-TEXT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 68
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 73,
+     "horror": "H-0130"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 76,
+     "horror": "H-0130"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 82,
+     "horror": "H-0130"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 85,
+     "horror": "H-0130"
+    }
+   ],
+   "horrors": [
+    "H-0130"
+   ]
+  },
   "apps/AIXA/cobol/AIXAFOP.cbl": {
    "app": "AIXA",
    "library": "cobol",

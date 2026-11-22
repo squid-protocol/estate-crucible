@@ -13,7 +13,9 @@ UNIQUEKEY and NONUNIQUEKEY alternate indexes, one PATH DD each).
 Slice 2 adds H-0109 (EXEC CICS READ with RIDFLD naming a relative byte address, RBA, on an ESDS and a relative
 record number, RRN, on an RRDS).
 Slice 11 adds H-0129 (the open-time file statuses 05, 35 and 39: an OPTIONAL KSDS with no data set, a
-nonoptional one, and a SELECT whose record key disagrees with the cluster)."""
+nonoptional one, and a SELECT whose record key disagrees with the cluster).
+Slice 12 adds H-0130 (file status 14 on a sequential READ of an RRDS whose relative key item is too small, 34
+on a WRITE past the end of an ESDS, and 38 on an OPEN of a file closed WITH LOCK)."""
 
 from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, read
@@ -21,6 +23,7 @@ from ..stmt import cics, goback, if_, para, perform, raw, read
 H76, H77, H78, H79, H80, H81, H82 = "H-0076", "H-0077", "H-0078", "H-0079", "H-0080", "H-0081", "H-0082"
 H106, H107, H108, H109, H110 = "H-0106", "H-0107", "H-0108", "H-0109", "H-0110"
 H129 = "H-0129"
+H130 = "H-0130"
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -337,6 +340,65 @@ AIXAFOP = {
     ],
 }
 
+AIXAFLK = {
+    "member": "AIXAFLK",
+    "era": 2,
+    "era_evidence": "END-IF and CLOSE ... WITH LOCK (COBOL-85); no later construct",
+    "program_id": "AIXAFLK",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAFLK - FILE STATUS 14, 34 AND 38 OVER AN RRDS AND AN ESDS.",
+                "EACH STATUS IS TESTED IN ITS OWN PARAGRAPH."],
+    "selects": [
+        {"name": "SLOT-FILE", "assign": "SLOTS", "status": "WS-SLOT-STATUS", "org": "RELATIVE",
+         "access": "SEQUENTIAL", "relative_key": "WS-SLOT-NO", "horror": H130},
+        {"name": "LOG-FILE", "assign": "LOGESD", "status": "WS-LOG-STATUS", "org": "SEQUENTIAL",
+         "access": "SEQUENTIAL", "horror": H130},
+    ],
+    "fds": [
+        {"fd": "SLOT-FILE", "record": I(1, "SLOT-REC", kids=[
+            I(5, "SLOT-ID", "X(8)"), I(5, "SLOT-QTY", "9(5)"), I(5, "FILLER", "X(27)")])},
+        {"fd": "LOG-FILE", "record": I(1, "LOG-REC", kids=[
+            I(5, "LOG-TS", "X(14)"), I(5, "LOG-TEXT", "X(40)"), I(5, "FILLER", "X(6)")])},
+    ],
+    "ws": [
+        I(1, "WS-SLOT-STATUS", "X(2)"),
+        I(1, "WS-LOG-STATUS", "X(2)"),
+        I(1, "WS-SLOT-NO", "9(2)"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN INPUT SLOT-FILE"),
+             perform("1000-SCAN-SLOTS", until="WS-SLOT-STATUS NOT = '00'"),
+             perform("1100-SLOT-STATUS"),
+             raw("CLOSE SLOT-FILE", "OPEN EXTEND LOG-FILE"),
+             perform("2000-FILL-LOG", until="WS-LOG-STATUS NOT = '00'"),
+             perform("2100-LOG-STATUS"),
+             raw("CLOSE LOG-FILE WITH LOCK", "OPEN INPUT LOG-FILE"),
+             perform("3000-LOCK-STATUS"),
+             raw("DISPLAY 'AIXAFLK BAD ' WS-BAD"),
+             goback()),
+        para("1000-SCAN-SLOTS",
+             raw("READ SLOT-FILE NEXT RECORD", "    AT END CONTINUE", "END-READ")),
+        para("1100-SLOT-STATUS",
+             if_("WS-SLOT-STATUS = '14'", [raw("DISPLAY 'SLOT NUMBER TOO LARGE FOR THE RELATIVE KEY'",
+                                               "ADD 1 TO WS-BAD")],
+                 [if_("WS-SLOT-STATUS NOT = '10'", [raw("ADD 1 TO WS-BAD")])]),
+             horror=H130),
+        para("2000-FILL-LOG",
+             raw("MOVE '20261122090000' TO LOG-TS", "MOVE 'FILL TO THE END OF THE EXTENT' TO LOG-TEXT",
+                 "WRITE LOG-REC")),
+        para("2100-LOG-STATUS",
+             if_("WS-LOG-STATUS = '34'", [raw("DISPLAY 'LOG EXTENT FULL'", "ADD 1 TO WS-BAD")],
+                 [if_("WS-LOG-STATUS NOT = '00'", [raw("ADD 1 TO WS-BAD")])]),
+             horror=H130),
+        para("3000-LOCK-STATUS",
+             if_("WS-LOG-STATUS = '38'", [raw("DISPLAY 'LOG FILE LOCKED'", "ADD 1 TO WS-BAD")],
+                 [if_("WS-LOG-STATUS NOT = '00'", [raw("ADD 1 TO WS-BAD")])]),
+             horror=H130),
+    ],
+}
+
 AIXACIC = {
     "member": "AIXACIC",
     "era": 2,
@@ -552,7 +614,7 @@ APP = {
     "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
     "copybooks": [],
     "dclgen": [],
-    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXACIC],
+    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXAFLK, AIXACIC],
     "csd": CSD,
     "jcl": JOBS,
     "procs": [],
