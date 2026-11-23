@@ -199,7 +199,12 @@ class ProgramWriter:
             m.cobol("FILE SECTION.", area="A")
             for fd in s["fds"]:
                 m.cobol(f"FD  {fd['fd']}", area="A")
-                m.cobol("RECORDING MODE IS F.")
+                if fd.get("varying"):  # RECORDING MODE V and a RECORD IS VARYING clause
+                    m.cobol(f"RECORDING MODE IS {fd.get('recording', 'V')}")
+                    m.cobol(f"RECORD IS VARYING IN SIZE FROM {fd['varying'][0]} TO {fd['varying'][1]} CHARACTERS")
+                    m.cobol(f"DEPENDING ON {fd['varying'][2]}.")
+                else:
+                    m.cobol("RECORDING MODE IS F.")
                 self.records([fd["record"]], "FILE", dw)
         first_fact = len(m.facts.get("data_items", []))
         for sec, key in (("WORKING-STORAGE", "ws"), ("LINKAGE", "linkage")):

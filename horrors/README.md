@@ -136,6 +136,7 @@ era-neutral syntax horror; blank is untagged.
 | H-0131 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | A sequential-access KSDS: REWRITE with no READ before it ends in file status 43, and REWRITE that gives a unique alternate key a duplicate value ends in 22 | `apps/AIXA/cobol/AIXAKS3.cbl` |
 | H-0132 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | Logic-error file statuses on a sequential KSDS: WRITE (48) and REWRITE (49) on a file open INPUT, READ past the at-end condition (46), OPEN of an open file (41), READ (47) and CLOSE (42) of a closed file | `apps/AIXA/cobol/AIXAMOD.cbl` |
 | H-0133 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | An alternate index defined NOUPGRADE and a path over it defined NOUPDATE: the index is outside the base cluster's upgrade set | `apps/AIXA/jcl/AIXADF4.jcl` |
+| H-0134 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | Variable-length FD over a KSDS: WRITE outside the RECORD IS VARYING bounds (file status 44) and READ of a record the FD cannot hold (04) | `apps/AIXA/cobol/AIXAVAR.cbl` |
 
 ## Field-testing defects not planted
 

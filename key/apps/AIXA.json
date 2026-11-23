@@ -4267,6 +4267,343 @@
     "H-0106"
    ]
   },
+  "apps/AIXA/cobol/AIXAVAR.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 64,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+   "programs": [
+    {
+     "program_id": "AIXAVAR",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 30,
+     "end_line": 37
+    },
+    {
+     "name": "1000-TOO-LONG",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 38,
+     "end_line": 46,
+     "horror": "H-0134"
+    },
+    {
+     "name": "2000-TOO-SHORT",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 47,
+     "end_line": 55,
+     "horror": "H-0134"
+    },
+    {
+     "name": "3000-ODD-READ",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 56,
+     "end_line": 64,
+     "horror": "H-0134"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-TOO-LONG",
+     "line": 32
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-TOO-SHORT",
+     "line": 33
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "3000-ODD-READ",
+     "line": 34
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "NOT-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 22
+    },
+    {
+     "level": 5,
+     "name": "NOT-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 23
+    },
+    {
+     "level": 5,
+     "name": "NOT-TEXT",
+     "pic": "X(42)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 24
+    },
+    {
+     "level": 1,
+     "name": "WS-NOT-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 26
+    },
+    {
+     "level": 1,
+     "name": "WS-NOT-LEN",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 27
+    },
+    {
+     "level": 1,
+     "name": "WS-BAD",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 28,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "NOT-REC",
+     "line": 22,
+     "bytes": 50,
+     "fields": [
+      {
+       "name": "NOT-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAVAR.cbl"
+      },
+      {
+       "name": "NOT-TEXT",
+       "level": 5,
+       "pic": "X(42)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 42,
+       "file": "apps/AIXA/cobol/AIXAVAR.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-NOT-STATUS",
+     "line": 26,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-NOT-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAVAR.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-NOT-LEN",
+     "line": 27,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-NOT-LEN",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAVAR.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BAD",
+     "line": 28,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-BAD",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAVAR.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "NOT-FILE",
+     "assign": "NOTKSD",
+     "organization": "INDEXED",
+     "access_mode": "SEQUENTIAL",
+     "record_key": "NOT-ID",
+     "file_status": "WS-NOT-STATUS",
+     "fd_copies": [],
+     "line": 11,
+     "horror": "H-0134"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "AIXAVAR",
+     "params": [],
+     "line": 29
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "'NOT00010'",
+     "source_kind": "literal",
+     "target": "NOT-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 39,
+     "horror": "H-0134"
+    },
+    {
+     "verb": "MOVE",
+     "source": "60",
+     "source_kind": "literal",
+     "target": "WS-NOT-LEN",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 40,
+     "horror": "H-0134"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 45,
+     "horror": "H-0134"
+    },
+    {
+     "verb": "MOVE",
+     "source": "'NOT00011'",
+     "source_kind": "literal",
+     "target": "NOT-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 48,
+     "horror": "H-0134"
+    },
+    {
+     "verb": "MOVE",
+     "source": "10",
+     "source_kind": "literal",
+     "target": "WS-NOT-LEN",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 49,
+     "horror": "H-0134"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 54,
+     "horror": "H-0134"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 63,
+     "horror": "H-0134"
+    }
+   ],
+   "horrors": [
+    "H-0134"
+   ]
+  },
   "apps/AIXA/csd/AIXAGRP.csd": {
    "app": "AIXA",
    "library": "csd",
@@ -4892,7 +5229,7 @@
    "library": "jcl",
    "language": "jcl",
    "numbered": false,
-   "lines": 32,
+   "lines": 37,
    "compile": {
     "status": "not-cobol"
    },
@@ -4936,6 +5273,14 @@
      "target": "AIXAMOD",
      "line": 29,
      "resolves_to": "apps/AIXA/cobol/AIXAMOD.cbl"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "AIXAVAR",
+     "target": "AIXAVAR",
+     "line": 34,
+     "resolves_to": "apps/AIXA/cobol/AIXAVAR.cbl"
     }
    ],
    "jcl_steps": [
@@ -4988,6 +5333,16 @@
      "exec_proc": null,
      "cond": null,
      "line": 29
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VR6060",
+     "ordinal": 6,
+     "program": "AIXAVAR",
+     "exec_proc": null,
+     "cond": null,
+     "line": 34
     }
    ],
    "jcl_dds": [
@@ -5230,6 +5585,42 @@
      "disp_normal": null,
      "sysout": "*",
      "line": 32
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VR6060",
+     "dd": "STEPLIB",
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 35
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VR6060",
+     "dd": "NOTKSD",
+     "dsn": "PROD.AIXA.NOTES",
+     "generation": null,
+     "disp": "OLD",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 36
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VR6060",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 37
     }
    ],
    "jcl_datasets": [
@@ -5339,6 +5730,20 @@
      "step": "MD5050",
      "dd": "CUSKSD",
      "line": 31
+    },
+    {
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "step": "VR6060",
+     "dd": "STEPLIB",
+     "line": 35
+    },
+    {
+     "dsn": "PROD.AIXA.NOTES",
+     "generation": null,
+     "step": "VR6060",
+     "dd": "NOTKSD",
+     "line": 36
     }
    ],
    "file_edges": [
@@ -5361,6 +5766,10 @@
     {
      "kind": "exec",
      "target": "apps/AIXA/cobol/AIXAMOD.cbl"
+    },
+    {
+     "kind": "exec",
+     "target": "apps/AIXA/cobol/AIXAVAR.cbl"
     }
    ],
    "horrors": [
