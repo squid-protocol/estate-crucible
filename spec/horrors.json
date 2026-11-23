@@ -3608,6 +3608,27 @@
    ],
    "era": 2,
    "notes": "Quote is the Table 34 entry for 44 from igy6lr40.pdf via pdftotext, joined across line breaks (H-0134 plants the second sentence: WRITE outside the VARYING bounds). Planted over an ESDS (ORGANIZATION IS SEQUENTIAL), the case Table 34 names for REWRITE; a KSDS REWRITE of a different size is not planted (the Programming Guide's VSAM rules for indexed files were not checked). The outcome assumes PROD.AIXA.LOG holds a 60-byte record (AIXAESU reads it with the 60-byte fixed layout; nothing in the estate loads it). An empty data set would end the READ at end and the REWRITE in 43. The key does not record the FD's RECORD clause. GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0136",
+   "title": "REWRITE of a record whose length differs from the record it replaces, over a KSDS (allowed: file status 00, not 44)",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAVKW: SELECT NOT-FILE ORGANIZATION IS INDEXED ACCESS MODE IS SEQUENTIAL; FD NOT-FILE RECORDING MODE IS V RECORD IS VARYING IN SIZE FROM 30 TO 50 CHARACTERS DEPENDING ON WS-NOT-LEN; 0000-MAIN OPEN I-O, PERFORMs 1000-SHRINK (READ NEXT of a 50-byte record, MOVE 40 TO WS-NOT-LEN, REWRITE, tests '00')",
+    "AIXA jcl/AIXARU2.jcl VK8080: //NOTUPD on PROD.AIXA.NOTES"
+   ],
+   "asserts": "The SELECT is one file_control fact (select NOT-FILE, assign NOTUPD, organization INDEXED, access_mode SEQUENTIAL, record_key NOT-ID, file_status WS-NOT-STATUS). 1000-SHRINK is one units fact, PERFORMed once from 0000-MAIN as a plain edges fact, and tests the FILE STATUS item named in the SELECT. The FD names its record NOT-REC (one layout fact, 50 bytes: NOT-ID X(8), NOT-TEXT X(42)); the variable-length clause adds no fact of its own. At run time the REWRITE of a record of 40 bytes over the 50-byte record the READ returned is within the RECORD IS VARYING bounds (30 to 50), and for an indexed file the length may differ from the record being replaced, so it succeeds with 00 (high-order digit 0), unlike the ESDS REWRITE of H-0135 (44). Step VK8080 has two jcl_dds facts: STEPLIB and NOTUPD.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "REWRITE statement > Indexed files",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The number of character positions in record-name-1 can be different from the number of character positions in the record being replaced."
+    }
+   ],
+   "era": 2,
+   "notes": "Quote is the Indexed files paragraph of the REWRITE statement from igy6lr40.pdf via pdftotext (its Sequential files paragraph requires equal lengths: H-0135 plants that case over an ESDS). The manual does not state the resulting status outright; 00 follows from the statement completing with no exception condition, and the quoted rule is what makes a different length no exception for a KSDS, so a reader who applies the Table 34 entry for 44 ('not the same size as the record being replaced') to a KSDS would wrongly expect 44. The VSAM-level behaviour (Programming Guide) was not checked. The outcome assumes PROD.AIXA.NOTES holds a 50-byte record and is writable (nothing in the estate loads it); an empty data set would end the READ at end and the REWRITE in 43. The key does not record the FD's RECORD clause. GnuCOBOL statuses were not compared."
   }
  ],
  "not_planted": [

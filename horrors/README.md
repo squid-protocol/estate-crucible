@@ -138,6 +138,7 @@ era-neutral syntax horror; blank is untagged.
 | H-0133 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | An alternate index defined NOUPGRADE and a path over it defined NOUPDATE: the index is outside the base cluster's upgrade set | `apps/AIXA/jcl/AIXADF4.jcl` |
 | H-0134 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | Variable-length FD over a KSDS: WRITE outside the RECORD IS VARYING bounds (file status 44) and READ of a record the FD cannot hold (04) | `apps/AIXA/cobol/AIXAVAR.cbl` |
 | H-0135 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | REWRITE of a record whose length differs from the record it replaces, over an ESDS (file status 44) | `apps/AIXA/cobol/AIXAVRW.cbl` |
+| H-0136 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | REWRITE of a record whose length differs from the record it replaces, over a KSDS (allowed: file status 00, not 44) | `apps/AIXA/cobol/AIXAVKW.cbl` |
 
 ## Field-testing defects not planted
 
