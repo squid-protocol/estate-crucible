@@ -3444,6 +3444,33 @@
    ],
    "era": 2,
    "notes": "Quotes are the Table 34 entries for 14, 34 and 38 from igy6lr40.pdf via pdftotext, joined across line breaks. Table 34 words 34 for a sequential file; an ESDS is the VSAM sequential file, and how many records fill the extent depends on the cluster's space, so the key asserts the status the loop ends in, not a count. The slot RRDS must hold a record numbered above 99 for 14 to occur; no JCL step runs AIXAFLK and the statuses are what IBM says for such a data set. 37 (open mode the file cannot support) and 44 (record size on REWRITE or a RECORD IS VARYING bound) are not planted: 37 depends on how the data set is allocated and 44 needs a variable-length FD this generator does not render. GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0131",
+   "title": "A sequential-access KSDS: REWRITE with no READ before it ends in file status 43, and REWRITE that gives a unique alternate key a duplicate value ends in 22",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAKS3: SELECT CUS-FILE ORGANIZATION IS INDEXED ACCESS MODE IS SEQUENTIAL with ALTERNATE RECORD KEY IS CUS-TAX (no DUPLICATES) and CUS-NAME WITH DUPLICATES; 0000-MAIN OPEN I-O, PERFORMs 1000-BLIND (REWRITE straight after OPEN, tests '43') then 2000-CLASH (READ NEXT, MOVE a TAX ID another record holds to CUS-TAX, REWRITE, tests '22')",
+    "AIXA jcl/AIXARU2.jcl KS3040: //CUSKSD, //CUSKSD1 (TAX path) and //CUSKSD2 (NAME path) on the same clusters as KS2030"
+   ],
+   "asserts": "The SELECT is one file_control fact (select CUS-FILE, assign CUSKSD, organization INDEXED, access_mode SEQUENTIAL, record_key CUS-ID) with alternate_keys [{name CUS-TAX, duplicates false}, {name CUS-NAME, duplicates true}]. 1000-BLIND and 2000-CLASH are each one units fact, PERFORMed once from 0000-MAIN as plain edges facts, and each tests the FILE STATUS item named in the SELECT (WS-CUS-STATUS). At run time, REWRITE of an indexed file in sequential access mode when the last I-O statement was not a successfully executed READ ends in 43 (high-order digit 4, logic error); REWRITE of a record after a successful READ NEXT, with CUS-TAX changed to a value another record already holds, ends in 22 (digit 2, invalid key) because CUS-TAX has no DUPLICATES phrase. CUS-NAME WITH DUPLICATES would not raise 22 for the same change. Step KS3040 has four jcl_dds facts: STEPLIB, CUSKSD, CUSKSD1, CUSKSD2, the latter two naming the paths.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "For relative and indexed files in the sequential access mode, the last input-output statement executed for the file prior to the execution of a DELETE or REWRITE statement was not a successfully executed READ statement."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "Or an attempt was made to write or rewrite a record that would create a duplicate prime record key or a duplicate alternate record key without the DUPLICATES phrase in an indexed file."
+    }
+   ],
+   "era": 2,
+   "notes": "Quotes are the Table 34 entries for 43 and 22 from igy6lr40.pdf via pdftotext, joined across line breaks. The 22 quote starts mid-sentence because Table 34 continues the entry for relative files. The 22 outcome assumes the data set holds a record with tax id 987654321 other than the one read (AIXAKS2 writes one); no step orders the two programs' data beyond that and the statuses are what IBM says for such a data set. Changing the prime key on REWRITE is a different case, not planted. GnuCOBOL statuses were not compared."
   }
  ],
  "not_planted": [

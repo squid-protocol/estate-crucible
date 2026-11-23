@@ -15,7 +15,9 @@ record number, RRN, on an RRDS).
 Slice 11 adds H-0129 (the open-time file statuses 05, 35 and 39: an OPTIONAL KSDS with no data set, a
 nonoptional one, and a SELECT whose record key disagrees with the cluster).
 Slice 12 adds H-0130 (file status 14 on a sequential READ of an RRDS whose relative key item is too small, 34
-on a WRITE past the end of an ESDS, and 38 on an OPEN of a file closed WITH LOCK)."""
+on a WRITE past the end of an ESDS, and 38 on an OPEN of a file closed WITH LOCK).
+Slice 13 adds H-0131 (a sequential-access KSDS: REWRITE with no READ before it ends in 43, and REWRITE of a record
+whose unique alternate key now matches another record ends in 22)."""
 
 from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, read
@@ -24,6 +26,7 @@ H76, H77, H78, H79, H80, H81, H82 = "H-0076", "H-0077", "H-0078", "H-0079", "H-0
 H106, H107, H108, H109, H110 = "H-0106", "H-0107", "H-0108", "H-0109", "H-0110"
 H129 = "H-0129"
 H130 = "H-0130"
+H131 = "H-0131"
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -282,6 +285,40 @@ AIXAKS2 = {
              if_("WS-CUS-STATUS = '22'", [raw("DISPLAY 'DUPLICATE KEY ' CUS-ID")]),
              if_("WS-CUS-STATUS = '02'", [raw("DISPLAY 'DUPLICATE NAME ' CUS-NAME")]),
              horror=H108),
+    ],
+}
+
+AIXAKS3 = {
+    "member": "AIXAKS3",
+    "era": 2,
+    "era_evidence": "END-READ (COBOL-85); no later construct",
+    "program_id": "AIXAKS3",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAKS3 - CUSTOMER TAX ID CORRECTIONS, KSDS READ SEQUENTIALLY.",
+                "A REWRITE NEEDS A READ BEFORE IT; A TAX ID MUST STAY UNIQUE."],
+    "selects": [{"name": "CUS-FILE", "assign": "CUSKSD", "status": "WS-CUS-STATUS", "org": "INDEXED",
+                 "access": "SEQUENTIAL", "record_key": "CUS-ID",
+                 "alternate_keys": [{"name": "CUS-TAX", "duplicates": False},
+                                    {"name": "CUS-NAME", "duplicates": True}], "horror": H131}],
+    "fds": [{"fd": "CUS-FILE", "record": I(1, "CUS-REC", kids=[
+        I(5, "CUS-ID", "X(8)"), I(5, "CUS-TAX", "X(9)"), I(5, "CUS-NAME", "X(20)"), I(5, "FILLER", "X(3)")])}],
+    "ws": [
+        I(1, "WS-CUS-STATUS", "X(2)"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN I-O CUS-FILE"),
+             perform("1000-BLIND"),
+             perform("2000-CLASH"),
+             raw("CLOSE CUS-FILE"),
+             goback()),
+        para("1000-BLIND",
+             raw("MOVE 'CUS00001' TO CUS-ID", "MOVE '555555555' TO CUS-TAX", "REWRITE CUS-REC"),
+             if_("WS-CUS-STATUS = '43'", [raw("DISPLAY 'REWRITE WITHOUT READ'")])),
+        para("2000-CLASH",
+             raw("READ CUS-FILE NEXT RECORD", "    AT END DISPLAY 'NO CUSTOMERS'", "END-READ",
+                 "MOVE '987654321' TO CUS-TAX", "REWRITE CUS-REC"),
+             if_("WS-CUS-STATUS = '22'", [raw("DISPLAY 'TAX ID TAKEN ' CUS-TAX", "MOVE 4 TO RETURN-CODE")])),
     ],
 }
 
@@ -576,6 +613,13 @@ JOBS = [
                 _dd("LOGUPD", "PROD.AIXA.LOG", ("OLD",)),
                 {"name": "SYSOUT", "sysout": "*"},
             ]},
+            {"name": "KS3040", "pgm": "AIXAKS3", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                _dd("CUSKSD", "PROD.AIXA.CUST", ("OLD",)),
+                _dd("CUSKSD1", "PROD.AIXA.CUST.TAXPATH", ("OLD",)),
+                _dd("CUSKSD2", "PROD.AIXA.CUST.NAMPATH", ("OLD",)),
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
             {"name": "KS2030", "pgm": "AIXAKS2", "dds": [
                 _dd("STEPLIB", LOADLIB),
                 _dd("CUSKSD", "PROD.AIXA.CUST", ("OLD",)),
@@ -614,7 +658,7 @@ APP = {
     "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
     "copybooks": [],
     "dclgen": [],
-    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXAFLK, AIXACIC],
+    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXAFLK, AIXAKS3, AIXACIC],
     "csd": CSD,
     "jcl": JOBS,
     "procs": [],
