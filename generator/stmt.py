@@ -12,9 +12,11 @@ def _s(op: str, horror: Optional[str], **kw: Any) -> Stmt:
     return {"op": op, "horror": horror, **kw}
 
 
-def raw(*lines: str, horror: Optional[str] = None) -> Stmt:
-    """Statements that carry no fact the key scores (MOVE, ADD, DISPLAY, OPEN, ...)."""
-    return _s("raw", horror, lines=list(lines))
+def raw(*lines: str, horror: Optional[str] = None, performs: Optional[dict[int, str]] = None) -> Stmt:
+    """Statements that carry no fact the key scores (MOVE, ADD, DISPLAY, OPEN, ...).
+    `performs` maps the index of a line to the paragraph an out-of-line PERFORM on that line
+    names (a PERFORM inside INVALID KEY / AT END is a real edge the raw text still carries)."""
+    return _s("raw", horror, lines=list(lines), performs=performs or {})
 
 
 def perform(target: str, *, thru: Optional[str] = None, until: Optional[str] = None, times: Optional[str] = None,

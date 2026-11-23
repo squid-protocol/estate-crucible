@@ -353,9 +353,11 @@ class ProgramWriter:
                 getattr(self, "op_" + st["op"])(st, indent)
 
     def op_raw(self, st: Stmt, indent: int) -> None:
-        for text in st["lines"]:
+        for i, text in enumerate(st["lines"]):
             line = self.line(text, indent)
             self.moves(text, line)
+            if i in st.get("performs", {}):
+                self.edge("perform", st["performs"][i], line)
 
     def moves(self, text: str, line: int) -> None:
         for row in cobol_moves(text, line):

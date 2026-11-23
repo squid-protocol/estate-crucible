@@ -26,6 +26,8 @@ gitgalaxy#7065, VSAM organizations and access paths (#4894). App `AIXA`
 
 All programs compile under `cobc -std=ibm`.
 
+The key lists the `2000-COPY` -> `2100-REPLACE` perform edge in `AIXARRS` (line 67, a `PERFORM` inside `INVALID KEY`): a real out-of-line PERFORM the key lacked, found by the gitgalaxy engine and confirmed by reading the member.
+
 New optional fields on `file_control` (listed in SPEC section 3): `alternate_keys`
 (`[{name, duplicates}]`, present only when the SELECT has an ALTERNATE RECORD KEY) and `relative_key`
 (present only when the SELECT has a RELATIVE KEY); `optional` (true, present only when the SELECT says OPTIONAL). The gitgalaxy scorer does not read them yet, so they
@@ -42,6 +44,6 @@ Known key question, not changed: the COBOL source alone does not tell an ESDS fr
 
 The first run needs the owner's release and pin bump, and gitgalaxy's scorer to read the new fields.
 
-Remaining slices: 37 and 9x, VLR(COMPAT) (a KSDS REWRITE of a different-size record is H-0136, 00; the ESDS 44 is H-0135) (04 becomes 00) (41, 42, 46, 47, 48 and 49 are H-0132; NOUPGRADE / NOUPDATE is H-0133; 04 and 44 are H-0134); the answer-key edge 2000-COPY -> 2100-REPLACE in AIXARRS (a PERFORM inside an INVALID KEY, see handoff 4894-aixa-check-20261122); scorer support for `alternate_keys` /
+Remaining slices: 37 and 9x, VLR(COMPAT) (a KSDS REWRITE of a different-size record is H-0136, 00; the ESDS 44 is H-0135) (04 becomes 00) (41, 42, 46, 47, 48 and 49 are H-0132; NOUPGRADE / NOUPDATE is H-0133; 04 and 44 are H-0134); scorer support for `alternate_keys` /
 `relative_key` (gitgalaxy side); RBA / RRN access (CICS `RIDFLD`, cics-crucible side); alternate-index
 upgrade-set behaviour at run time (a program reading a stale NOUPGRADE index); LINEAR and ZFS clusters; an ESDS with an alternate index (not supported in COBOL).
