@@ -3522,6 +3522,44 @@
    ],
    "era": 2,
    "notes": "Quotes are the Table 34 entries for 41, 42, 46, 47, 48 and 49 from igy6lr40.pdf via pdftotext, joined across line breaks (the 46 entry also joins its two bullets). 1000-WRONG-MODE sets CUS-ID before WRITE so the statement is otherwise well formed; 2000-DRAIN reads to the end of the file, so the READ in 2100-PAST-END follows an at-end condition. 43 (REWRITE with no READ) is H-0131; 44 and 37 stay out for the reasons in H-0130's notes. The statuses are what IBM says; GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0133",
+   "title": "An alternate index defined NOUPGRADE and a path over it defined NOUPDATE: the index is outside the base cluster's upgrade set",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA jcl/AIXADF4.jcl IDC010: DEFINE ALTERNATEINDEX (NAME(PROD.AIXA.AUDIT.AIX) RELATE(PROD.AIXA.AUDIT) KEYS(8 8) NONUNIQUEKEY NOUPGRADE ...)",
+    "AIXA jcl/AIXADF4.jcl IDC010: DEFINE PATH (NAME(PROD.AIXA.AUDIT.PATH) PATHENTRY(PROD.AIXA.AUDIT.AIX) NOUPDATE)"
+   ],
+   "asserts": "Step IDC010 of AIXADF4 has four jcl_utility_cards facts, utility IDCAMS: verbs DEFINE (the base cluster), DEFINE (the ALTERNATEINDEX with NOUPGRADE), DEFINE (the PATH with NOUPDATE) and BLDINDEX, in that order. Unlike the UPGRADE index of H-0079, this alternate index is not kept up to date when PROD.AIXA.AUDIT is modified, so after BLDINDEX it goes stale as soon as the base cluster changes until BLDINDEX is run again; NOUPDATE on the path means opening the path does not allocate the base cluster's upgrade set. The plant is JCL-only: no program in the estate reads PROD.AIXA.AUDIT.PATH, and the key asserts card facts, not run-time staleness.",
+   "citations": [
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+     "section": "DEFINE ALTERNATEINDEX > UPGRADE|NOUPGRADE",
+     "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-alternateindex",
+     "quote": "Specifies whether or not the alternate index is to be upgraded (that is, kept up to date) when its base cluster is modified."
+    },
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+     "section": "DEFINE ALTERNATEINDEX > UPGRADE|NOUPGRADE",
+     "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-alternateindex",
+     "quote": "Specifies that the alternate index does not upgrade when its base cluster is modified."
+    },
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+     "section": "DEFINE PATH > UPDATE|NOUPDATE",
+     "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-path",
+     "quote": "specifies whether the base cluster's upgrade set is to be allocated when the path is opened for processing."
+    },
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+     "section": "DEFINE PATH > UPDATE|NOUPDATE",
+     "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-path",
+     "quote": "the base cluster's upgrade set is not to be allocated."
+    }
+   ],
+   "era": 2
   }
  ],
  "not_planted": [
