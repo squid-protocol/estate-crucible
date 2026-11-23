@@ -4778,6 +4778,115 @@
     "H-0110"
    ]
   },
+  "apps/AIXA/jcl/AIXADF4.jcl": {
+   "app": "AIXA",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 18,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IDCAMS",
+     "target": "IDCAMS",
+     "line": 5,
+     "resolves_to": null
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "AIXADF4",
+     "proc": null,
+     "step": "IDC010",
+     "ordinal": 1,
+     "program": "IDCAMS",
+     "exec_proc": null,
+     "cond": null,
+     "line": 5
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "AIXADF4",
+     "proc": null,
+     "step": "IDC010",
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 6
+    },
+    {
+     "job": "AIXADF4",
+     "proc": null,
+     "step": "IDC010",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 7,
+     "inline_lines": 10,
+     "horror": "H-0133"
+    }
+   ],
+   "jcl_utility_cards": [
+    {
+     "job": "AIXADF4",
+     "proc": null,
+     "step": "IDC010",
+     "utility": "IDCAMS",
+     "dd": "SYSIN",
+     "verb": "DEFINE",
+     "operands": "CLUSTER (NAME(PROD.AIXA.AUDIT) INDEXED KEYS(8 0) RECORDSIZE(40 40) CYLINDERS(1 1))",
+     "line": 8,
+     "horror": "H-0133"
+    },
+    {
+     "job": "AIXADF4",
+     "proc": null,
+     "step": "IDC010",
+     "utility": "IDCAMS",
+     "dd": "SYSIN",
+     "verb": "DEFINE",
+     "operands": "ALTERNATEINDEX (NAME(PROD.AIXA.AUDIT.AIX) RELATE(PROD.AIXA.AUDIT) KEYS(8 8) NONUNIQUEKEY NOUPGRADE CYLINDERS(1 1))",
+     "line": 11,
+     "horror": "H-0133"
+    },
+    {
+     "job": "AIXADF4",
+     "proc": null,
+     "step": "IDC010",
+     "utility": "IDCAMS",
+     "dd": "SYSIN",
+     "verb": "DEFINE",
+     "operands": "PATH (NAME(PROD.AIXA.AUDIT.PATH) PATHENTRY(PROD.AIXA.AUDIT.AIX) NOUPDATE)",
+     "line": 14,
+     "horror": "H-0133"
+    },
+    {
+     "job": "AIXADF4",
+     "proc": null,
+     "step": "IDC010",
+     "utility": "IDCAMS",
+     "dd": "SYSIN",
+     "verb": "BLDINDEX",
+     "operands": "INDATASET(PROD.AIXA.AUDIT) OUTDATASET(PROD.AIXA.AUDIT.AIX)",
+     "line": 16,
+     "horror": "H-0133"
+    }
+   ],
+   "horrors": [
+    "H-0133"
+   ]
+  },
   "apps/AIXA/jcl/AIXARU2.jcl": {
    "app": "AIXA",
    "library": "jcl",

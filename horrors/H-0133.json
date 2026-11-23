@@ -1,0 +1,112 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0133",
+ "title": "An alternate index defined NOUPGRADE and a path over it defined NOUPDATE: the index is outside the base cluster's upgrade set",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA jcl/AIXADF4.jcl IDC010: DEFINE ALTERNATEINDEX (NAME(PROD.AIXA.AUDIT.AIX) RELATE(PROD.AIXA.AUDIT) KEYS(8 8) NONUNIQUEKEY NOUPGRADE ...)",
+  "AIXA jcl/AIXADF4.jcl IDC010: DEFINE PATH (NAME(PROD.AIXA.AUDIT.PATH) PATHENTRY(PROD.AIXA.AUDIT.AIX) NOUPDATE)"
+ ],
+ "asserts": "Step IDC010 of AIXADF4 has four jcl_utility_cards facts, utility IDCAMS: verbs DEFINE (the base cluster), DEFINE (the ALTERNATEINDEX with NOUPGRADE), DEFINE (the PATH with NOUPDATE) and BLDINDEX, in that order. Unlike the UPGRADE index of H-0079, this alternate index is not kept up to date when PROD.AIXA.AUDIT is modified, so after BLDINDEX it goes stale as soon as the base cluster changes until BLDINDEX is run again; NOUPDATE on the path means opening the path does not allocate the base cluster's upgrade set. The plant is JCL-only: no program in the estate reads PROD.AIXA.AUDIT.PATH, and the key asserts card facts, not run-time staleness.",
+ "citations": [
+  {
+   "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+   "section": "DEFINE ALTERNATEINDEX > UPGRADE|NOUPGRADE",
+   "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-alternateindex",
+   "quote": "Specifies whether or not the alternate index is to be upgraded (that is, kept up to date) when its base cluster is modified."
+  },
+  {
+   "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+   "section": "DEFINE ALTERNATEINDEX > UPGRADE|NOUPGRADE",
+   "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-alternateindex",
+   "quote": "Specifies that the alternate index does not upgrade when its base cluster is modified."
+  },
+  {
+   "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+   "section": "DEFINE PATH > UPDATE|NOUPDATE",
+   "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-path",
+   "quote": "specifies whether the base cluster's upgrade set is to be allocated when the path is opened for processing."
+  },
+  {
+   "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+   "section": "DEFINE PATH > UPDATE|NOUPDATE",
+   "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-path",
+   "quote": "the base cluster's upgrade set is not to be allocated."
+  }
+ ],
+ "era": 2,
+ "planted": [
+  {
+   "member": "apps/AIXA/jcl/AIXADF4.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "jcl_dds": [
+     {
+      "job": "AIXADF4",
+      "proc": null,
+      "step": "IDC010",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 7,
+      "inline_lines": 10,
+      "horror": "H-0133"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "AIXADF4",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "CLUSTER (NAME(PROD.AIXA.AUDIT) INDEXED KEYS(8 0) RECORDSIZE(40 40) CYLINDERS(1 1))",
+      "line": 8,
+      "horror": "H-0133"
+     },
+     {
+      "job": "AIXADF4",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "ALTERNATEINDEX (NAME(PROD.AIXA.AUDIT.AIX) RELATE(PROD.AIXA.AUDIT) KEYS(8 8) NONUNIQUEKEY NOUPGRADE CYLINDERS(1 1))",
+      "line": 11,
+      "horror": "H-0133"
+     },
+     {
+      "job": "AIXADF4",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "DEFINE",
+      "operands": "PATH (NAME(PROD.AIXA.AUDIT.PATH) PATHENTRY(PROD.AIXA.AUDIT.AIX) NOUPDATE)",
+      "line": 14,
+      "horror": "H-0133"
+     },
+     {
+      "job": "AIXADF4",
+      "proc": null,
+      "step": "IDC010",
+      "utility": "IDCAMS",
+      "dd": "SYSIN",
+      "verb": "BLDINDEX",
+      "operands": "INDATASET(PROD.AIXA.AUDIT) OUTDATASET(PROD.AIXA.AUDIT.AIX)",
+      "line": 16,
+      "horror": "H-0133"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

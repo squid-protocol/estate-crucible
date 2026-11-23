@@ -39,6 +39,6 @@ Known key question, not changed: the COBOL source alone does not tell an ESDS fr
 
 The first run needs the owner's release and pin bump, and gitgalaxy's scorer to read the new fields.
 
-Remaining slices: file status 04 and 44 (need a variable-length FD the generator cannot render yet), 37 and 9x (41, 42, 46, 47, 48 and 49 are H-0132); the answer-key edge 2000-COPY -> 2100-REPLACE in AIXARRS (a PERFORM inside an INVALID KEY, see handoff 4894-aixa-check-20261122); scorer support for `alternate_keys` /
+Remaining slices: file status 04 and 44 (need a variable-length FD the generator cannot render yet), 37 and 9x (41, 42, 46, 47, 48 and 49 are H-0132; NOUPGRADE / NOUPDATE is H-0133); the answer-key edge 2000-COPY -> 2100-REPLACE in AIXARRS (a PERFORM inside an INVALID KEY, see handoff 4894-aixa-check-20261122); scorer support for `alternate_keys` /
 `relative_key` (gitgalaxy side); RBA / RRN access (CICS `RIDFLD`, cics-crucible side); alternate-index
-upgrade-set behaviour; LINEAR and ZFS clusters; an ESDS with an alternate index (not supported in COBOL).
+upgrade-set behaviour at run time (a program reading a stale NOUPGRADE index); LINEAR and ZFS clusters; an ESDS with an alternate index (not supported in COBOL).

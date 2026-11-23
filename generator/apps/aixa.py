@@ -18,7 +18,8 @@ Slice 12 adds H-0130 (file status 14 on a sequential READ of an RRDS whose relat
 on a WRITE past the end of an ESDS, and 38 on an OPEN of a file closed WITH LOCK).
 Slice 13 adds H-0131 (a sequential-access KSDS: REWRITE with no READ before it ends in 43, and REWRITE of a record
 whose unique alternate key now matches another record ends in 22).
-Slice 14 adds H-0132 (logic-error file statuses 41, 42, 46, 47, 48 and 49 on a sequential KSDS)."""
+Slice 14 adds H-0132 (logic-error file statuses 41, 42, 46, 47, 48 and 49 on a sequential KSDS).
+Slice 15 adds H-0133 (an alternate index defined NOUPGRADE, its path defined NOUPDATE)."""
 
 from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, read
@@ -29,6 +30,7 @@ H129 = "H-0129"
 H130 = "H-0130"
 H131 = "H-0131"
 H132 = "H-0132"
+H133 = "H-0133"
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -692,6 +694,30 @@ JOBS = [
                 _dd("STEPLIB", LOADLIB),
                 _dd("CUSKSD", "PROD.AIXA.CUST", ("OLD",)),
                 {"name": "SYSOUT", "sysout": "*"},
+            ]},
+        ],
+    },
+    {
+        # slice 15: an alternate index outside the upgrade set (NOUPGRADE) and a path that does not allocate it (NOUPDATE)
+        "name": "AIXADF4",
+        "title": "AIXA DEFINE AUDIT AIX",
+        "accounting": "(AIXA,0100)",
+        "comments": ["DEFINE THE AUDIT KSDS WITH A NOUPGRADE ALTERNATE INDEX AND A NOUPDATE PATH"],
+        "steps": [
+            {"name": "IDC010", "pgm": "IDCAMS", "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                {"name": "SYSIN", "horror": H133, "inline": [
+                    ("DEFINE", [" DEFINE CLUSTER (NAME(PROD.AIXA.AUDIT) -",
+                                "        INDEXED KEYS(8 0) RECORDSIZE(40 40) -",
+                                "        CYLINDERS(1 1))"]),
+                    ("DEFINE", [" DEFINE ALTERNATEINDEX (NAME(PROD.AIXA.AUDIT.AIX) -",
+                                "        RELATE(PROD.AIXA.AUDIT) KEYS(8 8) -",
+                                "        NONUNIQUEKEY NOUPGRADE CYLINDERS(1 1))"]),
+                    ("DEFINE", [" DEFINE PATH (NAME(PROD.AIXA.AUDIT.PATH) -",
+                                "        PATHENTRY(PROD.AIXA.AUDIT.AIX) NOUPDATE)"]),
+                    ("BLDINDEX", [" BLDINDEX INDATASET(PROD.AIXA.AUDIT) -",
+                                  "        OUTDATASET(PROD.AIXA.AUDIT.AIX)"]),
+                ]},
             ]},
         ],
     },
