@@ -209,7 +209,7 @@ AIXARRS = {
              if_("NOT WS-EOF",
                  [raw("MOVE IN-REC TO OUT-REC", "MOVE WS-IN-NO TO WS-OUT-NO",
                       "WRITE OUT-REC", "    INVALID KEY PERFORM 2100-REPLACE", "END-WRITE",
-                      "ADD 1 TO WS-COPIED")])),
+                      "ADD 1 TO WS-COPIED", performs={3: "2100-REPLACE"})])),
         para("2100-REPLACE",
              raw("REWRITE OUT-REC", "    INVALID KEY DISPLAY 'SLOT LOST ' WS-OUT-NO", "END-REWRITE")),
         para("3000-TRIM",

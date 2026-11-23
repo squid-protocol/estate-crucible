@@ -222,7 +222,7 @@
  "fact_totals": {
   "programs": 79,
   "units": 223,
-  "edges": 214,
+  "edges": 215,
   "call_sites": 175,
   "copies": 95,
   "data_items": 926,
