@@ -21,7 +21,8 @@ whose unique alternate key now matches another record ends in 22).
 Slice 14 adds H-0132 (logic-error file statuses 41, 42, 46, 47, 48 and 49 on a sequential KSDS).
 Slice 15 adds H-0133 (an alternate index defined NOUPGRADE, its path defined NOUPDATE).
 Slice 16 adds H-0134 (a variable-length FD: file status 44 on WRITE outside the RECORD IS VARYING bounds, 04 on READ).
-Slice 17 adds H-0135 (file status 44 on REWRITE of a record whose length differs from the record it replaces, an ESDS)."""
+Slice 17 adds H-0135 (file status 44 on REWRITE of a record whose length differs from the record it replaces, an ESDS).
+Slice 18 adds H-0136 (the same REWRITE over a KSDS is allowed: the length may change, file status 00)."""
 
 from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, read
@@ -35,6 +36,7 @@ H132 = "H-0132"
 H133 = "H-0133"
 H134 = "H-0134"
 H135 = "H-0135"
+H136 = "H-0136"
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -465,6 +467,38 @@ AIXAVRW = {
     ],
 }
 
+AIXAVKW = {
+    "member": "AIXAVKW",
+    "era": 2,
+    "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+    "program_id": "AIXAVKW",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAVKW - TRIM A CUSTOMER NOTE IN PLACE.",
+                "A KSDS REWRITE MAY CHANGE THE LENGTH: FILE STATUS 00, NOT 44."],
+    "selects": [{"name": "NOT-FILE", "assign": "NOTUPD", "status": "WS-NOT-STATUS", "org": "INDEXED",
+                 "access": "SEQUENTIAL", "record_key": "NOT-ID", "horror": H136}],
+    "fds": [{"fd": "NOT-FILE", "varying": (30, 50, "WS-NOT-LEN"), "record": I(1, "NOT-REC", kids=[
+        I(5, "NOT-ID", "X(8)"), I(5, "NOT-TEXT", "X(42)")])}],
+    "ws": [
+        I(1, "WS-NOT-STATUS", "X(2)"),
+        I(1, "WS-NOT-LEN", "9(3)", value="ZERO"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN I-O NOT-FILE"),
+             perform("1000-SHRINK"),
+             raw("CLOSE NOT-FILE", "DISPLAY 'AIXAVKW BAD ' WS-BAD"),
+             goback()),
+        para("1000-SHRINK",
+             raw("READ NOT-FILE NEXT RECORD", "    AT END CONTINUE", "END-READ",
+                 "MOVE 40 TO WS-NOT-LEN", "REWRITE NOT-REC"),
+             if_("WS-NOT-STATUS = '00'", [raw("DISPLAY 'REWRITE CHANGED THE LENGTH'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H136),
+    ],
+}
+
 AIXAFOP = {
     "member": "AIXAFOP",
     "era": 2,
@@ -785,6 +819,11 @@ JOBS = [
                 _dd("LOGUPD", "PROD.AIXA.LOG", ("OLD",)),
                 {"name": "SYSOUT", "sysout": "*"},
             ]},
+            {"name": "VK8080", "pgm": "AIXAVKW", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                _dd("NOTUPD", "PROD.AIXA.NOTES", ("OLD",)),
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
         ],
     },
     {
@@ -840,7 +879,7 @@ APP = {
     "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
     "copybooks": [],
     "dclgen": [],
-    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXAFLK, AIXAKS3, AIXAMOD, AIXAVAR, AIXAVRW, AIXACIC],
+    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXAFLK, AIXAKS3, AIXAMOD, AIXAVAR, AIXAVRW, AIXAVKW, AIXACIC],
     "csd": CSD,
     "jcl": JOBS,
     "procs": [],
