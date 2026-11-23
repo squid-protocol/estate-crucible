@@ -3629,6 +3629,33 @@
    ],
    "era": 2,
    "notes": "Quote is the Indexed files paragraph of the REWRITE statement from igy6lr40.pdf via pdftotext (its Sequential files paragraph requires equal lengths: H-0135 plants that case over an ESDS). The manual does not state the resulting status outright; 00 follows from the statement completing with no exception condition, and the quoted rule is what makes a different length no exception for a KSDS, so a reader who applies the Table 34 entry for 44 ('not the same size as the record being replaced') to a KSDS would wrongly expect 44. The VSAM-level behaviour (Programming Guide) was not checked. The outcome assumes PROD.AIXA.NOTES holds a 50-byte record and is writable (nothing in the estate loads it); an empty data set would end the READ at end and the REWRITE in 43. The key does not record the FD's RECORD clause. GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0137",
+   "title": "OPEN I-O of a z/OS UNIX byte-stream file read through QSAM (a DD with PATH=, not a VSAM PATH): file status 37",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAUXF: SELECT UX-FILE ASSIGN TO UXOUT ORGANIZATION IS SEQUENTIAL; 0000-MAIN OPEN I-O, PERFORMs 1000-CHECK (tests '37')",
+    "AIXA jcl/AIXARU2.jcl UX9090: //UXOUT DD PATH='/u/aixa/extract/orders.dat',FILEDATA=BINARY"
+   ],
+   "asserts": "The SELECT is one file_control fact (select UX-FILE, assign UXOUT, organization SEQUENTIAL, access_mode SEQUENTIAL, record_key null) with no alternate_keys and no relative_key. 1000-CHECK is one units fact, PERFORMed once from 0000-MAIN as a plain edges fact, and tests the FILE STATUS item named in the SELECT. DD UXOUT in step UX9090 is a jcl_dds fact with dsn null, no sysout and no disp: PATH= names a z/OS UNIX file, not a data set and not a VSAM PATH (H-0080 is the VSAM PATH, a DSN). At run time OPEN I-O of that file is not supported, so file status 37 (permanent error, the file would not support the open mode); the program takes the 37 branch and WS-BAD stays 0. Step UX9090 has three jcl_dds facts: STEPLIB, UXOUT and SYSOUT.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+     "section": "Coding input and output statements for QSAM files > OPEN",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+     "quote": "You cannot open z/OS UNIX files as I-O; a file status of 37 results if you attempt to do so."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "File status key, Table 34 (permanent error condition)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "An OPEN statement was attempted on a file that would not support the open mode specified in the OPEN statement."
+    }
+   ],
+   "era": 2,
+   "notes": "Quotes are from igy6pg40.pdf and igy6lr40.pdf via pdftotext (the Programming Guide also lists 'OPEN I-O and REWRITE are not supported ... 37 from OPEN I-O' under Accessing z/OS UNIX files using QSAM). Not a VSAM case: it is planted here because the DD keyword PATH= collides with the VSAM PATH of H-0079/H-0080 and a reader must not take it for an alternate-index path. The edition number SC27-8714-03 is the one printed on the 6.4 Programming Guide cover as read locally; not re-verified online. The FD's record layout is nominal. GnuCOBOL statuses were not compared."
   }
  ],
  "not_planted": [

@@ -22,7 +22,8 @@ Slice 14 adds H-0132 (logic-error file statuses 41, 42, 46, 47, 48 and 49 on a s
 Slice 15 adds H-0133 (an alternate index defined NOUPGRADE, its path defined NOUPDATE).
 Slice 16 adds H-0134 (a variable-length FD: file status 44 on WRITE outside the RECORD IS VARYING bounds, 04 on READ).
 Slice 17 adds H-0135 (file status 44 on REWRITE of a record whose length differs from the record it replaces, an ESDS).
-Slice 18 adds H-0136 (the same REWRITE over a KSDS is allowed: the length may change, file status 00)."""
+Slice 18 adds H-0136 (the same REWRITE over a KSDS is allowed: the length may change, file status 00).
+Slice 20 adds H-0137 (file status 37: OPEN I-O of a z/OS UNIX byte-stream file, a DD with PATH=, read through QSAM)."""
 
 from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, read
@@ -37,6 +38,7 @@ H133 = "H-0133"
 H134 = "H-0134"
 H135 = "H-0135"
 H136 = "H-0136"
+H137 = "H-0137"
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -499,6 +501,35 @@ AIXAVKW = {
     ],
 }
 
+AIXAUXF = {
+    "member": "AIXAUXF",
+    "era": 2,
+    "era_evidence": "END-IF (COBOL-85); no later construct",
+    "program_id": "AIXAUXF",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAUXF - ORDER EXTRACT IN A Z/OS UNIX FILE.",
+                "PATH= ON A DD IS A UNIX FILE, NOT A VSAM PATH. OPEN I-O: 37."],
+    "selects": [{"name": "UX-FILE", "assign": "UXOUT", "status": "WS-UX-STATUS", "org": "SEQUENTIAL",
+                 "access": "SEQUENTIAL", "horror": H137}],
+    "fds": [{"fd": "UX-FILE", "record": I(1, "UX-REC", kids=[
+        I(5, "UX-ID", "X(8)"), I(5, "UX-TEXT", "X(32)")])}],
+    "ws": [
+        I(1, "WS-UX-STATUS", "X(2)"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN I-O UX-FILE"),
+             perform("1000-CHECK"),
+             raw("DISPLAY 'AIXAUXF BAD ' WS-BAD"),
+             goback()),
+        para("1000-CHECK",
+             if_("WS-UX-STATUS = '37'", [raw("DISPLAY 'OPEN I-O REFUSED FOR A UNIX FILE'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H137),
+    ],
+}
+
 AIXAFOP = {
     "member": "AIXAFOP",
     "era": 2,
@@ -824,6 +855,12 @@ JOBS = [
                 _dd("NOTUPD", "PROD.AIXA.NOTES", ("OLD",)),
                 {"name": "SYSOUT", "sysout": "*"},
             ]},
+            {"name": "UX9090", "pgm": "AIXAUXF", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                {"name": "UXOUT", "path": "/u/aixa/extract/orders.dat", "horror": H137,
+                 "extra": ["PATHOPTS=(ORDWR,OCREAT)", "PATHMODE=(SIRUSR,SIWUSR)", "FILEDATA=BINARY"]},
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
         ],
     },
     {
@@ -879,7 +916,7 @@ APP = {
     "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
     "copybooks": [],
     "dclgen": [],
-    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXAFLK, AIXAKS3, AIXAMOD, AIXAVAR, AIXAVRW, AIXAVKW, AIXACIC],
+    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXAFLK, AIXAKS3, AIXAMOD, AIXAVAR, AIXAVRW, AIXAVKW, AIXAUXF, AIXACIC],
     "csd": CSD,
     "jcl": JOBS,
     "procs": [],

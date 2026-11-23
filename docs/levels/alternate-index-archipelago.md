@@ -23,6 +23,7 @@ gitgalaxy#7065, VSAM organizations and access paths (#4894). App `AIXA`
 | `AIXAVAR` | a KSDS with a variable-length FD (`RECORD IS VARYING IN SIZE FROM 30 TO 50 CHARACTERS DEPENDING ON`): `WRITE` of 60 and of 10 bytes (file status 44), a `READ` of a record outside the bounds (04); step `VR6060` of `AIXARU2` | H-0134 |
 | `AIXAVRW` | the ESDS opened `I-O` with a variable-length FD (`RECORD IS VARYING IN SIZE FROM 40 TO 60 CHARACTERS`): `READ` of a 60-byte record, then `REWRITE` of 50 bytes, inside the bounds but not the size being replaced (file status 44); step `VW7070` of `AIXARU2` | H-0135 |
 | `AIXAVKW` | the KSDS of `AIXAVAR` opened `I-O`, `READ NEXT` of a 50-byte record, then `REWRITE` of 40 bytes: an indexed file may change the length, so file status 00, not the 44 of `AIXAVRW`; step `VK8080` of `AIXARU2` | H-0136 |
+| `AIXAUXF` | `OPEN I-O` of a z/OS UNIX byte-stream file (`//UXOUT DD PATH=...,FILEDATA=BINARY`, not a VSAM PATH): file status 37; step `UX9090` of `AIXARU2` | H-0137 |
 
 All programs compile under `cobc -std=ibm`.
 
@@ -44,6 +45,6 @@ Known key question, not changed: the COBOL source alone does not tell an ESDS fr
 
 The first run needs the owner's release and pin bump, and gitgalaxy's scorer to read the new fields.
 
-Remaining slices: 37 and 9x, VLR(COMPAT) (a KSDS REWRITE of a different-size record is H-0136, 00; the ESDS 44 is H-0135) (04 becomes 00) (41, 42, 46, 47, 48 and 49 are H-0132; NOUPGRADE / NOUPDATE is H-0133; 04 and 44 are H-0134); scorer support for `alternate_keys` /
+Remaining slices: 9x, 47 from REWRITE of a UNIX file, VLR(COMPAT) (a KSDS REWRITE of a different-size record is H-0136, 00; the ESDS 44 is H-0135) (04 becomes 00) (41, 42, 46, 47, 48 and 49 are H-0132; NOUPGRADE / NOUPDATE is H-0133; 04 and 44 are H-0134); scorer support for `alternate_keys` /
 `relative_key` (gitgalaxy side); RBA / RRN access (CICS `RIDFLD`, cics-crucible side); alternate-index
 upgrade-set behaviour at run time (a program reading a stale NOUPGRADE index); LINEAR and ZFS clusters; an ESDS with an alternate index (not supported in COBOL).

@@ -181,6 +181,8 @@ def _write_jcl(m: Member, spec: dict[str, Any], program_paths: dict[str, str], p
                 ops = ["DSN=NULLFILE"]
             elif dd.get("dummy"):
                 ops = ["DUMMY"]
+            elif dd.get("path"):
+                ops = [f"PATH='{dd['path']}'", *dd.get("extra", [])]
             else:
                 dsn = dd["dsn"] + (f"({dd['gen']})" if dd.get("gen") else "")
                 ops = [f"DSN={dsn}", f"DISP={_disp(dd['disp'])}"] + dd.get("extra", [])
