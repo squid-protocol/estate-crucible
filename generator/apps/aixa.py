@@ -23,7 +23,8 @@ Slice 15 adds H-0133 (an alternate index defined NOUPGRADE, its path defined NOU
 Slice 16 adds H-0134 (a variable-length FD: file status 44 on WRITE outside the RECORD IS VARYING bounds, 04 on READ).
 Slice 17 adds H-0135 (file status 44 on REWRITE of a record whose length differs from the record it replaces, an ESDS).
 Slice 18 adds H-0136 (the same REWRITE over a KSDS is allowed: the length may change, file status 00).
-Slice 20 adds H-0137 (file status 37: OPEN I-O of a z/OS UNIX byte-stream file, a DD with PATH=, read through QSAM)."""
+Slice 20 adds H-0137 (file status 37: OPEN I-O of a z/OS UNIX byte-stream file, a DD with PATH=, read through QSAM).
+Slice 21 adds H-0138 (file status 49: REWRITE of a record in a z/OS UNIX file, which can never be open I-O)."""
 
 from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, read
@@ -39,6 +40,7 @@ H134 = "H-0134"
 H135 = "H-0135"
 H136 = "H-0136"
 H137 = "H-0137"
+H138 = "H-0138"
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -530,6 +532,40 @@ AIXAUXF = {
     ],
 }
 
+AIXAUXR = {
+    "member": "AIXAUXR",
+    "era": 2,
+    "era_evidence": "END-IF (COBOL-85); no later construct",
+    "program_id": "AIXAUXR",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAUXR - ORDER EXTRACT REWRITTEN IN A UNIX FILE.",
+                "A UNIX FILE CANNOT BE OPEN I-O, SO REWRITE GIVES 49."],
+    "selects": [{"name": "UR-FILE", "assign": "UXRWR", "status": "WS-UR-STATUS", "org": "SEQUENTIAL",
+                 "access": "SEQUENTIAL", "horror": H138}],
+    "fds": [{"fd": "UR-FILE", "record": I(1, "UR-REC", kids=[
+        I(5, "UR-ID", "X(8)"), I(5, "UR-TEXT", "X(32)")])}],
+    "ws": [
+        I(1, "WS-UR-STATUS", "X(2)"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN OUTPUT UR-FILE"),
+             raw("MOVE 'ORD00001' TO UR-ID"),
+             raw("MOVE 'FIRST EXTRACT RECORD' TO UR-TEXT"),
+             raw("WRITE UR-REC"),
+             raw("REWRITE UR-REC"),
+             perform("1000-CHECK"),
+             raw("CLOSE UR-FILE"),
+             raw("DISPLAY 'AIXAUXR BAD ' WS-BAD"),
+             goback()),
+        para("1000-CHECK",
+             if_("WS-UR-STATUS = '49'", [raw("DISPLAY 'REWRITE REFUSED FOR A UNIX FILE'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H138),
+    ],
+}
+
 AIXAFOP = {
     "member": "AIXAFOP",
     "era": 2,
@@ -861,6 +897,12 @@ JOBS = [
                  "extra": ["PATHOPTS=(ORDWR,OCREAT)", "PATHMODE=(SIRUSR,SIWUSR)", "FILEDATA=BINARY"]},
                 {"name": "SYSOUT", "sysout": "*"},
             ]},
+            {"name": "UR9191", "pgm": "AIXAUXR", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                {"name": "UXRWR", "path": "/u/aixa/extract/orders2.dat", "horror": H138,
+                 "extra": ["PATHOPTS=(OWRONLY,OCREAT,OTRUNC)", "PATHMODE=(SIRUSR,SIWUSR)", "FILEDATA=BINARY"]},
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
         ],
     },
     {
@@ -916,7 +958,7 @@ APP = {
     "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
     "copybooks": [],
     "dclgen": [],
-    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXAFLK, AIXAKS3, AIXAMOD, AIXAVAR, AIXAVRW, AIXAVKW, AIXAUXF, AIXACIC],
+    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXAFLK, AIXAKS3, AIXAMOD, AIXAVAR, AIXAVRW, AIXAVKW, AIXAUXF, AIXAUXR, AIXACIC],
     "csd": CSD,
     "jcl": JOBS,
     "procs": [],

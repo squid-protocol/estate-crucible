@@ -220,26 +220,26 @@
   "ims_gen"
  ],
  "fact_totals": {
-  "programs": 80,
-  "units": 225,
-  "edges": 216,
-  "call_sites": 176,
+  "programs": 81,
+  "units": 227,
+  "edges": 217,
+  "call_sites": 177,
   "copies": 95,
-  "data_items": 931,
-  "layouts": 395,
+  "data_items": 936,
+  "layouts": 398,
   "sql_statements": 6,
   "sql_tables": 3,
-  "jcl_steps": 96,
-  "jcl_dds": 301,
+  "jcl_steps": 97,
+  "jcl_dds": 304,
   "screen_fields": 16,
   "csd_resources": 48,
   "transactions": 8,
   "cics_resources": 13,
-  "jcl_datasets": 158,
-  "file_control": 32,
-  "entry_points": 80,
-  "file_edges": 53,
-  "data_moves": 287,
+  "jcl_datasets": 159,
+  "file_control": 33,
+  "entry_points": 81,
+  "file_edges": 54,
+  "data_moves": 290,
   "copy_collisions": 9,
   "gaps": 75,
   "dead": 11,
@@ -657,7 +657,8 @@
   "H-0134",
   "H-0135",
   "H-0136",
-  "H-0137"
+  "H-0137",
+  "H-0138"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -1056,6 +1057,24 @@
     "H-0137"
    ]
   },
+  "apps/AIXA/cobol/AIXAUXR.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "9510bc88675197c4614a93ea1740356bd59fb4aa3f60fdcfb4048c5189ff24e7",
+   "bytes": 1444,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); no later construct",
+   "horrors": [
+    "H-0138"
+   ]
+  },
   "apps/AIXA/cobol/AIXAVAR.cbl": {
    "app": "AIXA",
    "library": "cobol",
@@ -1195,8 +1214,8 @@
    "app": "AIXA",
    "library": "jcl",
    "language": "jcl",
-   "sha256": "60d6a728f8842f0339d471ffbd4054bf36a874179320929ef8320141d2351354",
-   "bytes": 1721,
+   "sha256": "99a1f4cfb059efae3c2933c734f49fc6915c5135434fbce535091687b43d91fd",
+   "bytes": 1976,
    "encoding": "utf-8",
    "storage": "lf",
    "key": "key/apps/AIXA.json",
@@ -1205,7 +1224,8 @@
    },
    "horrors": [
     "H-0108",
-    "H-0137"
+    "H-0137",
+    "H-0138"
    ]
   },
   "apps/AIXA/jcl/AIXARUN.jcl": {

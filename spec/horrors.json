@@ -3656,6 +3656,39 @@
    ],
    "era": 2,
    "notes": "Quotes are from igy6pg40.pdf and igy6lr40.pdf via pdftotext (the Programming Guide also lists 'OPEN I-O and REWRITE are not supported ... 37 from OPEN I-O' under Accessing z/OS UNIX files using QSAM). Not a VSAM case: it is planted here because the DD keyword PATH= collides with the VSAM PATH of H-0079/H-0080 and a reader must not take it for an alternate-index path. The edition number SC27-8714-03 is the one printed on the 6.4 Programming Guide cover as read locally; not re-verified online. The FD's record layout is nominal. GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0138",
+   "title": "REWRITE of a record in a z/OS UNIX byte-stream file read through QSAM (the file cannot be open I-O): file status 49",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAUXR: SELECT UR-FILE ASSIGN TO UXRWR ORGANIZATION IS SEQUENTIAL; 0000-MAIN OPEN OUTPUT, WRITE, REWRITE, PERFORMs 1000-CHECK (tests '49')",
+    "AIXA jcl/AIXARU2.jcl UR9191: //UXRWR DD PATH='/u/aixa/extract/orders2.dat',FILEDATA=BINARY"
+   ],
+   "asserts": "The SELECT is one file_control fact (select UR-FILE, assign UXRWR, organization SEQUENTIAL, access_mode SEQUENTIAL, record_key null) with no alternate_keys and no relative_key. 1000-CHECK is one units fact, PERFORMed once from 0000-MAIN as a plain edges fact, and tests the FILE STATUS item named in the SELECT. DD UXRWR in step UR9191 is a jcl_dds fact with dsn null, no sysout and no disp (PATH= is a z/OS UNIX file, as in H-0137). At run time the OPEN OUTPUT and the WRITE succeed; the REWRITE cannot update a file in the z/OS UNIX file system, and since such a file can never be open I-O it ends in file status 49 (REWRITE on a file not open I-O); the program takes the 49 branch and WS-BAD stays 0. Step UR9191 has three jcl_dds facts: STEPLIB, UXRWR and SYSOUT.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+     "section": "Coding input and output statements for QSAM files > REWRITE",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+     "quote": "You cannot update a file in the z/OS UNIX file system using REWRITE."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+     "section": "Coding input and output statements for QSAM files > OPEN",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+     "quote": "You cannot open z/OS UNIX files as I-O; a file status of 37 results if you attempt to do so."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The execution of a DELETE or REWRITE statement was attempted on a file not open in the I-O mode."
+    }
+   ],
+   "era": 2,
+   "notes": "The 49 is an inference from two quoted rules, not a sentence IBM prints: the Programming Guide says REWRITE cannot update a UNIX file and that such a file cannot be opened I-O (37), and Table 34 gives 49 for REWRITE on a file not open I-O; the manual does not name the status for this exact statement. Status 47 is not used for this case: Table 34 gives 47 to READ and START on a file not open input or I-O, not to REWRITE. The outcome assumes the OPEN OUTPUT of the PATH succeeds (PATHOPTS OWRONLY,OCREAT,OTRUNC and PATHMODE give the program write access to /u/aixa/extract). The FD's record layout is nominal. GnuCOBOL statuses were not compared."
   }
  ],
  "not_planted": [
