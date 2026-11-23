@@ -220,26 +220,26 @@
   "ims_gen"
  ],
  "fact_totals": {
-  "programs": 79,
-  "units": 223,
-  "edges": 215,
-  "call_sites": 175,
+  "programs": 80,
+  "units": 225,
+  "edges": 216,
+  "call_sites": 176,
   "copies": 95,
-  "data_items": 926,
-  "layouts": 392,
+  "data_items": 931,
+  "layouts": 395,
   "sql_statements": 6,
   "sql_tables": 3,
-  "jcl_steps": 95,
-  "jcl_dds": 298,
+  "jcl_steps": 96,
+  "jcl_dds": 301,
   "screen_fields": 16,
   "csd_resources": 48,
   "transactions": 8,
   "cics_resources": 13,
-  "jcl_datasets": 157,
-  "file_control": 31,
-  "entry_points": 79,
-  "file_edges": 52,
-  "data_moves": 286,
+  "jcl_datasets": 158,
+  "file_control": 32,
+  "entry_points": 80,
+  "file_edges": 53,
+  "data_moves": 287,
   "copy_collisions": 9,
   "gaps": 75,
   "dead": 11,
@@ -656,7 +656,8 @@
   "H-0133",
   "H-0134",
   "H-0135",
-  "H-0136"
+  "H-0136",
+  "H-0137"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -1037,6 +1038,24 @@
     "H-0106"
    ]
   },
+  "apps/AIXA/cobol/AIXAUXF.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "940d4b9db78440b9503e4431686e97f4347ae5b9703979c414276eb1c95b7183",
+   "bytes": 1284,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); no later construct",
+   "horrors": [
+    "H-0137"
+   ]
+  },
   "apps/AIXA/cobol/AIXAVAR.cbl": {
    "app": "AIXA",
    "library": "cobol",
@@ -1176,8 +1195,8 @@
    "app": "AIXA",
    "library": "jcl",
    "language": "jcl",
-   "sha256": "f125a8e0240bf591e88709b5b7f84cc7bc2d6f83297b0dd17380fa5237020459",
-   "bytes": 1476,
+   "sha256": "60d6a728f8842f0339d471ffbd4054bf36a874179320929ef8320141d2351354",
+   "bytes": 1721,
    "encoding": "utf-8",
    "storage": "lf",
    "key": "key/apps/AIXA.json",
@@ -1185,7 +1204,8 @@
     "status": "not-cobol"
    },
    "horrors": [
-    "H-0108"
+    "H-0108",
+    "H-0137"
    ]
   },
   "apps/AIXA/jcl/AIXARUN.jcl": {
