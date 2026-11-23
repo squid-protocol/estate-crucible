@@ -19,6 +19,7 @@ gitgalaxy#7065, VSAM organizations and access paths (#4894). App `AIXA`
 | `AIXAFOP` | `SELECT OPTIONAL` KSDS, a nonoptional KSDS and a SELECT whose record key disagrees with the cluster: open-time file status 05 / 35 / 39 | H-0129 |
 | `AIXAFLK` | an RRDS read sequentially with a `PIC 9(2)` relative key (file status 14), a WRITE loop past the end of the ESDS (34), `CLOSE ... WITH LOCK` then `OPEN` (38) | H-0130 |
 | `AIXAKS3` | a sequential-access KSDS: `REWRITE` right after `OPEN` (file status 43), then `READ NEXT` and a `REWRITE` giving the unique alternate key `CUS-TAX` a value another record holds (22); step `KS3040` of `AIXARU2` | H-0131 |
+| `AIXAMOD` | a sequential KSDS used in states that forbid the statement: `WRITE` and `REWRITE` on a file open `INPUT` (file status 48, 49), a `READ NEXT` after the at-end condition (46), `OPEN` of an open file (41), `READ` (47) and `CLOSE` (42) of a closed one; step `MD5050` of `AIXARU2` | H-0132 |
 
 All programs compile under `cobc -std=ibm`.
 
@@ -38,6 +39,6 @@ Known key question, not changed: the COBOL source alone does not tell an ESDS fr
 
 The first run needs the owner's release and pin bump, and gitgalaxy's scorer to read the new fields.
 
-Remaining slices: file status 04 and 44 (need a variable-length FD the generator cannot render yet), 37 and 9x; the answer-key edge 2000-COPY -> 2100-REPLACE in AIXARRS (a PERFORM inside an INVALID KEY, see handoff 4894-aixa-check-20261122); scorer support for `alternate_keys` /
+Remaining slices: file status 04 and 44 (need a variable-length FD the generator cannot render yet), 37 and 9x (41, 42, 46, 47, 48 and 49 are H-0132); the answer-key edge 2000-COPY -> 2100-REPLACE in AIXARRS (a PERFORM inside an INVALID KEY, see handoff 4894-aixa-check-20261122); scorer support for `alternate_keys` /
 `relative_key` (gitgalaxy side); RBA / RRN access (CICS `RIDFLD`, cics-crucible side); alternate-index
 upgrade-set behaviour; LINEAR and ZFS clusters; an ESDS with an alternate index (not supported in COBOL).

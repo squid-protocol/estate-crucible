@@ -17,7 +17,8 @@ nonoptional one, and a SELECT whose record key disagrees with the cluster).
 Slice 12 adds H-0130 (file status 14 on a sequential READ of an RRDS whose relative key item is too small, 34
 on a WRITE past the end of an ESDS, and 38 on an OPEN of a file closed WITH LOCK).
 Slice 13 adds H-0131 (a sequential-access KSDS: REWRITE with no READ before it ends in 43, and REWRITE of a record
-whose unique alternate key now matches another record ends in 22)."""
+whose unique alternate key now matches another record ends in 22).
+Slice 14 adds H-0132 (logic-error file statuses 41, 42, 46, 47, 48 and 49 on a sequential KSDS)."""
 
 from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, read
@@ -27,6 +28,7 @@ H106, H107, H108, H109, H110 = "H-0106", "H-0107", "H-0108", "H-0109", "H-0110"
 H129 = "H-0129"
 H130 = "H-0130"
 H131 = "H-0131"
+H132 = "H-0132"
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -319,6 +321,65 @@ AIXAKS3 = {
              raw("READ CUS-FILE NEXT RECORD", "    AT END DISPLAY 'NO CUSTOMERS'", "END-READ",
                  "MOVE '987654321' TO CUS-TAX", "REWRITE CUS-REC"),
              if_("WS-CUS-STATUS = '22'", [raw("DISPLAY 'TAX ID TAKEN ' CUS-TAX", "MOVE 4 TO RETURN-CODE")])),
+    ],
+}
+
+AIXAMOD = {
+    "member": "AIXAMOD",
+    "era": 2,
+    "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+    "program_id": "AIXAMOD",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAMOD - LOGIC-ERROR FILE STATUS 4X OVER A KSDS.",
+                "EACH STATEMENT IS TRIED IN A STATE THAT DOES NOT ALLOW IT."],
+    "selects": [{"name": "CUS-FILE", "assign": "CUSKSD", "status": "WS-CUS-STATUS", "org": "INDEXED",
+                 "access": "SEQUENTIAL", "record_key": "CUS-ID", "horror": H132}],
+    "fds": [{"fd": "CUS-FILE", "record": I(1, "CUS-REC", kids=[
+        I(5, "CUS-ID", "X(8)"), I(5, "CUS-TAX", "X(9)"), I(5, "CUS-NAME", "X(20)"), I(5, "FILLER", "X(3)")])}],
+    "ws": [
+        I(1, "WS-CUS-STATUS", "X(2)"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN INPUT CUS-FILE"),
+             perform("1000-WRONG-MODE"),
+             raw("MOVE '00' TO WS-CUS-STATUS"),
+             perform("2000-DRAIN", until="WS-CUS-STATUS NOT = '00'"),
+             perform("2100-PAST-END"),
+             perform("3000-REOPEN"),
+             raw("CLOSE CUS-FILE"),
+             perform("4000-CLOSED"),
+             raw("DISPLAY 'AIXAMOD BAD ' WS-BAD"),
+             goback()),
+        para("1000-WRONG-MODE",
+             raw("MOVE 'CUS00009' TO CUS-ID", "WRITE CUS-REC"),
+             if_("WS-CUS-STATUS = '48'", [raw("DISPLAY 'WRITE ON AN INPUT FILE'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             raw("REWRITE CUS-REC"),
+             if_("WS-CUS-STATUS = '49'", [raw("DISPLAY 'REWRITE ON AN INPUT FILE'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H132),
+        para("2000-DRAIN",
+             raw("READ CUS-FILE NEXT RECORD", "    AT END CONTINUE", "END-READ")),
+        para("2100-PAST-END",
+             raw("READ CUS-FILE NEXT RECORD", "    AT END CONTINUE", "END-READ"),
+             if_("WS-CUS-STATUS = '46'", [raw("DISPLAY 'READ PAST THE END'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H132),
+        para("3000-REOPEN",
+             raw("OPEN INPUT CUS-FILE"),
+             if_("WS-CUS-STATUS = '41'", [raw("DISPLAY 'FILE ALREADY OPEN'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H132),
+        para("4000-CLOSED",
+             raw("READ CUS-FILE NEXT RECORD", "    AT END CONTINUE", "END-READ"),
+             if_("WS-CUS-STATUS = '47'", [raw("DISPLAY 'READ ON A CLOSED FILE'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             raw("CLOSE CUS-FILE"),
+             if_("WS-CUS-STATUS = '42'", [raw("DISPLAY 'FILE ALREADY CLOSED'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H132),
     ],
 }
 
@@ -627,6 +688,11 @@ JOBS = [
                 _dd("CUSKSD2", "PROD.AIXA.CUST.NAMPATH", ("OLD",), horror=H108),
                 {"name": "SYSOUT", "sysout": "*"},
             ]},
+            {"name": "MD5050", "pgm": "AIXAMOD", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                _dd("CUSKSD", "PROD.AIXA.CUST", ("OLD",)),
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
         ],
     },
     {
@@ -658,7 +724,7 @@ APP = {
     "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
     "copybooks": [],
     "dclgen": [],
-    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXAFLK, AIXAKS3, AIXACIC],
+    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXAFLK, AIXAKS3, AIXAMOD, AIXACIC],
     "csd": CSD,
     "jcl": JOBS,
     "procs": [],

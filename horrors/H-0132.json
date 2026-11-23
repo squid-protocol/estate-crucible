@@ -1,0 +1,203 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0132",
+ "title": "Logic-error file statuses on a sequential KSDS: WRITE (48) and REWRITE (49) on a file open INPUT, READ past the at-end condition (46), OPEN of an open file (41), READ (47) and CLOSE (42) of a closed file",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXAMOD: SELECT CUS-FILE ORGANIZATION IS INDEXED ACCESS MODE IS SEQUENTIAL; 0000-MAIN OPEN INPUT, then PERFORMs 1000-WRONG-MODE (WRITE tests '48', REWRITE tests '49'), 2000-DRAIN UNTIL the status is not '00', 2100-PAST-END (READ NEXT again, tests '46'), 3000-REOPEN (OPEN INPUT on the open file, tests '41'), CLOSE, then 4000-CLOSED (READ tests '47', CLOSE tests '42')",
+  "AIXA jcl/AIXARU2.jcl MD5050: //CUSKSD on the customer cluster"
+ ],
+ "asserts": "The SELECT is one file_control fact (select CUS-FILE, assign CUSKSD, organization INDEXED, access_mode SEQUENTIAL, record_key CUS-ID). 1000-WRONG-MODE, 2000-DRAIN, 2100-PAST-END, 3000-REOPEN and 4000-CLOSED are each one units fact, PERFORMed once from 0000-MAIN as plain edges facts (2000-DRAIN with an UNTIL), and each paragraph that tests a status tests the FILE STATUS item named in the SELECT (WS-CUS-STATUS). At run time, each statement ends in the logic-error status (high-order digit 4) IBM gives it: WRITE on a file open INPUT 48, REWRITE on a file open INPUT 49, a READ NEXT after the at-end condition 46, OPEN INPUT of a file already open 41, READ on a file that is not open 47, CLOSE of a file not open 42. Step MD5050 has two jcl_dds facts: STEPLIB and CUSKSD.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "An OPEN statement was attempted for a file in the open mode."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A CLOSE statement was attempted for a file not in the open mode."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A sequential READ statement was attempted on a file open in the input or I-O mode and no valid next record had been established because: The preceding READ statement was unsuccessful but did not cause an at-end condition. The preceding READ statement caused an at-end condition."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The execution of a READ statement was attempted on a file not open in the input or I-O mode."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The execution of a WRITE statement was attempted on a file not open in the I-O, output, or extend mode."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "The execution of a DELETE or REWRITE statement was attempted on a file not open in the I-O mode."
+  }
+ ],
+ "era": 2,
+ "notes": "Quotes are the Table 34 entries for 41, 42, 46, 47, 48 and 49 from igy6lr40.pdf via pdftotext, joined across line breaks (the 46 entry also joins its two bullets). 1000-WRONG-MODE sets CUS-ID before WRITE so the statement is otherwise well formed; 2000-DRAIN reads to the end of the file, so the READ in 2100-PAST-END follows an at-end condition. 43 (REWRITE with no READ) is H-0131; 44 and 37 stay out for the reasons in H-0130's notes. The statuses are what IBM says; GnuCOBOL statuses were not compared.",
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXAMOD.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "1000-WRONG-MODE",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 40,
+      "end_line": 53,
+      "horror": "H-0132"
+     },
+     {
+      "name": "2100-PAST-END",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 58,
+      "end_line": 66,
+      "horror": "H-0132"
+     },
+     {
+      "name": "3000-REOPEN",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 67,
+      "end_line": 73,
+      "horror": "H-0132"
+     },
+     {
+      "name": "4000-CLOSED",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 74,
+      "end_line": 88,
+      "horror": "H-0132"
+     }
+    ],
+    "file_control": [
+     {
+      "select": "CUS-FILE",
+      "assign": "CUSKSD",
+      "organization": "INDEXED",
+      "access_mode": "SEQUENTIAL",
+      "record_key": "CUS-ID",
+      "file_status": "WS-CUS-STATUS",
+      "fd_copies": [],
+      "line": 11,
+      "horror": "H-0132"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "'CUS00009'",
+      "source_kind": "literal",
+      "target": "CUS-ID",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 41,
+      "horror": "H-0132"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 46,
+      "horror": "H-0132"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 52,
+      "horror": "H-0132"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 65,
+      "horror": "H-0132"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 72,
+      "horror": "H-0132"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 81,
+      "horror": "H-0132"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 87,
+      "horror": "H-0132"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
