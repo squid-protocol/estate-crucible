@@ -21,6 +21,7 @@ gitgalaxy#7065, VSAM organizations and access paths (#4894). App `AIXA`
 | `AIXAKS3` | a sequential-access KSDS: `REWRITE` right after `OPEN` (file status 43), then `READ NEXT` and a `REWRITE` giving the unique alternate key `CUS-TAX` a value another record holds (22); step `KS3040` of `AIXARU2` | H-0131 |
 | `AIXAMOD` | a sequential KSDS used in states that forbid the statement: `WRITE` and `REWRITE` on a file open `INPUT` (file status 48, 49), a `READ NEXT` after the at-end condition (46), `OPEN` of an open file (41), `READ` (47) and `CLOSE` (42) of a closed one; step `MD5050` of `AIXARU2` | H-0132 |
 | `AIXAVAR` | a KSDS with a variable-length FD (`RECORD IS VARYING IN SIZE FROM 30 TO 50 CHARACTERS DEPENDING ON`): `WRITE` of 60 and of 10 bytes (file status 44), a `READ` of a record outside the bounds (04); step `VR6060` of `AIXARU2` | H-0134 |
+| `AIXAVRW` | the ESDS opened `I-O` with a variable-length FD (`RECORD IS VARYING IN SIZE FROM 40 TO 60 CHARACTERS`): `READ` of a 60-byte record, then `REWRITE` of 50 bytes, inside the bounds but not the size being replaced (file status 44); step `VW7070` of `AIXARU2` | H-0135 |
 
 All programs compile under `cobc -std=ibm`.
 
@@ -40,6 +41,6 @@ Known key question, not changed: the COBOL source alone does not tell an ESDS fr
 
 The first run needs the owner's release and pin bump, and gitgalaxy's scorer to read the new fields.
 
-Remaining slices: 37 and 9x, REWRITE of a different-size record (44) and VLR(COMPAT) (04 becomes 00) (41, 42, 46, 47, 48 and 49 are H-0132; NOUPGRADE / NOUPDATE is H-0133; 04 and 44 are H-0134); the answer-key edge 2000-COPY -> 2100-REPLACE in AIXARRS (a PERFORM inside an INVALID KEY, see handoff 4894-aixa-check-20261122); scorer support for `alternate_keys` /
+Remaining slices: 37 and 9x, a KSDS REWRITE of a different-size record (44 is H-0135 for an ESDS only) and VLR(COMPAT) (04 becomes 00) (41, 42, 46, 47, 48 and 49 are H-0132; NOUPGRADE / NOUPDATE is H-0133; 04 and 44 are H-0134); the answer-key edge 2000-COPY -> 2100-REPLACE in AIXARRS (a PERFORM inside an INVALID KEY, see handoff 4894-aixa-check-20261122); scorer support for `alternate_keys` /
 `relative_key` (gitgalaxy side); RBA / RRN access (CICS `RIDFLD`, cics-crucible side); alternate-index
 upgrade-set behaviour at run time (a program reading a stale NOUPGRADE index); LINEAR and ZFS clusters; an ESDS with an alternate index (not supported in COBOL).
