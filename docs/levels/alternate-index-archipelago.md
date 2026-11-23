@@ -18,6 +18,7 @@ gitgalaxy#7065, VSAM organizations and access paths (#4894). App `AIXA`
 | `AIXARU2` | `//CUSKSD` on the base cluster, `//CUSKSD1` on the TAX path, `//CUSKSD2` on the NAME path | H-0108 |
 | `AIXAFOP` | `SELECT OPTIONAL` KSDS, a nonoptional KSDS and a SELECT whose record key disagrees with the cluster: open-time file status 05 / 35 / 39 | H-0129 |
 | `AIXAFLK` | an RRDS read sequentially with a `PIC 9(2)` relative key (file status 14), a WRITE loop past the end of the ESDS (34), `CLOSE ... WITH LOCK` then `OPEN` (38) | H-0130 |
+| `AIXAKS3` | a sequential-access KSDS: `REWRITE` right after `OPEN` (file status 43), then `READ NEXT` and a `REWRITE` giving the unique alternate key `CUS-TAX` a value another record holds (22); step `KS3040` of `AIXARU2` | H-0131 |
 
 All programs compile under `cobc -std=ibm`.
 
