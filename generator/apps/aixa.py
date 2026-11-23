@@ -19,7 +19,8 @@ on a WRITE past the end of an ESDS, and 38 on an OPEN of a file closed WITH LOCK
 Slice 13 adds H-0131 (a sequential-access KSDS: REWRITE with no READ before it ends in 43, and REWRITE of a record
 whose unique alternate key now matches another record ends in 22).
 Slice 14 adds H-0132 (logic-error file statuses 41, 42, 46, 47, 48 and 49 on a sequential KSDS).
-Slice 15 adds H-0133 (an alternate index defined NOUPGRADE, its path defined NOUPDATE)."""
+Slice 15 adds H-0133 (an alternate index defined NOUPGRADE, its path defined NOUPDATE).
+Slice 16 adds H-0134 (a variable-length FD: file status 44 on WRITE outside the RECORD IS VARYING bounds, 04 on READ)."""
 
 from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, read
@@ -31,6 +32,7 @@ H130 = "H-0130"
 H131 = "H-0131"
 H132 = "H-0132"
 H133 = "H-0133"
+H134 = "H-0134"
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -385,6 +387,50 @@ AIXAMOD = {
     ],
 }
 
+AIXAVAR = {
+    "member": "AIXAVAR",
+    "era": 2,
+    "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+    "program_id": "AIXAVAR",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAVAR - VARIABLE-LENGTH CUSTOMER NOTES IN A KSDS.",
+                "FILE STATUS 44 ON WRITE, 04 ON READ: THE VARYING BOUNDS."],
+    "selects": [{"name": "NOT-FILE", "assign": "NOTKSD", "status": "WS-NOT-STATUS", "org": "INDEXED",
+                 "access": "SEQUENTIAL", "record_key": "NOT-ID", "horror": H134}],
+    "fds": [{"fd": "NOT-FILE", "varying": (30, 50, "WS-NOT-LEN"), "record": I(1, "NOT-REC", kids=[
+        I(5, "NOT-ID", "X(8)"), I(5, "NOT-TEXT", "X(42)")])}],
+    "ws": [
+        I(1, "WS-NOT-STATUS", "X(2)"),
+        I(1, "WS-NOT-LEN", "9(3)", value="ZERO"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN I-O NOT-FILE"),
+             perform("1000-TOO-LONG"),
+             perform("2000-TOO-SHORT"),
+             perform("3000-ODD-READ"),
+             raw("CLOSE NOT-FILE"),
+             raw("DISPLAY 'AIXAVAR BAD ' WS-BAD"),
+             goback()),
+        para("1000-TOO-LONG",
+             raw("MOVE 'NOT00010' TO NOT-ID", "MOVE 60 TO WS-NOT-LEN", "WRITE NOT-REC"),
+             if_("WS-NOT-STATUS = '44'", [raw("DISPLAY 'RECORD LARGER THAN THE LARGEST'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H134),
+        para("2000-TOO-SHORT",
+             raw("MOVE 'NOT00011' TO NOT-ID", "MOVE 10 TO WS-NOT-LEN", "WRITE NOT-REC"),
+             if_("WS-NOT-STATUS = '44'", [raw("DISPLAY 'RECORD SMALLER THAN THE SMALLEST'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H134),
+        para("3000-ODD-READ",
+             raw("READ NOT-FILE NEXT RECORD", "    AT END CONTINUE", "END-READ"),
+             if_("WS-NOT-STATUS = '04'", [raw("DISPLAY 'RECORD LENGTH OUTSIDE THE FD'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H134),
+    ],
+}
+
 AIXAFOP = {
     "member": "AIXAFOP",
     "era": 2,
@@ -695,6 +741,11 @@ JOBS = [
                 _dd("CUSKSD", "PROD.AIXA.CUST", ("OLD",)),
                 {"name": "SYSOUT", "sysout": "*"},
             ]},
+            {"name": "VR6060", "pgm": "AIXAVAR", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                _dd("NOTKSD", "PROD.AIXA.NOTES", ("OLD",)),
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
         ],
     },
     {
@@ -750,7 +801,7 @@ APP = {
     "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
     "copybooks": [],
     "dclgen": [],
-    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXAFLK, AIXAKS3, AIXAMOD, AIXACIC],
+    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXAFLK, AIXAKS3, AIXAMOD, AIXAVAR, AIXACIC],
     "csd": CSD,
     "jcl": JOBS,
     "procs": [],
