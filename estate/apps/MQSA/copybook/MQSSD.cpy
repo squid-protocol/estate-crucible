@@ -1,0 +1,4 @@
+      * MQSSD    - SUBSCRIPTION DESCRIPTOR, STAND-IN FOR THIS ESTATE
+           05  MQS-SD-OPTIONS         PIC S9(9) COMP VALUE 0.
+           05  MQS-SD-TOPICSTR        PIC X(64).
+           05  MQS-SD-SUBNAME         PIC X(48).

@@ -6771,6 +6771,791 @@
     "H-0093"
    ]
   },
+  "apps/MQSA/cobol/MQSASUB.cbl": {
+   "app": "MQSA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 65,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI is a static CALL interface with no later construct",
+   "programs": [
+    {
+     "program_id": "MQSASUB",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 28,
+     "end_line": 53,
+     "horror": "H-0139"
+    },
+    {
+     "name": "1000-GET",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 54,
+     "end_line": 65
+    }
+   ],
+   "edges": [
+    {
+     "kind": "call",
+     "from": "0000-MAIN",
+     "target": "MQCONN",
+     "line": 29,
+     "form": "literal",
+     "horror": "H-0139"
+    },
+    {
+     "kind": "call",
+     "from": "0000-MAIN",
+     "target": "MQSUB",
+     "line": 37,
+     "form": "literal",
+     "horror": "H-0139"
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-GET",
+     "line": 45,
+     "horror": "H-0139"
+    },
+    {
+     "kind": "call",
+     "from": "0000-MAIN",
+     "target": "MQCLOSE",
+     "line": 46,
+     "form": "literal",
+     "horror": "H-0139"
+    },
+    {
+     "kind": "call",
+     "from": "0000-MAIN",
+     "target": "MQCLOSE",
+     "line": 49,
+     "form": "literal",
+     "horror": "H-0139"
+    },
+    {
+     "kind": "call",
+     "from": "0000-MAIN",
+     "target": "MQDISC",
+     "line": 52,
+     "form": "literal",
+     "horror": "H-0139"
+    },
+    {
+     "kind": "call",
+     "from": "1000-GET",
+     "target": "MQGET",
+     "line": 57,
+     "form": "literal"
+    }
+   ],
+   "call_sites": [
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "MQCONN",
+     "target": "MQCONN",
+     "line": 29,
+     "resolves_to": null,
+     "horror": "H-0139"
+    },
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "MQSUB",
+     "target": "MQSUB",
+     "line": 37,
+     "resolves_to": null,
+     "horror": "H-0139"
+    },
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "MQCLOSE",
+     "target": "MQCLOSE",
+     "line": 46,
+     "resolves_to": null,
+     "horror": "H-0139"
+    },
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "MQCLOSE",
+     "target": "MQCLOSE",
+     "line": 49,
+     "resolves_to": null,
+     "horror": "H-0139"
+    },
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "MQDISC",
+     "target": "MQDISC",
+     "line": 52,
+     "resolves_to": null,
+     "horror": "H-0139"
+    },
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "MQGET",
+     "target": "MQGET",
+     "line": 57,
+     "resolves_to": null
+    }
+   ],
+   "copies": [
+    {
+     "member": "MQSMD",
+     "kind": "copy",
+     "line": 21,
+     "resolves_to": "apps/MQSA/copybook/MQSMD.cpy"
+    },
+    {
+     "member": "MQSGMO",
+     "kind": "copy",
+     "line": 23,
+     "resolves_to": "apps/MQSA/copybook/MQSGMO.cpy"
+    },
+    {
+     "member": "MQSSD",
+     "kind": "copy",
+     "line": 25,
+     "resolves_to": "apps/MQSA/copybook/MQSSD.cpy",
+     "horror": "H-0139"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-QMGR",
+     "pic": "X(48)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'QM01'",
+     "section": "WORKING-STORAGE",
+     "line": 10
+    },
+    {
+     "level": 1,
+     "name": "WS-HCONN",
+     "pic": "S9(9)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 11
+    },
+    {
+     "level": 1,
+     "name": "WS-HOBJ",
+     "pic": "S9(9)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 12
+    },
+    {
+     "level": 1,
+     "name": "WS-COMPCODE",
+     "pic": "S9(9)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 13
+    },
+    {
+     "level": 1,
+     "name": "WS-REASON",
+     "pic": "S9(9)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 14
+    },
+    {
+     "level": 1,
+     "name": "WS-OO-OPTIONS",
+     "pic": "S9(9)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 15
+    },
+    {
+     "level": 1,
+     "name": "WS-CO-OPTIONS",
+     "pic": "S9(9)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 16
+    },
+    {
+     "level": 1,
+     "name": "WS-BUFLEN",
+     "pic": "S9(9)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "80",
+     "section": "WORKING-STORAGE",
+     "line": 17
+    },
+    {
+     "level": 1,
+     "name": "WS-DATALEN",
+     "pic": "S9(9)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 18
+    },
+    {
+     "level": 1,
+     "name": "WS-BUF",
+     "pic": "X(80)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 19
+    },
+    {
+     "level": 1,
+     "name": "WS-MD",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 20,
+     "copy_members": [
+      "MQSMD"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-GMO",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 22,
+     "copy_members": [
+      "MQSGMO"
+     ]
+    },
+    {
+     "level": 1,
+     "name": "WS-SD",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 24,
+     "copy_members": [
+      "MQSSD"
+     ],
+     "horror": "H-0139"
+    },
+    {
+     "level": 1,
+     "name": "WS-HSUB",
+     "pic": "S9(9)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": "WORKING-STORAGE",
+     "line": 26
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-QMGR",
+     "line": 10,
+     "bytes": 48,
+     "fields": [
+      {
+       "name": "WS-QMGR",
+       "level": 1,
+       "pic": "X(48)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 48,
+       "file": "apps/MQSA/cobol/MQSASUB.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-HCONN",
+     "line": 11,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-HCONN",
+       "level": 1,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/MQSA/cobol/MQSASUB.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-HOBJ",
+     "line": 12,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-HOBJ",
+       "level": 1,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/MQSA/cobol/MQSASUB.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-COMPCODE",
+     "line": 13,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-COMPCODE",
+       "level": 1,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/MQSA/cobol/MQSASUB.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-REASON",
+     "line": 14,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-REASON",
+       "level": 1,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/MQSA/cobol/MQSASUB.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-OO-OPTIONS",
+     "line": 15,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-OO-OPTIONS",
+       "level": 1,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/MQSA/cobol/MQSASUB.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-CO-OPTIONS",
+     "line": 16,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-CO-OPTIONS",
+       "level": 1,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/MQSA/cobol/MQSASUB.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BUFLEN",
+     "line": 17,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-BUFLEN",
+       "level": 1,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/MQSA/cobol/MQSASUB.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-DATALEN",
+     "line": 18,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-DATALEN",
+       "level": 1,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/MQSA/cobol/MQSASUB.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BUF",
+     "line": 19,
+     "bytes": 80,
+     "fields": [
+      {
+       "name": "WS-BUF",
+       "level": 1,
+       "pic": "X(80)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 80,
+       "file": "apps/MQSA/cobol/MQSASUB.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-MD",
+     "line": 20,
+     "bytes": 112,
+     "fields": [
+      {
+       "name": "MQS-MSGTYPE",
+       "level": 5,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/MQSA/copybook/MQSMD.cpy"
+      },
+      {
+       "name": "MQS-FORMAT",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 4,
+       "bytes": 8,
+       "file": "apps/MQSA/copybook/MQSMD.cpy"
+      },
+      {
+       "name": "MQS-PERSIST",
+       "level": 5,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 12,
+       "bytes": 4,
+       "file": "apps/MQSA/copybook/MQSMD.cpy"
+      },
+      {
+       "name": "MQS-MSGID",
+       "level": 5,
+       "pic": "X(24)",
+       "usage": null,
+       "offset": 16,
+       "bytes": 24,
+       "file": "apps/MQSA/copybook/MQSMD.cpy"
+      },
+      {
+       "name": "MQS-CORRELID",
+       "level": 5,
+       "pic": "X(24)",
+       "usage": null,
+       "offset": 40,
+       "bytes": 24,
+       "file": "apps/MQSA/copybook/MQSMD.cpy"
+      },
+      {
+       "name": "MQS-REPLYQ",
+       "level": 5,
+       "pic": "X(48)",
+       "usage": null,
+       "offset": 64,
+       "bytes": 48,
+       "file": "apps/MQSA/copybook/MQSMD.cpy"
+      }
+     ]
+    },
+    {
+     "record": "WS-GMO",
+     "line": 22,
+     "bytes": 12,
+     "fields": [
+      {
+       "name": "MQS-GMO-OPTIONS",
+       "level": 5,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/MQSA/copybook/MQSGMO.cpy"
+      },
+      {
+       "name": "MQS-GMO-WAITINT",
+       "level": 5,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 4,
+       "bytes": 4,
+       "file": "apps/MQSA/copybook/MQSGMO.cpy"
+      },
+      {
+       "name": "MQS-GMO-MATCH",
+       "level": 5,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 8,
+       "bytes": 4,
+       "file": "apps/MQSA/copybook/MQSGMO.cpy"
+      }
+     ]
+    },
+    {
+     "record": "WS-SD",
+     "line": 24,
+     "bytes": 116,
+     "fields": [
+      {
+       "name": "MQS-SD-OPTIONS",
+       "level": 5,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/MQSA/copybook/MQSSD.cpy"
+      },
+      {
+       "name": "MQS-SD-TOPICSTR",
+       "level": 5,
+       "pic": "X(64)",
+       "usage": null,
+       "offset": 4,
+       "bytes": 64,
+       "file": "apps/MQSA/copybook/MQSSD.cpy"
+      },
+      {
+       "name": "MQS-SD-SUBNAME",
+       "level": 5,
+       "pic": "X(48)",
+       "usage": null,
+       "offset": 68,
+       "bytes": 48,
+       "file": "apps/MQSA/copybook/MQSSD.cpy"
+      }
+     ],
+     "horror": "H-0139"
+    },
+    {
+     "record": "WS-HSUB",
+     "line": 26,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-HSUB",
+       "level": 1,
+       "pic": "S9(9)",
+       "usage": "COMP",
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/MQSA/cobol/MQSASUB.cbl"
+      }
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "MQSASUB",
+     "params": [],
+     "line": 27
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "12",
+     "source_kind": "literal",
+     "target": "RETURN-CODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 32,
+     "horror": "H-0139"
+    },
+    {
+     "verb": "MOVE",
+     "source": "'ORDERS/NEW'",
+     "source_kind": "literal",
+     "target": "MQS-SD-TOPICSTR",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 35,
+     "horror": "H-0139"
+    },
+    {
+     "verb": "MOVE",
+     "source": "34",
+     "source_kind": "literal",
+     "target": "MQS-SD-OPTIONS",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 36,
+     "horror": "H-0139"
+    },
+    {
+     "verb": "MOVE",
+     "source": "12",
+     "source_kind": "literal",
+     "target": "RETURN-CODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 42,
+     "horror": "H-0139"
+    },
+    {
+     "verb": "MOVE",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "MQS-GMO-OPTIONS",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 55
+    },
+    {
+     "verb": "MOVE",
+     "source": "5000",
+     "source_kind": "literal",
+     "target": "MQS-GMO-WAITINT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 56
+    },
+    {
+     "verb": "MOVE",
+     "source": "4",
+     "source_kind": "literal",
+     "target": "RETURN-CODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 64
+    }
+   ],
+   "gaps": [
+    {
+     "kind": "call",
+     "name": "MQCONN",
+     "line": 29,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0139"
+    },
+    {
+     "kind": "call",
+     "name": "MQSUB",
+     "line": 37,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0139"
+    },
+    {
+     "kind": "call",
+     "name": "MQCLOSE",
+     "line": 46,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0139"
+    },
+    {
+     "kind": "call",
+     "name": "MQCLOSE",
+     "line": 49,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0139"
+    },
+    {
+     "kind": "call",
+     "name": "MQDISC",
+     "line": 52,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0139"
+    },
+    {
+     "kind": "call",
+     "name": "MQGET",
+     "line": 57,
+     "why": "no member of the estate holds the program"
+    }
+   ],
+   "horrors": [
+    "H-0139"
+   ]
+  },
   "apps/MQSA/cobol/MQSATMC.cbl": {
    "app": "MQSA",
    "library": "cobol",
@@ -8669,6 +9454,51 @@
     }
    ]
   },
+  "apps/MQSA/copybook/MQSSD.cpy": {
+   "app": "MQSA",
+   "library": "copybook",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 4,
+   "compile": {
+    "status": "copybook"
+   },
+   "data_items": [
+    {
+     "level": 5,
+     "name": "MQS-SD-OPTIONS",
+     "pic": "S9(9)",
+     "usage": "COMP",
+     "occurs": null,
+     "redefines": null,
+     "value": "0",
+     "section": null,
+     "line": 2
+    },
+    {
+     "level": 5,
+     "name": "MQS-SD-TOPICSTR",
+     "pic": "X(64)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 3
+    },
+    {
+     "level": 5,
+     "name": "MQS-SD-SUBNAME",
+     "pic": "X(48)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": null,
+     "line": 4
+    }
+   ]
+  },
   "apps/MQSA/copybook/MQSTM.cpy": {
    "app": "MQSA",
    "library": "copybook",
@@ -9255,7 +10085,7 @@
    "library": "jcl",
    "language": "jcl",
    "numbered": false,
-   "lines": 69,
+   "lines": 75,
    "compile": {
     "status": "not-cobol"
    },
@@ -9347,6 +10177,14 @@
      "target": "MQSABKO",
      "line": 65,
      "resolves_to": "apps/MQSA/cobol/MQSABKO.cbl"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "MQSASUB",
+     "target": "MQSASUB",
+     "line": 71,
+     "resolves_to": "apps/MQSA/cobol/MQSASUB.cbl"
     }
    ],
    "jcl_steps": [
@@ -9459,6 +10297,16 @@
      "exec_proc": null,
      "cond": null,
      "line": 65
+    },
+    {
+     "job": "MQSARUN",
+     "proc": null,
+     "step": "SUB120",
+     "ordinal": 12,
+     "program": "MQSASUB",
+     "exec_proc": null,
+     "cond": null,
+     "line": 71
     }
    ],
    "jcl_dds": [
@@ -10013,6 +10861,56 @@
      "disp_normal": null,
      "sysout": "*",
      "line": 69
+    },
+    {
+     "job": "MQSARUN",
+     "proc": null,
+     "step": "SUB120",
+     "dd": "STEPLIB",
+     "dsn": "PROD.MQSA.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 72
+    },
+    {
+     "job": "MQSARUN",
+     "proc": null,
+     "step": "SUB120",
+     "dd": null,
+     "dsn": "MQM.SCSQAUTH",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 73,
+     "concat_of": "STEPLIB"
+    },
+    {
+     "job": "MQSARUN",
+     "proc": null,
+     "step": "SUB120",
+     "dd": null,
+     "dsn": "MQM.SCSQLOAD",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 74,
+     "concat_of": "STEPLIB"
+    },
+    {
+     "job": "MQSARUN",
+     "proc": null,
+     "step": "SUB120",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 75
     }
    ],
    "jcl_datasets": [
@@ -10249,6 +11147,27 @@
      "step": "BKO110",
      "dd": "STEPLIB",
      "line": 68
+    },
+    {
+     "dsn": "PROD.MQSA.LOADLIB",
+     "generation": null,
+     "step": "SUB120",
+     "dd": "STEPLIB",
+     "line": 72
+    },
+    {
+     "dsn": "MQM.SCSQAUTH",
+     "generation": null,
+     "step": "SUB120",
+     "dd": "STEPLIB",
+     "line": 73
+    },
+    {
+     "dsn": "MQM.SCSQLOAD",
+     "generation": null,
+     "step": "SUB120",
+     "dd": "STEPLIB",
+     "line": 74
     }
    ],
    "file_edges": [
@@ -10295,6 +11214,10 @@
     {
      "kind": "exec",
      "target": "apps/MQSA/cobol/MQSABKO.cbl"
+    },
+    {
+     "kind": "exec",
+     "target": "apps/MQSA/cobol/MQSASUB.cbl"
     }
    ],
    "horrors": [

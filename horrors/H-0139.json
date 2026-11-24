@@ -1,0 +1,311 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0139",
+ "title": "MQSUB: a publish/subscribe subscription with a managed queue, a six-argument call that returns two handles, closed with two MQCLOSE calls",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQSA MQSASUB: CALL 'MQSUB' USING WS-HCONN WS-SD WS-HOBJ WS-HSUB WS-COMPCODE WS-REASON; WS-SD from COPY MQSSD (stand-in subscription descriptor); MQGET on WS-HOBJ; MQCLOSE of WS-HOBJ then of WS-HSUB",
+  "MQSA jcl/MQSARUN.jcl SUB120: EXEC PGM=MQSASUB"
+ ],
+ "asserts": "MQSASUB's MQSUB CALL is one call_sites fact (form literal, resolves_to null) called from 0000-MAIN, with a gaps entry (no estate member holds the MQ stub). The 01 WS-SD carries copy_members MQSSD, which resolves to the estate's stand-in copybook under apps/MQSA/copybook. The program holds two MQCLOSE call_sites facts, one on the object handle WS-HOBJ and one on the subscription handle WS-HSUB, and one MQGET. The key asserts the call shapes and the COPY only; it does not model publish/subscribe or what MQSUB's options mean.",
+ "citations": [
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQSUB (Register subscription)",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqsub-register-subscription",
+   "quote": "Use the MQSUB call to register the applications subscription to a particular topic."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQSUB (Register subscription), Hobj",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqsub-register-subscription",
+   "quote": "If the queue manager is to manage the storage of messages sent to this subscription, this should be set when you create the subscription, by using the MQSO_MANAGED option. The queue manager then returns this handle as an output parameter on the call."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQSUB (Register subscription), Hobj",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqsub-register-subscription",
+   "quote": "When a managed handle is returned to you by the queue manager, you can use it on an MQGET or MQCB call with or without browse options, on an MQINQ call, or on MQCLOSE."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications reference",
+   "section": "MQSUB (Register subscription), Hobj",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqsub-register-subscription",
+   "quote": "An MQCLOSE of the Hobj handle does not affect the Hsub handle."
+  }
+ ],
+ "era": 2,
+ "release": "IBM MQ 9.3",
+ "planted": [
+  {
+   "member": "apps/MQSA/cobol/MQSASUB.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "0000-MAIN",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 28,
+      "end_line": 53,
+      "horror": "H-0139"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQCONN",
+      "line": 29,
+      "form": "literal",
+      "horror": "H-0139"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQSUB",
+      "line": 37,
+      "form": "literal",
+      "horror": "H-0139"
+     },
+     {
+      "kind": "perform",
+      "from": "0000-MAIN",
+      "target": "1000-GET",
+      "line": 45,
+      "horror": "H-0139"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQCLOSE",
+      "line": 46,
+      "form": "literal",
+      "horror": "H-0139"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQCLOSE",
+      "line": 49,
+      "form": "literal",
+      "horror": "H-0139"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQDISC",
+      "line": 52,
+      "form": "literal",
+      "horror": "H-0139"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQCONN",
+      "target": "MQCONN",
+      "line": 29,
+      "resolves_to": null,
+      "horror": "H-0139"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQSUB",
+      "target": "MQSUB",
+      "line": 37,
+      "resolves_to": null,
+      "horror": "H-0139"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQCLOSE",
+      "target": "MQCLOSE",
+      "line": 46,
+      "resolves_to": null,
+      "horror": "H-0139"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQCLOSE",
+      "target": "MQCLOSE",
+      "line": 49,
+      "resolves_to": null,
+      "horror": "H-0139"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQDISC",
+      "target": "MQDISC",
+      "line": 52,
+      "resolves_to": null,
+      "horror": "H-0139"
+     }
+    ],
+    "copies": [
+     {
+      "member": "MQSSD",
+      "kind": "copy",
+      "line": 25,
+      "resolves_to": "apps/MQSA/copybook/MQSSD.cpy",
+      "horror": "H-0139"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "WS-SD",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "WORKING-STORAGE",
+      "line": 24,
+      "copy_members": [
+       "MQSSD"
+      ],
+      "horror": "H-0139"
+     }
+    ],
+    "layouts": [
+     {
+      "record": "WS-SD",
+      "line": 24,
+      "bytes": 116,
+      "fields": [
+       {
+        "name": "MQS-SD-OPTIONS",
+        "level": 5,
+        "pic": "S9(9)",
+        "usage": "COMP",
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSSD.cpy"
+       },
+       {
+        "name": "MQS-SD-TOPICSTR",
+        "level": 5,
+        "pic": "X(64)",
+        "usage": null,
+        "offset": 4,
+        "bytes": 64,
+        "file": "apps/MQSA/copybook/MQSSD.cpy"
+       },
+       {
+        "name": "MQS-SD-SUBNAME",
+        "level": 5,
+        "pic": "X(48)",
+        "usage": null,
+        "offset": 68,
+        "bytes": 48,
+        "file": "apps/MQSA/copybook/MQSSD.cpy"
+       }
+      ],
+      "horror": "H-0139"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "12",
+      "source_kind": "literal",
+      "target": "RETURN-CODE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 32,
+      "horror": "H-0139"
+     },
+     {
+      "verb": "MOVE",
+      "source": "'ORDERS/NEW'",
+      "source_kind": "literal",
+      "target": "MQS-SD-TOPICSTR",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 35,
+      "horror": "H-0139"
+     },
+     {
+      "verb": "MOVE",
+      "source": "34",
+      "source_kind": "literal",
+      "target": "MQS-SD-OPTIONS",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 36,
+      "horror": "H-0139"
+     },
+     {
+      "verb": "MOVE",
+      "source": "12",
+      "source_kind": "literal",
+      "target": "RETURN-CODE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 42,
+      "horror": "H-0139"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "MQCONN",
+      "line": 29,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0139"
+     },
+     {
+      "kind": "call",
+      "name": "MQSUB",
+      "line": 37,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0139"
+     },
+     {
+      "kind": "call",
+      "name": "MQCLOSE",
+      "line": 46,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0139"
+     },
+     {
+      "kind": "call",
+      "name": "MQCLOSE",
+      "line": 49,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0139"
+     },
+     {
+      "kind": "call",
+      "name": "MQDISC",
+      "line": 52,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0139"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
