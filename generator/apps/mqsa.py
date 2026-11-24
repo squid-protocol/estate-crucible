@@ -11,7 +11,7 @@ attribute-setting sibling of MQINQ, opened with the set option).
 Slice 3: H-0100 (the MQI verbs called through a data item, CALL identifier) and H-0101 (a trigger-monitor
 program that gets the MQTM trigger message from an initiation queue). Slice 4: H-0111 (RRS batch: SRRCMIT / SRRBACK, linked with CSQBRSTB and ATRSCSS), H-0112 (a program started
 by a trigger monitor, receiving the MQTMC2 character structure) and H-0113 (an MQ-only back-out: MQBACK, linked
-with CSQBSTUB). Distribution lists are not planted:
+with CSQBSTUB). Slice 5: H-0139 (MQSUB, a managed publish/subscribe subscription). Distribution lists are not planted:
 IBM documents them as not supported on IBM MQ for z/OS, and this is a z/OS estate."""
 
 from ..data import I
@@ -21,6 +21,7 @@ H86, H87, H88, H89, H90, H91 = "H-0086", "H-0087", "H-0088", "H-0089", "H-0090",
 H92, H93 = "H-0092", "H-0093"
 H100, H101 = "H-0100", "H-0101"
 H111, H112, H113 = "H-0111", "H-0112", "H-0113"
+H139 = "H-0139"
 
 COPYBOOKS = [
     {"member": "MQSMD",
@@ -50,6 +51,11 @@ COPYBOOKS = [
      "items": [I(5, "MQS-CNO-VERSION", "S9(9)", "COMP", value="2"),
                I(5, "MQS-CNO-OPTIONS", "S9(9)", "COMP", value="0"),
                I(5, "MQS-CNO-APPNAME", "X(28)")]},
+    {"member": "MQSSD",
+     "header": [" MQSSD    - SUBSCRIPTION DESCRIPTOR, STAND-IN FOR THIS ESTATE"],
+     "items": [I(5, "MQS-SD-OPTIONS", "S9(9)", "COMP", value="0"),
+               I(5, "MQS-SD-TOPICSTR", "X(64)"),
+               I(5, "MQS-SD-SUBNAME", "X(48)")]},
     {"member": "MQSTM",
      "header": [" MQSTM    - TRIGGER MESSAGE, STAND-IN WRITTEN FOR THIS ESTATE"],
      "items": [I(5, "MQS-TM-STRUCID", "X(4)", value="'TM  '"),
@@ -423,6 +429,37 @@ MQSABKO = {
 }
 
 
+MQSASUB = {
+    "member": "MQSASUB", **ERA,
+    "program_id": "MQSASUB", "author": AUTHOR,
+    "remarks": ["MQSASUB - SUBSCRIBE TO THE ORDER TOPIC WITH A MANAGED QUEUE,",
+                "READ ONE PUBLICATION, THEN CLOSE THE QUEUE AND THE SUBSCRIPTION."],
+    "ws": _common_ws(I(1, "WS-MD", copy=["MQSMD"]), I(1, "WS-GMO", copy=["MQSGMO"]),
+                     I(1, "WS-SD", copy=["MQSSD"], horror=H139),
+                     I(1, "WS-HSUB", "S9(9)", "COMP", value="0")),
+    "units": [
+        para("0000-MAIN",
+             call("MQCONN", using=["WS-QMGR", "WS-HCONN", "WS-COMPCODE", "WS-REASON"]),
+             _fail("MQSASUB", "CONNECT FAILED"),
+             raw("MOVE 'ORDERS/NEW' TO MQS-SD-TOPICSTR", "MOVE 34 TO MQS-SD-OPTIONS"),
+             call("MQSUB", using=["WS-HCONN", "WS-SD", "WS-HOBJ", "WS-HSUB", "WS-COMPCODE", "WS-REASON"],
+                  horror=H139),
+             _fail("MQSASUB", "SUBSCRIBE FAILED"),
+             perform("1000-GET"),
+             call("MQCLOSE", using=["WS-HCONN", "WS-HOBJ", "WS-CO-OPTIONS", "WS-COMPCODE", "WS-REASON"]),
+             call("MQCLOSE", using=["WS-HCONN", "WS-HSUB", "WS-CO-OPTIONS", "WS-COMPCODE", "WS-REASON"]),
+             call("MQDISC", using=["WS-HCONN", "WS-COMPCODE", "WS-REASON"]),
+             goback(), horror=H139),
+        para("1000-GET",
+             raw("MOVE 1 TO MQS-GMO-OPTIONS", "MOVE 5000 TO MQS-GMO-WAITINT"),
+             call("MQGET", using=["WS-HCONN", "WS-HOBJ", "WS-MD", "WS-GMO", "WS-BUFLEN", "WS-BUF",
+                                  "WS-DATALEN", "WS-COMPCODE", "WS-REASON"]),
+             if_("WS-COMPCODE = 0", [raw("DISPLAY 'MQSASUB PUBLICATION ' WS-BUF")],
+                 [raw("DISPLAY 'MQSASUB NO PUBLICATION ' WS-REASON", "MOVE 4 TO RETURN-CODE")])),
+    ],
+}
+
+
 def _dd(name, dsn=None, disp=("SHR",), **kw):
     return {"name": name, "dsn": dsn, "disp": disp, **kw}
 
@@ -453,6 +490,7 @@ JOBS = [{
         {"name": "RRS090", "pgm": "MQSARRS", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
         {"name": "TMC100", "pgm": "MQSATMC", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
         {"name": "BKO110", "pgm": "MQSABKO", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
+        {"name": "SUB120", "pgm": "MQSASUB", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
     ],
 }, {
     "name": "MQSALNK",
@@ -495,7 +533,7 @@ APP = {
     "style": "batch COBOL over the MQ programming interface: MQPUT1, MQGET with wait, MQCMIT / MQBACK, MQINQ, MQCONNX, MQSET",
     "copybooks": COPYBOOKS,
     "dclgen": [],
-    "programs": [MQSAPUT, MQSAGET, MQSAREP, MQSAINQ, MQSACNX, MQSASET, MQSADYN, MQSATRG, MQSARRS, MQSATMC, MQSABKO],
+    "programs": [MQSAPUT, MQSAGET, MQSAREP, MQSAINQ, MQSACNX, MQSASET, MQSADYN, MQSATRG, MQSARRS, MQSATMC, MQSABKO, MQSASUB],
     "jcl": JOBS,
     "procs": [],
 }

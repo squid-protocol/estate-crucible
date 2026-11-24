@@ -144,6 +144,7 @@ era-neutral syntax horror; blank is untagged.
 | H-0136 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | REWRITE of a record whose length differs from the record it replaces, over a KSDS (allowed: file status 00, not 44) | `apps/AIXA/cobol/AIXAVKW.cbl` |
 | H-0137 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | OPEN I-O of a z/OS UNIX byte-stream file read through QSAM (a DD with PATH=, not a VSAM PATH): file status 37 | `apps/AIXA/cobol/AIXAUXF.cbl`, `apps/AIXA/jcl/AIXARU2.jcl` |
 | H-0138 | 2 | [#4894](https://github.com/squid-protocol/gitgalaxy/issues/4894) | vsam | REWRITE of a record in a z/OS UNIX byte-stream file read through QSAM (the file cannot be open I-O): file status 49 | `apps/AIXA/cobol/AIXAUXR.cbl`, `apps/AIXA/jcl/AIXARU2.jcl` |
+| H-0139 | 2 | [#4892](https://github.com/squid-protocol/gitgalaxy/issues/4892) | mq | MQSUB: a publish/subscribe subscription with a managed queue, a six-argument call that returns two handles, closed with two MQCLOSE calls | `apps/MQSA/cobol/MQSASUB.cbl` |
 
 ## Field-testing defects not planted
 

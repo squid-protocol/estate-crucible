@@ -3782,6 +3782,45 @@
    ],
    "era": 2,
    "notes": "The 49 is an inference from two quoted rules, not a sentence IBM prints: the Programming Guide says REWRITE cannot update a UNIX file and that such a file cannot be opened I-O (37), and Table 34 gives 49 for REWRITE on a file not open I-O; the manual does not name the status for this exact statement. Status 47 is not used for this case: Table 34 gives 47 to READ and START on a file not open input or I-O, not to REWRITE. The outcome assumes the OPEN OUTPUT of the PATH succeeds (PATHOPTS OWRONLY,OCREAT,OTRUNC and PATHMODE give the program write access to /u/aixa/extract). The FD's record layout is nominal. GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0139",
+   "title": "MQSUB: a publish/subscribe subscription with a managed queue, a six-argument call that returns two handles, closed with two MQCLOSE calls",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQSA MQSASUB: CALL 'MQSUB' USING WS-HCONN WS-SD WS-HOBJ WS-HSUB WS-COMPCODE WS-REASON; WS-SD from COPY MQSSD (stand-in subscription descriptor); MQGET on WS-HOBJ; MQCLOSE of WS-HOBJ then of WS-HSUB",
+    "MQSA jcl/MQSARUN.jcl SUB120: EXEC PGM=MQSASUB"
+   ],
+   "asserts": "MQSASUB's MQSUB CALL is one call_sites fact (form literal, resolves_to null) called from 0000-MAIN, with a gaps entry (no estate member holds the MQ stub). The 01 WS-SD carries copy_members MQSSD, which resolves to the estate's stand-in copybook under apps/MQSA/copybook. The program holds two MQCLOSE call_sites facts, one on the object handle WS-HOBJ and one on the subscription handle WS-HSUB, and one MQGET. The key asserts the call shapes and the COPY only; it does not model publish/subscribe or what MQSUB's options mean.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQSUB (Register subscription)",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqsub-register-subscription",
+     "quote": "Use the MQSUB call to register the applications subscription to a particular topic."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQSUB (Register subscription), Hobj",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqsub-register-subscription",
+     "quote": "If the queue manager is to manage the storage of messages sent to this subscription, this should be set when you create the subscription, by using the MQSO_MANAGED option. The queue manager then returns this handle as an output parameter on the call."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQSUB (Register subscription), Hobj",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqsub-register-subscription",
+     "quote": "When a managed handle is returned to you by the queue manager, you can use it on an MQGET or MQCB call with or without browse options, on an MQINQ call, or on MQCLOSE."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQSUB (Register subscription), Hobj",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/9.3?topic=calls-mqsub-register-subscription",
+     "quote": "An MQCLOSE of the Hobj handle does not affect the Hsub handle."
+    }
+   ],
+   "era": 2,
+   "release": "IBM MQ 9.3"
   }
  ],
  "not_planted": [

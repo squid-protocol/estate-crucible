@@ -19,6 +19,7 @@ stand-in copybooks (IBM's are never shipped), and the STEPLIB concatenation of a
 | `MQSARRS` + `MQSALNK` step `LKRRS10` | SRRCMIT / SRRBACK; IEWL link-edit with CSQBRSTB and ATRSCSS | H-0111 |
 | `MQSATMC` | LINKAGE `COPY MQSTMC2` (MQTMC2 character trigger message), `PROCEDURE DIVISION USING` | H-0112 |
 | `MQSABKO` + `MQSALNK` step `LKBKO20` | MQ-only MQBACK; link-edit with CSQBSTUB | H-0113 |
+| `MQSASUB` + `MQSARUN` step `SUB120` | MQSUB with a managed queue (`COPY MQSSD`), MQGET on the returned handle, MQCLOSE of the queue and subscription handles | H-0139 |
 | `MQSAPUT` | MQOPEN / MQPUT / MQCLOSE (no dedicated horror) | |
 
 Slice 2 adds `MQSACNX`, `MQSASET`, the stand-in copybook `MQSCNO` and `MQSARUN` steps `CNX050`, `SET060`.
@@ -49,5 +50,8 @@ The first run needs the owner's estate-crucible release and pin bump.
 Slice 4 adds `MQSARRS`, `MQSATMC`, `MQSABKO`, the stand-in copybook `MQSTMC2` (ten character fields, 732 bytes),
 `MQSARUN` steps `RRS090`, `TMC100`, `BKO110`, and the link-edit job `MQSALNK`. Citations are from IBM MQ 9.3
 (`release` set on each horror). H-0110 is taken by the Alternate Index Archipelago slice 3 (PR #25).
+
+Slice 5 adds `MQSASUB`, the stand-in copybook `MQSSD` and `MQSARUN` step `SUB120` (citations: IBM MQ 9.3 MQSUB page,
+`release` set). The key asserts the call shapes only; the MQSD option values are the estate's own and unasserted.
 
 Remaining slices: IMS and CICS-MQ bridge programs; the `levels.json` rows for slice 4 (gitgalaxy side, separate PR).
