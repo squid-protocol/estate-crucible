@@ -2,6 +2,72 @@
  "format": "estate-crucible-key/1",
  "app": "HKEP",
  "members": {
+  "apps/HKEP/asm/HKEPDB2.asm": {
+   "app": "HKEP",
+   "library": "asm",
+   "language": "hlasm",
+   "numbered": false,
+   "lines": 10,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); DL/I is a static CALL interface to CBLTDLI",
+   "ims_gen": [
+    {
+     "kind": "DBD",
+     "name": "HKEPDB2",
+     "line": 2,
+     "horror": "H-0118"
+    },
+    {
+     "kind": "SEGM",
+     "name": "KEEP",
+     "parent": "",
+     "bytes": 40,
+     "line": 3,
+     "horror": "H-0118"
+    },
+    {
+     "kind": "FIELD",
+     "name": "KEEPKEY",
+     "segment": "KEEP",
+     "bytes": 8,
+     "start": 1,
+     "line": 4,
+     "horror": "H-0118"
+    },
+    {
+     "kind": "LCHILD",
+     "name": "ENTRY",
+     "dbname": "HKEPDB3",
+     "segment": "KEEP",
+     "line": 5,
+     "horror": "H-0119"
+    },
+    {
+     "kind": "SEGM",
+     "name": "WALL",
+     "parent": "KEEP",
+     "bytes": 40,
+     "line": 6,
+     "horror": "H-0118"
+    },
+    {
+     "kind": "FIELD",
+     "name": "WALLKEY",
+     "segment": "WALL",
+     "bytes": 8,
+     "start": 1,
+     "line": 7,
+     "horror": "H-0118"
+    }
+   ],
+   "horrors": [
+    "H-0118",
+    "H-0119"
+   ]
+  },
   "apps/HKEP/asm/HKEPDBD.asm": {
    "app": "HKEP",
    "library": "asm",
@@ -47,6 +113,496 @@
    ],
    "horrors": [
     "H-0096"
+   ]
+  },
+  "apps/HKEP/asm/HKEPPSB.asm": {
+   "app": "HKEP",
+   "library": "asm",
+   "language": "hlasm",
+   "numbered": false,
+   "lines": 6,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); DL/I is a static CALL interface to CBLTDLI",
+   "ims_gen": [
+    {
+     "kind": "PCB",
+     "name": "HKEPDB2",
+     "line": 2,
+     "horror": "H-0117"
+    },
+    {
+     "kind": "SENSEG",
+     "name": "KEEP",
+     "pcb": "HKEPDB2",
+     "line": 3,
+     "horror": "H-0117"
+    },
+    {
+     "kind": "SENSEG",
+     "name": "WALL",
+     "pcb": "HKEPDB2",
+     "line": 4,
+     "horror": "H-0117"
+    },
+    {
+     "kind": "PSB",
+     "name": "HKEPPSB",
+     "line": 5,
+     "horror": "H-0117"
+    }
+   ],
+   "horrors": [
+    "H-0117"
+   ]
+  },
+  "apps/HKEP/cobol/HKEPFIND.cbl": {
+   "app": "HKEP",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 33,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); DL/I is a static CALL interface to CBLTDLI",
+   "programs": [
+    {
+     "program_id": "HKEPFIND",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 28,
+     "end_line": 33
+    }
+   ],
+   "edges": [
+    {
+     "kind": "call",
+     "from": "0000-MAIN",
+     "target": "CBLTDLI",
+     "line": 29,
+     "form": "literal",
+     "horror": "H-0120"
+    }
+   ],
+   "call_sites": [
+    {
+     "verb": "CALL",
+     "form": "literal",
+     "operand": "CBLTDLI",
+     "target": "CBLTDLI",
+     "line": 29,
+     "resolves_to": null,
+     "horror": "H-0120"
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "WS-GU",
+     "pic": "X(4)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'GU  '",
+     "section": "WORKING-STORAGE",
+     "line": 9
+    },
+    {
+     "level": 1,
+     "name": "WS-IO-AREA",
+     "pic": "X(80)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 10
+    },
+    {
+     "level": 1,
+     "name": "SSA-KEEP",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 11
+    },
+    {
+     "level": 5,
+     "name": "SSA-SEGNAME",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'KEEP    '",
+     "section": "WORKING-STORAGE",
+     "line": 12,
+     "horror": "H-0120"
+    },
+    {
+     "level": 5,
+     "name": "SSA-LPAREN",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'('",
+     "section": "WORKING-STORAGE",
+     "line": 13,
+     "horror": "H-0120"
+    },
+    {
+     "level": 5,
+     "name": "SSA-FLDNAME",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'KEEPKEY '",
+     "section": "WORKING-STORAGE",
+     "line": 14,
+     "horror": "H-0120"
+    },
+    {
+     "level": 5,
+     "name": "SSA-OPER",
+     "pic": "XX",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "' ='",
+     "section": "WORKING-STORAGE",
+     "line": 15,
+     "horror": "H-0120"
+    },
+    {
+     "level": 5,
+     "name": "SSA-FLDVAL",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "'K0001234'",
+     "section": "WORKING-STORAGE",
+     "line": 16,
+     "horror": "H-0120"
+    },
+    {
+     "level": 5,
+     "name": "SSA-RPAREN",
+     "pic": "X",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "')'",
+     "section": "WORKING-STORAGE",
+     "line": 17,
+     "horror": "H-0120"
+    },
+    {
+     "level": 1,
+     "name": "IO-PCB",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 19
+    },
+    {
+     "level": 5,
+     "name": "IO-LTERM",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 20
+    },
+    {
+     "level": 5,
+     "name": "IO-RSV",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 21
+    },
+    {
+     "level": 5,
+     "name": "IO-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 22
+    },
+    {
+     "level": 1,
+     "name": "DB-PCB",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 23
+    },
+    {
+     "level": 5,
+     "name": "DB-DBD",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 24
+    },
+    {
+     "level": 5,
+     "name": "DB-LEVEL",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 25
+    },
+    {
+     "level": 5,
+     "name": "DB-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "LINKAGE",
+     "line": 26,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "WS-GU",
+     "line": 9,
+     "bytes": 4,
+     "fields": [
+      {
+       "name": "WS-GU",
+       "level": 1,
+       "pic": "X(4)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 4,
+       "file": "apps/HKEP/cobol/HKEPFIND.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-IO-AREA",
+     "line": 10,
+     "bytes": 80,
+     "fields": [
+      {
+       "name": "WS-IO-AREA",
+       "level": 1,
+       "pic": "X(80)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 80,
+       "file": "apps/HKEP/cobol/HKEPFIND.cbl"
+      }
+     ]
+    },
+    {
+     "record": "SSA-KEEP",
+     "line": 11,
+     "bytes": 28,
+     "fields": [
+      {
+       "name": "SSA-SEGNAME",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/HKEP/cobol/HKEPFIND.cbl"
+      },
+      {
+       "name": "SSA-LPAREN",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 8,
+       "bytes": 1,
+       "file": "apps/HKEP/cobol/HKEPFIND.cbl"
+      },
+      {
+       "name": "SSA-FLDNAME",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 9,
+       "bytes": 8,
+       "file": "apps/HKEP/cobol/HKEPFIND.cbl"
+      },
+      {
+       "name": "SSA-OPER",
+       "level": 5,
+       "pic": "XX",
+       "usage": null,
+       "offset": 17,
+       "bytes": 2,
+       "file": "apps/HKEP/cobol/HKEPFIND.cbl"
+      },
+      {
+       "name": "SSA-FLDVAL",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 19,
+       "bytes": 8,
+       "file": "apps/HKEP/cobol/HKEPFIND.cbl"
+      },
+      {
+       "name": "SSA-RPAREN",
+       "level": 5,
+       "pic": "X",
+       "usage": null,
+       "offset": 27,
+       "bytes": 1,
+       "file": "apps/HKEP/cobol/HKEPFIND.cbl"
+      }
+     ]
+    },
+    {
+     "record": "IO-PCB",
+     "line": 19,
+     "bytes": 12,
+     "fields": [
+      {
+       "name": "IO-LTERM",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/HKEP/cobol/HKEPFIND.cbl"
+      },
+      {
+       "name": "IO-RSV",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 2,
+       "file": "apps/HKEP/cobol/HKEPFIND.cbl"
+      },
+      {
+       "name": "IO-STATUS",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 2,
+       "file": "apps/HKEP/cobol/HKEPFIND.cbl"
+      }
+     ]
+    },
+    {
+     "record": "DB-PCB",
+     "line": 23,
+     "bytes": 12,
+     "fields": [
+      {
+       "name": "DB-DBD",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/HKEP/cobol/HKEPFIND.cbl"
+      },
+      {
+       "name": "DB-LEVEL",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 2,
+       "file": "apps/HKEP/cobol/HKEPFIND.cbl"
+      },
+      {
+       "name": "DB-STATUS",
+       "level": 5,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 10,
+       "bytes": 2,
+       "file": "apps/HKEP/cobol/HKEPFIND.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "HKEPFIND",
+     "params": [
+      "IO-PCB",
+      "DB-PCB"
+     ],
+     "line": 27
+    }
+   ],
+   "gaps": [
+    {
+     "kind": "call",
+     "name": "CBLTDLI",
+     "line": 29,
+     "why": "no member of the estate holds the program",
+     "horror": "H-0120"
+    }
+   ],
+   "dli_calls": [
+    {
+     "function": "GU",
+     "pcb": "DB-PCB",
+     "io_area": "WS-IO-AREA",
+     "ssas": [
+      "SSA-KEEP"
+     ],
+     "line": 29,
+     "horror": "H-0120"
+    }
+   ],
+   "horrors": [
+    "H-0120"
    ]
   },
   "apps/HKEP/cobol/HKEPWALK.cbl": {

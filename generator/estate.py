@@ -33,6 +33,8 @@ APP_LIBRARIES = (("copybook", "CPY"), ("dclgen", "DCL"), ("oldcopy", "OLD"))
 SYSTEM_MEMBERS = frozenset({
     "SQLCA", "SQLDA", "DFHAID", "DFHBMSCA", "DFHEIBLK", "DFHCOMMAREA",
     "IEBGENER", "IEFBR14", "IDCAMS", "SORT", "ICETOOL", "IKJEFT01", "IKJEFT1B", "DSNUTILB", "DFSRRC00", "DSNTIAR",
+    # z/OS utilities and UNIX services programs an app's JCL runs (the batch utility plants)
+    "BPXBATCH", "ADRDSSU", "IEBCOPY", "IEBUPDTE", "IEBPTPCH", "IEBCOMPR", "IEBIMAGE",
 })
 
 

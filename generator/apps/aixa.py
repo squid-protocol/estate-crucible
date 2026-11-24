@@ -11,13 +11,36 @@ Slice 1 adds H-0106 (an RRDS read ACCESS SEQUENTIAL with START and written ACCES
 H-0107 (an ESDS opened I-O: READ then REWRITE) and H-0108 (a KSDS with a unique and a duplicate alternate key,
 UNIQUEKEY and NONUNIQUEKEY alternate indexes, one PATH DD each).
 Slice 2 adds H-0109 (EXEC CICS READ with RIDFLD naming a relative byte address, RBA, on an ESDS and a relative
-record number, RRN, on an RRDS)."""
+record number, RRN, on an RRDS).
+Slice 11 adds H-0129 (the open-time file statuses 05, 35 and 39: an OPTIONAL KSDS with no data set, a
+nonoptional one, and a SELECT whose record key disagrees with the cluster).
+Slice 12 adds H-0130 (file status 14 on a sequential READ of an RRDS whose relative key item is too small, 34
+on a WRITE past the end of an ESDS, and 38 on an OPEN of a file closed WITH LOCK).
+Slice 13 adds H-0131 (a sequential-access KSDS: REWRITE with no READ before it ends in 43, and REWRITE of a record
+whose unique alternate key now matches another record ends in 22).
+Slice 14 adds H-0132 (logic-error file statuses 41, 42, 46, 47, 48 and 49 on a sequential KSDS).
+Slice 15 adds H-0133 (an alternate index defined NOUPGRADE, its path defined NOUPDATE).
+Slice 16 adds H-0134 (a variable-length FD: file status 44 on WRITE outside the RECORD IS VARYING bounds, 04 on READ).
+Slice 17 adds H-0135 (file status 44 on REWRITE of a record whose length differs from the record it replaces, an ESDS).
+Slice 18 adds H-0136 (the same REWRITE over a KSDS is allowed: the length may change, file status 00).
+Slice 20 adds H-0137 (file status 37: OPEN I-O of a z/OS UNIX byte-stream file, a DD with PATH=, read through QSAM).
+Slice 21 adds H-0138 (file status 49: REWRITE of a record in a z/OS UNIX file, which can never be open I-O)."""
 
 from ..data import I
 from ..stmt import cics, goback, if_, para, perform, raw, read
 
 H76, H77, H78, H79, H80, H81, H82 = "H-0076", "H-0077", "H-0078", "H-0079", "H-0080", "H-0081", "H-0082"
 H106, H107, H108, H109, H110 = "H-0106", "H-0107", "H-0108", "H-0109", "H-0110"
+H129 = "H-0129"
+H130 = "H-0130"
+H131 = "H-0131"
+H132 = "H-0132"
+H133 = "H-0133"
+H134 = "H-0134"
+H135 = "H-0135"
+H136 = "H-0136"
+H137 = "H-0137"
+H138 = "H-0138"
 
 AIXAKSD = {
     "member": "AIXAKSD",
@@ -190,7 +213,7 @@ AIXARRS = {
              if_("NOT WS-EOF",
                  [raw("MOVE IN-REC TO OUT-REC", "MOVE WS-IN-NO TO WS-OUT-NO",
                       "WRITE OUT-REC", "    INVALID KEY PERFORM 2100-REPLACE", "END-WRITE",
-                      "ADD 1 TO WS-COPIED")])),
+                      "ADD 1 TO WS-COPIED", performs={3: "2100-REPLACE"})])),
         para("2100-REPLACE",
              raw("REWRITE OUT-REC", "    INVALID KEY DISPLAY 'SLOT LOST ' WS-OUT-NO", "END-REWRITE")),
         para("3000-TRIM",
@@ -276,6 +299,384 @@ AIXAKS2 = {
              if_("WS-CUS-STATUS = '22'", [raw("DISPLAY 'DUPLICATE KEY ' CUS-ID")]),
              if_("WS-CUS-STATUS = '02'", [raw("DISPLAY 'DUPLICATE NAME ' CUS-NAME")]),
              horror=H108),
+    ],
+}
+
+AIXAKS3 = {
+    "member": "AIXAKS3",
+    "era": 2,
+    "era_evidence": "END-READ (COBOL-85); no later construct",
+    "program_id": "AIXAKS3",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAKS3 - CUSTOMER TAX ID CORRECTIONS, KSDS READ SEQUENTIALLY.",
+                "A REWRITE NEEDS A READ BEFORE IT; A TAX ID MUST STAY UNIQUE."],
+    "selects": [{"name": "CUS-FILE", "assign": "CUSKSD", "status": "WS-CUS-STATUS", "org": "INDEXED",
+                 "access": "SEQUENTIAL", "record_key": "CUS-ID",
+                 "alternate_keys": [{"name": "CUS-TAX", "duplicates": False},
+                                    {"name": "CUS-NAME", "duplicates": True}], "horror": H131}],
+    "fds": [{"fd": "CUS-FILE", "record": I(1, "CUS-REC", kids=[
+        I(5, "CUS-ID", "X(8)"), I(5, "CUS-TAX", "X(9)"), I(5, "CUS-NAME", "X(20)"), I(5, "FILLER", "X(3)")])}],
+    "ws": [
+        I(1, "WS-CUS-STATUS", "X(2)"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN I-O CUS-FILE"),
+             perform("1000-BLIND"),
+             perform("2000-CLASH"),
+             raw("CLOSE CUS-FILE"),
+             goback()),
+        para("1000-BLIND",
+             raw("MOVE 'CUS00001' TO CUS-ID", "MOVE '555555555' TO CUS-TAX", "REWRITE CUS-REC"),
+             if_("WS-CUS-STATUS = '43'", [raw("DISPLAY 'REWRITE WITHOUT READ'")])),
+        para("2000-CLASH",
+             raw("READ CUS-FILE NEXT RECORD", "    AT END DISPLAY 'NO CUSTOMERS'", "END-READ",
+                 "MOVE '987654321' TO CUS-TAX", "REWRITE CUS-REC"),
+             if_("WS-CUS-STATUS = '22'", [raw("DISPLAY 'TAX ID TAKEN ' CUS-TAX", "MOVE 4 TO RETURN-CODE")])),
+    ],
+}
+
+AIXAMOD = {
+    "member": "AIXAMOD",
+    "era": 2,
+    "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+    "program_id": "AIXAMOD",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAMOD - LOGIC-ERROR FILE STATUS 4X OVER A KSDS.",
+                "EACH STATEMENT IS TRIED IN A STATE THAT DOES NOT ALLOW IT."],
+    "selects": [{"name": "CUS-FILE", "assign": "CUSKSD", "status": "WS-CUS-STATUS", "org": "INDEXED",
+                 "access": "SEQUENTIAL", "record_key": "CUS-ID", "horror": H132}],
+    "fds": [{"fd": "CUS-FILE", "record": I(1, "CUS-REC", kids=[
+        I(5, "CUS-ID", "X(8)"), I(5, "CUS-TAX", "X(9)"), I(5, "CUS-NAME", "X(20)"), I(5, "FILLER", "X(3)")])}],
+    "ws": [
+        I(1, "WS-CUS-STATUS", "X(2)"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN INPUT CUS-FILE"),
+             perform("1000-WRONG-MODE"),
+             raw("MOVE '00' TO WS-CUS-STATUS"),
+             perform("2000-DRAIN", until="WS-CUS-STATUS NOT = '00'"),
+             perform("2100-PAST-END"),
+             perform("3000-REOPEN"),
+             raw("CLOSE CUS-FILE"),
+             perform("4000-CLOSED"),
+             raw("DISPLAY 'AIXAMOD BAD ' WS-BAD"),
+             goback()),
+        para("1000-WRONG-MODE",
+             raw("MOVE 'CUS00009' TO CUS-ID", "WRITE CUS-REC"),
+             if_("WS-CUS-STATUS = '48'", [raw("DISPLAY 'WRITE ON AN INPUT FILE'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             raw("REWRITE CUS-REC"),
+             if_("WS-CUS-STATUS = '49'", [raw("DISPLAY 'REWRITE ON AN INPUT FILE'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H132),
+        para("2000-DRAIN",
+             raw("READ CUS-FILE NEXT RECORD", "    AT END CONTINUE", "END-READ")),
+        para("2100-PAST-END",
+             raw("READ CUS-FILE NEXT RECORD", "    AT END CONTINUE", "END-READ"),
+             if_("WS-CUS-STATUS = '46'", [raw("DISPLAY 'READ PAST THE END'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H132),
+        para("3000-REOPEN",
+             raw("OPEN INPUT CUS-FILE"),
+             if_("WS-CUS-STATUS = '41'", [raw("DISPLAY 'FILE ALREADY OPEN'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H132),
+        para("4000-CLOSED",
+             raw("READ CUS-FILE NEXT RECORD", "    AT END CONTINUE", "END-READ"),
+             if_("WS-CUS-STATUS = '47'", [raw("DISPLAY 'READ ON A CLOSED FILE'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             raw("CLOSE CUS-FILE"),
+             if_("WS-CUS-STATUS = '42'", [raw("DISPLAY 'FILE ALREADY CLOSED'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H132),
+    ],
+}
+
+AIXAVAR = {
+    "member": "AIXAVAR",
+    "era": 2,
+    "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+    "program_id": "AIXAVAR",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAVAR - VARIABLE-LENGTH CUSTOMER NOTES IN A KSDS.",
+                "FILE STATUS 44 ON WRITE, 04 ON READ: THE VARYING BOUNDS."],
+    "selects": [{"name": "NOT-FILE", "assign": "NOTKSD", "status": "WS-NOT-STATUS", "org": "INDEXED",
+                 "access": "SEQUENTIAL", "record_key": "NOT-ID", "horror": H134}],
+    "fds": [{"fd": "NOT-FILE", "varying": (30, 50, "WS-NOT-LEN"), "record": I(1, "NOT-REC", kids=[
+        I(5, "NOT-ID", "X(8)"), I(5, "NOT-TEXT", "X(42)")])}],
+    "ws": [
+        I(1, "WS-NOT-STATUS", "X(2)"),
+        I(1, "WS-NOT-LEN", "9(3)", value="ZERO"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN I-O NOT-FILE"),
+             perform("1000-TOO-LONG"),
+             perform("2000-TOO-SHORT"),
+             perform("3000-ODD-READ"),
+             raw("CLOSE NOT-FILE"),
+             raw("DISPLAY 'AIXAVAR BAD ' WS-BAD"),
+             goback()),
+        para("1000-TOO-LONG",
+             raw("MOVE 'NOT00010' TO NOT-ID", "MOVE 60 TO WS-NOT-LEN", "WRITE NOT-REC"),
+             if_("WS-NOT-STATUS = '44'", [raw("DISPLAY 'RECORD LARGER THAN THE LARGEST'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H134),
+        para("2000-TOO-SHORT",
+             raw("MOVE 'NOT00011' TO NOT-ID", "MOVE 10 TO WS-NOT-LEN", "WRITE NOT-REC"),
+             if_("WS-NOT-STATUS = '44'", [raw("DISPLAY 'RECORD SMALLER THAN THE SMALLEST'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H134),
+        para("3000-ODD-READ",
+             raw("READ NOT-FILE NEXT RECORD", "    AT END CONTINUE", "END-READ"),
+             if_("WS-NOT-STATUS = '04'", [raw("DISPLAY 'RECORD LENGTH OUTSIDE THE FD'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H134),
+    ],
+}
+
+AIXAVRW = {
+    "member": "AIXAVRW",
+    "era": 2,
+    "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+    "program_id": "AIXAVRW",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAVRW - TRIM A LOG RECORD IN PLACE.",
+                "FILE STATUS 44: AN ESDS REWRITE CANNOT CHANGE THE LENGTH."],
+    "selects": [{"name": "LOG-FILE", "assign": "LOGUPD", "status": "WS-LOG-STATUS", "org": "SEQUENTIAL",
+                 "access": "SEQUENTIAL", "horror": H135}],
+    "fds": [{"fd": "LOG-FILE", "varying": (40, 60, "WS-LOG-LEN"), "record": I(1, "LOG-REC", kids=[
+        I(5, "LOG-TS", "X(14)"), I(5, "LOG-TEXT", "X(40)"), I(5, "FILLER", "X(6)")])}],
+    "ws": [
+        I(1, "WS-LOG-STATUS", "X(2)"),
+        I(1, "WS-LOG-LEN", "9(3)", value="ZERO"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN I-O LOG-FILE"),
+             perform("1000-SHRINK"),
+             raw("CLOSE LOG-FILE", "DISPLAY 'AIXAVRW BAD ' WS-BAD"),
+             goback()),
+        para("1000-SHRINK",
+             raw("READ LOG-FILE NEXT RECORD", "    AT END CONTINUE", "END-READ",
+                 "MOVE 50 TO WS-LOG-LEN", "REWRITE LOG-REC"),
+             if_("WS-LOG-STATUS = '44'", [raw("DISPLAY 'REWRITE CHANGES THE LENGTH'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H135),
+    ],
+}
+
+AIXAVKW = {
+    "member": "AIXAVKW",
+    "era": 2,
+    "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+    "program_id": "AIXAVKW",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAVKW - TRIM A CUSTOMER NOTE IN PLACE.",
+                "A KSDS REWRITE MAY CHANGE THE LENGTH: FILE STATUS 00, NOT 44."],
+    "selects": [{"name": "NOT-FILE", "assign": "NOTUPD", "status": "WS-NOT-STATUS", "org": "INDEXED",
+                 "access": "SEQUENTIAL", "record_key": "NOT-ID", "horror": H136}],
+    "fds": [{"fd": "NOT-FILE", "varying": (30, 50, "WS-NOT-LEN"), "record": I(1, "NOT-REC", kids=[
+        I(5, "NOT-ID", "X(8)"), I(5, "NOT-TEXT", "X(42)")])}],
+    "ws": [
+        I(1, "WS-NOT-STATUS", "X(2)"),
+        I(1, "WS-NOT-LEN", "9(3)", value="ZERO"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN I-O NOT-FILE"),
+             perform("1000-SHRINK"),
+             raw("CLOSE NOT-FILE", "DISPLAY 'AIXAVKW BAD ' WS-BAD"),
+             goback()),
+        para("1000-SHRINK",
+             raw("READ NOT-FILE NEXT RECORD", "    AT END CONTINUE", "END-READ",
+                 "MOVE 40 TO WS-NOT-LEN", "REWRITE NOT-REC"),
+             if_("WS-NOT-STATUS = '00'", [raw("DISPLAY 'REWRITE CHANGED THE LENGTH'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H136),
+    ],
+}
+
+AIXAUXF = {
+    "member": "AIXAUXF",
+    "era": 2,
+    "era_evidence": "END-IF (COBOL-85); no later construct",
+    "program_id": "AIXAUXF",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAUXF - ORDER EXTRACT IN A Z/OS UNIX FILE.",
+                "PATH= ON A DD IS A UNIX FILE, NOT A VSAM PATH. OPEN I-O: 37."],
+    "selects": [{"name": "UX-FILE", "assign": "UXOUT", "status": "WS-UX-STATUS", "org": "SEQUENTIAL",
+                 "access": "SEQUENTIAL", "horror": H137}],
+    "fds": [{"fd": "UX-FILE", "record": I(1, "UX-REC", kids=[
+        I(5, "UX-ID", "X(8)"), I(5, "UX-TEXT", "X(32)")])}],
+    "ws": [
+        I(1, "WS-UX-STATUS", "X(2)"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN I-O UX-FILE"),
+             perform("1000-CHECK"),
+             raw("DISPLAY 'AIXAUXF BAD ' WS-BAD"),
+             goback()),
+        para("1000-CHECK",
+             if_("WS-UX-STATUS = '37'", [raw("DISPLAY 'OPEN I-O REFUSED FOR A UNIX FILE'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H137),
+    ],
+}
+
+AIXAUXR = {
+    "member": "AIXAUXR",
+    "era": 2,
+    "era_evidence": "END-IF (COBOL-85); no later construct",
+    "program_id": "AIXAUXR",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAUXR - ORDER EXTRACT REWRITTEN IN A UNIX FILE.",
+                "A UNIX FILE CANNOT BE OPEN I-O, SO REWRITE GIVES 49."],
+    "selects": [{"name": "UR-FILE", "assign": "UXRWR", "status": "WS-UR-STATUS", "org": "SEQUENTIAL",
+                 "access": "SEQUENTIAL", "horror": H138}],
+    "fds": [{"fd": "UR-FILE", "record": I(1, "UR-REC", kids=[
+        I(5, "UR-ID", "X(8)"), I(5, "UR-TEXT", "X(32)")])}],
+    "ws": [
+        I(1, "WS-UR-STATUS", "X(2)"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN OUTPUT UR-FILE"),
+             raw("MOVE 'ORD00001' TO UR-ID"),
+             raw("MOVE 'FIRST EXTRACT RECORD' TO UR-TEXT"),
+             raw("WRITE UR-REC"),
+             raw("REWRITE UR-REC"),
+             perform("1000-CHECK"),
+             raw("CLOSE UR-FILE"),
+             raw("DISPLAY 'AIXAUXR BAD ' WS-BAD"),
+             goback()),
+        para("1000-CHECK",
+             if_("WS-UR-STATUS = '49'", [raw("DISPLAY 'REWRITE REFUSED FOR A UNIX FILE'")],
+                 [raw("ADD 1 TO WS-BAD")]),
+             horror=H138),
+    ],
+}
+
+AIXAFOP = {
+    "member": "AIXAFOP",
+    "era": 2,
+    "era_evidence": "END-IF and OPTIONAL (COBOL-85); no later construct",
+    "program_id": "AIXAFOP",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAFOP - OPEN-TIME FILE STATUS OVER KSDS FILES.",
+                "FILE STATUS 05, 35 AND 39 ARE TESTED IN ONE PARAGRAPH EACH."],
+    "selects": [
+        {"name": "CTL-FILE", "assign": "CTLKSD", "status": "WS-CTL-STATUS", "org": "INDEXED",
+         "access": "SEQUENTIAL", "record_key": "CTL-ID", "optional": True, "horror": H129},
+        {"name": "CHK-FILE", "assign": "CHKKSD", "status": "WS-CHK-STATUS", "org": "INDEXED",
+         "access": "SEQUENTIAL", "record_key": "CHK-ID", "horror": H129},
+        {"name": "ORD-FILE", "assign": "ORDKSD", "status": "WS-ORD-STATUS", "org": "INDEXED",
+         "access": "SEQUENTIAL", "record_key": "ORD-CUST", "horror": H129},
+    ],
+    "fds": [
+        {"fd": "CTL-FILE", "record": I(1, "CTL-REC", kids=[
+            I(5, "CTL-ID", "X(8)"), I(5, "CTL-VAL", "X(32)")])},
+        {"fd": "CHK-FILE", "record": I(1, "CHK-REC", kids=[
+            I(5, "CHK-ID", "X(8)"), I(5, "CHK-VAL", "X(32)")])},
+        {"fd": "ORD-FILE", "record": I(1, "ORD-REC", kids=[
+            I(5, "ORD-ID", "X(8)"), I(5, "ORD-CUST", "X(8)"), I(5, "FILLER", "X(24)")])},
+    ],
+    "ws": [
+        I(1, "WS-CTL-STATUS", "X(2)"),
+        I(1, "WS-CHK-STATUS", "X(2)"),
+        I(1, "WS-ORD-STATUS", "X(2)"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN INPUT CTL-FILE"),
+             perform("1000-CTL-STATUS"),
+             raw("OPEN INPUT CHK-FILE"),
+             perform("2000-CHK-STATUS"),
+             raw("OPEN INPUT ORD-FILE"),
+             perform("3000-ORD-STATUS"),
+             raw("DISPLAY 'AIXAFOP BAD ' WS-BAD"),
+             goback()),
+        para("1000-CTL-STATUS",
+             if_("WS-CTL-STATUS = '05'", [raw("DISPLAY 'CONTROL FILE ABSENT, TREATED AS EMPTY'")],
+                 [if_("WS-CTL-STATUS NOT = '00'", [raw("ADD 1 TO WS-BAD")])]),
+             horror=H129),
+        para("2000-CHK-STATUS",
+             if_("WS-CHK-STATUS = '35'", [raw("DISPLAY 'CHECK FILE NOT AVAILABLE'", "ADD 1 TO WS-BAD")],
+                 [if_("WS-CHK-STATUS NOT = '00'", [raw("ADD 1 TO WS-BAD")])]),
+             horror=H129),
+        para("3000-ORD-STATUS",
+             if_("WS-ORD-STATUS = '39'", [raw("DISPLAY 'ORDER FILE ATTRIBUTE CONFLICT'", "ADD 1 TO WS-BAD")],
+                 [if_("WS-ORD-STATUS NOT = '00'", [raw("ADD 1 TO WS-BAD")])]),
+             horror=H129),
+    ],
+}
+
+AIXAFLK = {
+    "member": "AIXAFLK",
+    "era": 2,
+    "era_evidence": "END-IF and CLOSE ... WITH LOCK (COBOL-85); no later construct",
+    "program_id": "AIXAFLK",
+    "author": "ORDER SYSTEMS",
+    "remarks": ["AIXAFLK - FILE STATUS 14, 34 AND 38 OVER AN RRDS AND AN ESDS.",
+                "EACH STATUS IS TESTED IN ITS OWN PARAGRAPH."],
+    "selects": [
+        {"name": "SLOT-FILE", "assign": "SLOTS", "status": "WS-SLOT-STATUS", "org": "RELATIVE",
+         "access": "SEQUENTIAL", "relative_key": "WS-SLOT-NO", "horror": H130},
+        {"name": "LOG-FILE", "assign": "LOGESD", "status": "WS-LOG-STATUS", "org": "SEQUENTIAL",
+         "access": "SEQUENTIAL", "horror": H130},
+    ],
+    "fds": [
+        {"fd": "SLOT-FILE", "record": I(1, "SLOT-REC", kids=[
+            I(5, "SLOT-ID", "X(8)"), I(5, "SLOT-QTY", "9(5)"), I(5, "FILLER", "X(27)")])},
+        {"fd": "LOG-FILE", "record": I(1, "LOG-REC", kids=[
+            I(5, "LOG-TS", "X(14)"), I(5, "LOG-TEXT", "X(40)"), I(5, "FILLER", "X(6)")])},
+    ],
+    "ws": [
+        I(1, "WS-SLOT-STATUS", "X(2)"),
+        I(1, "WS-LOG-STATUS", "X(2)"),
+        I(1, "WS-SLOT-NO", "9(2)"),
+        I(1, "WS-BAD", "9(3)", value="ZERO"),
+    ],
+    "units": [
+        para("0000-MAIN",
+             raw("OPEN INPUT SLOT-FILE"),
+             perform("1000-SCAN-SLOTS", until="WS-SLOT-STATUS NOT = '00'"),
+             perform("1100-SLOT-STATUS"),
+             raw("CLOSE SLOT-FILE", "OPEN EXTEND LOG-FILE"),
+             perform("2000-FILL-LOG", until="WS-LOG-STATUS NOT = '00'"),
+             perform("2100-LOG-STATUS"),
+             raw("CLOSE LOG-FILE WITH LOCK", "OPEN INPUT LOG-FILE"),
+             perform("3000-LOCK-STATUS"),
+             raw("DISPLAY 'AIXAFLK BAD ' WS-BAD"),
+             goback()),
+        para("1000-SCAN-SLOTS",
+             raw("READ SLOT-FILE NEXT RECORD", "    AT END CONTINUE", "END-READ")),
+        para("1100-SLOT-STATUS",
+             if_("WS-SLOT-STATUS = '14'", [raw("DISPLAY 'SLOT NUMBER TOO LARGE FOR THE RELATIVE KEY'",
+                                               "ADD 1 TO WS-BAD")],
+                 [if_("WS-SLOT-STATUS NOT = '10'", [raw("ADD 1 TO WS-BAD")])]),
+             horror=H130),
+        para("2000-FILL-LOG",
+             raw("MOVE '20261122090000' TO LOG-TS", "MOVE 'FILL TO THE END OF THE EXTENT' TO LOG-TEXT",
+                 "WRITE LOG-REC")),
+        para("2100-LOG-STATUS",
+             if_("WS-LOG-STATUS = '34'", [raw("DISPLAY 'LOG EXTENT FULL'", "ADD 1 TO WS-BAD")],
+                 [if_("WS-LOG-STATUS NOT = '00'", [raw("ADD 1 TO WS-BAD")])]),
+             horror=H130),
+        para("3000-LOCK-STATUS",
+             if_("WS-LOG-STATUS = '38'", [raw("DISPLAY 'LOG FILE LOCKED'", "ADD 1 TO WS-BAD")],
+                 [if_("WS-LOG-STATUS NOT = '00'", [raw("ADD 1 TO WS-BAD")])]),
+             horror=H130),
     ],
 }
 
@@ -456,12 +857,75 @@ JOBS = [
                 _dd("LOGUPD", "PROD.AIXA.LOG", ("OLD",)),
                 {"name": "SYSOUT", "sysout": "*"},
             ]},
+            {"name": "KS3040", "pgm": "AIXAKS3", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                _dd("CUSKSD", "PROD.AIXA.CUST", ("OLD",)),
+                _dd("CUSKSD1", "PROD.AIXA.CUST.TAXPATH", ("OLD",)),
+                _dd("CUSKSD2", "PROD.AIXA.CUST.NAMPATH", ("OLD",)),
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
             {"name": "KS2030", "pgm": "AIXAKS2", "dds": [
                 _dd("STEPLIB", LOADLIB),
                 _dd("CUSKSD", "PROD.AIXA.CUST", ("OLD",)),
                 _dd("CUSKSD1", "PROD.AIXA.CUST.TAXPATH", ("OLD",), horror=H108),
                 _dd("CUSKSD2", "PROD.AIXA.CUST.NAMPATH", ("OLD",), horror=H108),
                 {"name": "SYSOUT", "sysout": "*"},
+            ]},
+            {"name": "MD5050", "pgm": "AIXAMOD", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                _dd("CUSKSD", "PROD.AIXA.CUST", ("OLD",)),
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
+            {"name": "VR6060", "pgm": "AIXAVAR", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                _dd("NOTKSD", "PROD.AIXA.NOTES", ("OLD",)),
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
+            {"name": "VW7070", "pgm": "AIXAVRW", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                _dd("LOGUPD", "PROD.AIXA.LOG", ("OLD",)),
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
+            {"name": "VK8080", "pgm": "AIXAVKW", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                _dd("NOTUPD", "PROD.AIXA.NOTES", ("OLD",)),
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
+            {"name": "UX9090", "pgm": "AIXAUXF", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                {"name": "UXOUT", "path": "/u/aixa/extract/orders.dat", "horror": H137,
+                 "extra": ["PATHOPTS=(ORDWR,OCREAT)", "PATHMODE=(SIRUSR,SIWUSR)", "FILEDATA=BINARY"]},
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
+            {"name": "UR9191", "pgm": "AIXAUXR", "dds": [
+                _dd("STEPLIB", LOADLIB),
+                {"name": "UXRWR", "path": "/u/aixa/extract/orders2.dat", "horror": H138,
+                 "extra": ["PATHOPTS=(OWRONLY,OCREAT,OTRUNC)", "PATHMODE=(SIRUSR,SIWUSR)", "FILEDATA=BINARY"]},
+                {"name": "SYSOUT", "sysout": "*"},
+            ]},
+        ],
+    },
+    {
+        # slice 15: an alternate index outside the upgrade set (NOUPGRADE) and a path that does not allocate it (NOUPDATE)
+        "name": "AIXADF4",
+        "title": "AIXA DEFINE AUDIT AIX",
+        "accounting": "(AIXA,0100)",
+        "comments": ["DEFINE THE AUDIT KSDS WITH A NOUPGRADE ALTERNATE INDEX AND A NOUPDATE PATH"],
+        "steps": [
+            {"name": "IDC010", "pgm": "IDCAMS", "dds": [
+                {"name": "SYSPRINT", "sysout": "*"},
+                {"name": "SYSIN", "horror": H133, "inline": [
+                    ("DEFINE", [" DEFINE CLUSTER (NAME(PROD.AIXA.AUDIT) -",
+                                "        INDEXED KEYS(8 0) RECORDSIZE(40 40) -",
+                                "        CYLINDERS(1 1))"]),
+                    ("DEFINE", [" DEFINE ALTERNATEINDEX (NAME(PROD.AIXA.AUDIT.AIX) -",
+                                "        RELATE(PROD.AIXA.AUDIT) KEYS(8 8) -",
+                                "        NONUNIQUEKEY NOUPGRADE CYLINDERS(1 1))"]),
+                    ("DEFINE", [" DEFINE PATH (NAME(PROD.AIXA.AUDIT.PATH) -",
+                                "        PATHENTRY(PROD.AIXA.AUDIT.AIX) NOUPDATE)"]),
+                    ("BLDINDEX", [" BLDINDEX INDATASET(PROD.AIXA.AUDIT) -",
+                                  "        OUTDATASET(PROD.AIXA.AUDIT.AIX)"]),
+                ]},
             ]},
         ],
     },
@@ -494,7 +958,7 @@ APP = {
     "style": "VSAM KSDS with an alternate index, RRDS, ESDS: SELECT clauses, IDCAMS cards, the PATH DD, file status",
     "copybooks": [],
     "dclgen": [],
-    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXACIC],
+    "programs": [AIXAKSD, AIXARRD, AIXAESD, AIXARRS, AIXAESU, AIXAKS2, AIXAFOP, AIXAFLK, AIXAKS3, AIXAMOD, AIXAVAR, AIXAVRW, AIXAVKW, AIXAUXF, AIXAUXR, AIXACIC],
     "csd": CSD,
     "jcl": JOBS,
     "procs": [],

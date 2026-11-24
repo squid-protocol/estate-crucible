@@ -992,6 +992,1014 @@
     "H-0107"
    ]
   },
+  "apps/AIXA/cobol/AIXAFLK.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 87,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and CLOSE ... WITH LOCK (COBOL-85); no later construct",
+   "programs": [
+    {
+     "program_id": "AIXAFLK",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 40,
+     "end_line": 52
+    },
+    {
+     "name": "1000-SCAN-SLOTS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 53,
+     "end_line": 56
+    },
+    {
+     "name": "1100-SLOT-STATUS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 57,
+     "end_line": 65,
+     "horror": "H-0130"
+    },
+    {
+     "name": "2000-FILL-LOG",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 66,
+     "end_line": 69
+    },
+    {
+     "name": "2100-LOG-STATUS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 70,
+     "end_line": 78,
+     "horror": "H-0130"
+    },
+    {
+     "name": "3000-LOCK-STATUS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 79,
+     "end_line": 87,
+     "horror": "H-0130"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-SCAN-SLOTS",
+     "line": 42
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1100-SLOT-STATUS",
+     "line": 43
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-FILL-LOG",
+     "line": 46
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2100-LOG-STATUS",
+     "line": 47
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "3000-LOCK-STATUS",
+     "line": 50
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "SLOT-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 24
+    },
+    {
+     "level": 5,
+     "name": "SLOT-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 25
+    },
+    {
+     "level": 5,
+     "name": "SLOT-QTY",
+     "pic": "9(5)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 26
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(27)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 27
+    },
+    {
+     "level": 1,
+     "name": "LOG-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 30
+    },
+    {
+     "level": 5,
+     "name": "LOG-TS",
+     "pic": "X(14)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 31
+    },
+    {
+     "level": 5,
+     "name": "LOG-TEXT",
+     "pic": "X(40)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 32
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(6)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 33
+    },
+    {
+     "level": 1,
+     "name": "WS-SLOT-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 35
+    },
+    {
+     "level": 1,
+     "name": "WS-LOG-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 36
+    },
+    {
+     "level": 1,
+     "name": "WS-SLOT-NO",
+     "pic": "9(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 37
+    },
+    {
+     "level": 1,
+     "name": "WS-BAD",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 38,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "SLOT-REC",
+     "line": 24,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "SLOT-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      },
+      {
+       "name": "SLOT-QTY",
+       "level": 5,
+       "pic": "9(5)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 5,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(27)",
+       "usage": null,
+       "offset": 13,
+       "bytes": 27,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      }
+     ]
+    },
+    {
+     "record": "LOG-REC",
+     "line": 30,
+     "bytes": 60,
+     "fields": [
+      {
+       "name": "LOG-TS",
+       "level": 5,
+       "pic": "X(14)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 14,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      },
+      {
+       "name": "LOG-TEXT",
+       "level": 5,
+       "pic": "X(40)",
+       "usage": null,
+       "offset": 14,
+       "bytes": 40,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(6)",
+       "usage": null,
+       "offset": 54,
+       "bytes": 6,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-SLOT-STATUS",
+     "line": 35,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-SLOT-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-LOG-STATUS",
+     "line": 36,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-LOG-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-SLOT-NO",
+     "line": 37,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-SLOT-NO",
+       "level": 1,
+       "pic": "9(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BAD",
+     "line": 38,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-BAD",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAFLK.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "SLOT-FILE",
+     "assign": "SLOTS",
+     "organization": "RELATIVE",
+     "access_mode": "SEQUENTIAL",
+     "record_key": null,
+     "file_status": "WS-SLOT-STATUS",
+     "fd_copies": [],
+     "line": 11,
+     "relative_key": "WS-SLOT-NO",
+     "horror": "H-0130"
+    },
+    {
+     "select": "LOG-FILE",
+     "assign": "LOGESD",
+     "organization": "SEQUENTIAL",
+     "access_mode": "SEQUENTIAL",
+     "record_key": null,
+     "file_status": "WS-LOG-STATUS",
+     "fd_copies": [],
+     "line": 16,
+     "horror": "H-0130"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "AIXAFLK",
+     "params": [],
+     "line": 39
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 60,
+     "horror": "H-0130"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 63,
+     "horror": "H-0130"
+    },
+    {
+     "verb": "MOVE",
+     "source": "'20261122090000'",
+     "source_kind": "literal",
+     "target": "LOG-TS",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 67
+    },
+    {
+     "verb": "MOVE",
+     "source": "'FILL TO THE END OF THE EXTENT'",
+     "source_kind": "literal",
+     "target": "LOG-TEXT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 68
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 73,
+     "horror": "H-0130"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 76,
+     "horror": "H-0130"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 82,
+     "horror": "H-0130"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 85,
+     "horror": "H-0130"
+    }
+   ],
+   "horrors": [
+    "H-0130"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAFOP.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 84,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and OPTIONAL (COBOL-85); no later construct",
+   "programs": [
+    {
+     "program_id": "AIXAFOP",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 50,
+     "end_line": 58
+    },
+    {
+     "name": "1000-CTL-STATUS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 59,
+     "end_line": 66,
+     "horror": "H-0129"
+    },
+    {
+     "name": "2000-CHK-STATUS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 67,
+     "end_line": 75,
+     "horror": "H-0129"
+    },
+    {
+     "name": "3000-ORD-STATUS",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 76,
+     "end_line": 84,
+     "horror": "H-0129"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-CTL-STATUS",
+     "line": 52
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-CHK-STATUS",
+     "line": 54
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "3000-ORD-STATUS",
+     "line": 56
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "CTL-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 30
+    },
+    {
+     "level": 5,
+     "name": "CTL-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 31
+    },
+    {
+     "level": 5,
+     "name": "CTL-VAL",
+     "pic": "X(32)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 32
+    },
+    {
+     "level": 1,
+     "name": "CHK-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 35
+    },
+    {
+     "level": 5,
+     "name": "CHK-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 36
+    },
+    {
+     "level": 5,
+     "name": "CHK-VAL",
+     "pic": "X(32)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 37
+    },
+    {
+     "level": 1,
+     "name": "ORD-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 40
+    },
+    {
+     "level": 5,
+     "name": "ORD-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 41
+    },
+    {
+     "level": 5,
+     "name": "ORD-CUST",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 42
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(24)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 43
+    },
+    {
+     "level": 1,
+     "name": "WS-CTL-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 45
+    },
+    {
+     "level": 1,
+     "name": "WS-CHK-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 46
+    },
+    {
+     "level": 1,
+     "name": "WS-ORD-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 47
+    },
+    {
+     "level": 1,
+     "name": "WS-BAD",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 48,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "CTL-REC",
+     "line": 30,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "CTL-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      },
+      {
+       "name": "CTL-VAL",
+       "level": 5,
+       "pic": "X(32)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 32,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      }
+     ]
+    },
+    {
+     "record": "CHK-REC",
+     "line": 35,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "CHK-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      },
+      {
+       "name": "CHK-VAL",
+       "level": 5,
+       "pic": "X(32)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 32,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      }
+     ]
+    },
+    {
+     "record": "ORD-REC",
+     "line": 40,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "ORD-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      },
+      {
+       "name": "ORD-CUST",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(24)",
+       "usage": null,
+       "offset": 16,
+       "bytes": 24,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-CTL-STATUS",
+     "line": 45,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-CTL-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-CHK-STATUS",
+     "line": 46,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-CHK-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-ORD-STATUS",
+     "line": 47,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-ORD-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BAD",
+     "line": 48,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-BAD",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAFOP.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "CTL-FILE",
+     "assign": "CTLKSD",
+     "organization": "INDEXED",
+     "access_mode": "SEQUENTIAL",
+     "record_key": "CTL-ID",
+     "file_status": "WS-CTL-STATUS",
+     "fd_copies": [],
+     "line": 11,
+     "optional": true,
+     "horror": "H-0129"
+    },
+    {
+     "select": "CHK-FILE",
+     "assign": "CHKKSD",
+     "organization": "INDEXED",
+     "access_mode": "SEQUENTIAL",
+     "record_key": "CHK-ID",
+     "file_status": "WS-CHK-STATUS",
+     "fd_copies": [],
+     "line": 16,
+     "horror": "H-0129"
+    },
+    {
+     "select": "ORD-FILE",
+     "assign": "ORDKSD",
+     "organization": "INDEXED",
+     "access_mode": "SEQUENTIAL",
+     "record_key": "ORD-CUST",
+     "file_status": "WS-ORD-STATUS",
+     "fd_copies": [],
+     "line": 21,
+     "horror": "H-0129"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "AIXAFOP",
+     "params": [],
+     "line": 49
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 64,
+     "horror": "H-0129"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 70,
+     "horror": "H-0129"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 73,
+     "horror": "H-0129"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 79,
+     "horror": "H-0129"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 82,
+     "horror": "H-0129"
+    }
+   ],
+   "horrors": [
+    "H-0129"
+   ]
+  },
   "apps/AIXA/cobol/AIXAKS2.cbl": {
    "app": "AIXA",
    "library": "cobol",
@@ -1356,6 +2364,280 @@
    ],
    "horrors": [
     "H-0108"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAKS3.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 52,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-READ (COBOL-85); no later construct",
+   "programs": [
+    {
+     "program_id": "AIXAKS3",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 30,
+     "end_line": 35
+    },
+    {
+     "name": "1000-BLIND",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 36,
+     "end_line": 42
+    },
+    {
+     "name": "2000-CLASH",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 43,
+     "end_line": 52
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-BLIND",
+     "line": 32
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-CLASH",
+     "line": 33
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "CUS-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 22
+    },
+    {
+     "level": 5,
+     "name": "CUS-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 23
+    },
+    {
+     "level": 5,
+     "name": "CUS-TAX",
+     "pic": "X(9)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 24
+    },
+    {
+     "level": 5,
+     "name": "CUS-NAME",
+     "pic": "X(20)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 25
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 26
+    },
+    {
+     "level": 1,
+     "name": "WS-CUS-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 28,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "CUS-REC",
+     "line": 22,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "CUS-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAKS3.cbl"
+      },
+      {
+       "name": "CUS-TAX",
+       "level": 5,
+       "pic": "X(9)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 9,
+       "file": "apps/AIXA/cobol/AIXAKS3.cbl"
+      },
+      {
+       "name": "CUS-NAME",
+       "level": 5,
+       "pic": "X(20)",
+       "usage": null,
+       "offset": 17,
+       "bytes": 20,
+       "file": "apps/AIXA/cobol/AIXAKS3.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(3)",
+       "usage": null,
+       "offset": 37,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAKS3.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-CUS-STATUS",
+     "line": 28,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-CUS-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAKS3.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "CUS-FILE",
+     "assign": "CUSKSD",
+     "organization": "INDEXED",
+     "access_mode": "SEQUENTIAL",
+     "record_key": "CUS-ID",
+     "file_status": "WS-CUS-STATUS",
+     "fd_copies": [],
+     "line": 11,
+     "alternate_keys": [
+      {
+       "name": "CUS-TAX",
+       "duplicates": false
+      },
+      {
+       "name": "CUS-NAME",
+       "duplicates": true
+      }
+     ],
+     "horror": "H-0131"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "AIXAKS3",
+     "params": [],
+     "line": 29
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "'CUS00001'",
+     "source_kind": "literal",
+     "target": "CUS-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 37
+    },
+    {
+     "verb": "MOVE",
+     "source": "'555555555'",
+     "source_kind": "literal",
+     "target": "CUS-TAX",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 38
+    },
+    {
+     "verb": "MOVE",
+     "source": "'987654321'",
+     "source_kind": "literal",
+     "target": "CUS-TAX",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 47
+    },
+    {
+     "verb": "MOVE",
+     "source": "4",
+     "source_kind": "literal",
+     "target": "RETURN-CODE",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 51
+    }
+   ],
+   "horrors": [
+    "H-0131"
    ]
   },
   "apps/AIXA/cobol/AIXAKSD.cbl": {
@@ -1812,6 +3094,395 @@
     "H-0081"
    ]
   },
+  "apps/AIXA/cobol/AIXAMOD.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 88,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+   "programs": [
+    {
+     "program_id": "AIXAMOD",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 29,
+     "end_line": 39
+    },
+    {
+     "name": "1000-WRONG-MODE",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 40,
+     "end_line": 53,
+     "horror": "H-0132"
+    },
+    {
+     "name": "2000-DRAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 54,
+     "end_line": 57
+    },
+    {
+     "name": "2100-PAST-END",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 58,
+     "end_line": 66,
+     "horror": "H-0132"
+    },
+    {
+     "name": "3000-REOPEN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 67,
+     "end_line": 73,
+     "horror": "H-0132"
+    },
+    {
+     "name": "4000-CLOSED",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 74,
+     "end_line": 88,
+     "horror": "H-0132"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-WRONG-MODE",
+     "line": 31
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-DRAIN",
+     "line": 33
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2100-PAST-END",
+     "line": 34
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "3000-REOPEN",
+     "line": 35
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "4000-CLOSED",
+     "line": 37
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "CUS-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 20
+    },
+    {
+     "level": 5,
+     "name": "CUS-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 21
+    },
+    {
+     "level": 5,
+     "name": "CUS-TAX",
+     "pic": "X(9)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 22
+    },
+    {
+     "level": 5,
+     "name": "CUS-NAME",
+     "pic": "X(20)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 23
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 24
+    },
+    {
+     "level": 1,
+     "name": "WS-CUS-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 26
+    },
+    {
+     "level": 1,
+     "name": "WS-BAD",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 27,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "CUS-REC",
+     "line": 20,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "CUS-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAMOD.cbl"
+      },
+      {
+       "name": "CUS-TAX",
+       "level": 5,
+       "pic": "X(9)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 9,
+       "file": "apps/AIXA/cobol/AIXAMOD.cbl"
+      },
+      {
+       "name": "CUS-NAME",
+       "level": 5,
+       "pic": "X(20)",
+       "usage": null,
+       "offset": 17,
+       "bytes": 20,
+       "file": "apps/AIXA/cobol/AIXAMOD.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(3)",
+       "usage": null,
+       "offset": 37,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAMOD.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-CUS-STATUS",
+     "line": 26,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-CUS-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAMOD.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BAD",
+     "line": 27,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-BAD",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAMOD.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "CUS-FILE",
+     "assign": "CUSKSD",
+     "organization": "INDEXED",
+     "access_mode": "SEQUENTIAL",
+     "record_key": "CUS-ID",
+     "file_status": "WS-CUS-STATUS",
+     "fd_copies": [],
+     "line": 11,
+     "horror": "H-0132"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "AIXAMOD",
+     "params": [],
+     "line": 28
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "'00'",
+     "source_kind": "literal",
+     "target": "WS-CUS-STATUS",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 32
+    },
+    {
+     "verb": "MOVE",
+     "source": "'CUS00009'",
+     "source_kind": "literal",
+     "target": "CUS-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 41,
+     "horror": "H-0132"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 46,
+     "horror": "H-0132"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 52,
+     "horror": "H-0132"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 65,
+     "horror": "H-0132"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 72,
+     "horror": "H-0132"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 81,
+     "horror": "H-0132"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 87,
+     "horror": "H-0132"
+    }
+   ],
+   "horrors": [
+    "H-0132"
+   ]
+  },
   "apps/AIXA/cobol/AIXARRD.cbl": {
    "app": "AIXA",
    "library": "cobol",
@@ -2155,6 +3826,12 @@
      "from": "0000-MAIN",
      "target": "3000-TRIM",
      "line": 49
+    },
+    {
+     "kind": "perform",
+     "from": "2000-COPY",
+     "target": "2100-REPLACE",
+     "line": 67
     }
    ],
    "data_items": [
@@ -2594,6 +4271,1283 @@
    ],
    "horrors": [
     "H-0106"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAUXF.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 36,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); no later construct",
+   "programs": [
+    {
+     "program_id": "AIXAUXF",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 26,
+     "end_line": 30
+    },
+    {
+     "name": "1000-CHECK",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 31,
+     "end_line": 36,
+     "horror": "H-0137"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-CHECK",
+     "line": 28
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "UX-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 19
+    },
+    {
+     "level": 5,
+     "name": "UX-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 20
+    },
+    {
+     "level": 5,
+     "name": "UX-TEXT",
+     "pic": "X(32)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 21
+    },
+    {
+     "level": 1,
+     "name": "WS-UX-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 23
+    },
+    {
+     "level": 1,
+     "name": "WS-BAD",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 24,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "UX-REC",
+     "line": 19,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "UX-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAUXF.cbl"
+      },
+      {
+       "name": "UX-TEXT",
+       "level": 5,
+       "pic": "X(32)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 32,
+       "file": "apps/AIXA/cobol/AIXAUXF.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-UX-STATUS",
+     "line": 23,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-UX-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAUXF.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BAD",
+     "line": 24,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-BAD",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAUXF.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "UX-FILE",
+     "assign": "UXOUT",
+     "organization": "SEQUENTIAL",
+     "access_mode": "SEQUENTIAL",
+     "record_key": null,
+     "file_status": "WS-UX-STATUS",
+     "fd_copies": [],
+     "line": 11,
+     "horror": "H-0137"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "AIXAUXF",
+     "params": [],
+     "line": 25
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 35,
+     "horror": "H-0137"
+    }
+   ],
+   "horrors": [
+    "H-0137"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAUXR.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 41,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); no later construct",
+   "programs": [
+    {
+     "program_id": "AIXAUXR",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 26,
+     "end_line": 35
+    },
+    {
+     "name": "1000-CHECK",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 36,
+     "end_line": 41,
+     "horror": "H-0138"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-CHECK",
+     "line": 32
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "UR-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 19
+    },
+    {
+     "level": 5,
+     "name": "UR-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 20
+    },
+    {
+     "level": 5,
+     "name": "UR-TEXT",
+     "pic": "X(32)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 21
+    },
+    {
+     "level": 1,
+     "name": "WS-UR-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 23
+    },
+    {
+     "level": 1,
+     "name": "WS-BAD",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 24,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "UR-REC",
+     "line": 19,
+     "bytes": 40,
+     "fields": [
+      {
+       "name": "UR-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAUXR.cbl"
+      },
+      {
+       "name": "UR-TEXT",
+       "level": 5,
+       "pic": "X(32)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 32,
+       "file": "apps/AIXA/cobol/AIXAUXR.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-UR-STATUS",
+     "line": 23,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-UR-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAUXR.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BAD",
+     "line": 24,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-BAD",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAUXR.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "UR-FILE",
+     "assign": "UXRWR",
+     "organization": "SEQUENTIAL",
+     "access_mode": "SEQUENTIAL",
+     "record_key": null,
+     "file_status": "WS-UR-STATUS",
+     "fd_copies": [],
+     "line": 11,
+     "horror": "H-0138"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "AIXAUXR",
+     "params": [],
+     "line": 25
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "'ORD00001'",
+     "source_kind": "literal",
+     "target": "UR-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 28
+    },
+    {
+     "verb": "MOVE",
+     "source": "'FIRST EXTRACT RECORD'",
+     "source_kind": "literal",
+     "target": "UR-TEXT",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 29
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 40,
+     "horror": "H-0138"
+    }
+   ],
+   "horrors": [
+    "H-0138"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAVAR.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 64,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+   "programs": [
+    {
+     "program_id": "AIXAVAR",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 30,
+     "end_line": 37
+    },
+    {
+     "name": "1000-TOO-LONG",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 38,
+     "end_line": 46,
+     "horror": "H-0134"
+    },
+    {
+     "name": "2000-TOO-SHORT",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 47,
+     "end_line": 55,
+     "horror": "H-0134"
+    },
+    {
+     "name": "3000-ODD-READ",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 56,
+     "end_line": 64,
+     "horror": "H-0134"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-TOO-LONG",
+     "line": 32
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "2000-TOO-SHORT",
+     "line": 33
+    },
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "3000-ODD-READ",
+     "line": 34
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "NOT-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 22
+    },
+    {
+     "level": 5,
+     "name": "NOT-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 23
+    },
+    {
+     "level": 5,
+     "name": "NOT-TEXT",
+     "pic": "X(42)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 24
+    },
+    {
+     "level": 1,
+     "name": "WS-NOT-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 26
+    },
+    {
+     "level": 1,
+     "name": "WS-NOT-LEN",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 27
+    },
+    {
+     "level": 1,
+     "name": "WS-BAD",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 28,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "NOT-REC",
+     "line": 22,
+     "bytes": 50,
+     "fields": [
+      {
+       "name": "NOT-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAVAR.cbl"
+      },
+      {
+       "name": "NOT-TEXT",
+       "level": 5,
+       "pic": "X(42)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 42,
+       "file": "apps/AIXA/cobol/AIXAVAR.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-NOT-STATUS",
+     "line": 26,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-NOT-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAVAR.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-NOT-LEN",
+     "line": 27,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-NOT-LEN",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAVAR.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BAD",
+     "line": 28,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-BAD",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAVAR.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "NOT-FILE",
+     "assign": "NOTKSD",
+     "organization": "INDEXED",
+     "access_mode": "SEQUENTIAL",
+     "record_key": "NOT-ID",
+     "file_status": "WS-NOT-STATUS",
+     "fd_copies": [],
+     "line": 11,
+     "horror": "H-0134"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "AIXAVAR",
+     "params": [],
+     "line": 29
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "'NOT00010'",
+     "source_kind": "literal",
+     "target": "NOT-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 39,
+     "horror": "H-0134"
+    },
+    {
+     "verb": "MOVE",
+     "source": "60",
+     "source_kind": "literal",
+     "target": "WS-NOT-LEN",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 40,
+     "horror": "H-0134"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 45,
+     "horror": "H-0134"
+    },
+    {
+     "verb": "MOVE",
+     "source": "'NOT00011'",
+     "source_kind": "literal",
+     "target": "NOT-ID",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 48,
+     "horror": "H-0134"
+    },
+    {
+     "verb": "MOVE",
+     "source": "10",
+     "source_kind": "literal",
+     "target": "WS-NOT-LEN",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 49,
+     "horror": "H-0134"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 54,
+     "horror": "H-0134"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 63,
+     "horror": "H-0134"
+    }
+   ],
+   "horrors": [
+    "H-0134"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAVKW.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 46,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+   "programs": [
+    {
+     "program_id": "AIXAVKW",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 30,
+     "end_line": 35
+    },
+    {
+     "name": "1000-SHRINK",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 36,
+     "end_line": 46,
+     "horror": "H-0136"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-SHRINK",
+     "line": 32
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "NOT-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 22
+    },
+    {
+     "level": 5,
+     "name": "NOT-ID",
+     "pic": "X(8)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 23
+    },
+    {
+     "level": 5,
+     "name": "NOT-TEXT",
+     "pic": "X(42)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 24
+    },
+    {
+     "level": 1,
+     "name": "WS-NOT-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 26
+    },
+    {
+     "level": 1,
+     "name": "WS-NOT-LEN",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 27
+    },
+    {
+     "level": 1,
+     "name": "WS-BAD",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 28,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "NOT-REC",
+     "line": 22,
+     "bytes": 50,
+     "fields": [
+      {
+       "name": "NOT-ID",
+       "level": 5,
+       "pic": "X(8)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 8,
+       "file": "apps/AIXA/cobol/AIXAVKW.cbl"
+      },
+      {
+       "name": "NOT-TEXT",
+       "level": 5,
+       "pic": "X(42)",
+       "usage": null,
+       "offset": 8,
+       "bytes": 42,
+       "file": "apps/AIXA/cobol/AIXAVKW.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-NOT-STATUS",
+     "line": 26,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-NOT-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAVKW.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-NOT-LEN",
+     "line": 27,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-NOT-LEN",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAVKW.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BAD",
+     "line": 28,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-BAD",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAVKW.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "NOT-FILE",
+     "assign": "NOTUPD",
+     "organization": "INDEXED",
+     "access_mode": "SEQUENTIAL",
+     "record_key": "NOT-ID",
+     "file_status": "WS-NOT-STATUS",
+     "fd_copies": [],
+     "line": 11,
+     "horror": "H-0136"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "AIXAVKW",
+     "params": [],
+     "line": 29
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "40",
+     "source_kind": "literal",
+     "target": "WS-NOT-LEN",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 40,
+     "horror": "H-0136"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 45,
+     "horror": "H-0136"
+    }
+   ],
+   "horrors": [
+    "H-0136"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAVRW.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "numbered": false,
+   "lines": 46,
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+   "programs": [
+    {
+     "program_id": "AIXAVRW",
+     "line": 2
+    }
+   ],
+   "units": [
+    {
+     "name": "0000-MAIN",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 30,
+     "end_line": 35
+    },
+    {
+     "name": "1000-SHRINK",
+     "kind": "paragraph",
+     "section": null,
+     "start_line": 36,
+     "end_line": 46,
+     "horror": "H-0135"
+    }
+   ],
+   "edges": [
+    {
+     "kind": "perform",
+     "from": "0000-MAIN",
+     "target": "1000-SHRINK",
+     "line": 32
+    }
+   ],
+   "data_items": [
+    {
+     "level": 1,
+     "name": "LOG-REC",
+     "pic": null,
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 21
+    },
+    {
+     "level": 5,
+     "name": "LOG-TS",
+     "pic": "X(14)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 22
+    },
+    {
+     "level": 5,
+     "name": "LOG-TEXT",
+     "pic": "X(40)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 23
+    },
+    {
+     "level": 5,
+     "name": "FILLER",
+     "pic": "X(6)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "FILE",
+     "line": 24
+    },
+    {
+     "level": 1,
+     "name": "WS-LOG-STATUS",
+     "pic": "X(2)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": null,
+     "section": "WORKING-STORAGE",
+     "line": 26
+    },
+    {
+     "level": 1,
+     "name": "WS-LOG-LEN",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 27
+    },
+    {
+     "level": 1,
+     "name": "WS-BAD",
+     "pic": "9(3)",
+     "usage": null,
+     "occurs": null,
+     "redefines": null,
+     "value": "ZERO",
+     "section": "WORKING-STORAGE",
+     "line": 28,
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "layouts": [
+    {
+     "record": "LOG-REC",
+     "line": 21,
+     "bytes": 60,
+     "fields": [
+      {
+       "name": "LOG-TS",
+       "level": 5,
+       "pic": "X(14)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 14,
+       "file": "apps/AIXA/cobol/AIXAVRW.cbl"
+      },
+      {
+       "name": "LOG-TEXT",
+       "level": 5,
+       "pic": "X(40)",
+       "usage": null,
+       "offset": 14,
+       "bytes": 40,
+       "file": "apps/AIXA/cobol/AIXAVRW.cbl"
+      },
+      {
+       "name": "FILLER",
+       "level": 5,
+       "pic": "X(6)",
+       "usage": null,
+       "offset": 54,
+       "bytes": 6,
+       "file": "apps/AIXA/cobol/AIXAVRW.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-LOG-STATUS",
+     "line": 26,
+     "bytes": 2,
+     "fields": [
+      {
+       "name": "WS-LOG-STATUS",
+       "level": 1,
+       "pic": "X(2)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 2,
+       "file": "apps/AIXA/cobol/AIXAVRW.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-LOG-LEN",
+     "line": 27,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-LOG-LEN",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAVRW.cbl"
+      }
+     ]
+    },
+    {
+     "record": "WS-BAD",
+     "line": 28,
+     "bytes": 3,
+     "fields": [
+      {
+       "name": "WS-BAD",
+       "level": 1,
+       "pic": "9(3)",
+       "usage": null,
+       "offset": 0,
+       "bytes": 3,
+       "file": "apps/AIXA/cobol/AIXAVRW.cbl"
+      }
+     ],
+     "depends_on": [
+      "H-0009"
+     ]
+    }
+   ],
+   "file_control": [
+    {
+     "select": "LOG-FILE",
+     "assign": "LOGUPD",
+     "organization": "SEQUENTIAL",
+     "access_mode": "SEQUENTIAL",
+     "record_key": null,
+     "file_status": "WS-LOG-STATUS",
+     "fd_copies": [],
+     "line": 11,
+     "horror": "H-0135"
+    }
+   ],
+   "entry_points": [
+    {
+     "kind": "PROCEDURE",
+     "program": "AIXAVRW",
+     "params": [],
+     "line": 29
+    }
+   ],
+   "data_moves": [
+    {
+     "verb": "MOVE",
+     "source": "50",
+     "source_kind": "literal",
+     "target": "WS-LOG-LEN",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 40,
+     "horror": "H-0135"
+    },
+    {
+     "verb": "ADD",
+     "source": "1",
+     "source_kind": "literal",
+     "target": "WS-BAD",
+     "corresponding": false,
+     "source_refmod": false,
+     "target_refmod": false,
+     "source_refmod_text": null,
+     "target_refmod_text": null,
+     "line": 45,
+     "horror": "H-0135"
+    }
+   ],
+   "horrors": [
+    "H-0135"
    ]
   },
   "apps/AIXA/csd/AIXAGRP.csd": {
@@ -3107,12 +6061,121 @@
     "H-0110"
    ]
   },
+  "apps/AIXA/jcl/AIXADF4.jcl": {
+   "app": "AIXA",
+   "library": "jcl",
+   "language": "jcl",
+   "numbered": false,
+   "lines": 18,
+   "compile": {
+    "status": "not-cobol"
+   },
+   "call_sites": [
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "IDCAMS",
+     "target": "IDCAMS",
+     "line": 5,
+     "resolves_to": null
+    }
+   ],
+   "jcl_steps": [
+    {
+     "job": "AIXADF4",
+     "proc": null,
+     "step": "IDC010",
+     "ordinal": 1,
+     "program": "IDCAMS",
+     "exec_proc": null,
+     "cond": null,
+     "line": 5
+    }
+   ],
+   "jcl_dds": [
+    {
+     "job": "AIXADF4",
+     "proc": null,
+     "step": "IDC010",
+     "dd": "SYSPRINT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 6
+    },
+    {
+     "job": "AIXADF4",
+     "proc": null,
+     "step": "IDC010",
+     "dd": "SYSIN",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 7,
+     "inline_lines": 10,
+     "horror": "H-0133"
+    }
+   ],
+   "jcl_utility_cards": [
+    {
+     "job": "AIXADF4",
+     "proc": null,
+     "step": "IDC010",
+     "utility": "IDCAMS",
+     "dd": "SYSIN",
+     "verb": "DEFINE",
+     "operands": "CLUSTER (NAME(PROD.AIXA.AUDIT) INDEXED KEYS(8 0) RECORDSIZE(40 40) CYLINDERS(1 1))",
+     "line": 8,
+     "horror": "H-0133"
+    },
+    {
+     "job": "AIXADF4",
+     "proc": null,
+     "step": "IDC010",
+     "utility": "IDCAMS",
+     "dd": "SYSIN",
+     "verb": "DEFINE",
+     "operands": "ALTERNATEINDEX (NAME(PROD.AIXA.AUDIT.AIX) RELATE(PROD.AIXA.AUDIT) KEYS(8 8) NONUNIQUEKEY NOUPGRADE CYLINDERS(1 1))",
+     "line": 11,
+     "horror": "H-0133"
+    },
+    {
+     "job": "AIXADF4",
+     "proc": null,
+     "step": "IDC010",
+     "utility": "IDCAMS",
+     "dd": "SYSIN",
+     "verb": "DEFINE",
+     "operands": "PATH (NAME(PROD.AIXA.AUDIT.PATH) PATHENTRY(PROD.AIXA.AUDIT.AIX) NOUPDATE)",
+     "line": 14,
+     "horror": "H-0133"
+    },
+    {
+     "job": "AIXADF4",
+     "proc": null,
+     "step": "IDC010",
+     "utility": "IDCAMS",
+     "dd": "SYSIN",
+     "verb": "BLDINDEX",
+     "operands": "INDATASET(PROD.AIXA.AUDIT) OUTDATASET(PROD.AIXA.AUDIT.AIX)",
+     "line": 16,
+     "horror": "H-0133"
+    }
+   ],
+   "horrors": [
+    "H-0133"
+   ]
+  },
   "apps/AIXA/jcl/AIXARU2.jcl": {
    "app": "AIXA",
    "library": "jcl",
    "language": "jcl",
    "numbered": false,
-   "lines": 20,
+   "lines": 61,
    "compile": {
     "status": "not-cobol"
    },
@@ -3136,10 +6199,66 @@
     {
      "verb": "EXEC PGM",
      "form": "literal",
+     "operand": "AIXAKS3",
+     "target": "AIXAKS3",
+     "line": 15,
+     "resolves_to": "apps/AIXA/cobol/AIXAKS3.cbl"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
      "operand": "AIXAKS2",
      "target": "AIXAKS2",
-     "line": 15,
+     "line": 22,
      "resolves_to": "apps/AIXA/cobol/AIXAKS2.cbl"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "AIXAMOD",
+     "target": "AIXAMOD",
+     "line": 29,
+     "resolves_to": "apps/AIXA/cobol/AIXAMOD.cbl"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "AIXAVAR",
+     "target": "AIXAVAR",
+     "line": 34,
+     "resolves_to": "apps/AIXA/cobol/AIXAVAR.cbl"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "AIXAVRW",
+     "target": "AIXAVRW",
+     "line": 39,
+     "resolves_to": "apps/AIXA/cobol/AIXAVRW.cbl"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "AIXAVKW",
+     "target": "AIXAVKW",
+     "line": 44,
+     "resolves_to": "apps/AIXA/cobol/AIXAVKW.cbl"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "AIXAUXF",
+     "target": "AIXAUXF",
+     "line": 49,
+     "resolves_to": "apps/AIXA/cobol/AIXAUXF.cbl"
+    },
+    {
+     "verb": "EXEC PGM",
+     "form": "literal",
+     "operand": "AIXAUXR",
+     "target": "AIXAUXR",
+     "line": 56,
+     "resolves_to": "apps/AIXA/cobol/AIXAUXR.cbl"
     }
    ],
    "jcl_steps": [
@@ -3166,12 +6285,82 @@
     {
      "job": "AIXARU2",
      "proc": null,
-     "step": "KS2030",
+     "step": "KS3040",
      "ordinal": 3,
-     "program": "AIXAKS2",
+     "program": "AIXAKS3",
      "exec_proc": null,
      "cond": null,
      "line": 15
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "KS2030",
+     "ordinal": 4,
+     "program": "AIXAKS2",
+     "exec_proc": null,
+     "cond": null,
+     "line": 22
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "MD5050",
+     "ordinal": 5,
+     "program": "AIXAMOD",
+     "exec_proc": null,
+     "cond": null,
+     "line": 29
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VR6060",
+     "ordinal": 6,
+     "program": "AIXAVAR",
+     "exec_proc": null,
+     "cond": null,
+     "line": 34
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VW7070",
+     "ordinal": 7,
+     "program": "AIXAVRW",
+     "exec_proc": null,
+     "cond": null,
+     "line": 39
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VK8080",
+     "ordinal": 8,
+     "program": "AIXAVKW",
+     "exec_proc": null,
+     "cond": null,
+     "line": 44
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "UX9090",
+     "ordinal": 9,
+     "program": "AIXAUXF",
+     "exec_proc": null,
+     "cond": null,
+     "line": 49
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "UR9191",
+     "ordinal": 10,
+     "program": "AIXAUXR",
+     "exec_proc": null,
+     "cond": null,
+     "line": 56
     }
    ],
    "jcl_dds": [
@@ -3262,7 +6451,7 @@
     {
      "job": "AIXARU2",
      "proc": null,
-     "step": "KS2030",
+     "step": "KS3040",
      "dd": "STEPLIB",
      "dsn": "PROD.AIXA.LOADLIB",
      "generation": null,
@@ -3274,7 +6463,7 @@
     {
      "job": "AIXARU2",
      "proc": null,
-     "step": "KS2030",
+     "step": "KS3040",
      "dd": "CUSKSD",
      "dsn": "PROD.AIXA.CUST",
      "generation": null,
@@ -3286,7 +6475,7 @@
     {
      "job": "AIXARU2",
      "proc": null,
-     "step": "KS2030",
+     "step": "KS3040",
      "dd": "CUSKSD1",
      "dsn": "PROD.AIXA.CUST.TAXPATH",
      "generation": null,
@@ -3298,7 +6487,7 @@
     {
      "job": "AIXARU2",
      "proc": null,
-     "step": "KS2030",
+     "step": "KS3040",
      "dd": "CUSKSD2",
      "dsn": "PROD.AIXA.CUST.NAMPATH",
      "generation": null,
@@ -3310,7 +6499,7 @@
     {
      "job": "AIXARU2",
      "proc": null,
-     "step": "KS2030",
+     "step": "KS3040",
      "dd": "SYSOUT",
      "dsn": null,
      "generation": null,
@@ -3318,6 +6507,282 @@
      "disp_normal": null,
      "sysout": "*",
      "line": 20
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "KS2030",
+     "dd": "STEPLIB",
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 23
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "KS2030",
+     "dd": "CUSKSD",
+     "dsn": "PROD.AIXA.CUST",
+     "generation": null,
+     "disp": "OLD",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 24
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "KS2030",
+     "dd": "CUSKSD1",
+     "dsn": "PROD.AIXA.CUST.TAXPATH",
+     "generation": null,
+     "disp": "OLD",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 25
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "KS2030",
+     "dd": "CUSKSD2",
+     "dsn": "PROD.AIXA.CUST.NAMPATH",
+     "generation": null,
+     "disp": "OLD",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 26
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "KS2030",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 27
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "MD5050",
+     "dd": "STEPLIB",
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 30
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "MD5050",
+     "dd": "CUSKSD",
+     "dsn": "PROD.AIXA.CUST",
+     "generation": null,
+     "disp": "OLD",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 31
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "MD5050",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 32
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VR6060",
+     "dd": "STEPLIB",
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 35
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VR6060",
+     "dd": "NOTKSD",
+     "dsn": "PROD.AIXA.NOTES",
+     "generation": null,
+     "disp": "OLD",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 36
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VR6060",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 37
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VW7070",
+     "dd": "STEPLIB",
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 40
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VW7070",
+     "dd": "LOGUPD",
+     "dsn": "PROD.AIXA.LOG",
+     "generation": null,
+     "disp": "OLD",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 41
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VW7070",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 42
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VK8080",
+     "dd": "STEPLIB",
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 45
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VK8080",
+     "dd": "NOTUPD",
+     "dsn": "PROD.AIXA.NOTES",
+     "generation": null,
+     "disp": "OLD",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 46
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "VK8080",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 47
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "UX9090",
+     "dd": "STEPLIB",
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 50
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "UX9090",
+     "dd": "UXOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 51
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "UX9090",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 54
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "UR9191",
+     "dd": "STEPLIB",
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "disp": "SHR",
+     "disp_normal": null,
+     "sysout": null,
+     "line": 57
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "UR9191",
+     "dd": "UXRWR",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": null,
+     "line": 58
+    },
+    {
+     "job": "AIXARU2",
+     "proc": null,
+     "step": "UR9191",
+     "dd": "SYSOUT",
+     "dsn": null,
+     "generation": null,
+     "disp": null,
+     "disp_normal": null,
+     "sysout": "*",
+     "line": 61
     }
    ],
    "jcl_datasets": [
@@ -3359,23 +6824,51 @@
     {
      "dsn": "PROD.AIXA.LOADLIB",
      "generation": null,
-     "step": "KS2030",
+     "step": "KS3040",
      "dd": "STEPLIB",
      "line": 16
     },
     {
      "dsn": "PROD.AIXA.CUST",
      "generation": null,
-     "step": "KS2030",
+     "step": "KS3040",
      "dd": "CUSKSD",
      "line": 17
     },
     {
      "dsn": "PROD.AIXA.CUST.TAXPATH",
      "generation": null,
+     "step": "KS3040",
+     "dd": "CUSKSD1",
+     "line": 18
+    },
+    {
+     "dsn": "PROD.AIXA.CUST.NAMPATH",
+     "generation": null,
+     "step": "KS3040",
+     "dd": "CUSKSD2",
+     "line": 19
+    },
+    {
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "step": "KS2030",
+     "dd": "STEPLIB",
+     "line": 23
+    },
+    {
+     "dsn": "PROD.AIXA.CUST",
+     "generation": null,
+     "step": "KS2030",
+     "dd": "CUSKSD",
+     "line": 24
+    },
+    {
+     "dsn": "PROD.AIXA.CUST.TAXPATH",
+     "generation": null,
      "step": "KS2030",
      "dd": "CUSKSD1",
-     "line": 18,
+     "line": 25,
      "horror": "H-0108"
     },
     {
@@ -3383,8 +6876,78 @@
      "generation": null,
      "step": "KS2030",
      "dd": "CUSKSD2",
-     "line": 19,
+     "line": 26,
      "horror": "H-0108"
+    },
+    {
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "step": "MD5050",
+     "dd": "STEPLIB",
+     "line": 30
+    },
+    {
+     "dsn": "PROD.AIXA.CUST",
+     "generation": null,
+     "step": "MD5050",
+     "dd": "CUSKSD",
+     "line": 31
+    },
+    {
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "step": "VR6060",
+     "dd": "STEPLIB",
+     "line": 35
+    },
+    {
+     "dsn": "PROD.AIXA.NOTES",
+     "generation": null,
+     "step": "VR6060",
+     "dd": "NOTKSD",
+     "line": 36
+    },
+    {
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "step": "VW7070",
+     "dd": "STEPLIB",
+     "line": 40
+    },
+    {
+     "dsn": "PROD.AIXA.LOG",
+     "generation": null,
+     "step": "VW7070",
+     "dd": "LOGUPD",
+     "line": 41
+    },
+    {
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "step": "VK8080",
+     "dd": "STEPLIB",
+     "line": 45
+    },
+    {
+     "dsn": "PROD.AIXA.NOTES",
+     "generation": null,
+     "step": "VK8080",
+     "dd": "NOTUPD",
+     "line": 46
+    },
+    {
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "step": "UX9090",
+     "dd": "STEPLIB",
+     "line": 50
+    },
+    {
+     "dsn": "PROD.AIXA.LOADLIB",
+     "generation": null,
+     "step": "UR9191",
+     "dd": "STEPLIB",
+     "line": 57
     }
    ],
    "file_edges": [
@@ -3398,11 +6961,41 @@
     },
     {
      "kind": "exec",
+     "target": "apps/AIXA/cobol/AIXAKS3.cbl"
+    },
+    {
+     "kind": "exec",
      "target": "apps/AIXA/cobol/AIXAKS2.cbl"
+    },
+    {
+     "kind": "exec",
+     "target": "apps/AIXA/cobol/AIXAMOD.cbl"
+    },
+    {
+     "kind": "exec",
+     "target": "apps/AIXA/cobol/AIXAVAR.cbl"
+    },
+    {
+     "kind": "exec",
+     "target": "apps/AIXA/cobol/AIXAVRW.cbl"
+    },
+    {
+     "kind": "exec",
+     "target": "apps/AIXA/cobol/AIXAVKW.cbl"
+    },
+    {
+     "kind": "exec",
+     "target": "apps/AIXA/cobol/AIXAUXF.cbl"
+    },
+    {
+     "kind": "exec",
+     "target": "apps/AIXA/cobol/AIXAUXR.cbl"
     }
    ],
    "horrors": [
-    "H-0108"
+    "H-0108",
+    "H-0137",
+    "H-0138"
    ]
   },
   "apps/AIXA/jcl/AIXARUN.jcl": {

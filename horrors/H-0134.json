@@ -1,0 +1,171 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0134",
+ "title": "Variable-length FD over a KSDS: WRITE outside the RECORD IS VARYING bounds (file status 44) and READ of a record the FD cannot hold (04)",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXAVAR: SELECT NOT-FILE ORGANIZATION IS INDEXED ACCESS MODE IS SEQUENTIAL; FD NOT-FILE RECORDING MODE IS V RECORD IS VARYING IN SIZE FROM 30 TO 50 CHARACTERS DEPENDING ON WS-NOT-LEN; 0000-MAIN OPEN I-O, PERFORMs 1000-TOO-LONG (WS-NOT-LEN 60, WRITE, tests '44'), 2000-TOO-SHORT (WS-NOT-LEN 10, WRITE, tests '44'), 3000-ODD-READ (READ NEXT, tests '04')",
+  "AIXA jcl/AIXARU2.jcl VR6060: //NOTKSD on PROD.AIXA.NOTES"
+ ],
+ "asserts": "The SELECT is one file_control fact (select NOT-FILE, assign NOTKSD, organization INDEXED, access_mode SEQUENTIAL, record_key NOT-ID, file_status WS-NOT-STATUS). 1000-TOO-LONG, 2000-TOO-SHORT and 3000-ODD-READ are each one units fact, PERFORMed once from 0000-MAIN as plain edges facts, and each tests the FILE STATUS item named in the SELECT. The FD names its record NOT-REC (one layout fact, 50 bytes: NOT-ID X(8), NOT-TEXT X(42)); the variable-length clause adds no fact of its own. At run time, WRITE of a record whose length (WS-NOT-LEN 60) exceeds the largest the RECORD IS VARYING clause allows, and WRITE of one (WS-NOT-LEN 10) below the smallest, each end in 44 (high-order digit 4, logic error); a READ that returns a record whose length is outside 30 to 50 ends successfully with 04 (high-order digit 0). Step VR6060 has two jcl_dds facts: STEPLIB and NOTKSD.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A boundary violation exists because an attempt was made to rewrite a record to a file and the record was not the same size as the record being replaced. Or an attempt was made to write or rewrite a record that was larger than the largest or smaller than the smallest record allowed by the RECORD IS VARYING clause of the associated file-name."
+  },
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A READ statement was successfully executed, but the number of character positions that were read was less than the minimum size or was greater than the maximum size specified by the record description entries associated with the FD for the file."
+  }
+ ],
+ "era": 2,
+ "notes": "Quotes are the Table 34 entries for 44 and 04 from igy6lr40.pdf via pdftotext, joined across line breaks (the 04 entry's VLR(COMPAT) note, which turns the status into 00, is left out: the key assumes the default option). The 44 outcomes hold whatever the data set holds. The 04 outcome assumes PROD.AIXA.NOTES holds a record whose length is below 30 or above 50 bytes (no step in the estate loads one) and no JCL step orders that; the status is what IBM says for such a data set. The 44 clause for REWRITE of a record of a different size is not planted. Closes the 'variable-length FD the generator cannot render' gap named in H-0130's notes; the key does not record the FD's RECORD clause. GnuCOBOL statuses were not compared.",
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXAVAR.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "1000-TOO-LONG",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 38,
+      "end_line": 46,
+      "horror": "H-0134"
+     },
+     {
+      "name": "2000-TOO-SHORT",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 47,
+      "end_line": 55,
+      "horror": "H-0134"
+     },
+     {
+      "name": "3000-ODD-READ",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 56,
+      "end_line": 64,
+      "horror": "H-0134"
+     }
+    ],
+    "file_control": [
+     {
+      "select": "NOT-FILE",
+      "assign": "NOTKSD",
+      "organization": "INDEXED",
+      "access_mode": "SEQUENTIAL",
+      "record_key": "NOT-ID",
+      "file_status": "WS-NOT-STATUS",
+      "fd_copies": [],
+      "line": 11,
+      "horror": "H-0134"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "'NOT00010'",
+      "source_kind": "literal",
+      "target": "NOT-ID",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 39,
+      "horror": "H-0134"
+     },
+     {
+      "verb": "MOVE",
+      "source": "60",
+      "source_kind": "literal",
+      "target": "WS-NOT-LEN",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 40,
+      "horror": "H-0134"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 45,
+      "horror": "H-0134"
+     },
+     {
+      "verb": "MOVE",
+      "source": "'NOT00011'",
+      "source_kind": "literal",
+      "target": "NOT-ID",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 48,
+      "horror": "H-0134"
+     },
+     {
+      "verb": "MOVE",
+      "source": "10",
+      "source_kind": "literal",
+      "target": "WS-NOT-LEN",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 49,
+      "horror": "H-0134"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 54,
+      "horror": "H-0134"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 63,
+      "horror": "H-0134"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

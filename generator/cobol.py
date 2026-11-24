@@ -143,14 +143,15 @@ class ProgramWriter:
 
     def select(self, sel: dict[str, Any]) -> None:
         m = self.m
+        opt = "OPTIONAL " if sel.get("optional") else ""
         with m.horror(sel.get("horror")):
             if sel.get("assign_split"):
                 # ASSIGN TO at the end of its line, the assignment-name on the next, both lines
                 # carrying an identification tag in cols 73-80 (#4264)
-                line = m.cobol(f"SELECT {sel['name']} ASSIGN TO", tag=sel["assign_split"])
+                line = m.cobol(f"SELECT {opt}{sel['name']} ASSIGN TO", tag=sel["assign_split"])
                 m.cobol(f"    {sel['assign']}", tag=sel["assign_split"])
             else:
-                line = m.cobol(f"SELECT {sel['name']} ASSIGN TO {sel['assign']}")
+                line = m.cobol(f"SELECT {opt}{sel['name']} ASSIGN TO {sel['assign']}")
             org = sel.get("org", "SEQUENTIAL")
             m.cobol(f"ORGANIZATION IS {org}", indent=4)
             if sel.get("access"):
@@ -172,6 +173,8 @@ class ProgramWriter:
                                            for a in sel["alternate_keys"]]
             if sel.get("relative_key"):
                 extra["relative_key"] = sel["relative_key"]
+            if sel.get("optional"):
+                extra["optional"] = True
             if sel.get("rerun"):
                 extra["rerun"] = dict(sel["rerun"])
             m.fact("file_control", select=sel["name"], assign=sel["assign"], organization=org,
@@ -196,7 +199,12 @@ class ProgramWriter:
             m.cobol("FILE SECTION.", area="A")
             for fd in s["fds"]:
                 m.cobol(f"FD  {fd['fd']}", area="A")
-                m.cobol("RECORDING MODE IS F.")
+                if fd.get("varying"):  # RECORDING MODE V and a RECORD IS VARYING clause
+                    m.cobol(f"RECORDING MODE IS {fd.get('recording', 'V')}")
+                    m.cobol(f"RECORD IS VARYING IN SIZE FROM {fd['varying'][0]} TO {fd['varying'][1]} CHARACTERS")
+                    m.cobol(f"DEPENDING ON {fd['varying'][2]}.")
+                else:
+                    m.cobol("RECORDING MODE IS F.")
                 self.records([fd["record"]], "FILE", dw)
         first_fact = len(m.facts.get("data_items", []))
         for sec, key in (("WORKING-STORAGE", "ws"), ("LINKAGE", "linkage")):
@@ -345,9 +353,11 @@ class ProgramWriter:
                 getattr(self, "op_" + st["op"])(st, indent)
 
     def op_raw(self, st: Stmt, indent: int) -> None:
-        for text in st["lines"]:
+        for i, text in enumerate(st["lines"]):
             line = self.line(text, indent)
             self.moves(text, line)
+            if i in st.get("performs", {}):
+                self.edge("perform", st["performs"][i], line)
 
     def moves(self, text: str, line: int) -> None:
         for row in cobol_moves(text, line):

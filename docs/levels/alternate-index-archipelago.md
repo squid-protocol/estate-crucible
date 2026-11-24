@@ -16,12 +16,23 @@ gitgalaxy#7065, VSAM organizations and access paths (#4894). App `AIXA`
 | `AIXAKS2` | KSDS with two alternate keys, `CUS-TAX` unique and `CUS-NAME WITH DUPLICATES` | H-0108 |
 | `AIXADF2` | `DEFINE CLUSTER` for the history RRDS (IDC010); the customer KSDS, `UNIQUEKEY` and `NONUNIQUEKEY` alternate indexes, a PATH and a `BLDINDEX` each (IDC020) | H-0106, H-0108 |
 | `AIXARU2` | `//CUSKSD` on the base cluster, `//CUSKSD1` on the TAX path, `//CUSKSD2` on the NAME path | H-0108 |
+| `AIXAFOP` | `SELECT OPTIONAL` KSDS, a nonoptional KSDS and a SELECT whose record key disagrees with the cluster: open-time file status 05 / 35 / 39 | H-0129 |
+| `AIXAFLK` | an RRDS read sequentially with a `PIC 9(2)` relative key (file status 14), a WRITE loop past the end of the ESDS (34), `CLOSE ... WITH LOCK` then `OPEN` (38) | H-0130 |
+| `AIXAKS3` | a sequential-access KSDS: `REWRITE` right after `OPEN` (file status 43), then `READ NEXT` and a `REWRITE` giving the unique alternate key `CUS-TAX` a value another record holds (22); step `KS3040` of `AIXARU2` | H-0131 |
+| `AIXAMOD` | a sequential KSDS used in states that forbid the statement: `WRITE` and `REWRITE` on a file open `INPUT` (file status 48, 49), a `READ NEXT` after the at-end condition (46), `OPEN` of an open file (41), `READ` (47) and `CLOSE` (42) of a closed one; step `MD5050` of `AIXARU2` | H-0132 |
+| `AIXAVAR` | a KSDS with a variable-length FD (`RECORD IS VARYING IN SIZE FROM 30 TO 50 CHARACTERS DEPENDING ON`): `WRITE` of 60 and of 10 bytes (file status 44), a `READ` of a record outside the bounds (04); step `VR6060` of `AIXARU2` | H-0134 |
+| `AIXAVRW` | the ESDS opened `I-O` with a variable-length FD (`RECORD IS VARYING IN SIZE FROM 40 TO 60 CHARACTERS`): `READ` of a 60-byte record, then `REWRITE` of 50 bytes, inside the bounds but not the size being replaced (file status 44); step `VW7070` of `AIXARU2` | H-0135 |
+| `AIXAVKW` | the KSDS of `AIXAVAR` opened `I-O`, `READ NEXT` of a 50-byte record, then `REWRITE` of 40 bytes: an indexed file may change the length, so file status 00, not the 44 of `AIXAVRW`; step `VK8080` of `AIXARU2` | H-0136 |
+| `AIXAUXF` | `OPEN I-O` of a z/OS UNIX byte-stream file (`//UXOUT DD PATH=...,FILEDATA=BINARY`, not a VSAM PATH): file status 37; step `UX9090` of `AIXARU2` | H-0137 |
+| `AIXAUXR` | `OPEN OUTPUT` then `WRITE` then `REWRITE` of a record in a z/OS UNIX byte-stream file (`//UXRWR DD PATH=...,FILEDATA=BINARY`): a UNIX file cannot be updated with `REWRITE` and can never be open I-O, so file status 49 (inferred from two IBM rules, see the horror's notes); step `UR9191` of `AIXARU2` | H-0138 |
 
-All six programs compile under `cobc -std=ibm`.
+All programs compile under `cobc -std=ibm`.
+
+The key lists the `2000-COPY` -> `2100-REPLACE` perform edge in `AIXARRS` (line 67, a `PERFORM` inside `INVALID KEY`): a real out-of-line PERFORM the key lacked, found by the gitgalaxy engine and confirmed by reading the member.
 
 New optional fields on `file_control` (listed in SPEC section 3): `alternate_keys`
 (`[{name, duplicates}]`, present only when the SELECT has an ALTERNATE RECORD KEY) and `relative_key`
-(present only when the SELECT has a RELATIVE KEY). The gitgalaxy scorer does not read them yet, so they
+(present only when the SELECT has a RELATIVE KEY); `optional` (true, present only when the SELECT says OPTIONAL). The gitgalaxy scorer does not read them yet, so they
 score as unscored until it does.
 
 Known key question, not changed: the COBOL source alone does not tell an ESDS from a QSAM data set
@@ -35,6 +46,6 @@ Known key question, not changed: the COBOL source alone does not tell an ESDS fr
 
 The first run needs the owner's release and pin bump, and gitgalaxy's scorer to read the new fields.
 
-Remaining slices: scorer support for `alternate_keys` /
+Remaining slices: 9x, VLR(COMPAT) (a KSDS REWRITE of a different-size record is H-0136, 00; the ESDS 44 is H-0135) (04 becomes 00) (41, 42, 46, 47, 48 and 49 are H-0132; NOUPGRADE / NOUPDATE is H-0133; 04 and 44 are H-0134); scorer support for `alternate_keys` /
 `relative_key` (gitgalaxy side); RBA / RRN access (CICS `RIDFLD`, cics-crucible side); alternate-index
-upgrade-set behaviour; LINEAR and ZFS clusters; an ESDS with an alternate index (not supported in COBOL).
+upgrade-set behaviour at run time (a program reading a stale NOUPGRADE index); LINEAR and ZFS clusters; an ESDS with an alternate index (not supported in COBOL).

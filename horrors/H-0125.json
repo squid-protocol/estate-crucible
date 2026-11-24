@@ -1,0 +1,160 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0125",
+ "title": "DSN subcommands BIND PACKAGE (MEMBER) and BIND PLAN (PKLIST) under IKJEFT01, each continued with a hyphen",
+ "category": "jcl",
+ "issue": 4890,
+ "shapes": [
+  "BDLD jcl/BDLDUT5.jcl BND040: EXEC PGM=IKJEFT01, DBRMLIB DD DSN=PROD.BDLD.DBRMLIB, SYSTSIN holds DSN SYSTEM(DB2P), BIND PACKAGE(BDLDCOLL) MEMBER(BDLDDB2) - ACTION(REPLACE), BIND PLAN(BDLDPLN) PKLIST(BDLDCOLL.*) - ACTION(REPLACE), END"
+ ],
+ "asserts": "The SYSTSIN stream holds four jcl_utility_cards facts with utility IKJEFT01, dd SYSTSIN: verbs DSN, BIND, BIND and END. Each BIND is one fact with its continuation hyphen dropped and its two lines joined: operands 'PACKAGE(BDLDCOLL) MEMBER(BDLDDB2) ACTION(REPLACE)' and 'PLAN(BDLDPLN) PKLIST(BDLDCOLL.*) ACTION(REPLACE)'. There is no RUN subcommand, so no RUN PROGRAM call_sites fact and no program edge: MEMBER(BDLDDB2) names a DBRM, which the BIND PACKAGE turns into a package, it does not call the COBOL program BDLDDB2 that the DBRM came from. BDLDCOLL.* is a collection and package-id pattern, not a dataset. DBRMLIB is an ordinary jcl_dds and jcl_datasets fact on PROD.BDLD.DBRMLIB.",
+ "citations": [
+  {
+   "doc": "Db2 13 for z/OS Command Reference",
+   "section": "Chapter 9. BIND PACKAGE subcommand (DSN)",
+   "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+   "quote": "The DSN subcommand BIND PACKAGE builds an application package."
+  },
+  {
+   "doc": "Db2 13 for z/OS Command Reference",
+   "section": "Chapter 9. BIND PACKAGE subcommand (DSN), Example: Replacing a version of a package",
+   "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+   "quote": "BIND PACKAGE (USIBMSTODB22.TEST) - MEMBER (DSN8BC13) - ACTION (REPLACE) REPLVER (APRIL_VERSION) -"
+  },
+  {
+   "doc": "Db2 13 for z/OS Command Reference",
+   "section": "MEMBER bind option",
+   "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+   "quote": "Specifies the name of a partitioned data set member or zFS file that contains a DBRM."
+  },
+  {
+   "doc": "Db2 13 for z/OS Command Reference",
+   "section": "MEMBER bind option",
+   "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+   "quote": "dbrm-member-name becomes the package name."
+  },
+  {
+   "doc": "Db2 13 for z/OS Command Reference",
+   "section": "LIBRARY bind option",
+   "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+   "quote": "Search only the libraries described by the DBRMLIB DD statement"
+  },
+  {
+   "doc": "Db2 13 for z/OS Command Reference",
+   "section": "Chapter 10. BIND PLAN subcommand (DSN)",
+   "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+   "quote": "The DSN subcommand BIND PLAN builds an application plan."
+  },
+  {
+   "doc": "Db2 13 for z/OS Command Reference",
+   "section": "PKLIST and NOPKLIST bind options",
+   "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+   "quote": "The PKLIST option determines the packages to include in a package list."
+  },
+  {
+   "doc": "Db2 13 for z/OS Command Reference",
+   "section": "ACTION bind option",
+   "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+   "quote": "The object replaces an existing one with the same identifier, and a new entry replaces the old one in the catalog table SYSPLAN or SYSPACKAGE."
+  }
+ ],
+ "era": 0,
+ "release": "Db2 13",
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDUT5.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "IKJEFT01",
+      "target": "IKJEFT01",
+      "line": 29,
+      "resolves_to": null,
+      "horror": "H-0125"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": "BDLDUT5",
+      "proc": null,
+      "step": "BND040",
+      "ordinal": 4,
+      "program": "IKJEFT01",
+      "exec_proc": null,
+      "cond": null,
+      "line": 29,
+      "horror": "H-0125"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": "BDLDUT5",
+      "proc": null,
+      "step": "BND040",
+      "dd": "SYSTSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 33,
+      "inline_lines": 6,
+      "horror": "H-0125"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDUT5",
+      "proc": null,
+      "step": "BND040",
+      "utility": "IKJEFT01",
+      "dd": "SYSTSIN",
+      "verb": "DSN",
+      "operands": "SYSTEM(DB2P)",
+      "line": 34,
+      "horror": "H-0125"
+     },
+     {
+      "job": "BDLDUT5",
+      "proc": null,
+      "step": "BND040",
+      "utility": "IKJEFT01",
+      "dd": "SYSTSIN",
+      "verb": "BIND",
+      "operands": "PACKAGE(BDLDCOLL) MEMBER(BDLDDB2) ACTION(REPLACE)",
+      "line": 35,
+      "horror": "H-0125"
+     },
+     {
+      "job": "BDLDUT5",
+      "proc": null,
+      "step": "BND040",
+      "utility": "IKJEFT01",
+      "dd": "SYSTSIN",
+      "verb": "BIND",
+      "operands": "PLAN(BDLDPLN) PKLIST(BDLDCOLL.*) ACTION(REPLACE)",
+      "line": 37,
+      "horror": "H-0125"
+     },
+     {
+      "job": "BDLDUT5",
+      "proc": null,
+      "step": "BND040",
+      "utility": "IKJEFT01",
+      "dd": "SYSTSIN",
+      "verb": "END",
+      "operands": "",
+      "line": 39,
+      "horror": "H-0125"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

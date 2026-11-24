@@ -3018,6 +3018,770 @@
    ],
    "era": 2,
    "release": "IBM MQ 9.3"
+  },
+  {
+   "id": "H-0114",
+   "title": "IMS bridge message: MQMD format MQFMT_IMS, an MQIIH structure, then LLZZ-framed transaction data in one MQPUT buffer",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQBR MQBRIMS: CALL 'MQPUT' USING ... WS-MSGLEN WS-MSG ..., 01 WS-MSG = 05 WS-IIH (COPY MQBIIH, the 84-byte MQIIH stand-in) + WS-LL + WS-ZZ (halfword binary) + WS-TRANCODE X(8) + WS-DATA X(12); MOVE 'MQIMS' TO the MQMD format"
+   ],
+   "asserts": "MQBRIMS's MQPUT CALL is one call_sites fact (form literal, resolves_to null) with a call edge from 0000-MAIN and a gaps entry. The 01 group WS-MSG holds, in order, WS-IIH (copy_members MQBIIH, whose fields total 84 bytes, the length IBM gives MQIIH_LENGTH_1), the halfword binary items WS-LL (VALUE 24) and WS-ZZ, the 8-character WS-TRANCODE and the 12-character WS-DATA. WS-LL is 4 (LLZZ) + 8 + 12 = 24, and the MQPUT length item WS-MSGLEN is 84 + 24 = 108, so the LL bytes plus the MQIIH length equal the message length as IBM requires. The key's layouts fact for WS-MSG is 108 bytes (MQIIH 84, then 2, 2, 8 and 12). The key asserts the layout only: it does not model the bridge.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications",
+     "section": "How the IMS bridge deals with messages",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q023200_.html",
+     "quote": "Messages containing IMS transaction data and an MQIIH structure (described in MQIIH ): MQIIH LLZZ<trancode><data>[LLZZ<data>][LLZZ<data>]"
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications",
+     "section": "How the IMS bridge deals with messages",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q023200_.html",
+     "quote": "Set the Format field of the MQMD structure to MQFMT_IMS to use the MQIIH structure."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications",
+     "section": "How the IMS bridge deals with messages",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q023200_.html",
+     "quote": "IBM MQ validates the message data to ensure that the sum of the LL bytes plus the length of the MQIIH (if it is present) is equal to the message length."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQIIH - IMS information header",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q096960_.html",
+     "quote": "StrucLength (length of MQIIH structure) MQIIH_LENGTH_1 84"
+    }
+   ],
+   "era": 2,
+   "notes": "MQFMT_IMS is the name of the MQIIH format; the estate's value 'MQIMS' (padded to 8) is IBM's constant value, which the MQIIH page lists only by name, so the key asserts the layout, not the literal. The copybook field names are the estate's own. MQIIH CommitMode '1' (send then commit) is set by the sender; IBM's initial value is '0'."
+  },
+  {
+   "id": "H-0115",
+   "title": "CICS bridge message: MQMD format MQFMT_CICS, an MQCIH structure (version 2), then the COMMAREA data in one MQPUT buffer",
+   "category": "mq",
+   "issue": 4892,
+   "shapes": [
+    "MQBR MQBRCIH: CALL 'MQPUT' USING ... WS-MSGLEN WS-MSG ..., 01 WS-MSG = 05 WS-CIH (COPY MQBCIH, the 180-byte MQCIH version 2 stand-in) + WS-COMMAREA X(40); MQCIH Format set to the COMMAREA's format name, LinkType program, UOWControl only"
+   ],
+   "asserts": "MQBRCIH's MQPUT CALL is one call_sites fact (form literal, resolves_to null) with a call edge from 0000-MAIN and a gaps entry. The 01 group WS-MSG holds WS-CIH (copy_members MQBCIH, whose 38 fields total 180 bytes, the length IBM gives MQCIH_LENGTH_2, with StrucLength VALUE 180 and Version VALUE 2) followed by the 40-character WS-COMMAREA, and WS-MSGLEN is 180 + 40 = 220; the key's layouts fact for WS-MSG is 220 bytes. The key asserts the layout only: it does not model the bridge.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQCIH - CICS bridge header",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q094830_.html",
+     "quote": "StrucLength (length of MQCIH structure) MQCIH_LENGTH_2 180"
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "MQCIH - CICS bridge header",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q094830_.html",
+     "quote": "The bridge accepts either a version-1 or a version-2 MQCIH structure, but for 3270 transactions, you must use a version-2 structure."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "Format (MQCHAR8) for MQCIH",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q095010_.html",
+     "quote": "For DPL requests, Format must be the format name of the COMMAREA."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications reference",
+     "section": "LinkType (MQLONG) for MQCIH",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q095050_.html",
+     "quote": "MQCLT_PROGRAM DPL program."
+    }
+   ],
+   "era": 2,
+   "notes": "The MQCIH field table is the one in the MQCIH page (Table 2); the estate stand-in follows its order and lengths (the four trailing fields CursorPosition, ErrorOffset, InputItem and Reserved4 are the version 2 additions). UOWControl 273 is MQCUOWC_ONLY and LinkType 1 is MQCLT_PROGRAM, both from the constants pages (q091210, q090990). The program the bridge links to is not planted."
+  },
+  {
+   "id": "H-0116",
+   "title": "IMS bridge transaction: GU the input message and ISRT the reply to the IO PCB, which the bridge returns to the reply-to queue",
+   "category": "ims",
+   "issue": 4892,
+   "shapes": [
+    "MQBR MQBRMPP: CALL 'CBLTDLI' USING WS-GU IO-PCB WS-IN-AREA, then CALL 'CBLTDLI' USING WS-ISRT IO-PCB WS-OUT-AREA (LL ZZ and text)"
+   ],
+   "asserts": "MQBRMPP's ISRT CALL (tagged) is one call_sites fact (CBLTDLI, resolves_to null), a call edge from 1000-REPLY, a gaps entry and one dli_calls fact: function ISRT (from WS-ISRT VALUE 'ISRT'), pcb IO-PCB, io_area WS-OUT-AREA, no ssas. The ISRT to the IO PCB is the call the IMS bridge returns as the reply message.",
+   "citations": [
+    {
+     "doc": "IBM MQ 9.3 developing applications",
+     "section": "Reply messages from IMS",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q023260_.html",
+     "quote": "When an IMS transaction ISRTs to its IOPCB, the message is routed back to the originating LTERM or TPIPE. These are seen in IBM MQ as reply messages."
+    },
+    {
+     "doc": "IBM MQ 9.3 developing applications",
+     "section": "Reply messages from IMS",
+     "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q023260_.html",
+     "quote": "Reply messages from IMS are put onto the reply-to queue specified in the original message."
+    }
+   ],
+   "era": 2,
+   "notes": "The citations document the ISRT-to-IO-PCB reply. The GU of the input message in the same member is a standard DL/I message call that no cited rule covers, so it is not tagged and the key asserts nothing about it for this horror (see H-0097 for a cited DL/I call)."
+  },
+  {
+   "id": "H-0117",
+   "title": "PSBGEN: a database PCB followed by one SENSEG per sensitive segment, the path from the root included",
+   "category": "ims",
+   "issue": 4893,
+   "shapes": [
+    "HKEP HKEPPSB: PCB TYPE=DB,DBDNAME=HKEPDB2,PROCOPT=G / SENSEG NAME=KEEP / SENSEG NAME=WALL,PARENT=KEEP / PSBGEN PSBNAME=HKEPPSB"
+   ],
+   "asserts": "HKEPPSB keys one ims_gen PCB fact (name HKEPDB2, the DBD it names), two SENSEG facts (KEEP, WALL, each with pcb HKEPDB2) in source order, and one PSB fact (HKEPPSB).",
+   "citations": [
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "The database PCB statement",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_dbpcbstat.htm",
+     "quote": "The database PCB statement defines the DBD of the database that the application program will access."
+    },
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "The SENSEG statement",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_sensegstat.htm",
+     "quote": "SENSEG statements must immediately follow the PCB statement to which they are related."
+    },
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "The SENSEG statement",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_sensegstat.htm",
+     "quote": "A separate SENSEG statement must exist for each segment type."
+    }
+   ],
+   "era": 2,
+   "release": "IMS 15.1",
+   "notes": "WALL is a dependent of KEEP, so the PSB is sensitive to the root as well as to WALL, as the SENSEG page requires of a segment beneath the root. PARENT= and PROCOPT= are coded for realism; the key asserts neither (the pages read do not define them)."
+  },
+  {
+   "id": "H-0118",
+   "title": "DBD FIELD statements following the SEGM they describe, NAME= coded for a field an SSA names",
+   "category": "ims",
+   "issue": 4893,
+   "shapes": [
+    "HKEP HKEPDB2: SEGM NAME=KEEP / FIELD NAME=(KEEPKEY,SEQ,U),BYTES=8,START=1,TYPE=C; SEGM NAME=WALL / FIELD NAME=(WALLKEY,SEQ,U),..."
+   ],
+   "asserts": "HKEPDB2 keys one DBD fact, two SEGM facts and two FIELD facts (KEEPKEY of segment KEEP, WALLKEY of segment WALL; bytes 8, start 1), each FIELD attached to the SEGM before it.",
+   "citations": [
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "FIELD statement overview",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_fieldstat.htm",
+     "quote": "FIELD statements must immediately follow the SEGM statement to which they are related."
+    },
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "FIELD statements",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.sur/ims_fieldstmt.htm",
+     "quote": "The NAME parameter is required on the following types of fields:"
+    }
+   ],
+   "era": 2,
+   "release": "IMS 15.1",
+   "notes": "The page lists, under that sentence, the field types referenced by a segment search argument (SSA); KEEPKEY is the field HKEPFIND's SSA names (H-0120)."
+  },
+  {
+   "id": "H-0119",
+   "title": "DBD LCHILD statement naming a logical child segment in another database, after the SEGM and FIELD it belongs to",
+   "category": "ims",
+   "issue": 4893,
+   "shapes": [
+    "HKEP HKEPDB2: LCHILD NAME=(ENTRY,HKEPDB3) between FIELD KEEPKEY and SEGM WALL"
+   ],
+   "asserts": "HKEPDB2 keys one LCHILD fact (name ENTRY, dbname HKEPDB3, segment KEEP: the SEGM it follows).",
+   "citations": [
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "LCHILD statement overview",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.dag/ims_lchildstat.htm",
+     "quote": "LCHILD statements immediately follow the SEGM, FIELD, or XDFLD statement of the segment involved in the relationship."
+    },
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "LCHILD statements",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.sur/ims_lchildstmt.htm",
+     "quote": "The dbname parameter is the name of the database that contains the segment type specified in segname1."
+    }
+   ],
+   "era": 2,
+   "release": "IMS 15.1",
+   "notes": "HKEPDB3 is not in the estate: the LCHILD names a database outside it, as the page allows. POINTER= and PAIR= are not coded; the key asserts neither."
+  },
+  {
+   "id": "H-0120",
+   "title": "A qualified SSA: segment name, then a parenthesised qualification statement, passed after the I/O area",
+   "category": "ims",
+   "issue": 4893,
+   "shapes": [
+    "HKEP HKEPFIND: SSA-KEEP ('KEEP    ' '(' 'KEEPKEY ' ' =' 'K0001234' ')') as the fourth operand of CALL 'CBLTDLI' with a GU"
+   ],
+   "asserts": "HKEPFIND's CALL is one call_sites fact and one dli_calls fact: function GU, pcb DB-PCB, io_area WS-IO-AREA, ssas [SSA-KEEP]; SSA-KEEP is a group of six data_items facts in storage order.",
+   "citations": [
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "Segment search arguments (SSAs)",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.apg/ims_ssas.htm",
+     "quote": "A qualified SSA describes the segment occurrence that you want to access."
+    },
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "Segment search arguments (SSAs)",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.apg/ims_ssas.htm",
+     "quote": "This description is called a qualification statement and has three parts."
+    },
+    {
+     "doc": "IBM IMS 15.1 documentation",
+     "section": "Segment search arguments (SSAs)",
+     "url": "https://www.ibm.com/docs/en/SSEPH2_15.1.0/com.ibm.ims15.doc.apg/ims_ssas.htm",
+     "quote": "The qualification statement is enclosed in parentheses."
+    }
+   ],
+   "era": 2,
+   "release": "IMS 15.1"
+  },
+  {
+   "id": "H-0121",
+   "title": "DFSMSdss ADRDSSU: a DUMP and a RESTORE command with a continued DATASET(INCLUDE(...)) filter",
+   "category": "jcl",
+   "issue": 4890,
+   "shapes": [
+    "BDLD jcl/BDLDUT4.jcl DMP010: EXEC PGM=ADRDSSU, SYSIN holds DUMP DATASET(INCLUDE(PROD.BDLD.**)) - continued, OUTDDNAME(DROUT)",
+    "BDLD jcl/BDLDUT4.jcl RST020: EXEC PGM=ADRDSSU, SYSIN holds RESTORE DATASET(INCLUDE(PROD.BDLD.**)) - continued, INDDNAME(DRIN)"
+   ],
+   "asserts": "Each command in the inline SYSIN stream is one jcl_utility_cards fact with utility ADRDSSU, dd SYSIN, verb DUMP or RESTORE and its operands with the continuation hyphen dropped and the two lines joined; the continued command is one fact, not two. The DD named by OUTDDNAME / INDDNAME (DROUT, DRIN) is an ordinary jcl_dds fact of the step. ADRDSSU is system supplied: no program edge into the estate. The data set group PROD.BDLD.** is a filter in an operand, not a dataset reference.",
+   "citations": [
+    {
+     "doc": "z/OS V1R13.0 DFSMSdss Storage Administration (SC35-0423-16)",
+     "section": "DUMP command for DFSMSdss",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/dgt2u2b0.pdf",
+     "quote": "With the DUMP command, you can dump DASD data to a basic sequential data set, a large format sequential data set or an extended format sequential data set."
+    },
+    {
+     "doc": "z/OS V1R13.0 DFSMSdss Storage Administration (SC35-0423-16)",
+     "section": "Restoring data sets",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/dgt2u2b0.pdf",
+     "quote": "With the RESTORE command, you can restore data to DASD volumes from DFSMSdss-produced dump volumes, which are identified with the INDDNAME keyword."
+    },
+    {
+     "doc": "z/OS V1R13.0 DFSMSdss Storage Administration (SC35-0423-16)",
+     "section": "Uses of filtering",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/dgt2u2b0.pdf",
+     "quote": "//STEP1     EXEC PGM=ADRDSSU,REGION=4000K"
+    }
+   ],
+   "era": 0,
+   "release": "z/OS 1.13"
+  },
+  {
+   "id": "H-0122",
+   "title": "IEBIMAGE building a forms control buffer module: FCB then NAME statements, SYSUT1 the image library DISP=OLD",
+   "category": "jcl",
+   "issue": 4890,
+   "shapes": [
+    "BDLD jcl/BDLDUT4.jcl IMG030: EXEC PGM=IEBIMAGE, SYSUT1 DD DSN=SYS1.IMAGELIB,DISP=OLD, SYSIN holds FCB CH1=1,CH12=80,LPI=8 and NAME BDLD"
+   ],
+   "asserts": "Each control statement in the inline SYSIN stream is one jcl_utility_cards fact with utility IEBIMAGE, dd SYSIN, verb FCB or NAME and its operands as written; SYSUT1 is a jcl_dds fact on SYS1.IMAGELIB with disp OLD. IEBIMAGE is system supplied: no program edge into the estate. The NAME operand BDLD names a library module, not a program or a data set.",
+   "citations": [
+    {
+     "doc": "z/OS V2R1.0 DFSMSdfp Utilities (SC23-6864)",
+     "section": "Chapter 7. IEBIMAGE (Create Printer Image) Program",
+     "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/pdf/dgt3u100.pdf",
+     "quote": "Forms control buffer modules for the 3800 and 4248 that specify controls for the vertical line spacing and any one of 12 channel codes per line."
+    },
+    {
+     "doc": "z/OS V2R1.0 DFSMSdfp Utilities (SC23-6864)",
+     "section": "IEBIMAGE: Utility Control Statements, Table 28",
+     "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/pdf/dgt3u100.pdf",
+     "quote": "Creates a 3800 or 4248 forms control buffer module and stores it in an image library."
+    },
+    {
+     "doc": "z/OS V2R1.0 DFSMSdfp Utilities (SC23-6864)",
+     "section": "IEBIMAGE: NAME Statement",
+     "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/pdf/dgt3u100.pdf",
+     "quote": "The NAME statement is required, and must be the last statement in each operation group."
+    },
+    {
+     "doc": "z/OS V2R1.0 DFSMSdfp Utilities (SC23-6864)",
+     "section": "IEBIMAGE: SYSUT1 DD Statement",
+     "url": "https://www.ibm.com/docs/SSLTBW_2.1.0/pdf/dgt3u100.pdf",
+     "quote": "DISP=OLD should be specified on the SYSUT1 DD statement."
+    }
+   ],
+   "era": 0,
+   "release": "z/OS 2.1"
+  },
+  {
+   "id": "H-0123",
+   "title": "BPXBATCH running a z/OS UNIX shell script: PARM with SH and a path, STDENV and STDPARM in-stream data sets",
+   "category": "jcl",
+   "issue": 4890,
+   "shapes": [
+    "BDLD jcl/BDLDUT5.jcl BPX010: EXEC PGM=BPXBATCH,PARM='SH /u/bdld/bin/purge.sh 30', STDOUT and STDERR SYSOUT=*, STDENV DD * holding LANG and LC_ALL",
+    "BDLD jcl/BDLDUT5.jcl BPX020: EXEC PGM=BPXBATCH with no PARM, STDPARM DD * holding SH /u/bdld/bin/purge.sh AAAA continued by a second line BBBB"
+   ],
+   "asserts": "Each BPXBATCH step is a jcl_steps fact with program BPXBATCH (BPX010 with parm 'SH /u/bdld/bin/purge.sh 30', BPX020 with none) and an EXEC PGM call_sites fact that resolves to nothing in the estate and is no gap: BPXBATCH is system supplied. The path /u/bdld/bin/purge.sh is a z/OS UNIX file named in a shell command: not a dataset, not a program, no edge. STDOUT and STDERR are jcl_dds facts with sysout *. STDENV and STDPARM are jcl_dds facts with inline_lines 2; their lines are environment variables and parameter text, not utility control statements, so the steps have no jcl_utility_cards fact (the SH token and the continuation line BBBB are not verbs).",
+   "citations": [
+    {
+     "doc": "z/OS 3.1 z/OS UNIX System Services User's Guide (SA23-2279-60)",
+     "section": "The BPXBATCH utility",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_3.1.0/pdf/bpxa400.pdf",
+     "quote": "BPXBATCH is a utility that you can use to run shell commands or executable files through the batch facility."
+    },
+    {
+     "doc": "z/OS 3.1 z/OS UNIX System Services User's Guide (SA23-2279-60)",
+     "section": "Passing parameter data to BPXBATCH",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_3.1.0/pdf/bpxa400.pdf",
+     "quote": "In a batch job, BPXBATCH only allows up to 100 bytes for the parameter string due to JCL limitations."
+    },
+    {
+     "doc": "z/OS 3.1 z/OS UNIX System Services User's Guide (SA23-2279-60)",
+     "section": "Passing environment variables to BPXBATCH",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_3.1.0/pdf/bpxa400.pdf",
+     "quote": "To pass environment variables to BPXBATCH, you define a file containing the variable definitions and allocate it to the STDENV ddname."
+    },
+    {
+     "doc": "z/OS 3.1 z/OS UNIX System Services User's Guide (SA23-2279-60)",
+     "section": "Guidelines for defining STDPARM",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_3.1.0/pdf/bpxa400.pdf",
+     "quote": "If the STDPARM ddname is defined, BPXBATCH uses the data found in the specified file rather than what is found in the parameter string or in the STDIN ddname."
+    },
+    {
+     "doc": "z/OS 3.1 z/OS UNIX System Services User's Guide (SA23-2279-60)",
+     "section": "Guidelines for defining STDPARM",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_3.1.0/pdf/bpxa400.pdf",
+     "quote": "Records in in-stream data sets are concatenated with blanks as separator characters, and the string remaining after the SH token is passed as a single argument to a /bin/sh -c command."
+    },
+    {
+     "doc": "z/OS 3.1 z/OS UNIX System Services User's Guide (SA23-2279-60)",
+     "section": "Guidelines for defining stdin, stdout, and stderr",
+     "url": "https://www.ibm.com/docs/en/SSLTBW_3.1.0/pdf/bpxa400.pdf",
+     "quote": "It can be a sequential data set, a partitioned data set (PDS) member, a partitioned data set extended (PDSE) member, or SYSOUT."
+    }
+   ],
+   "era": 0,
+   "release": "z/OS 3.1"
+  },
+  {
+   "id": "H-0124",
+   "title": "DSNUTILB running RUNSTATS: PARM 'subsystem,utility-id', a free-form control statement continued without a hyphen",
+   "category": "jcl",
+   "issue": 4890,
+   "shapes": [
+    "BDLD jcl/BDLDUT5.jcl RUN030: EXEC PGM=DSNUTILB,PARM='DB2P,BDLDRUNS', SYSPRINT and UTPRINT SYSOUT=*, SYSIN holds RUNSTATS TABLESPACE BDLDDB.BDLDTS on one line and UPDATE SPACE on the next"
+   ],
+   "asserts": "The step is a jcl_steps fact with program DSNUTILB and parm 'DB2P,BDLDRUNS'; DB2P is the Db2 subsystem and BDLDRUNS the utility id, neither a dataset nor a program. DSNUTILB is system supplied: its EXEC PGM call_sites fact resolves to nothing in the estate and is no gap. The SYSIN stream holds one jcl_utility_cards fact with utility DSNUTILB, dd SYSIN, verb RUNSTATS and operands 'TABLESPACE BDLDDB.BDLDTS UPDATE SPACE': the statement runs over two lines with no continuation hyphen, so it is one fact, not two (the second line is not a verb). BDLDDB.BDLDTS is a database.table-space name, not a dataset. SYSPRINT and UTPRINT are jcl_dds facts with sysout *.",
+   "citations": [
+    {
+     "doc": "Db2 13 for z/OS Utility Guide and Reference",
+     "section": "Invoking a Db2 online utility by creating the JCL data set yourself",
+     "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_ugrefbook.pdf",
+     "quote": "//stepname EXEC PGM=DSNUTILB,PARM='system,[uid],[utproc]'"
+    },
+    {
+     "doc": "Db2 13 for z/OS Utility Guide and Reference",
+     "section": "Invoking a Db2 online utility by creating the JCL data set yourself",
+     "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_ugrefbook.pdf",
+     "quote": "The utility control program. The program must reside in an APF-authorized library."
+    },
+    {
+     "doc": "Db2 13 for z/OS Utility Guide and Reference",
+     "section": "Invoking a Db2 online utility by creating the JCL data set yourself",
+     "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_ugrefbook.pdf",
+     "quote": "The unique identifier for your utility job."
+    },
+    {
+     "doc": "Db2 13 for z/OS Utility Guide and Reference",
+     "section": "Data sets that online utilities use",
+     "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_ugrefbook.pdf",
+     "quote": "In the utility job, use the SYSIN DD statement to define an in-stream data set with the utility statement."
+    },
+    {
+     "doc": "Db2 13 for z/OS Utility Guide and Reference",
+     "section": "Chapter 32. RUNSTATS",
+     "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_ugrefbook.pdf",
+     "quote": "The RUNSTATS online utility gathers summary information about the characteristics of data in table spaces, indexes, and partitions."
+    },
+    {
+     "doc": "Db2 13 for z/OS Utility Guide and Reference",
+     "section": "REORG TABLESPACE, Example 12: Conditionally reorganizing a table space",
+     "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_ugrefbook.pdf",
+     "quote": "RUNSTATS TABLESPACE DBHR5201.TPHR5201 UPDATE SPACE"
+    }
+   ],
+   "era": 0,
+   "release": "Db2 13"
+  },
+  {
+   "id": "H-0125",
+   "title": "DSN subcommands BIND PACKAGE (MEMBER) and BIND PLAN (PKLIST) under IKJEFT01, each continued with a hyphen",
+   "category": "jcl",
+   "issue": 4890,
+   "shapes": [
+    "BDLD jcl/BDLDUT5.jcl BND040: EXEC PGM=IKJEFT01, DBRMLIB DD DSN=PROD.BDLD.DBRMLIB, SYSTSIN holds DSN SYSTEM(DB2P), BIND PACKAGE(BDLDCOLL) MEMBER(BDLDDB2) - ACTION(REPLACE), BIND PLAN(BDLDPLN) PKLIST(BDLDCOLL.*) - ACTION(REPLACE), END"
+   ],
+   "asserts": "The SYSTSIN stream holds four jcl_utility_cards facts with utility IKJEFT01, dd SYSTSIN: verbs DSN, BIND, BIND and END. Each BIND is one fact with its continuation hyphen dropped and its two lines joined: operands 'PACKAGE(BDLDCOLL) MEMBER(BDLDDB2) ACTION(REPLACE)' and 'PLAN(BDLDPLN) PKLIST(BDLDCOLL.*) ACTION(REPLACE)'. There is no RUN subcommand, so no RUN PROGRAM call_sites fact and no program edge: MEMBER(BDLDDB2) names a DBRM, which the BIND PACKAGE turns into a package, it does not call the COBOL program BDLDDB2 that the DBRM came from. BDLDCOLL.* is a collection and package-id pattern, not a dataset. DBRMLIB is an ordinary jcl_dds and jcl_datasets fact on PROD.BDLD.DBRMLIB.",
+   "citations": [
+    {
+     "doc": "Db2 13 for z/OS Command Reference",
+     "section": "Chapter 9. BIND PACKAGE subcommand (DSN)",
+     "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+     "quote": "The DSN subcommand BIND PACKAGE builds an application package."
+    },
+    {
+     "doc": "Db2 13 for z/OS Command Reference",
+     "section": "Chapter 9. BIND PACKAGE subcommand (DSN), Example: Replacing a version of a package",
+     "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+     "quote": "BIND PACKAGE (USIBMSTODB22.TEST) - MEMBER (DSN8BC13) - ACTION (REPLACE) REPLVER (APRIL_VERSION) -"
+    },
+    {
+     "doc": "Db2 13 for z/OS Command Reference",
+     "section": "MEMBER bind option",
+     "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+     "quote": "Specifies the name of a partitioned data set member or zFS file that contains a DBRM."
+    },
+    {
+     "doc": "Db2 13 for z/OS Command Reference",
+     "section": "MEMBER bind option",
+     "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+     "quote": "dbrm-member-name becomes the package name."
+    },
+    {
+     "doc": "Db2 13 for z/OS Command Reference",
+     "section": "LIBRARY bind option",
+     "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+     "quote": "Search only the libraries described by the DBRMLIB DD statement"
+    },
+    {
+     "doc": "Db2 13 for z/OS Command Reference",
+     "section": "Chapter 10. BIND PLAN subcommand (DSN)",
+     "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+     "quote": "The DSN subcommand BIND PLAN builds an application plan."
+    },
+    {
+     "doc": "Db2 13 for z/OS Command Reference",
+     "section": "PKLIST and NOPKLIST bind options",
+     "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+     "quote": "The PKLIST option determines the packages to include in a package list."
+    },
+    {
+     "doc": "Db2 13 for z/OS Command Reference",
+     "section": "ACTION bind option",
+     "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_comrefbook.pdf",
+     "quote": "The object replaces an existing one with the same identifier, and a new entry replaces the old one in the catalog table SYSPLAN or SYSPACKAGE."
+    }
+   ],
+   "era": 0,
+   "release": "Db2 13"
+  },
+  {
+   "id": "H-0129",
+   "title": "Open-time file statuses 05, 35 and 39 over KSDS files: an OPTIONAL file with no data set, a nonoptional one, and a record key that disagrees with the cluster",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAFOP: SELECT OPTIONAL CTL-FILE and SELECT CHK-FILE, both ORGANIZATION IS INDEXED over DDs with no data set behind them, and SELECT ORD-FILE over DD ORDKSD with RECORD KEY IS ORD-CUST (offset 8); 0000-MAIN OPEN INPUTs each and PERFORMs 1000-CTL-STATUS (tests '05'), 2000-CHK-STATUS (tests '35'), 3000-ORD-STATUS (tests '39')"
+   ],
+   "asserts": "The SELECT of CTL-FILE carries OPTIONAL (file_control optional = true; the other two carry no optional field). Each of 1000-, 2000-, 3000- is one units fact, PERFORMed once from 0000-MAIN as plain edges facts, and each tests the FILE STATUS item named in its own SELECT (WS-CTL-STATUS, WS-CHK-STATUS, WS-ORD-STATUS). At run time, OPEN INPUT of the optional file with no data set present ends in 05 (success, file unavailable); OPEN INPUT of the nonoptional file with no data set ends in 35 (permanent error); OPEN INPUT of ORD-FILE, whose key starts at offset 8 while the PROD.AIXA.ORDER cluster is defined KEYS(8 0), ends in 39 (fixed-attribute conflict). 05 has high-order digit 0 (successful), 35 and 39 digit 3 (permanent error). No READ is issued: the statuses are open-time only.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "An OPEN statement was successfully executed, but the referenced optional file was unavailable at the time the OPEN statement was executed."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "An OPEN statement with the INPUT, I-O, or EXTEND phrase was attempted on a nonoptional file that was unavailable."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The OPEN statement was unsuccessful because a conflict was detected between the fixed file attributes and the attributes specified for that file in the program. These attributes include the organization of the file (sequential, relative, or indexed), the prime record key, the alternate record keys, the code set, the maximum record size, the record type (fixed or variable), and the blocking factor."
+    }
+   ],
+   "era": 2,
+   "notes": "Quotes are the Table 34 entries for 05, 35 and 39 from igy6lr40.pdf via pdftotext, joined across line breaks. Table 34 says 05 does not apply to VSAM sequential files, so the optional plant is a KSDS. 04 (record length conflict on READ) is not planted here: it needs a variable-length record, which this generator's FDs (RECORDING MODE F) do not render. The JCL does not allocate CTLKSD or CHKKSD and no step runs AIXAFOP; the statuses are what IBM says for that allocation. GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0130",
+   "title": "File status 14 on a sequential READ of an RRDS with a too-small relative key item, 34 on a WRITE past the end of an ESDS, and 38 on an OPEN of a file closed WITH LOCK",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAFLK: SELECT SLOT-FILE ORGANIZATION IS RELATIVE ACCESS MODE IS SEQUENTIAL with RELATIVE KEY IS WS-SLOT-NO PIC 9(2), and SELECT LOG-FILE ORGANIZATION IS SEQUENTIAL over DD LOGESD (an ESDS); 0000-MAIN OPEN INPUTs SLOT-FILE, PERFORMs 1000-SCAN-SLOTS UNTIL WS-SLOT-STATUS NOT = '00' then 1100-SLOT-STATUS (tests '14'); OPEN EXTENDs LOG-FILE, PERFORMs 2000-FILL-LOG UNTIL WS-LOG-STATUS NOT = '00' then 2100-LOG-STATUS (tests '34'); CLOSE LOG-FILE WITH LOCK, OPEN INPUT LOG-FILE, PERFORM 3000-LOCK-STATUS (tests '38')"
+   ],
+   "asserts": "The two SELECTs are one file_control fact each: SLOT-FILE is org RELATIVE, access SEQUENTIAL, with relative_key WS-SLOT-NO (a PIC 9(2) item, so relative record numbers above 99 do not fit); LOG-FILE is org SEQUENTIAL. 1100-, 2100- and 3000- are each one units fact, PERFORMed once from 0000-MAIN as plain edges facts (1000- and 2000- are PERFORMed UNTIL), and each tests the FILE STATUS item named in its own SELECT (WS-SLOT-STATUS, WS-LOG-STATUS, WS-LOG-STATUS). At run time, the sequential READ of a relative file whose next relative record number has more significant digits than WS-SLOT-NO ends in 14 (high-order digit 1, at-end condition); a WRITE past the externally defined boundary of the ESDS ends in 34 (digit 3, permanent error); an OPEN of a file previously closed WITH LOCK ends in 38 (digit 3). No INVALID KEY phrase is coded, so status alone reports each condition.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A sequential READ statement was attempted for a relative file, and the number of significant digits in the relative record number was larger than the size of the relative key data item described for the file."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A permanent error exists because of a boundary violation; an attempt was made to write beyond the externally defined boundaries of a sequential file."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "An OPEN statement was attempted on a file previously closed with lock."
+    }
+   ],
+   "era": 2,
+   "notes": "Quotes are the Table 34 entries for 14, 34 and 38 from igy6lr40.pdf via pdftotext, joined across line breaks. Table 34 words 34 for a sequential file; an ESDS is the VSAM sequential file, and how many records fill the extent depends on the cluster's space, so the key asserts the status the loop ends in, not a count. The slot RRDS must hold a record numbered above 99 for 14 to occur; no JCL step runs AIXAFLK and the statuses are what IBM says for such a data set. 37 (open mode the file cannot support) and 44 (record size on REWRITE or a RECORD IS VARYING bound) are not planted: 37 depends on how the data set is allocated and 44 needs a variable-length FD this generator does not render. GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0131",
+   "title": "A sequential-access KSDS: REWRITE with no READ before it ends in file status 43, and REWRITE that gives a unique alternate key a duplicate value ends in 22",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAKS3: SELECT CUS-FILE ORGANIZATION IS INDEXED ACCESS MODE IS SEQUENTIAL with ALTERNATE RECORD KEY IS CUS-TAX (no DUPLICATES) and CUS-NAME WITH DUPLICATES; 0000-MAIN OPEN I-O, PERFORMs 1000-BLIND (REWRITE straight after OPEN, tests '43') then 2000-CLASH (READ NEXT, MOVE a TAX ID another record holds to CUS-TAX, REWRITE, tests '22')",
+    "AIXA jcl/AIXARU2.jcl KS3040: //CUSKSD, //CUSKSD1 (TAX path) and //CUSKSD2 (NAME path) on the same clusters as KS2030"
+   ],
+   "asserts": "The SELECT is one file_control fact (select CUS-FILE, assign CUSKSD, organization INDEXED, access_mode SEQUENTIAL, record_key CUS-ID) with alternate_keys [{name CUS-TAX, duplicates false}, {name CUS-NAME, duplicates true}]. 1000-BLIND and 2000-CLASH are each one units fact, PERFORMed once from 0000-MAIN as plain edges facts, and each tests the FILE STATUS item named in the SELECT (WS-CUS-STATUS). At run time, REWRITE of an indexed file in sequential access mode when the last I-O statement was not a successfully executed READ ends in 43 (high-order digit 4, logic error); REWRITE of a record after a successful READ NEXT, with CUS-TAX changed to a value another record already holds, ends in 22 (digit 2, invalid key) because CUS-TAX has no DUPLICATES phrase. CUS-NAME WITH DUPLICATES would not raise 22 for the same change. Step KS3040 has four jcl_dds facts: STEPLIB, CUSKSD, CUSKSD1, CUSKSD2, the latter two naming the paths.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "For relative and indexed files in the sequential access mode, the last input-output statement executed for the file prior to the execution of a DELETE or REWRITE statement was not a successfully executed READ statement."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "Or an attempt was made to write or rewrite a record that would create a duplicate prime record key or a duplicate alternate record key without the DUPLICATES phrase in an indexed file."
+    }
+   ],
+   "era": 2,
+   "notes": "Quotes are the Table 34 entries for 43 and 22 from igy6lr40.pdf via pdftotext, joined across line breaks. The 22 quote starts mid-sentence because Table 34 continues the entry for relative files. The 22 outcome assumes the data set holds a record with tax id 987654321 other than the one read (AIXAKS2 writes one); no step orders the two programs' data beyond that and the statuses are what IBM says for such a data set. Changing the prime key on REWRITE is a different case, not planted. GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0132",
+   "title": "Logic-error file statuses on a sequential KSDS: WRITE (48) and REWRITE (49) on a file open INPUT, READ past the at-end condition (46), OPEN of an open file (41), READ (47) and CLOSE (42) of a closed file",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAMOD: SELECT CUS-FILE ORGANIZATION IS INDEXED ACCESS MODE IS SEQUENTIAL; 0000-MAIN OPEN INPUT, then PERFORMs 1000-WRONG-MODE (WRITE tests '48', REWRITE tests '49'), 2000-DRAIN UNTIL the status is not '00', 2100-PAST-END (READ NEXT again, tests '46'), 3000-REOPEN (OPEN INPUT on the open file, tests '41'), CLOSE, then 4000-CLOSED (READ tests '47', CLOSE tests '42')",
+    "AIXA jcl/AIXARU2.jcl MD5050: //CUSKSD on the customer cluster"
+   ],
+   "asserts": "The SELECT is one file_control fact (select CUS-FILE, assign CUSKSD, organization INDEXED, access_mode SEQUENTIAL, record_key CUS-ID). 1000-WRONG-MODE, 2000-DRAIN, 2100-PAST-END, 3000-REOPEN and 4000-CLOSED are each one units fact, PERFORMed once from 0000-MAIN as plain edges facts (2000-DRAIN with an UNTIL), and each paragraph that tests a status tests the FILE STATUS item named in the SELECT (WS-CUS-STATUS). At run time, each statement ends in the logic-error status (high-order digit 4) IBM gives it: WRITE on a file open INPUT 48, REWRITE on a file open INPUT 49, a READ NEXT after the at-end condition 46, OPEN INPUT of a file already open 41, READ on a file that is not open 47, CLOSE of a file not open 42. Step MD5050 has two jcl_dds facts: STEPLIB and CUSKSD.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "An OPEN statement was attempted for a file in the open mode."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A CLOSE statement was attempted for a file not in the open mode."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A sequential READ statement was attempted on a file open in the input or I-O mode and no valid next record had been established because: The preceding READ statement was unsuccessful but did not cause an at-end condition. The preceding READ statement caused an at-end condition."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The execution of a READ statement was attempted on a file not open in the input or I-O mode."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The execution of a WRITE statement was attempted on a file not open in the I-O, output, or extend mode."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The execution of a DELETE or REWRITE statement was attempted on a file not open in the I-O mode."
+    }
+   ],
+   "era": 2,
+   "notes": "Quotes are the Table 34 entries for 41, 42, 46, 47, 48 and 49 from igy6lr40.pdf via pdftotext, joined across line breaks (the 46 entry also joins its two bullets). 1000-WRONG-MODE sets CUS-ID before WRITE so the statement is otherwise well formed; 2000-DRAIN reads to the end of the file, so the READ in 2100-PAST-END follows an at-end condition. 43 (REWRITE with no READ) is H-0131; 44 and 37 stay out for the reasons in H-0130's notes. The statuses are what IBM says; GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0133",
+   "title": "An alternate index defined NOUPGRADE and a path over it defined NOUPDATE: the index is outside the base cluster's upgrade set",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA jcl/AIXADF4.jcl IDC010: DEFINE ALTERNATEINDEX (NAME(PROD.AIXA.AUDIT.AIX) RELATE(PROD.AIXA.AUDIT) KEYS(8 8) NONUNIQUEKEY NOUPGRADE ...)",
+    "AIXA jcl/AIXADF4.jcl IDC010: DEFINE PATH (NAME(PROD.AIXA.AUDIT.PATH) PATHENTRY(PROD.AIXA.AUDIT.AIX) NOUPDATE)"
+   ],
+   "asserts": "Step IDC010 of AIXADF4 has four jcl_utility_cards facts, utility IDCAMS: verbs DEFINE (the base cluster), DEFINE (the ALTERNATEINDEX with NOUPGRADE), DEFINE (the PATH with NOUPDATE) and BLDINDEX, in that order. Unlike the UPGRADE index of H-0079, this alternate index is not kept up to date when PROD.AIXA.AUDIT is modified, so after BLDINDEX it goes stale as soon as the base cluster changes until BLDINDEX is run again; NOUPDATE on the path means opening the path does not allocate the base cluster's upgrade set. The plant is JCL-only: no program in the estate reads PROD.AIXA.AUDIT.PATH, and the key asserts card facts, not run-time staleness.",
+   "citations": [
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+     "section": "DEFINE ALTERNATEINDEX > UPGRADE|NOUPGRADE",
+     "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-alternateindex",
+     "quote": "Specifies whether or not the alternate index is to be upgraded (that is, kept up to date) when its base cluster is modified."
+    },
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+     "section": "DEFINE ALTERNATEINDEX > UPGRADE|NOUPGRADE",
+     "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-alternateindex",
+     "quote": "Specifies that the alternate index does not upgrade when its base cluster is modified."
+    },
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+     "section": "DEFINE PATH > UPDATE|NOUPDATE",
+     "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-path",
+     "quote": "specifies whether the base cluster's upgrade set is to be allocated when the path is opened for processing."
+    },
+    {
+     "doc": "z/OS DFSMS Access Method Services Commands (z/OS 2.5.0)",
+     "section": "DEFINE PATH > UPDATE|NOUPDATE",
+     "url": "https://www.ibm.com/docs/en/zos/2.5.0?topic=commands-define-path",
+     "quote": "the base cluster's upgrade set is not to be allocated."
+    }
+   ],
+   "era": 2
+  },
+  {
+   "id": "H-0134",
+   "title": "Variable-length FD over a KSDS: WRITE outside the RECORD IS VARYING bounds (file status 44) and READ of a record the FD cannot hold (04)",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAVAR: SELECT NOT-FILE ORGANIZATION IS INDEXED ACCESS MODE IS SEQUENTIAL; FD NOT-FILE RECORDING MODE IS V RECORD IS VARYING IN SIZE FROM 30 TO 50 CHARACTERS DEPENDING ON WS-NOT-LEN; 0000-MAIN OPEN I-O, PERFORMs 1000-TOO-LONG (WS-NOT-LEN 60, WRITE, tests '44'), 2000-TOO-SHORT (WS-NOT-LEN 10, WRITE, tests '44'), 3000-ODD-READ (READ NEXT, tests '04')",
+    "AIXA jcl/AIXARU2.jcl VR6060: //NOTKSD on PROD.AIXA.NOTES"
+   ],
+   "asserts": "The SELECT is one file_control fact (select NOT-FILE, assign NOTKSD, organization INDEXED, access_mode SEQUENTIAL, record_key NOT-ID, file_status WS-NOT-STATUS). 1000-TOO-LONG, 2000-TOO-SHORT and 3000-ODD-READ are each one units fact, PERFORMed once from 0000-MAIN as plain edges facts, and each tests the FILE STATUS item named in the SELECT. The FD names its record NOT-REC (one layout fact, 50 bytes: NOT-ID X(8), NOT-TEXT X(42)); the variable-length clause adds no fact of its own. At run time, WRITE of a record whose length (WS-NOT-LEN 60) exceeds the largest the RECORD IS VARYING clause allows, and WRITE of one (WS-NOT-LEN 10) below the smallest, each end in 44 (high-order digit 4, logic error); a READ that returns a record whose length is outside 30 to 50 ends successfully with 04 (high-order digit 0). Step VR6060 has two jcl_dds facts: STEPLIB and NOTKSD.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A boundary violation exists because an attempt was made to rewrite a record to a file and the record was not the same size as the record being replaced. Or an attempt was made to write or rewrite a record that was larger than the largest or smaller than the smallest record allowed by the RECORD IS VARYING clause of the associated file-name."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A READ statement was successfully executed, but the number of character positions that were read was less than the minimum size or was greater than the maximum size specified by the record description entries associated with the FD for the file."
+    }
+   ],
+   "era": 2,
+   "notes": "Quotes are the Table 34 entries for 44 and 04 from igy6lr40.pdf via pdftotext, joined across line breaks (the 04 entry's VLR(COMPAT) note, which turns the status into 00, is left out: the key assumes the default option). The 44 outcomes hold whatever the data set holds. The 04 outcome assumes PROD.AIXA.NOTES holds a record whose length is below 30 or above 50 bytes (no step in the estate loads one) and no JCL step orders that; the status is what IBM says for such a data set. The 44 clause for REWRITE of a record of a different size is not planted. Closes the 'variable-length FD the generator cannot render' gap named in H-0130's notes; the key does not record the FD's RECORD clause. GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0135",
+   "title": "REWRITE of a record whose length differs from the record it replaces, over an ESDS (file status 44)",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAVRW: SELECT LOG-FILE ORGANIZATION IS SEQUENTIAL ACCESS MODE IS SEQUENTIAL; FD LOG-FILE RECORDING MODE IS V RECORD IS VARYING IN SIZE FROM 40 TO 60 CHARACTERS DEPENDING ON WS-LOG-LEN; 0000-MAIN OPEN I-O, PERFORMs 1000-SHRINK (READ NEXT of a 60-byte record, MOVE 50 TO WS-LOG-LEN, REWRITE, tests '44')",
+    "AIXA jcl/AIXARU2.jcl VW7070: //LOGUPD on PROD.AIXA.LOG"
+   ],
+   "asserts": "The SELECT is one file_control fact (select LOG-FILE, assign LOGUPD, organization SEQUENTIAL, access_mode SEQUENTIAL, file_status WS-LOG-STATUS). 1000-SHRINK is one units fact, PERFORMed once from 0000-MAIN as a plain edges fact, and tests the FILE STATUS item named in the SELECT. The FD names its record LOG-REC (one layout fact, 60 bytes: LOG-TS X(14), LOG-TEXT X(40), FILLER X(6)); the variable-length clause adds no fact of its own. At run time the REWRITE of a record of 50 bytes over the 60-byte record the READ returned is within the RECORD IS VARYING bounds (40 to 60) but not the size of the record being replaced, and ends in 44 (high-order digit 4, logic error). Step VW7070 has two jcl_dds facts: STEPLIB and LOGUPD.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "A boundary violation exists because an attempt was made to rewrite a record to a file and the record was not the same size as the record being replaced. Or an attempt was made to write or rewrite a record that was larger than the largest or smaller than the smallest record allowed by the RECORD IS VARYING clause of the associated file-name."
+    }
+   ],
+   "era": 2,
+   "notes": "Quote is the Table 34 entry for 44 from igy6lr40.pdf via pdftotext, joined across line breaks (H-0134 plants the second sentence: WRITE outside the VARYING bounds). Planted over an ESDS (ORGANIZATION IS SEQUENTIAL), the case Table 34 names for REWRITE; a KSDS REWRITE of a different size is not planted (the Programming Guide's VSAM rules for indexed files were not checked). The outcome assumes PROD.AIXA.LOG holds a 60-byte record (AIXAESU reads it with the 60-byte fixed layout; nothing in the estate loads it). An empty data set would end the READ at end and the REWRITE in 43. The key does not record the FD's RECORD clause. GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0136",
+   "title": "REWRITE of a record whose length differs from the record it replaces, over a KSDS (allowed: file status 00, not 44)",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAVKW: SELECT NOT-FILE ORGANIZATION IS INDEXED ACCESS MODE IS SEQUENTIAL; FD NOT-FILE RECORDING MODE IS V RECORD IS VARYING IN SIZE FROM 30 TO 50 CHARACTERS DEPENDING ON WS-NOT-LEN; 0000-MAIN OPEN I-O, PERFORMs 1000-SHRINK (READ NEXT of a 50-byte record, MOVE 40 TO WS-NOT-LEN, REWRITE, tests '00')",
+    "AIXA jcl/AIXARU2.jcl VK8080: //NOTUPD on PROD.AIXA.NOTES"
+   ],
+   "asserts": "The SELECT is one file_control fact (select NOT-FILE, assign NOTUPD, organization INDEXED, access_mode SEQUENTIAL, record_key NOT-ID, file_status WS-NOT-STATUS). 1000-SHRINK is one units fact, PERFORMed once from 0000-MAIN as a plain edges fact, and tests the FILE STATUS item named in the SELECT. The FD names its record NOT-REC (one layout fact, 50 bytes: NOT-ID X(8), NOT-TEXT X(42)); the variable-length clause adds no fact of its own. At run time the REWRITE of a record of 40 bytes over the 50-byte record the READ returned is within the RECORD IS VARYING bounds (30 to 50), and for an indexed file the length may differ from the record being replaced, so it succeeds with 00 (high-order digit 0), unlike the ESDS REWRITE of H-0135 (44). Step VK8080 has two jcl_dds facts: STEPLIB and NOTUPD.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "REWRITE statement > Indexed files",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The number of character positions in record-name-1 can be different from the number of character positions in the record being replaced."
+    }
+   ],
+   "era": 2,
+   "notes": "Quote is the Indexed files paragraph of the REWRITE statement from igy6lr40.pdf via pdftotext (its Sequential files paragraph requires equal lengths: H-0135 plants that case over an ESDS). The manual does not state the resulting status outright; 00 follows from the statement completing with no exception condition, and the quoted rule is what makes a different length no exception for a KSDS, so a reader who applies the Table 34 entry for 44 ('not the same size as the record being replaced') to a KSDS would wrongly expect 44. The VSAM-level behaviour (Programming Guide) was not checked. The outcome assumes PROD.AIXA.NOTES holds a 50-byte record and is writable (nothing in the estate loads it); an empty data set would end the READ at end and the REWRITE in 43. The key does not record the FD's RECORD clause. GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0137",
+   "title": "OPEN I-O of a z/OS UNIX byte-stream file read through QSAM (a DD with PATH=, not a VSAM PATH): file status 37",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAUXF: SELECT UX-FILE ASSIGN TO UXOUT ORGANIZATION IS SEQUENTIAL; 0000-MAIN OPEN I-O, PERFORMs 1000-CHECK (tests '37')",
+    "AIXA jcl/AIXARU2.jcl UX9090: //UXOUT DD PATH='/u/aixa/extract/orders.dat',FILEDATA=BINARY"
+   ],
+   "asserts": "The SELECT is one file_control fact (select UX-FILE, assign UXOUT, organization SEQUENTIAL, access_mode SEQUENTIAL, record_key null) with no alternate_keys and no relative_key. 1000-CHECK is one units fact, PERFORMed once from 0000-MAIN as a plain edges fact, and tests the FILE STATUS item named in the SELECT. DD UXOUT in step UX9090 is a jcl_dds fact with dsn null, no sysout and no disp: PATH= names a z/OS UNIX file, not a data set and not a VSAM PATH (H-0080 is the VSAM PATH, a DSN). At run time OPEN I-O of that file is not supported, so file status 37 (permanent error, the file would not support the open mode); the program takes the 37 branch and WS-BAD stays 0. Step UX9090 has three jcl_dds facts: STEPLIB, UXOUT and SYSOUT.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+     "section": "Coding input and output statements for QSAM files > OPEN",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+     "quote": "You cannot open z/OS UNIX files as I-O; a file status of 37 results if you attempt to do so."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "File status key, Table 34 (permanent error condition)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "An OPEN statement was attempted on a file that would not support the open mode specified in the OPEN statement."
+    }
+   ],
+   "era": 2,
+   "notes": "Quotes are from igy6pg40.pdf and igy6lr40.pdf via pdftotext (the Programming Guide also lists 'OPEN I-O and REWRITE are not supported ... 37 from OPEN I-O' under Accessing z/OS UNIX files using QSAM). Not a VSAM case: it is planted here because the DD keyword PATH= collides with the VSAM PATH of H-0079/H-0080 and a reader must not take it for an alternate-index path. The edition number SC27-8714-03 is the one printed on the 6.4 Programming Guide cover as read locally; not re-verified online. The FD's record layout is nominal. GnuCOBOL statuses were not compared."
+  },
+  {
+   "id": "H-0138",
+   "title": "REWRITE of a record in a z/OS UNIX byte-stream file read through QSAM (the file cannot be open I-O): file status 49",
+   "category": "vsam",
+   "issue": 4894,
+   "shapes": [
+    "AIXA AIXAUXR: SELECT UR-FILE ASSIGN TO UXRWR ORGANIZATION IS SEQUENTIAL; 0000-MAIN OPEN OUTPUT, WRITE, REWRITE, PERFORMs 1000-CHECK (tests '49')",
+    "AIXA jcl/AIXARU2.jcl UR9191: //UXRWR DD PATH='/u/aixa/extract/orders2.dat',FILEDATA=BINARY"
+   ],
+   "asserts": "The SELECT is one file_control fact (select UR-FILE, assign UXRWR, organization SEQUENTIAL, access_mode SEQUENTIAL, record_key null) with no alternate_keys and no relative_key. 1000-CHECK is one units fact, PERFORMed once from 0000-MAIN as a plain edges fact, and tests the FILE STATUS item named in the SELECT. DD UXRWR in step UR9191 is a jcl_dds fact with dsn null, no sysout and no disp (PATH= is a z/OS UNIX file, as in H-0137). At run time the OPEN OUTPUT and the WRITE succeed; the REWRITE cannot update a file in the z/OS UNIX file system, and since such a file can never be open I-O it ends in file status 49 (REWRITE on a file not open I-O); the program takes the 49 branch and WS-BAD stays 0. Step UR9191 has three jcl_dds facts: STEPLIB, UXRWR and SYSOUT.",
+   "citations": [
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+     "section": "Coding input and output statements for QSAM files > REWRITE",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+     "quote": "You cannot update a file in the z/OS UNIX file system using REWRITE."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Programming Guide (SC27-8714-03)",
+     "section": "Coding input and output statements for QSAM files > OPEN",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6pg40.pdf",
+     "quote": "You cannot open z/OS UNIX files as I-O; a file status of 37 results if you attempt to do so."
+    },
+    {
+     "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+     "section": "I-O status > File status key (Table 34)",
+     "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+     "quote": "The execution of a DELETE or REWRITE statement was attempted on a file not open in the I-O mode."
+    }
+   ],
+   "era": 2,
+   "notes": "The 49 is an inference from two quoted rules, not a sentence IBM prints: the Programming Guide says REWRITE cannot update a UNIX file and that such a file cannot be opened I-O (37), and Table 34 gives 49 for REWRITE on a file not open I-O; the manual does not name the status for this exact statement. Status 47 is not used for this case: Table 34 gives 47 to READ and START on a file not open input or I-O, not to REWRITE. The outcome assumes the OPEN OUTPUT of the PATH succeeds (PATHOPTS OWRONLY,OCREAT,OTRUNC and PATHMODE give the program write access to /u/aixa/extract). The FD's record layout is nominal. GnuCOBOL statuses were not compared."
   }
  ],
  "not_planted": [

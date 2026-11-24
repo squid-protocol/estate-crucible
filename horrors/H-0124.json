@@ -1,0 +1,116 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0124",
+ "title": "DSNUTILB running RUNSTATS: PARM 'subsystem,utility-id', a free-form control statement continued without a hyphen",
+ "category": "jcl",
+ "issue": 4890,
+ "shapes": [
+  "BDLD jcl/BDLDUT5.jcl RUN030: EXEC PGM=DSNUTILB,PARM='DB2P,BDLDRUNS', SYSPRINT and UTPRINT SYSOUT=*, SYSIN holds RUNSTATS TABLESPACE BDLDDB.BDLDTS on one line and UPDATE SPACE on the next"
+ ],
+ "asserts": "The step is a jcl_steps fact with program DSNUTILB and parm 'DB2P,BDLDRUNS'; DB2P is the Db2 subsystem and BDLDRUNS the utility id, neither a dataset nor a program. DSNUTILB is system supplied: its EXEC PGM call_sites fact resolves to nothing in the estate and is no gap. The SYSIN stream holds one jcl_utility_cards fact with utility DSNUTILB, dd SYSIN, verb RUNSTATS and operands 'TABLESPACE BDLDDB.BDLDTS UPDATE SPACE': the statement runs over two lines with no continuation hyphen, so it is one fact, not two (the second line is not a verb). BDLDDB.BDLDTS is a database.table-space name, not a dataset. SYSPRINT and UTPRINT are jcl_dds facts with sysout *.",
+ "citations": [
+  {
+   "doc": "Db2 13 for z/OS Utility Guide and Reference",
+   "section": "Invoking a Db2 online utility by creating the JCL data set yourself",
+   "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_ugrefbook.pdf",
+   "quote": "//stepname EXEC PGM=DSNUTILB,PARM='system,[uid],[utproc]'"
+  },
+  {
+   "doc": "Db2 13 for z/OS Utility Guide and Reference",
+   "section": "Invoking a Db2 online utility by creating the JCL data set yourself",
+   "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_ugrefbook.pdf",
+   "quote": "The utility control program. The program must reside in an APF-authorized library."
+  },
+  {
+   "doc": "Db2 13 for z/OS Utility Guide and Reference",
+   "section": "Invoking a Db2 online utility by creating the JCL data set yourself",
+   "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_ugrefbook.pdf",
+   "quote": "The unique identifier for your utility job."
+  },
+  {
+   "doc": "Db2 13 for z/OS Utility Guide and Reference",
+   "section": "Data sets that online utilities use",
+   "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_ugrefbook.pdf",
+   "quote": "In the utility job, use the SYSIN DD statement to define an in-stream data set with the utility statement."
+  },
+  {
+   "doc": "Db2 13 for z/OS Utility Guide and Reference",
+   "section": "Chapter 32. RUNSTATS",
+   "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_ugrefbook.pdf",
+   "quote": "The RUNSTATS online utility gathers summary information about the characteristics of data in table spaces, indexes, and partitions."
+  },
+  {
+   "doc": "Db2 13 for z/OS Utility Guide and Reference",
+   "section": "REORG TABLESPACE, Example 12: Conditionally reorganizing a table space",
+   "url": "https://www.ibm.com/docs/en/SSEPEK_13.0.0/pdf/db2z_13_ugrefbook.pdf",
+   "quote": "RUNSTATS TABLESPACE DBHR5201.TPHR5201 UPDATE SPACE"
+  }
+ ],
+ "era": 0,
+ "release": "Db2 13",
+ "planted": [
+  {
+   "member": "apps/BDLD/jcl/BDLDUT5.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "DSNUTILB",
+      "target": "DSNUTILB",
+      "line": 20,
+      "resolves_to": null,
+      "horror": "H-0124"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": "BDLDUT5",
+      "proc": null,
+      "step": "RUN030",
+      "ordinal": 3,
+      "program": "DSNUTILB",
+      "exec_proc": null,
+      "cond": null,
+      "line": 20,
+      "parm": "DB2P,BDLDRUNS",
+      "horror": "H-0124"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": "BDLDUT5",
+      "proc": null,
+      "step": "RUN030",
+      "dd": "SYSIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 24,
+      "inline_lines": 2,
+      "horror": "H-0124"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "BDLDUT5",
+      "proc": null,
+      "step": "RUN030",
+      "utility": "DSNUTILB",
+      "dd": "SYSIN",
+      "verb": "RUNSTATS",
+      "operands": "TABLESPACE BDLDDB.BDLDTS UPDATE SPACE",
+      "line": 25,
+      "horror": "H-0124"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

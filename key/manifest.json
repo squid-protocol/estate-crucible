@@ -176,6 +176,13 @@
    "era_evidence": "END-IF (COBOL-85); static CALLs to the MQI and plain EXEC steps"
   },
   {
+   "id": "MQBR",
+   "title": "Bridge Road (MQ messages that start IMS and CICS work)",
+   "style": "batch COBOL senders for the IMS bridge (MQIIH) and the CICS bridge (MQCIH), and the IMS MPP the bridge starts",
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); static CALLs to the MQI and DL/I and plain EXEC steps"
+  },
+  {
    "id": "HKEP",
    "title": "Hierarchy Keep (batch IMS: DL/I calls and a DBD)",
    "style": "batch COBOL over DL/I (CBLTDLI) with a DBDGEN member",
@@ -213,33 +220,33 @@
   "ims_gen"
  ],
  "fact_totals": {
-  "programs": 71,
-  "units": 192,
-  "edges": 193,
-  "call_sites": 167,
-  "copies": 97,
-  "data_items": 792,
-  "layouts": 369,
+  "programs": 84,
+  "units": 230,
+  "edges": 234,
+  "call_sites": 199,
+  "copies": 105,
+  "data_items": 987,
+  "layouts": 439,
   "sql_statements": 6,
   "sql_tables": 3,
-  "jcl_steps": 85,
-  "jcl_dds": 271,
+  "jcl_steps": 102,
+  "jcl_dds": 327,
   "screen_fields": 16,
   "csd_resources": 48,
   "transactions": 8,
   "cics_resources": 13,
-  "jcl_datasets": 149,
-  "file_control": 21,
-  "entry_points": 71,
-  "file_edges": 48,
-  "data_moves": 249,
+  "jcl_datasets": 175,
+  "file_control": 33,
+  "entry_points": 84,
+  "file_edges": 57,
+  "data_moves": 308,
   "copy_collisions": 9,
-  "gaps": 83,
+  "gaps": 94,
   "dead": 11,
-  "jcl_utility_cards": 74,
+  "jcl_utility_cards": 87,
   "jcl_outputs": 3,
-  "dli_calls": 2,
-  "ims_gen": 4,
+  "dli_calls": 5,
+  "ims_gen": 14,
   "phantoms": 61
  },
  "code_pages": {
@@ -297,6 +304,9 @@
    ],
    "LOANCPY": [
     "apps/LOAN/copybook"
+   ],
+   "MQBRCPY": [
+    "apps/MQBR/copybook"
    ],
    "MQSACPY": [
     "apps/MQSA/copybook"
@@ -448,6 +458,13 @@
    {
     "programs": "apps/MODN/*",
     "order": [
+     "SHRCPY"
+    ]
+   },
+   {
+    "programs": "apps/MQBR/*",
+    "order": [
+     "MQBRCPY",
      "SHRCPY"
     ]
    },
@@ -622,7 +639,29 @@
   "H-0110",
   "H-0111",
   "H-0112",
-  "H-0113"
+  "H-0113",
+  "H-0114",
+  "H-0115",
+  "H-0116",
+  "H-0117",
+  "H-0118",
+  "H-0119",
+  "H-0120",
+  "H-0121",
+  "H-0122",
+  "H-0123",
+  "H-0124",
+  "H-0125",
+  "H-0129",
+  "H-0130",
+  "H-0131",
+  "H-0132",
+  "H-0133",
+  "H-0134",
+  "H-0135",
+  "H-0136",
+  "H-0137",
+  "H-0138"
  ],
  "members": {
   "apps/ACCT/cobol/ACCTAUD.cbl": {
@@ -858,6 +897,42 @@
     "H-0107"
    ]
   },
+  "apps/AIXA/cobol/AIXAFLK.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "81f905b73cdbd8a8a3445254c8e5499ae25343bdfbdb52ae5b109210176cccfc",
+   "bytes": 3097,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and CLOSE ... WITH LOCK (COBOL-85); no later construct",
+   "horrors": [
+    "H-0130"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAFOP.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "36ede4ec3ecff0e96e10758c8da0efba2ac0d492c082a353b085ff097958557d",
+   "bytes": 2980,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and OPTIONAL (COBOL-85); no later construct",
+   "horrors": [
+    "H-0129"
+   ]
+  },
   "apps/AIXA/cobol/AIXAKS2.cbl": {
    "app": "AIXA",
    "library": "cobol",
@@ -874,6 +949,24 @@
    "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
    "horrors": [
     "H-0108"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAKS3.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "e8e95f73ccf8e235a6c5fb7e78a8bb94287378869eaa1c555162ecbd6ac2ccca",
+   "bytes": 1877,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-READ (COBOL-85); no later construct",
+   "horrors": [
+    "H-0131"
    ]
   },
   "apps/AIXA/cobol/AIXAKSD.cbl": {
@@ -893,6 +986,24 @@
    "horrors": [
     "H-0076",
     "H-0081"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAMOD.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "deeaf0429c32ddabcd683f91d240814f609d235abef11a43c3c41683202d3b30",
+   "bytes": 2858,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+   "horrors": [
+    "H-0132"
    ]
   },
   "apps/AIXA/cobol/AIXARRD.cbl": {
@@ -929,6 +1040,96 @@
    "era_evidence": "END-START, END-READ, END-WRITE, END-REWRITE, END-DELETE (COBOL-85); no later construct",
    "horrors": [
     "H-0106"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAUXF.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "940d4b9db78440b9503e4431686e97f4347ae5b9703979c414276eb1c95b7183",
+   "bytes": 1284,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); no later construct",
+   "horrors": [
+    "H-0137"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAUXR.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "9510bc88675197c4614a93ea1740356bd59fb4aa3f60fdcfb4048c5189ff24e7",
+   "bytes": 1444,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); no later construct",
+   "horrors": [
+    "H-0138"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAVAR.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "66375e15d1a00771fcd600cecb60502d6393414e3bcb7b0ef1899b0fa724ae94",
+   "bytes": 2209,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+   "horrors": [
+    "H-0134"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAVKW.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "5c558d16e4fa335e83acf63dc6d12d34bcb2474c5c760652b10ab8bdccecb827",
+   "bytes": 1643,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+   "horrors": [
+    "H-0136"
+   ]
+  },
+  "apps/AIXA/cobol/AIXAVRW.cbl": {
+   "app": "AIXA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "31539818c5408b820fe9df6688a13f8eb1bf058cb151f0192a8395d57d45ffbe",
+   "bytes": 1652,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF and END-READ (COBOL-85); no later construct",
+   "horrors": [
+    "H-0135"
    ]
   },
   "apps/AIXA/csd/AIXAGRP.csd": {
@@ -996,12 +1197,12 @@
     "H-0110"
    ]
   },
-  "apps/AIXA/jcl/AIXARU2.jcl": {
+  "apps/AIXA/jcl/AIXADF4.jcl": {
    "app": "AIXA",
    "library": "jcl",
    "language": "jcl",
-   "sha256": "9b51fb4efbc07db78f8bfef616c83179538dc0cf2da45d01c19f8416f468166e",
-   "bytes": 665,
+   "sha256": "e8549ed737b32e1efaf9fcb03f11e2321cc2e18ae32b4c98a1ebccb21eecd39a",
+   "bytes": 677,
    "encoding": "utf-8",
    "storage": "lf",
    "key": "key/apps/AIXA.json",
@@ -1009,7 +1210,25 @@
     "status": "not-cobol"
    },
    "horrors": [
-    "H-0108"
+    "H-0133"
+   ]
+  },
+  "apps/AIXA/jcl/AIXARU2.jcl": {
+   "app": "AIXA",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "99a1f4cfb059efae3c2933c734f49fc6915c5135434fbce535091687b43d91fd",
+   "bytes": 1976,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/AIXA.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0108",
+    "H-0137",
+    "H-0138"
    ]
   },
   "apps/AIXA/jcl/AIXARUN.jcl": {
@@ -1335,6 +1554,41 @@
     "H-0103",
     "H-0104",
     "H-0105"
+   ]
+  },
+  "apps/BDLD/jcl/BDLDUT4.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "a6167c1e18397e390ac09283ee9e0009ed1ad1331b91a1219211af3c7e4b3a56",
+   "bytes": 665,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/BDLD.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0121",
+    "H-0122"
+   ]
+  },
+  "apps/BDLD/jcl/BDLDUT5.jcl": {
+   "app": "BDLD",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "39bebd5105ac77254f4bfc00903dac0444c70d2ace2869c4eec3fd8aaaa91622",
+   "bytes": 936,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/BDLD.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0123",
+    "H-0124",
+    "H-0125"
    ]
   },
   "apps/BDLD/jcl/BDLDUTIL.jcl": {
@@ -1765,6 +2019,25 @@
    },
    "generated_from": "apps/GULF/bms/GULFMS.bms"
   },
+  "apps/HKEP/asm/HKEPDB2.asm": {
+   "app": "HKEP",
+   "library": "asm",
+   "language": "hlasm",
+   "sha256": "dc764638751342a9f94994dddaa64163241d57de9f9935dc98371ed619f045b0",
+   "bytes": 399,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/HKEP.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); DL/I is a static CALL interface to CBLTDLI",
+   "horrors": [
+    "H-0118",
+    "H-0119"
+   ]
+  },
   "apps/HKEP/asm/HKEPDBD.asm": {
    "app": "HKEP",
    "library": "asm",
@@ -1781,6 +2054,42 @@
    "era_evidence": "END-IF (COBOL-85); DL/I is a static CALL interface to CBLTDLI",
    "horrors": [
     "H-0096"
+   ]
+  },
+  "apps/HKEP/asm/HKEPPSB.asm": {
+   "app": "HKEP",
+   "library": "asm",
+   "language": "hlasm",
+   "sha256": "e6ea8af7061844db379c8a0c5cb5c1f48d47a79879027c900c159f2d504e9376",
+   "bytes": 244,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/HKEP.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); DL/I is a static CALL interface to CBLTDLI",
+   "horrors": [
+    "H-0117"
+   ]
+  },
+  "apps/HKEP/cobol/HKEPFIND.cbl": {
+   "app": "HKEP",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "64f04c6b0271715ff8d40fe9bab11999ba43386ca5ed5e1b50533bfc0802a823",
+   "bytes": 1420,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/HKEP.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); DL/I is a static CALL interface to CBLTDLI",
+   "horrors": [
+    "H-0120"
    ]
   },
   "apps/HKEP/cobol/HKEPWALK.cbl": {
@@ -2263,6 +2572,138 @@
    "horrors": [
     "H-0028"
    ]
+  },
+  "apps/MQBR/cobol/MQBRCIH.cbl": {
+   "app": "MQBR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "b2c8cb39be392e3494c47a579252b1baf3b04054f2f2a7a4a604360b06137fc0",
+   "bytes": 2604,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI and DL/I are static CALL interfaces",
+   "horrors": [
+    "H-0115"
+   ]
+  },
+  "apps/MQBR/cobol/MQBRIMS.cbl": {
+   "app": "MQBR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "1c6d74511c8984c72a3eb10f9a4099675ceac31cfbe27f1a42ff63ff4affc2e3",
+   "bytes": 2771,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI and DL/I are static CALL interfaces",
+   "horrors": [
+    "H-0114"
+   ]
+  },
+  "apps/MQBR/cobol/MQBRMPP.cbl": {
+   "app": "MQBR",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "2cc0f708c5b2748c992ea8c44571ad00e7f39d281035c2f6f6f19c909921de19",
+   "bytes": 1554,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI and DL/I are static CALL interfaces",
+   "horrors": [
+    "H-0116"
+   ]
+  },
+  "apps/MQBR/copybook/MQBCIH.cpy": {
+   "app": "MQBR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "f905268d17d913eccc33267b79318a81cd071ef489b1efc4294737e09c92677e",
+   "bytes": 2202,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQBR/copybook/MQBIIH.cpy": {
+   "app": "MQBR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "e22827b9bff98d32d7649298937b4994b856378b3bf458631c06ded0c6d57508",
+   "bytes": 955,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQBR/copybook/MQBMD.cpy": {
+   "app": "MQBR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "ec26f5d5f288f7e2e7302f2c5f1229d1df7ed0669fef8fec7ac5eb2311ef0a19",
+   "bytes": 342,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQBR/copybook/MQBOD.cpy": {
+   "app": "MQBR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "3146b3303aa794ccdff79f653e0436e0db8df51483b4c2f499c53db8dd4e8c48",
+   "bytes": 231,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQBR/copybook/MQBPMO.cpy": {
+   "app": "MQBR",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "8154afe49526e74dd3bbfb1ce0214da50616522750ea4cf6cbe2748938e0308d",
+   "bytes": 189,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQBR/jcl/MQBRRUN.jcl": {
+   "app": "MQBR",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "c06133bdebfe27a38d36a71d6133fdf1e845c75b88a1d5d5dccd1384643c90c4",
+   "bytes": 529,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQBR.json",
+   "compile": {
+    "status": "not-cobol"
+   }
   },
   "apps/MQSA/cobol/MQSABKO.cbl": {
    "app": "MQSA",

@@ -1,0 +1,84 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0135",
+ "title": "REWRITE of a record whose length differs from the record it replaces, over an ESDS (file status 44)",
+ "category": "vsam",
+ "issue": 4894,
+ "shapes": [
+  "AIXA AIXAVRW: SELECT LOG-FILE ORGANIZATION IS SEQUENTIAL ACCESS MODE IS SEQUENTIAL; FD LOG-FILE RECORDING MODE IS V RECORD IS VARYING IN SIZE FROM 40 TO 60 CHARACTERS DEPENDING ON WS-LOG-LEN; 0000-MAIN OPEN I-O, PERFORMs 1000-SHRINK (READ NEXT of a 60-byte record, MOVE 50 TO WS-LOG-LEN, REWRITE, tests '44')",
+  "AIXA jcl/AIXARU2.jcl VW7070: //LOGUPD on PROD.AIXA.LOG"
+ ],
+ "asserts": "The SELECT is one file_control fact (select LOG-FILE, assign LOGUPD, organization SEQUENTIAL, access_mode SEQUENTIAL, file_status WS-LOG-STATUS). 1000-SHRINK is one units fact, PERFORMed once from 0000-MAIN as a plain edges fact, and tests the FILE STATUS item named in the SELECT. The FD names its record LOG-REC (one layout fact, 60 bytes: LOG-TS X(14), LOG-TEXT X(40), FILLER X(6)); the variable-length clause adds no fact of its own. At run time the REWRITE of a record of 50 bytes over the 60-byte record the READ returned is within the RECORD IS VARYING bounds (40 to 60) but not the size of the record being replaced, and ends in 44 (high-order digit 4, logic error). Step VW7070 has two jcl_dds facts: STEPLIB and LOGUPD.",
+ "citations": [
+  {
+   "doc": "Enterprise COBOL for z/OS 6.4 Language Reference (SC27-8713-03)",
+   "section": "I-O status > File status key (Table 34)",
+   "url": "https://publibfp.dhe.ibm.com/epubs/pdf/igy6lr40.pdf",
+   "quote": "A boundary violation exists because an attempt was made to rewrite a record to a file and the record was not the same size as the record being replaced. Or an attempt was made to write or rewrite a record that was larger than the largest or smaller than the smallest record allowed by the RECORD IS VARYING clause of the associated file-name."
+  }
+ ],
+ "era": 2,
+ "notes": "Quote is the Table 34 entry for 44 from igy6lr40.pdf via pdftotext, joined across line breaks (H-0134 plants the second sentence: WRITE outside the VARYING bounds). Planted over an ESDS (ORGANIZATION IS SEQUENTIAL), the case Table 34 names for REWRITE; a KSDS REWRITE of a different size is not planted (the Programming Guide's VSAM rules for indexed files were not checked). The outcome assumes PROD.AIXA.LOG holds a 60-byte record (AIXAESU reads it with the 60-byte fixed layout; nothing in the estate loads it). An empty data set would end the READ at end and the REWRITE in 43. The key does not record the FD's RECORD clause. GnuCOBOL statuses were not compared.",
+ "planted": [
+  {
+   "member": "apps/AIXA/cobol/AIXAVRW.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "1000-SHRINK",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 36,
+      "end_line": 46,
+      "horror": "H-0135"
+     }
+    ],
+    "file_control": [
+     {
+      "select": "LOG-FILE",
+      "assign": "LOGUPD",
+      "organization": "SEQUENTIAL",
+      "access_mode": "SEQUENTIAL",
+      "record_key": null,
+      "file_status": "WS-LOG-STATUS",
+      "fd_copies": [],
+      "line": 11,
+      "horror": "H-0135"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "50",
+      "source_kind": "literal",
+      "target": "WS-LOG-LEN",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 40,
+      "horror": "H-0135"
+     },
+     {
+      "verb": "ADD",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-BAD",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 45,
+      "horror": "H-0135"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
