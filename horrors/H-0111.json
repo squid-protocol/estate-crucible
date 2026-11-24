@@ -1,0 +1,230 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0111",
+ "title": "RRS batch: a program that commits with SRRCMIT / SRRBACK, linked with the CSQBRSTB stub and the ATRSCSS callable services stub",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQSA MQSARRS: CALL 'SRRCMIT' USING WS-RRS-RC after a good MQPUT, CALL 'SRRBACK' otherwise; no MQCMIT or MQBACK",
+  "MQSA jcl/MQSALNK.jcl LKRRS10: IEWL with SYSLIB MQM.SCSQLOAD and SYS1.CSSLIB, SYSLIN INCLUDE SYSLIB(CSQBRSTB), INCLUDE SYSLIB(ATRSCSS)"
+ ],
+ "asserts": "MQSARRS holds two call_sites facts to SRRCMIT and SRRBACK (form literal, resolves_to null, a gaps entry each) and none to MQCMIT or MQBACK. Step LKRRS10 of MQSALNK is a jcl_steps fact (program IEWL, parm LIST,MAP; IEWL is a gaps entry, no member holds it); its SYSLIB DD is MQM.SCSQLOAD with SYS1.CSSLIB concatenated (two jcl_datasets entries), and its SYSLIN instream data yields jcl_utility_cards facts (utility IEWL, verb INCLUDE) for SYSLIB(CSQBRSTB) and SYSLIB(ATRSCSS), then INCLUDE OBJLIB(MQSARRS) and NAME. The pairing is the fact: the program is linked with the RRS stub, so MQCMIT / MQBACK would fail with MQRC_ENVIRONMENT_ERROR.",
+ "citations": [
+  {
+   "doc": "IBM MQ 9.3 developing applications",
+   "section": "The RRS batch adapter",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q027130_.html",
+   "quote": "This adapter requires you to change any MQCMIT statement to SRRCMIT and any MQBACK statement to SRRBACK in your IBM MQ application. (If you code MQCMIT or MQBACK in an application linked with CSQBRSTB, you receive MQRC_ENVIRONMENT_ERROR.)"
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications",
+   "section": "IBM MQ for z/OS stub programs",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q025760_.html",
+   "quote": "If you use the CSQBRSTB stub program, link-edit with ATRSCSS from SYS1.CSSLIB."
+  }
+ ],
+ "era": 2,
+ "release": "IBM MQ 9.3",
+ "planted": [
+  {
+   "member": "apps/MQSA/cobol/MQSARRS.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "edges": [
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "SRRCMIT",
+      "line": 51,
+      "form": "literal",
+      "horror": "H-0111"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "SRRBACK",
+      "line": 53,
+      "form": "literal",
+      "horror": "H-0111"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "SRRCMIT",
+      "target": "SRRCMIT",
+      "line": 51,
+      "resolves_to": null,
+      "horror": "H-0111"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "SRRBACK",
+      "target": "SRRBACK",
+      "line": 53,
+      "resolves_to": null,
+      "horror": "H-0111"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "SRRCMIT",
+      "line": 51,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0111"
+     },
+     {
+      "kind": "call",
+      "name": "SRRBACK",
+      "line": 53,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0111"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/MQSA/jcl/MQSALNK.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "IEWL",
+      "target": "IEWL",
+      "line": 5,
+      "resolves_to": null,
+      "horror": "H-0111"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": "MQSALNK",
+      "proc": null,
+      "step": "LKRRS10",
+      "ordinal": 1,
+      "program": "IEWL",
+      "exec_proc": null,
+      "cond": null,
+      "line": 5,
+      "parm": "LIST,MAP",
+      "horror": "H-0111"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": "MQSALNK",
+      "proc": null,
+      "step": "LKRRS10",
+      "dd": null,
+      "dsn": "SYS1.CSSLIB",
+      "generation": null,
+      "disp": "SHR",
+      "disp_normal": null,
+      "sysout": null,
+      "line": 8,
+      "concat_of": "SYSLIB",
+      "horror": "H-0111"
+     },
+     {
+      "job": "MQSALNK",
+      "proc": null,
+      "step": "LKRRS10",
+      "dd": "SYSLIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 11,
+      "inline_lines": 4,
+      "horror": "H-0111"
+     }
+    ],
+    "jcl_datasets": [
+     {
+      "dsn": "MQM.SCSQLOAD",
+      "generation": null,
+      "step": "LKRRS10",
+      "dd": "SYSLIB",
+      "line": 7,
+      "horror": "H-0111"
+     },
+     {
+      "dsn": "SYS1.CSSLIB",
+      "generation": null,
+      "step": "LKRRS10",
+      "dd": "SYSLIB",
+      "line": 8,
+      "horror": "H-0111"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "exec",
+      "name": "IEWL",
+      "line": 5,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0111"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "MQSALNK",
+      "proc": null,
+      "step": "LKRRS10",
+      "utility": "IEWL",
+      "dd": "SYSLIN",
+      "verb": "INCLUDE",
+      "operands": "SYSLIB(CSQBRSTB)",
+      "line": 12,
+      "horror": "H-0111"
+     },
+     {
+      "job": "MQSALNK",
+      "proc": null,
+      "step": "LKRRS10",
+      "utility": "IEWL",
+      "dd": "SYSLIN",
+      "verb": "INCLUDE",
+      "operands": "SYSLIB(ATRSCSS)",
+      "line": 13,
+      "horror": "H-0111"
+     },
+     {
+      "job": "MQSALNK",
+      "proc": null,
+      "step": "LKRRS10",
+      "utility": "IEWL",
+      "dd": "SYSLIN",
+      "verb": "INCLUDE",
+      "operands": "OBJLIB(MQSARRS)",
+      "line": 14,
+      "horror": "H-0111"
+     },
+     {
+      "job": "MQSALNK",
+      "proc": null,
+      "step": "LKRRS10",
+      "utility": "IEWL",
+      "dd": "SYSLIN",
+      "verb": "NAME",
+      "operands": "MQSARRS(R)",
+      "line": 15,
+      "horror": "H-0111"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

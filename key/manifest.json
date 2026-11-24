@@ -220,30 +220,30 @@
   "ims_gen"
  ],
  "fact_totals": {
-  "programs": 81,
-  "units": 227,
-  "edges": 217,
-  "call_sites": 177,
-  "copies": 95,
-  "data_items": 936,
-  "layouts": 398,
+  "programs": 84,
+  "units": 230,
+  "edges": 234,
+  "call_sites": 199,
+  "copies": 105,
+  "data_items": 987,
+  "layouts": 439,
   "sql_statements": 6,
   "sql_tables": 3,
-  "jcl_steps": 97,
-  "jcl_dds": 304,
+  "jcl_steps": 102,
+  "jcl_dds": 327,
   "screen_fields": 16,
   "csd_resources": 48,
   "transactions": 8,
   "cics_resources": 13,
-  "jcl_datasets": 159,
+  "jcl_datasets": 175,
   "file_control": 33,
-  "entry_points": 81,
-  "file_edges": 54,
-  "data_moves": 290,
+  "entry_points": 84,
+  "file_edges": 57,
+  "data_moves": 308,
   "copy_collisions": 9,
-  "gaps": 75,
+  "gaps": 94,
   "dead": 11,
-  "jcl_utility_cards": 80,
+  "jcl_utility_cards": 87,
   "jcl_outputs": 3,
   "dli_calls": 5,
   "ims_gen": 14,
@@ -637,6 +637,9 @@
   "H-0108",
   "H-0109",
   "H-0110",
+  "H-0111",
+  "H-0112",
+  "H-0113",
   "H-0114",
   "H-0115",
   "H-0116",
@@ -2702,6 +2705,24 @@
     "status": "not-cobol"
    }
   },
+  "apps/MQSA/cobol/MQSABKO.cbl": {
+   "app": "MQSA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "e9e4625612349767d6ac211c94bb7e3636b881d5a22a10421e532e62e83c1f72",
+   "bytes": 2461,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI is a static CALL interface with no later construct",
+   "horrors": [
+    "H-0113"
+   ]
+  },
   "apps/MQSA/cobol/MQSACNX.cbl": {
    "app": "MQSA",
    "library": "cobol",
@@ -2809,6 +2830,24 @@
     "H-0086"
    ]
   },
+  "apps/MQSA/cobol/MQSARRS.cbl": {
+   "app": "MQSA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "2bf4854f30e462961834e04da5790798654b3013137398c0ddf14a3fb249b45c",
+   "bytes": 2371,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI is a static CALL interface with no later construct",
+   "horrors": [
+    "H-0111"
+   ]
+  },
   "apps/MQSA/cobol/MQSASET.cbl": {
    "app": "MQSA",
    "library": "cobol",
@@ -2825,6 +2864,24 @@
    "era_evidence": "END-IF (COBOL-85); the MQI is a static CALL interface with no later construct",
    "horrors": [
     "H-0093"
+   ]
+  },
+  "apps/MQSA/cobol/MQSATMC.cbl": {
+   "app": "MQSA",
+   "library": "cobol",
+   "language": "cobol",
+   "sha256": "892dee81ca3ce573a57456e9ce25e8dbb6e247f3ada4a624562d4feda45030c0",
+   "bytes": 2148,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "compiled"
+   },
+   "era": 2,
+   "era_evidence": "END-IF (COBOL-85); the MQI is a static CALL interface with no later construct",
+   "horrors": [
+    "H-0112"
    ]
   },
   "apps/MQSA/cobol/MQSATRG.cbl": {
@@ -2923,12 +2980,42 @@
     "status": "copybook"
    }
   },
+  "apps/MQSA/copybook/MQSTMC2.cpy": {
+   "app": "MQSA",
+   "library": "copybook",
+   "language": "cobol",
+   "sha256": "affcccf800caec06368fbd4fedf60d16090f66e8a607e43c4caef001cfe5f841",
+   "bytes": 586,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "copybook"
+   }
+  },
+  "apps/MQSA/jcl/MQSALNK.jcl": {
+   "app": "MQSA",
+   "library": "jcl",
+   "language": "jcl",
+   "sha256": "96e1c6172bc127e572203f867fa04db94fc9127ce6ec2af43e30fcdda38be31c",
+   "bytes": 837,
+   "encoding": "utf-8",
+   "storage": "lf",
+   "key": "key/apps/MQSA.json",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "horrors": [
+    "H-0111",
+    "H-0113"
+   ]
+  },
   "apps/MQSA/jcl/MQSARUN.jcl": {
    "app": "MQSA",
    "library": "jcl",
    "language": "jcl",
-   "sha256": "ce57c34f5a81976a392df0d55b16531e9ca2437fb66b9504d7ee7de5743e134e",
-   "bytes": 1626,
+   "sha256": "10cb9a68be5876520a632ee5a285d7c868f95c24d07c5969f7056b0a973fdd29",
+   "bytes": 2166,
    "encoding": "utf-8",
    "storage": "lf",
    "key": "key/apps/MQSA.json",

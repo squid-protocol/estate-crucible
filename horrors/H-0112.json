@@ -1,0 +1,356 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0112",
+ "title": "Trigger monitor start-up: a program started by a trigger monitor receives the MQTMC2 character form of the trigger message through PROCEDURE DIVISION USING",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQSA MQSATMC: LINKAGE 01 LK-TMC from COPY MQSTMC2 (stand-in MQTMC2: ten character fields, 732 bytes); PROCEDURE DIVISION USING LK-TMC",
+  "MQSA jcl/MQSARUN.jcl TMC100: EXEC PGM=MQSATMC"
+ ],
+ "asserts": "MQSATMC's procedure division USING list is [LK-TMC]; the 01 LK-TMC in the LINKAGE SECTION carries copy_members MQSTMC2, which resolves to the estate's stand-in copybook under apps/MQSA/copybook. MQSTMC2 holds the ten MQTMC2 fields as alphanumeric items at IBM's lengths (4, 4, 48, 48, 64, 4, 256, 128, 128, 48): every non-character field of MQTM is a character field here, and the queue manager name is last. Step TMC100 of MQSARUN executes MQSATMC.",
+ "citations": [
+  {
+   "doc": "IBM MQ 9.3 developing applications",
+   "section": "MQTMC2 - Trigger message 2 (character format)",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q100940_.html",
+   "quote": "The MQTMC2 structure is very similar to the format of the MQTM structure. The difference is that the non-character fields in MQTM are changed in MQTMC2 to character fields of the same length, and the queue manager name is added at the end of the structure."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications",
+   "section": "MQTMC2 - Trigger message 2 (character format)",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q100940_.html",
+   "quote": "The trigger monitor application can pass the MQTM structure directly to the started application, or pass an MQTMC2 structure instead, depending on what is permitted by the environment and convenient for the started application."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications",
+   "section": "ApplType (MQCHAR4) for MQTMC2",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q100980_.html",
+   "quote": "This field always contains blanks, whatever the value in the ApplType field in the MQTM structure of the original trigger message."
+  }
+ ],
+ "era": 2,
+ "release": "IBM MQ 9.3",
+ "planted": [
+  {
+   "member": "apps/MQSA/cobol/MQSATMC.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "0000-MAIN",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 30,
+      "end_line": 53,
+      "horror": "H-0112"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQCONN",
+      "line": 33,
+      "form": "literal",
+      "horror": "H-0112"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQOPEN",
+      "line": 41,
+      "form": "literal",
+      "horror": "H-0112"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQCLOSE",
+      "line": 49,
+      "form": "literal",
+      "horror": "H-0112"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQDISC",
+      "line": 52,
+      "form": "literal",
+      "horror": "H-0112"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQCONN",
+      "target": "MQCONN",
+      "line": 33,
+      "resolves_to": null,
+      "horror": "H-0112"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQOPEN",
+      "target": "MQOPEN",
+      "line": 41,
+      "resolves_to": null,
+      "horror": "H-0112"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQCLOSE",
+      "target": "MQCLOSE",
+      "line": 49,
+      "resolves_to": null,
+      "horror": "H-0112"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQDISC",
+      "target": "MQDISC",
+      "line": 52,
+      "resolves_to": null,
+      "horror": "H-0112"
+     }
+    ],
+    "copies": [
+     {
+      "member": "MQSTMC2",
+      "kind": "copy",
+      "line": 28,
+      "resolves_to": "apps/MQSA/copybook/MQSTMC2.cpy",
+      "horror": "H-0112"
+     }
+    ],
+    "data_items": [
+     {
+      "level": 1,
+      "name": "LK-TMC",
+      "pic": null,
+      "usage": null,
+      "occurs": null,
+      "redefines": null,
+      "value": null,
+      "section": "LINKAGE",
+      "line": 27,
+      "copy_members": [
+       "MQSTMC2"
+      ],
+      "horror": "H-0112",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "layouts": [
+     {
+      "record": "LK-TMC",
+      "line": 27,
+      "bytes": 732,
+      "fields": [
+       {
+        "name": "MQS-TMC-STRUCID",
+        "level": 5,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 0,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSTMC2.cpy"
+       },
+       {
+        "name": "MQS-TMC-VERSION",
+        "level": 5,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 4,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSTMC2.cpy"
+       },
+       {
+        "name": "MQS-TMC-QNAME",
+        "level": 5,
+        "pic": "X(48)",
+        "usage": null,
+        "offset": 8,
+        "bytes": 48,
+        "file": "apps/MQSA/copybook/MQSTMC2.cpy"
+       },
+       {
+        "name": "MQS-TMC-PROCESS",
+        "level": 5,
+        "pic": "X(48)",
+        "usage": null,
+        "offset": 56,
+        "bytes": 48,
+        "file": "apps/MQSA/copybook/MQSTMC2.cpy"
+       },
+       {
+        "name": "MQS-TMC-TRIGDATA",
+        "level": 5,
+        "pic": "X(64)",
+        "usage": null,
+        "offset": 104,
+        "bytes": 64,
+        "file": "apps/MQSA/copybook/MQSTMC2.cpy"
+       },
+       {
+        "name": "MQS-TMC-APPTYPE",
+        "level": 5,
+        "pic": "X(4)",
+        "usage": null,
+        "offset": 168,
+        "bytes": 4,
+        "file": "apps/MQSA/copybook/MQSTMC2.cpy"
+       },
+       {
+        "name": "MQS-TMC-APPLID",
+        "level": 5,
+        "pic": "X(256)",
+        "usage": null,
+        "offset": 172,
+        "bytes": 256,
+        "file": "apps/MQSA/copybook/MQSTMC2.cpy"
+       },
+       {
+        "name": "MQS-TMC-ENVDATA",
+        "level": 5,
+        "pic": "X(128)",
+        "usage": null,
+        "offset": 428,
+        "bytes": 128,
+        "file": "apps/MQSA/copybook/MQSTMC2.cpy"
+       },
+       {
+        "name": "MQS-TMC-USERDATA",
+        "level": 5,
+        "pic": "X(128)",
+        "usage": null,
+        "offset": 556,
+        "bytes": 128,
+        "file": "apps/MQSA/copybook/MQSTMC2.cpy"
+       },
+       {
+        "name": "MQS-TMC-QMGRNAME",
+        "level": 5,
+        "pic": "X(48)",
+        "usage": null,
+        "offset": 684,
+        "bytes": 48,
+        "file": "apps/MQSA/copybook/MQSTMC2.cpy"
+       }
+      ],
+      "horror": "H-0112",
+      "depends_on": [
+       "H-0009"
+      ]
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "MQS-TMC-QMGRNAME",
+      "source_kind": "item",
+      "target": "WS-QMGR",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 32,
+      "horror": "H-0112"
+     },
+     {
+      "verb": "MOVE",
+      "source": "12",
+      "source_kind": "literal",
+      "target": "RETURN-CODE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 36,
+      "horror": "H-0112"
+     },
+     {
+      "verb": "MOVE",
+      "source": "MQS-TMC-QNAME",
+      "source_kind": "item",
+      "target": "MQS-OBJNAME",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 39,
+      "horror": "H-0112"
+     },
+     {
+      "verb": "MOVE",
+      "source": "1",
+      "source_kind": "literal",
+      "target": "WS-OO-OPTIONS",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 40,
+      "horror": "H-0112"
+     },
+     {
+      "verb": "MOVE",
+      "source": "12",
+      "source_kind": "literal",
+      "target": "RETURN-CODE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 46,
+      "horror": "H-0112"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "MQCONN",
+      "line": 33,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0112"
+     },
+     {
+      "kind": "call",
+      "name": "MQOPEN",
+      "line": 41,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0112"
+     },
+     {
+      "kind": "call",
+      "name": "MQCLOSE",
+      "line": 49,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0112"
+     },
+     {
+      "kind": "call",
+      "name": "MQDISC",
+      "line": 52,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0112"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}

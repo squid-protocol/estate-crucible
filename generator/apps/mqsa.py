@@ -9,7 +9,9 @@ batch step: STEPLIB concatenation holding the MQ load libraries).
 Slice 2: H-0092 (MQCONNX, the connect call that takes an options structure by COPY) and H-0093 (MQSET, the
 attribute-setting sibling of MQINQ, opened with the set option).
 Slice 3: H-0100 (the MQI verbs called through a data item, CALL identifier) and H-0101 (a trigger-monitor
-program that gets the MQTM trigger message from an initiation queue). Distribution lists are not planted:
+program that gets the MQTM trigger message from an initiation queue). Slice 4: H-0111 (RRS batch: SRRCMIT / SRRBACK, linked with CSQBRSTB and ATRSCSS), H-0112 (a program started
+by a trigger monitor, receiving the MQTMC2 character structure) and H-0113 (an MQ-only back-out: MQBACK, linked
+with CSQBSTUB). Distribution lists are not planted:
 IBM documents them as not supported on IBM MQ for z/OS, and this is a z/OS estate."""
 
 from ..data import I
@@ -18,6 +20,7 @@ from ..stmt import call, goback, if_, para, perform, raw
 H86, H87, H88, H89, H90, H91 = "H-0086", "H-0087", "H-0088", "H-0089", "H-0090", "H-0091"
 H92, H93 = "H-0092", "H-0093"
 H100, H101 = "H-0100", "H-0101"
+H111, H112, H113 = "H-0111", "H-0112", "H-0113"
 
 COPYBOOKS = [
     {"member": "MQSMD",
@@ -58,6 +61,18 @@ COPYBOOKS = [
                I(5, "MQS-TM-APPLID", "X(256)"),
                I(5, "MQS-TM-ENVDATA", "X(128)"),
                I(5, "MQS-TM-USERDATA", "X(128)")]},
+    {"member": "MQSTMC2",
+     "header": [" MQSTMC2  - TRIGGER MESSAGE 2 (CHAR), STAND-IN FOR THIS ESTATE"],
+     "items": [I(5, "MQS-TMC-STRUCID", "X(4)", value="'TMC '"),
+               I(5, "MQS-TMC-VERSION", "X(4)", value="'   2'"),
+               I(5, "MQS-TMC-QNAME", "X(48)"),
+               I(5, "MQS-TMC-PROCESS", "X(48)"),
+               I(5, "MQS-TMC-TRIGDATA", "X(64)"),
+               I(5, "MQS-TMC-APPTYPE", "X(4)"),
+               I(5, "MQS-TMC-APPLID", "X(256)"),
+               I(5, "MQS-TMC-ENVDATA", "X(128)"),
+               I(5, "MQS-TMC-USERDATA", "X(128)"),
+               I(5, "MQS-TMC-QMGRNAME", "X(48)")]},
 ]
 
 AUTHOR = "ORDER SYSTEMS"
@@ -330,6 +345,84 @@ MQSATRG = {
 }
 
 
+MQSARRS = {
+    "member": "MQSARRS", **ERA,
+    "program_id": "MQSARRS", "author": AUTHOR,
+    "remarks": ["MQSARRS - PUT ONE ORDER AND COMMIT THROUGH RRS.",
+                "LINKED WITH CSQBRSTB: THE SYNCPOINT IS SRRCMIT / SRRBACK."],
+    "ws": _common_ws(I(1, "WS-MD", copy=["MQSMD"]), I(1, "WS-OD", copy=["MQSOD"]),
+                     I(1, "WS-PMO", copy=["MQSPMO"]), I(1, "WS-RRS-RC", "S9(9)", "COMP", value="0")),
+    "units": [
+        para("0000-MAIN",
+             call("MQCONN", using=["WS-QMGR", "WS-HCONN", "WS-COMPCODE", "WS-REASON"]),
+             _fail("MQSARRS", "CONNECT FAILED"),
+             raw("MOVE 'ORDERS.IN' TO MQS-OBJNAME", "MOVE 16 TO WS-OO-OPTIONS"),
+             call("MQOPEN", using=["WS-HCONN", "WS-OD", "WS-OO-OPTIONS", "WS-HOBJ", "WS-COMPCODE",
+                                   "WS-REASON"]),
+             _fail("MQSARRS", "OPEN FAILED"),
+             raw("MOVE 2 TO MQS-PMO-OPTIONS", "MOVE 'ORDER ORD00003 75' TO WS-BUF"),
+             call("MQPUT", using=["WS-HCONN", "WS-HOBJ", "WS-MD", "WS-PMO", "WS-BUFLEN", "WS-BUF",
+                                  "WS-COMPCODE", "WS-REASON"]),
+             if_("WS-COMPCODE = 0", [call("SRRCMIT", using=["WS-RRS-RC"], horror=H111)],
+                 [call("SRRBACK", using=["WS-RRS-RC"], horror=H111)], horror=H111),
+             call("MQCLOSE", using=["WS-HCONN", "WS-HOBJ", "WS-CO-OPTIONS", "WS-COMPCODE", "WS-REASON"]),
+             call("MQDISC", using=["WS-HCONN", "WS-COMPCODE", "WS-REASON"]),
+             goback()),
+    ],
+}
+
+MQSATMC = {
+    "member": "MQSATMC", **ERA,
+    "program_id": "MQSATMC", "author": AUTHOR,
+    "remarks": ["MQSATMC - THE PROGRAM A TRIGGER MONITOR STARTS FOR ORDERS.IN.",
+                "THE MONITOR PASSES THE CHARACTER FORM OF THE TRIGGER (MQTMC2)."],
+    "ws": _common_ws(I(1, "WS-MD", copy=["MQSMD"]), I(1, "WS-OD", copy=["MQSOD"]),
+                     I(1, "WS-GMO", copy=["MQSGMO"])),
+    "linkage": [I(1, "LK-TMC", copy=["MQSTMC2"], horror=H112)],
+    "using": ["LK-TMC"],
+    "units": [
+        para("0000-MAIN",
+             raw("DISPLAY 'MQSATMC STARTED FOR ' MQS-TMC-QNAME", "MOVE MQS-TMC-QMGRNAME TO WS-QMGR"),
+             call("MQCONN", using=["WS-QMGR", "WS-HCONN", "WS-COMPCODE", "WS-REASON"]),
+             _fail("MQSATMC", "CONNECT FAILED"),
+             raw("MOVE MQS-TMC-QNAME TO MQS-OBJNAME", "MOVE 1 TO WS-OO-OPTIONS"),
+             call("MQOPEN", using=["WS-HCONN", "WS-OD", "WS-OO-OPTIONS", "WS-HOBJ", "WS-COMPCODE",
+                                   "WS-REASON"]),
+             _fail("MQSATMC", "OPEN FAILED"),
+             call("MQCLOSE", using=["WS-HCONN", "WS-HOBJ", "WS-CO-OPTIONS", "WS-COMPCODE", "WS-REASON"]),
+             call("MQDISC", using=["WS-HCONN", "WS-COMPCODE", "WS-REASON"]),
+             goback(), horror=H112),
+    ],
+}
+
+MQSABKO = {
+    "member": "MQSABKO", **ERA,
+    "program_id": "MQSABKO", "author": AUTHOR,
+    "remarks": ["MQSABKO - MQ-ONLY BACK-OUT: PUT UNDER SYNCPOINT, THEN MQBACK.",
+                "NO OTHER RESOURCE MANAGER IS TOUCHED: MQBACK IS ENOUGH."],
+    "ws": _common_ws(I(1, "WS-MD", copy=["MQSMD"]), I(1, "WS-OD", copy=["MQSOD"]),
+                     I(1, "WS-PMO", copy=["MQSPMO"])),
+    "units": [
+        para("0000-MAIN",
+             call("MQCONN", using=["WS-QMGR", "WS-HCONN", "WS-COMPCODE", "WS-REASON"]),
+             _fail("MQSABKO", "CONNECT FAILED"),
+             raw("MOVE 'ORDERS.IN' TO MQS-OBJNAME", "MOVE 16 TO WS-OO-OPTIONS"),
+             call("MQOPEN", using=["WS-HCONN", "WS-OD", "WS-OO-OPTIONS", "WS-HOBJ", "WS-COMPCODE",
+                                   "WS-REASON"]),
+             _fail("MQSABKO", "OPEN FAILED"),
+             raw("MOVE 2 TO MQS-PMO-OPTIONS", "MOVE 'ORDER ORD00004 DRAFT' TO WS-BUF"),
+             call("MQPUT", using=["WS-HCONN", "WS-HOBJ", "WS-MD", "WS-PMO", "WS-BUFLEN", "WS-BUF",
+                                  "WS-COMPCODE", "WS-REASON"]),
+             raw("DISPLAY 'MQSABKO DRAFT REJECTED, BACKING OUT'"),
+             call("MQBACK", using=["WS-HCONN", "WS-COMPCODE", "WS-REASON"], horror=H113),
+             _fail("MQSABKO", "BACKOUT FAILED"),
+             call("MQCLOSE", using=["WS-HCONN", "WS-HOBJ", "WS-CO-OPTIONS", "WS-COMPCODE", "WS-REASON"]),
+             call("MQDISC", using=["WS-HCONN", "WS-COMPCODE", "WS-REASON"]),
+             goback(), horror=H113),
+    ],
+}
+
+
 def _dd(name, dsn=None, disp=("SHR",), **kw):
     return {"name": name, "dsn": dsn, "disp": disp, **kw}
 
@@ -357,6 +450,40 @@ JOBS = [{
         {"name": "SET060", "pgm": "MQSASET", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
         {"name": "DYN070", "pgm": "MQSADYN", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
         {"name": "TRG080", "pgm": "MQSATRG", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
+        {"name": "RRS090", "pgm": "MQSARRS", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
+        {"name": "TMC100", "pgm": "MQSATMC", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
+        {"name": "BKO110", "pgm": "MQSABKO", "dds": [*_mq_steplib(), {"name": "SYSOUT", "sysout": "*"}]},
+    ],
+}, {
+    "name": "MQSALNK",
+    "title": "MQSA LINK-EDIT WITH THE MQ STUBS",
+    "accounting": "(MQSA,0100)",
+    "comments": ["LINK THE RRS PROGRAM WITH CSQBRSTB AND THE CALLABLE SERVICES STUB, THE MQ-ONLY PROGRAM WITH CSQBSTUB"],
+    "steps": [
+        {"name": "LKRRS10", "pgm": "IEWL", "parm": "LIST,MAP", "horror": H111, "dds": [
+            {"name": "SYSPRINT", "sysout": "*"},
+            _dd("SYSLIB", "MQM.SCSQLOAD", horror=H111),
+            _dd("", "SYS1.CSSLIB", concat=True, horror=H111),
+            _dd("SYSLMOD", LOADLIB),
+            _dd("OBJLIB", "PROD.MQSA.OBJLIB"),
+            {"name": "SYSLIN", "horror": H111, "inline": [
+                ("INCLUDE", " INCLUDE SYSLIB(CSQBRSTB)"),
+                ("INCLUDE", " INCLUDE SYSLIB(ATRSCSS)"),
+                ("INCLUDE", " INCLUDE OBJLIB(MQSARRS)"),
+                ("NAME", " NAME MQSARRS(R)"),
+            ]},
+        ]},
+        {"name": "LKBKO20", "pgm": "IEWL", "parm": "LIST,MAP", "horror": H113, "dds": [
+            {"name": "SYSPRINT", "sysout": "*"},
+            _dd("SYSLIB", "MQM.SCSQLOAD"),
+            _dd("SYSLMOD", LOADLIB),
+            _dd("OBJLIB", "PROD.MQSA.OBJLIB"),
+            {"name": "SYSLIN", "horror": H113, "inline": [
+                ("INCLUDE", " INCLUDE SYSLIB(CSQBSTUB)"),
+                ("INCLUDE", " INCLUDE OBJLIB(MQSABKO)"),
+                ("NAME", " NAME MQSABKO(R)"),
+            ]},
+        ]},
     ],
 }]
 
@@ -368,7 +495,7 @@ APP = {
     "style": "batch COBOL over the MQ programming interface: MQPUT1, MQGET with wait, MQCMIT / MQBACK, MQINQ, MQCONNX, MQSET",
     "copybooks": COPYBOOKS,
     "dclgen": [],
-    "programs": [MQSAPUT, MQSAGET, MQSAREP, MQSAINQ, MQSACNX, MQSASET, MQSADYN, MQSATRG],
+    "programs": [MQSAPUT, MQSAGET, MQSAREP, MQSAINQ, MQSACNX, MQSASET, MQSADYN, MQSATRG, MQSARRS, MQSATMC, MQSABKO],
     "jcl": JOBS,
     "procs": [],
 }

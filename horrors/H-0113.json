@@ -1,0 +1,392 @@
+{
+ "format": "estate-crucible-horror/1",
+ "id": "H-0113",
+ "title": "MQ-only back-out fixture: a put under syncpoint undone with MQBACK in a program linked with the plain batch stub CSQBSTUB",
+ "category": "mq",
+ "issue": 4892,
+ "shapes": [
+  "MQSA MQSABKO: MQPUT then CALL 'MQBACK' USING WS-HCONN WS-COMPCODE WS-REASON; no MQCMIT, no SRRBACK",
+  "MQSA jcl/MQSALNK.jcl LKBKO20: IEWL, SYSLIN INCLUDE SYSLIB(CSQBSTUB), INCLUDE OBJLIB(MQSABKO)"
+ ],
+ "asserts": "MQSABKO holds one MQBACK call_sites fact (form literal, resolves_to null, a gaps entry), called from 0000-MAIN, and no SRRCMIT / SRRBACK / MQCMIT call. Step LKBKO20 of MQSALNK is a jcl_steps fact (program IEWL) whose SYSLIN instream data yields jcl_utility_cards facts INCLUDE SYSLIB(CSQBSTUB), INCLUDE OBJLIB(MQSABKO) and NAME MQSABKO(R): it is linked with CSQBSTUB, not CSQBRSTB. The unit of work touches only MQ resources, which is the case IBM gives for MQBACK in a batch program. Contrast H-0111, where the back-out is SRRBACK because the program is linked with the RRS stub.",
+ "citations": [
+  {
+   "doc": "IBM MQ 9.3 developing applications",
+   "section": "MQBACK - Back out changes",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q101690_.html",
+   "quote": "Batch programs (including IMS batch DL/I programs) can use the MQBACK call if the unit of work affects only MQ resources."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications",
+   "section": "MQBACK - Back out changes",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/refdev/q101690_.html",
+   "quote": "On z/OS, this call is used only by batch programs (including IMS batch DL/I programs)."
+  },
+  {
+   "doc": "IBM MQ 9.3 developing applications",
+   "section": "IBM MQ for z/OS stub programs",
+   "url": "https://www.ibm.com/docs/en/ibm-mq/SSFKSJ_9.3.0/develop/q025760_.html",
+   "quote": "Before you can run a program written with IBM MQ for z/OS, you must link-edit it to the stub program supplied with IBM MQ for z/OS for the environment in which you are running the application."
+  }
+ ],
+ "era": 2,
+ "release": "IBM MQ 9.3",
+ "planted": [
+  {
+   "member": "apps/MQSA/cobol/MQSABKO.cbl",
+   "compile": {
+    "status": "compiled"
+   },
+   "expected": {
+    "units": [
+     {
+      "name": "0000-MAIN",
+      "kind": "paragraph",
+      "section": null,
+      "start_line": 27,
+      "end_line": 60,
+      "horror": "H-0113"
+     }
+    ],
+    "edges": [
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQCONN",
+      "line": 28,
+      "form": "literal",
+      "horror": "H-0113"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQOPEN",
+      "line": 36,
+      "form": "literal",
+      "horror": "H-0113"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQPUT",
+      "line": 46,
+      "form": "literal",
+      "horror": "H-0113"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQBACK",
+      "line": 50,
+      "form": "literal",
+      "horror": "H-0113"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQCLOSE",
+      "line": 56,
+      "form": "literal",
+      "horror": "H-0113"
+     },
+     {
+      "kind": "call",
+      "from": "0000-MAIN",
+      "target": "MQDISC",
+      "line": 59,
+      "form": "literal",
+      "horror": "H-0113"
+     }
+    ],
+    "call_sites": [
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQCONN",
+      "target": "MQCONN",
+      "line": 28,
+      "resolves_to": null,
+      "horror": "H-0113"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQOPEN",
+      "target": "MQOPEN",
+      "line": 36,
+      "resolves_to": null,
+      "horror": "H-0113"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQPUT",
+      "target": "MQPUT",
+      "line": 46,
+      "resolves_to": null,
+      "horror": "H-0113"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQBACK",
+      "target": "MQBACK",
+      "line": 50,
+      "resolves_to": null,
+      "horror": "H-0113"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQCLOSE",
+      "target": "MQCLOSE",
+      "line": 56,
+      "resolves_to": null,
+      "horror": "H-0113"
+     },
+     {
+      "verb": "CALL",
+      "form": "literal",
+      "operand": "MQDISC",
+      "target": "MQDISC",
+      "line": 59,
+      "resolves_to": null,
+      "horror": "H-0113"
+     }
+    ],
+    "data_moves": [
+     {
+      "verb": "MOVE",
+      "source": "12",
+      "source_kind": "literal",
+      "target": "RETURN-CODE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 31,
+      "horror": "H-0113"
+     },
+     {
+      "verb": "MOVE",
+      "source": "'ORDERS.IN'",
+      "source_kind": "literal",
+      "target": "MQS-OBJNAME",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 34,
+      "horror": "H-0113"
+     },
+     {
+      "verb": "MOVE",
+      "source": "16",
+      "source_kind": "literal",
+      "target": "WS-OO-OPTIONS",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 35,
+      "horror": "H-0113"
+     },
+     {
+      "verb": "MOVE",
+      "source": "12",
+      "source_kind": "literal",
+      "target": "RETURN-CODE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 41,
+      "horror": "H-0113"
+     },
+     {
+      "verb": "MOVE",
+      "source": "2",
+      "source_kind": "literal",
+      "target": "MQS-PMO-OPTIONS",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 44,
+      "horror": "H-0113"
+     },
+     {
+      "verb": "MOVE",
+      "source": "'ORDER ORD00004 DRAFT'",
+      "source_kind": "literal",
+      "target": "WS-BUF",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 45,
+      "horror": "H-0113"
+     },
+     {
+      "verb": "MOVE",
+      "source": "12",
+      "source_kind": "literal",
+      "target": "RETURN-CODE",
+      "corresponding": false,
+      "source_refmod": false,
+      "target_refmod": false,
+      "source_refmod_text": null,
+      "target_refmod_text": null,
+      "line": 53,
+      "horror": "H-0113"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "call",
+      "name": "MQCONN",
+      "line": 28,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0113"
+     },
+     {
+      "kind": "call",
+      "name": "MQOPEN",
+      "line": 36,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0113"
+     },
+     {
+      "kind": "call",
+      "name": "MQPUT",
+      "line": 46,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0113"
+     },
+     {
+      "kind": "call",
+      "name": "MQBACK",
+      "line": 50,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0113"
+     },
+     {
+      "kind": "call",
+      "name": "MQCLOSE",
+      "line": 56,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0113"
+     },
+     {
+      "kind": "call",
+      "name": "MQDISC",
+      "line": 59,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0113"
+     }
+    ]
+   },
+   "phantoms": []
+  },
+  {
+   "member": "apps/MQSA/jcl/MQSALNK.jcl",
+   "compile": {
+    "status": "not-cobol"
+   },
+   "expected": {
+    "call_sites": [
+     {
+      "verb": "EXEC PGM",
+      "form": "literal",
+      "operand": "IEWL",
+      "target": "IEWL",
+      "line": 18,
+      "resolves_to": null,
+      "horror": "H-0113"
+     }
+    ],
+    "jcl_steps": [
+     {
+      "job": "MQSALNK",
+      "proc": null,
+      "step": "LKBKO20",
+      "ordinal": 2,
+      "program": "IEWL",
+      "exec_proc": null,
+      "cond": null,
+      "line": 18,
+      "parm": "LIST,MAP",
+      "horror": "H-0113"
+     }
+    ],
+    "jcl_dds": [
+     {
+      "job": "MQSALNK",
+      "proc": null,
+      "step": "LKBKO20",
+      "dd": "SYSLIN",
+      "dsn": null,
+      "generation": null,
+      "disp": null,
+      "disp_normal": null,
+      "sysout": null,
+      "line": 23,
+      "inline_lines": 3,
+      "horror": "H-0113"
+     }
+    ],
+    "gaps": [
+     {
+      "kind": "exec",
+      "name": "IEWL",
+      "line": 18,
+      "why": "no member of the estate holds the program",
+      "horror": "H-0113"
+     }
+    ],
+    "jcl_utility_cards": [
+     {
+      "job": "MQSALNK",
+      "proc": null,
+      "step": "LKBKO20",
+      "utility": "IEWL",
+      "dd": "SYSLIN",
+      "verb": "INCLUDE",
+      "operands": "SYSLIB(CSQBSTUB)",
+      "line": 24,
+      "horror": "H-0113"
+     },
+     {
+      "job": "MQSALNK",
+      "proc": null,
+      "step": "LKBKO20",
+      "utility": "IEWL",
+      "dd": "SYSLIN",
+      "verb": "INCLUDE",
+      "operands": "OBJLIB(MQSABKO)",
+      "line": 25,
+      "horror": "H-0113"
+     },
+     {
+      "job": "MQSALNK",
+      "proc": null,
+      "step": "LKBKO20",
+      "utility": "IEWL",
+      "dd": "SYSLIN",
+      "verb": "NAME",
+      "operands": "MQSABKO(R)",
+      "line": 26,
+      "horror": "H-0113"
+     }
+    ]
+   },
+   "phantoms": []
+  }
+ ]
+}
